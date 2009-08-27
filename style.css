@@ -1,0 +1,127 @@
+body {
+    margin: auto;
+    padding: 1.5em 3em 0 3em;
+    background-color: white;
+    background-image: url(background.png);
+    background-repeat: repeat-x;
+    color: #000000;
+    font: 12pt sans-serif;
+}
+
+h4 {
+    text-align: center;
+    margin-bottom: 0.5em;
+}
+
+#wrapper-outer {
+    margin: 0px auto;   /* Goodbye, IE5 */
+    padding: 0;
+    width: 58em;
+    max-width: 100%;
+}
+
+#header {
+    padding: 0em 1em 0em 1em;
+    margin: 0px 0px 3em 0px;
+    position: relative;
+    border-radius: 1em; 
+    -moz-border-radius: 1em;
+    -webkit-border-radius: 1em;
+    background: #63a4ff;
+    border: 3px solid #dddddd;
+    min-height: 200px;
+    font-weight: bold;
+}
+
+#header img {
+    float: right;
+    position: relative;
+    top: -1.5em;
+    right: -2em;
+    z-index: 1;
+}
+
+
+#header a {
+    font-weight: bold;
+    text-decoration: none;
+    color: #ffffff;
+    border-bottom: 1px dotted #ffffff;
+}
+
+#header a.header-black-link {
+    color: #000;
+    border-bottom: 1px dotted #000;    
+}
+
+div a {
+    text-decoration: none;
+    font-weight: bold;
+    color: #000000;
+    border-bottom: 1px dotted #000000;
+}
+
+div a:hover, #header a:hover {
+    text-decoration: underline;
+    border-bottom: none;
+}
+
+.box {
+    width: 15em;
+    height: 20em;
+    margin: 0.5em;
+    padding: 0 1em 1em 1em;
+    float: left;
+    border: 3px solid #dddddd;
+    border-radius: 1em; 
+    -moz-border-radius: 1em;
+    -webkit-border-radius: 1em;
+    color: #000000;
+}
+
+.box ul {
+    font: 9pt sans-serif;
+    line-height: 130%;
+}
+
+#community, #stuff {
+    background: #a5e41c;
+}
+#specs {
+    background: #e43b59;
+}
+#compiler, #docs {
+    background: #f5ec48;
+}
+#download {
+    border: 2px solid white;
+}
+
+#download a {
+    text-decoration: none;
+    border: 0px;
+    font-size: 100%;
+    color: #ffffff;
+    margin: 8em auto;
+    display: block;
+    width: 206px;
+}
+
+ul {
+    margin: 0;
+    padding: 0;
+    list-style-type: none;
+}
+
+li {
+    margin-bottom: 0.5em;
+}
+
+#footer {
+    clear: both;
+    font-size: 9pt;
+    padding: 2.5em 2em 0px 2em;
+}
+
+.bold { font-weight: bold; }
+

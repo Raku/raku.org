@@ -1,0 +1,20 @@
+TODO for perl6-projects.org:
+
+GENERAL
+
+* Items in each box could be sorted by likely reader interest / current project
+  activity level / something. (Example: #perl6 IRC first in "Community")
+
+
+CSS/LAYOUT
+
+* add base font size & change font specs from points to ems
+
+* block element widths shouldn't generally be specified in terms of font size
+  (this means: change width: Xem; -> width: X% or Xpx  on divs)
+
+* download button should NOT be moved up top; would be missing the
+  (visual) point, hehe :)
+
+
+CONTENT

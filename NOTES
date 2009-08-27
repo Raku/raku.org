@@ -1,0 +1,16 @@
+Notes:
+  
+  - The layout is intended to look like the temple thingy in
+    the Rakudo.org logo.
+    
+  - If you intend to change the layout, consider what happens when:
+    * user's viewport is small (e.g. 800x600)
+    * user resizes window
+
+  - Test layout changes on browsershots.org, with particular consideration
+    to badly broken browsers - IE6 still needs to be considered (2009-07).
+    IE5.5 and below can be ignored.
+    
+  - jquery.min.js is in repo, i find i end up using it most of the time anyway
+  
+  - other javascript stuff could go in page.js (at your discretion).
