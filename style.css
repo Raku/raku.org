@@ -16,7 +16,7 @@ h4 {
 #wrapper-outer {
     margin: 0px auto;   /* Goodbye, IE5 */
     padding: 0;
-    width: 58em;
+    width: 55.21em; /* A little slipping room */
     max-width: 100%;
 }
 
@@ -28,7 +28,7 @@ h4 {
     -moz-border-radius: 1em;
     -webkit-border-radius: 1em;
     background: #63a4ff;
-    border: 3px solid #dddddd;
+    border: 0.2em solid #dddddd;
     min-height: 200px;
     font-weight: bold;
 }
@@ -72,7 +72,7 @@ div a:hover, #header a:hover {
     margin: 0.5em;
     padding: 0 1em 1em 1em;
     float: left;
-    border: 3px solid #dddddd;
+    border: 0.2em solid #dddddd;
     border-radius: 1em; 
     -moz-border-radius: 1em;
     -webkit-border-radius: 1em;
