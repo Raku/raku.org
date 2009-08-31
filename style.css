@@ -24,13 +24,15 @@ h4 {
     padding: 0em 1em 0em 1em;
     margin: 0px 0px 3em 0px;
     position: relative;
-    border-radius: 1em; 
+    border-radius: 1em;
     -moz-border-radius: 1em;
     -webkit-border-radius: 1em;
-    background: #63a4ff;
-    border: 0.2em solid #dddddd;
+    background: #80b5ff;
+    border: 0.2em solid #63a4ff;
     min-height: 200px;
     font-weight: bold;
+    -moz-box-shadow: 5px 5px 10px #888;
+    -webkit-box-shadow: 5px 5px 10px #888;
 }
 
 #header img {
@@ -51,7 +53,7 @@ h4 {
 
 #header a.header-black-link {
     color: #000;
-    border-bottom: 1px dotted #000;    
+    border-bottom: 1px dotted #000;
 }
 
 div a {
@@ -73,10 +75,12 @@ div a:hover, #header a:hover {
     padding: 0 1em 1em 1em;
     float: left;
     border: 0.2em solid #dddddd;
-    border-radius: 1em; 
+    border-radius: 1em;
     -moz-border-radius: 1em;
     -webkit-border-radius: 1em;
     color: #000000;
+    -moz-box-shadow: 5px 5px 10px #888;
+    -webkit-box-shadow: 5px 5px 10px #888;
 }
 
 .box ul {
@@ -85,16 +89,21 @@ div a:hover, #header a:hover {
 }
 
 #community, #stuff {
-    background: #a5e41c;
+    background: #c0e472;
+    border-color: #a5e41c;
 }
 #specs {
-    background: #e43b59;
+    background: #e47286;
+    border-color: #e43b59;
 }
 #compiler, #docs {
-    background: #f5ec48;
+    background: #f5ef7b;
+    border-color: #f5ec48;
 }
 #download {
     border: 2px solid white;
+    -moz-box-shadow: 5px 5px 10px white;
+    -webkit-box-shadow: 5px 5px 10px white;
 }
 
 #download a {
@@ -124,4 +133,3 @@ li {
 }
 
 .bold { font-weight: bold; }
-
