@@ -1,0 +1,9 @@
+<div id="navigation">
+    <ul>
+        [% item home      <li id="nav-home"     {{ class="active"}}><a href="/">Home</a></li> %]
+        [% item community <li id="nav-community"{{ class="active"}}><a href="/community/">Community</a></li> %]
+        [% item compilers <li id="nav-compilers"{{ class="active"}}><a href="/compilers/">Compilers</a></li> %]
+    </ul>
+</div>
+
+[% comment vim: set tw=0 ft=html : %]
