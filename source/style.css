@@ -11,6 +11,11 @@ h4 {
     margin-bottom: 0.5em;
 }
 
+.box h4 a {
+    text-decoration: none;
+    border-bottom:   none;
+}
+
 #wrapper-outer {
     margin: 0px auto;   /* Goodbye, IE5 */
     padding: 0;
