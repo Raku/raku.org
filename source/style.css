@@ -89,7 +89,7 @@ div a:hover, #header a:hover {
 
 .box {
     width: 15em;
-    height: 8em;
+    height: 9em;
     margin: 0.5em;
     padding: 0 1em 1em 1em;
     float: left;
@@ -203,4 +203,13 @@ li {
 
 #navigation .active a {
     text-decoration: underline;
+}
+
+.more {
+    text-align: center;
+    color: white;
+}
+
+.more a {
+    color: white;
 }
