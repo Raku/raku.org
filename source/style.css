@@ -97,6 +97,28 @@ div a:hover, #header a:hover {
     -webkit-box-shadow: 5px 5px 10px #888;
 }
 
+#col1, #col2 {
+    width: 23em;
+    -moz-border-radius: 1em;
+    -webkit-border-radius: 1em;
+    padding: 2em;
+    color: #000000;
+    -moz-box-shadow: 5px 5px 10px #888;
+    -webkit-box-shadow: 5px 5px 10px #888;
+}
+
+#col1 {
+    float: left;
+    background: #c0e472;
+    border-color: #a5e41c;
+}
+
+#col2 {
+    float: right;
+    background: #f5ef7b;
+    border-color: #f5ec48;
+}
+
 .box ul {
     font: 9pt sans-serif;
     line-height: 130%;
