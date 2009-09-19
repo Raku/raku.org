@@ -173,7 +173,7 @@ li {
 
 #footer {
     clear: both;
-    font-size: 9pt;
+    font-size: 90%;
     padding: 2.5em 2em 0px 2em;
 }
 
@@ -212,4 +212,5 @@ li {
 
 .more a {
     color: white;
+    border-bottom: 1px dotted #ffffff;
 }
