@@ -87,6 +87,7 @@ div a:hover, #header a:hover {
     -moz-border-radius: 1em;
     -webkit-border-radius: 1em;
     border-radius: 1em;
+    border: 0.2em solid #dddddd;
 }
 
 .box {
@@ -95,7 +96,6 @@ div a:hover, #header a:hover {
     margin: 0.5em;
     padding: 0 1em 1em 1em;
     float: left;
-    border: 0.2em solid #dddddd;
 }
 
 #col1, #col2 {
