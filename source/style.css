@@ -194,10 +194,10 @@ li {
 
 .more {
     text-align: center;
-    color: white;
+    color: #006;
 }
 
 .more a {
-    color: white;
-    border-bottom: 1px dotted #ffffff;
+    color: #006;
+    border-bottom: 1px dotted #006;
 }
