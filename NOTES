@@ -1,8 +1,5 @@
 Notes:
   
-  - The layout is intended to look like the temple thingy in
-    the Rakudo.org logo.
-    
   - If you intend to change the layout, consider what happens when:
     * user's viewport is small (e.g. 800x600)
     * user resizes window
@@ -12,5 +9,12 @@ Notes:
     IE5.5 and below can be ignored.
     
   - jquery.min.js is in repo, i find i end up using it most of the time anyway
+    All basic functionality (links, menus, proper page rendering) must be
+    availalbe without javascript though.
   
   - other javascript stuff could go in page.js (at your discretion).
+
+  - We spell "Perl 6" consitently with a non-breaking space. If you don't have
+    already, go get an editor with decent Unicode support.
+
+  - Speaking of which, all pages are served as UTF-8.
