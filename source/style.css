@@ -118,7 +118,7 @@ div a:hover, #header a:hover {
 
 #community, #stuff, #nav-community, #nav-docs, #col1 {
     background: #c0e472;
-    border-color: #a5e41c;
+    border-color: #8bc313;
 }
 #specs, #nav-specs, #nav-fun {
     background: #e47286;
@@ -126,7 +126,7 @@ div a:hover, #header a:hover {
 }
 #compiler, #docs, #nav-compilers, #nav-whatever, #col2 {
     background: #f5ef7b;
-    border-color: #f5ec48;
+    border-color: #f2c100;
 }
 #download {
     border: 2px solid white;
