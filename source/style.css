@@ -201,3 +201,11 @@ li {
     color: #006;
     border-bottom: 1px dotted #006;
 }
+
+dl#botlist dt {
+    margin-top: 1em;
+}
+
+dl#botlist dd {
+    margin-left: 1.5em;
+}
