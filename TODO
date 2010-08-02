@@ -15,7 +15,7 @@ GENERAL
 
 CSS/LAYOUT
 
-* add base font size & change font specs from points to ems
+* add base font size & change font specs from points to ems.
 
 * block element widths shouldn't generally be specified in terms of font size
   (this means: change width: Xem; -> width: X% or Xpx  on divs)
