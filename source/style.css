@@ -209,3 +209,104 @@ dl#botlist dt {
 dl#botlist dd {
     margin-left: 1.5em;
 }
+
+/*
+** Documentation page
+*/
+#newcomers {
+    background: #c0e472;
+    border-color: #8bc313;
+    height: auto;
+}
+
+#p5programmers {
+    background: #e47286;
+    border-color: #e43b59;
+    height: auto;
+}
+
+#compendiums {
+    background: #f5ef7b;
+    border-color: #f2c100;
+    height: auto;
+}
+
+#booksandprint {
+    background: #80b5ff;
+    border-color: #63a4ff;
+    height: auto;
+}
+
+#examples {
+    background: #f5ef7b;
+    border-color: #f2c100;
+    height: auto;
+}
+
+#misc {
+    background: #c0e472;
+    border-color: #8bc313;
+    height: auto;
+}
+
+
+/*
+** Three-column CSS magic
+*/
+
+/* common column settings */
+.colcommon {
+    width: 100%;                     /* width of page */
+    position: relative;
+}
+
+div.autosize {
+    display: table; width: 1px;
+}
+div.autosize > div {
+    display: table-cell;
+}
+
+/* column container */
+.colmask {
+    position:relative;      /* This fixes the IE7 overflow hidden bug */
+    clear:both;
+    float:left;
+    width:100%;             /* width of whole page and then some */
+    overflow:hidden;        /* This chops off any overhanging divs */
+}
+
+.colright, .colmid, .colleft {
+    float: left;
+    width: 100%;
+    position: relative;
+}
+
+.col1, .col2, .col3 {
+    float: left;
+    position: relative;
+    padding: 0 0 1em 0;
+/*    overflow: hidden; */
+}
+
+/* 3 Column settings */
+.threecol {
+}
+.threecol .colmid {
+    right: 30%;
+}
+.threecol .colleft {
+    right: 30%;
+}
+.threecol .col1 {
+    width: 30%;                      /* width of center column content (column width minus padding on either side) */
+    left: 93%;                      /* 100% plus left padding of center column */
+}
+.threecol .col2 {
+    width: 28%;                      /* Width of left column content (column width minus padding on either side) */
+    left: 29%;                       /* width of (right column) plus (center column left and right padding) plus (left column left padding) */
+}
+.threecol .col3 {
+    width: 28%;                      /* Width of right column content (column width minus padding on either side) */
+    left: 69%;                       /* Please make note of the brackets here: (100% - left column width) plus (center column left and right padding) plus (left column left and right padding) plus (right column left padding) */
+}
