@@ -1,3 +1,9 @@
+This is the source code http://perl6.org/
+
+It is rendered with mowyw[1] every 15 minutes, so updates to the repository
+should also result in an update of perl6.org. If not, talk to moritz_ on
+#perl6.
+
 Notes:
   
   - If you intend to change the layout, consider what happens when:
