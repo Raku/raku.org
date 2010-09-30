@@ -7,7 +7,7 @@
 
     <h2>Perl&nbsp;6 Compilers</h2>
 
-    <p>Perl 6 is a language specification, and just like C or C++ there
+    <p>Perl&nbsp;6 is a language specification, and just like C or C++ there
     are multiple compilers for the language.</p>
 </div>
 
@@ -15,16 +15,17 @@
     <h3>Compilers</h3>
     <ul>
         <li>
-            <a href="http://rakudo.org/">Rakudo</a> is based on the <a
-            href="http://www.parrot.org/">Parrot virtual machine</a>. It
-            is developed very actively. <a
+            <a href="http://rakudo.org/">Rakudo</a> is copyrighted by the Perl
+            Foundation, was born and raised in the <a href="http://www.parrot.org/">
+            Parrot virtual machine</a>, and is actively developed
+            <a href="http://github.com/rakudo/rakudo">here</a>. <a
             href="http://rakudo.org/how-to-get-rakudo">Download or compile
             Rakudo</a>, <a href="http://rakudo.org/status">status</a>.
         </li>
 
         <li>
-            <a href="http://svn.pugscode.org/pugs/src/perl6/STD.pm6">STD.pm</a>
-            is Larry Wall's reference implementation of the Perl 6 grammar,
+            <a href="http://github.com/perl6/std">STD</a>
+            is Larry Wall's reference implementation of the Perl&nbsp;6 grammar,
             parser generator, and some of the semantic verifier. STD is an
             abbreviation of "Standard", as in "Perl6.0.0-STD". It is written in
             Perl 6, transliterated into Perl 5 by "gimme5", and supported by
@@ -32,45 +33,61 @@
         </li>
 
         <li>
-            <a href="http://www.perlfoundation.org/perl6/index.cgi?smop">SMOP</a>
-            is a runtime library to represent Perl&nbsp;6 objects. It focuses on the
-            meta object programming capabilities. It is actively developed.
+            <a href="http://github.com/sorear/niecza">Niecza</a> is a compiler
+            targetting the Common Language Runtime (.NET and Mono).  Its goal
+            is to explore the static aspects of Perl 6 and the possibilities
+            for compile-time optimization, though this is not yet well realized.
+            It is actively developed.
+        </li>
+
+        <li>
+            <a href="http://www.perlito.org/">Perlito</a>, also known as MiniPerl6,
+            is a subset of Perl&nbsp;6, designed as a light bootstrapping language.
+            You can <a href="http://www.perlito.org/js">try it online</a>. It is
+            actively developed <a href="http://github.com/fglock/Perlito/">here</a>.
+        </li>
+
+        <li>
+            <a href="http://github.com/masak/yapsi">Yapsi</a> is Yet Another
+            Perl Six Implementation, an implementation of a Perl&nbsp;6
+            compiler-and-runtime in Perl&nbsp;6.  Yapsi issues monthly releases
+            and is actively developed.
+        </li>
+
+        <li>
+            <a
+            href="http://github.com/diakopter/sprixel">Sprixel</a> is a
+            Perl&nbsp;6 compiler targetting the Common Language Runtime (.NET
+            and Mono).  It has a storied history (many total rewrites), but it
+            currently intends to implement a small strongly/natively-typed
+            functional-programming subset of Perl&nbsp;6 ("perlesque"), but
+            specifically the flavor of Perl&nbsp;6 used by STD, to facilitate
+            quick bootstrapping of the official STD grammar and Cursor parser
+            engine to the CLR.  It is actively developed.
         </li>
 
         <li>
             <a
             href="http://www.perlfoundation.org/perl6/index.cgi?mildew">Mildew</a>
             uses STD.pm as a parser and SMOP as runtime. It is actively developed.
-        </li>
-
-        <li>
-            <a href="http://github.com/sorear/niecza">Niecza</a> is a compiler
-            targetting the Common Language Runtime (.NET and Mono).  Its goal
-            is to explore the static aspects of Perl 6 and the possibilities
-            for compile-time optimization, though this is not yet well realized.
-        </li>
-
-        <li>
-            <a href="http://www.perlito.org/">Perlito</a>, also known as MiniPerl6,
-            is a subset of Perl 6, designed as a light bootstrapping language.
-            You can <a href="http://www.perlito.org/js">try it online</a>.
-            It is actively developed.
-        </li>
-
-        <li>
-            <a
-            href="http://perlgeek.de/blog-en/perl-6/announcing-sprixel.html">Sprixel</a>
-            uses JavaScript to compile Perl&nbsp;6 to JavaScript, with a runtime written in JavaScript. Recently, an STD.pm-compatible parser-generator was being written. It is actively developed.
+            <a href="http://www.perlfoundation.org/perl6/index.cgi?smop">SMOP</a>
+            is a runtime library to represent Perl&nbsp;6 objects. It focuses on
+            meta object programming capabilities.
         </li>
 
         <li>
             <a href="http://perl.net.au/wiki/Elf">Elf</a> is a bootstrapped
-            compiler with Perl&nbsp;5 and Lisp backends. Only very little activity
-            since March 2009.
+            compiler with Perl&nbsp;5 and Lisp backends. Not actively developed
+            since March 2009. Its source lives
+            <a href="http://github.com/perl6/mu/tree/master/v6/">here</a>.
         </li>
 
         <li>
-            <a href="http://pugscode.org/">Pugs</a> is written in Haskell, and has been inactive in the pugscode repository since mid 2007, but new releases for successive versions of ghc are published to <a href="http://hackage.haskell.org/package/Pugs">Hackage</a>. The most recent (6.2.13.15 as of this writing) was released 2009-12-16.
+            <a href="http://pugscode.org/">Pugs</a> is written in Haskell.
+            Maintenance releases for successive versions of ghc are published to
+            <a href="http://hackage.haskell.org/package/Pugs">Hackage</a>.
+            The most recent (6.2.13.15 as of this writing (2010-09-27)) was
+            released 2009-12-16.
         </li>
     </ul>
 </div>
