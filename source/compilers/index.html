@@ -28,8 +28,15 @@
             is Larry Wall's reference implementation of the Perl&nbsp;6 grammar,
             parser generator, and some of the semantic verifier. STD is an
             abbreviation of "Standard", as in "Perl6.0.0-STD". It is written in
-            Perl 6, transliterated into Perl 5 by "gimme5", and supported by
-            Cursor.pm and Moose and others.
+            Perl&nbsp;6, transliterated into Perl&nbsp;5 by "gimme5", and
+            supported by Cursor.pm and Moose and others. It is also used by
+            various phases of several other compilers (mildew, perlito, elf).
+        </li>
+
+        <li>
+            <a href="http://github.com/perl6/std">viv</a> ("vi" to "v", 6 to 5)
+            is a compiler that uses STD as its front-end. STD itself uses viv to
+            build. It is actively developed along with STD.
         </li>
 
         <li>
