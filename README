@@ -6,23 +6,28 @@ should also result in an update of perl6.org. If not, talk to moritz_ on
 
 [1]: http://perlgeek.de/en/software/mowyw
 
-Notes:
-  
-  - If you intend to change the layout, consider what happens when:
-    * user's viewport is small (e.g. 800x600)
-    * user resizes window
+Here are some guidelines that you should respect when changing this site:
 
-  - Test layout changes on browsershots.org, with particular consideration
-    to badly broken browsers - IE6 still needs to be considered (2009-07).
-    IE5.5 and below can be ignored.
-    
-  - jquery.min.js is in repo, i find i end up using it most of the time anyway
-    All basic functionality (links, menus, proper page rendering) must be
-    availalbe without javascript though.
-  
-  - other javascript stuff could go in page.js (at your discretion).
+ * Only link to up-to-date information; feel free to delete outdated
+   information - it is often more confusing than helpful
 
-  - We spell "Perl 6" consitently with a non-breaking space. If you don't have
-    already, go get an editor with decent Unicode support.
+ * Be nice
 
-  - Speaking of which, all pages are served as UTF-8.
+ * Don't hesitate to link to pages you wrote youself, if they are helpful to
+   a broader Perl 6 audience
+
+ * If you have a Perl 6 blog, get it included in the planetsix.perl.org feed
+   instead. Talk to [Coke] on #perl6
+
+ * If you intend to change the layout, consider what happens when:
+    - user's viewport is small (e.g. 800x600)
+    - user resizes window
+
+ * Test layout changes on browsershots.org, with particular consideration
+   to badly broken browsers - IE6 still needs to be considered (2009-07).
+   IE5.5 and below can be ignored.
+
+ * We spell "Perl 6" consitently with a non-breaking space. If you don't have
+   already, go get an editor with decent Unicode support.
+
+ * Speaking of which, all pages are served as UTF-8.
