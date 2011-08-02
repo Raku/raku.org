@@ -249,6 +249,12 @@ dl#botlist dd {
     height: auto;
 }
 
+#compilers {
+    background: #c0e472;
+    border-color: #8bc313;
+    height: auto;
+}
+
 #features {
     background: #e47286;
     border-color: #e43b59;
@@ -256,8 +262,8 @@ dl#botlist dd {
 }
 
 #supplementals {
-    background: #80b5ff;
-    border-color: #63a4ff;
+    background: #f5ef7b;
+    border-color: #f2c100;
     height: auto;
 }
 
