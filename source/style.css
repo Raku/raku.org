@@ -250,14 +250,14 @@ dl#botlist dd {
 }
 
 #features {
-    background: #80b5ff;
-    border-color: #63a4ff;
+    background: #c0e472;
+    border-color: #8bc313;
     height: auto;
 }
 
 #supplementals {
-    background: #c0e472;
-    border-color: #8bc313;
+    background: #80b5ff;
+    border-color: #63a4ff;
     height: auto;
 }
 
