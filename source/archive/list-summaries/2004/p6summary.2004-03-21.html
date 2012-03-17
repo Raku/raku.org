@@ -52,7 +52,7 @@ things were changed.</p>
 <p><a href='http://groups.google.com/groups?selm=200403151648.i2FGm5A04234@vendian.org' target='_blank'>groups.google.com</a></p>
 <a name='GC issues'></a><h2>GC issues</h2>
 <p>Jens Rieks continues to stress the object stuff (he's working on writing
-an EBNF parser). He posted a test to the list that led Leo Tötsch to
+an EBNF parser). He posted a test to the list that led Leo TÃ¶tsch to
 find and fix 3 bugs in the Garbage Collector's DOD phase.</p>
 <p><a href='http://groups.google.com/groups?selm=200403151937.19883.parrot@jensbeimsurfen.de' target='_blank'>groups.google.com</a></p>
 <a name='Will's questions'></a><h2>Will's questions</h2>
@@ -130,7 +130,7 @@ representation, which can't be bad.</p>
 <p><a href='http://groups.google.com/groups?selm=FB17458A-783C-11D8-8121-000393A6B9DA@mac.com' target='_blank'>groups.google.com</a></p>
 <a name='Continuation usage'></a><h2>Continuation usage</h2>
 <p>Jens Rieks and Piers Cawley both had problems with continuations. Leo
-Tötsch tried explain what they were doing wrong. There seemed to be a
+TÃ¶tsch tried explain what they were doing wrong. There seemed to be a
 fair amount of talking past each other going on (at least, that's how
 it felt from my point of view) but I think communication has been
 established now. Hopefully this will lead to a better set of tests for
@@ -152,14 +152,14 @@ faster), he thought they were rather lovely.</p>
 <a name='Meanwhile, in perl6-language'></a><h1>Meanwhile, in perl6-language</h1>
 <a name='Hash subscriptor'></a><h2>Hash subscriptor</h2>
 <p>At the back end of the previous week, Larry introduced the idea of
-subscripting hashes with <code>%hash«baz»</code> when you mean
+subscripting hashes with <code>%hashÂ«bazÂ»</code> when you mean
 <code>%hash{'baz'}</code>. This surprised John Williams (and others I'm sure, it
 certainly surprised me, but it's one of those &quot;What? Oh... that makes a
 lot of sense&quot; type surprises.) Larry explained his thinking on the
 issue. Apparently it arose because <code>:foo('bar')</code> was too ugly to live,
-but too useful to die, so <code>:foo«bar»</code> was invented, and once you have
-that, it is but a short step to <code>%foo«bar»</code>. (If you've not read
-Exegesis 7, you probably don't know that <code>:foo«bar»</code> is equivalent to
+but too useful to die, so <code>:fooÂ«barÂ»</code> was invented, and once you have
+that, it is but a short step to <code>%fooÂ«barÂ»</code>. (If you've not read
+Exegesis 7, you probably don't know that <code>:fooÂ«barÂ»</code> is equivalent to
 <code>foo =&gt; 'bar'</code>, but you do now.) John wasn't convinced though. It
 remains to be seen if he's convinced Larry.</p>
 <p>Larry: unfortunately it's an unavoidable part of my job description to
@@ -181,7 +181,7 @@ questions. Much of the ensuing discussion covered the use of the
 'broken bar' glyph as an infix form of the <code>zip</code> operator. Which I
 didn't quite realise as I skimmed the thread during the week because
 courier doesn't seem to distinguish between the broken bar and the
-standard bar. Larry later suggested using the yen (¥) symbol instead,
+standard bar. Larry later suggested using the yen (Â¥) symbol instead,
 which has the advantage of looking a little like a zipper. I really
 hope that firms up from suggestion to design call.</p>
 <p><a href='http://groups.google.com/groups?selm=200403200148.i2K1mJkG001378@ms-smtp-02-eri0.southeast.rr.com' target='_blank'>groups.google.com</a></p>

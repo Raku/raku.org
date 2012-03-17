@@ -10,14 +10,14 @@
 <p>Autrijus release Pugs 6.2.0 marking the first major milestone for Pugs.  This includes most of the control flow primitives of Perl 6 and is a testament to the solid work that all of the &quot;lambdacamels&quot; have been putting in.</p>
 <p><a href='http://groups-beta.google.com/group/perl.perl6.compiler/browse_frm/thread/96465d8b9ad451d9/506edf0f1f75fd18' target='_blank'>groups-beta.google.com</a>#506edf0f1f75fd18</p>
 <a name='CGI.pm and multi byte characters'></a><h3>CGI.pm and multi byte characters</h3>
-<p>B¡RTH¡ZI Andr·s was having trouble encoding and decoding multi byte characters in CGI.pm.  This led to a general discussion of how to escape such characters in URLs as well as when to call <code> chr </code>.</p>
+<p>B√ÅRTH√ÅZI Andr√°s was having trouble encoding and decoding multi byte characters in CGI.pm.  This led to a general discussion of how to escape such characters in URLs as well as when to call <code> chr </code>.</p>
 <p><a href='http://groups-beta.google.com/group/perl.perl6.compiler/browse_frm/thread/750a78b4aba5ab30/18de224db1c6456a' target='_blank'>groups-beta.google.com</a>#18de224db1c6456a -- discussion</p>
 <p><a href='http://groups-beta.google.com/group/perl.perl6.compiler/browse_frm/thread/2583cd2ad56bcb8a/b146ba42087af46e' target='_blank'>groups-beta.google.com</a>#b146ba42087af46e -- more discussion</p>
 <a name='auto currying?'></a><h3>auto currying?</h3>
 <p>Matthew D Swank wondered if he really needed an extra set of parens to simultaneously call a function generator and its generated function.  Autrijus told him that yes he did as Perl 6 is not quite Haskell yet.</p>
 <p><a href='http://groups-beta.google.com/group/perl.perl6.compiler/browse_frm/thread/c188af3a040a766c/2bed10c78e871766' target='_blank'>groups-beta.google.com</a>#2bed10c78e871766</p>
 <a name='case insensitive P5 regex'></a><h3>case insensitive P5 regex</h3>
-<p>B¡RTH¡ZI Andr·s wanted to use the :i switch on P5 regexes.  Autrijus implemented it, but Larry noticed that this introduced a flag ordering dependency.  As a result the new way to supply flags to a perl 5 regex is <code> rx:P5&lt;imsxg</code>/.../ &gt;.</p>
+<p>B√ÅRTH√ÅZI Andr√°s wanted to use the :i switch on P5 regexes.  Autrijus implemented it, but Larry noticed that this introduced a flag ordering dependency.  As a result the new way to supply flags to a perl 5 regex is <code> rx:P5&lt;imsxg</code>/.../ &gt;.</p>
 <p><a href='http://groups-beta.google.com/group/perl.perl6.compiler/browse_frm/thread/e02fee049f84a748/0a265818f9c46346' target='_blank'>groups-beta.google.com</a>#0a265818f9c46346</p>
 <a name='Cookbook Ettiquette'></a><h3>Cookbook Ettiquette</h3>
 <p>Marcus Adair wondered if there were rules of etiquette he should obey when writing examples for the Perl 6 Cookbook.  In particular, should examples run and be only one file.  Ovid suggested that one file was a good idea, but was open to contrary arguments.</p>
@@ -26,7 +26,7 @@
 <p>Thomas Klausner announced that on June 9-10 in Vienna Austria there would be a Hackathon featuring the collective might of Autrijus, Chip, Leo, and more.  When that much brain power gets together only two things can happen:  much hacking and much drinking.</p>
 <p><a href='http://groups-beta.google.com/group/perl.perl6.compiler/browse_frm/thread/cdccc751c9d251a2/12384146569d9acd' target='_blank'>groups-beta.google.com</a>#12384146569d9acd</p>
 <a name='encoding illegal byte sequences in strings'></a><h3>encoding illegal byte sequences in strings</h3>
-<p>B¡RTH¡ZI Andr·s wanted to know if he could encode an illegal byte sequence in a string.  Much discussion ensued, but Larry promised that it would be possible.</p>
+<p>B√ÅRTH√ÅZI Andr√°s wanted to know if he could encode an illegal byte sequence in a string.  Much discussion ensued, but Larry promised that it would be possible.</p>
 <p><a href='http://groups-beta.google.com/group/perl.perl6.compiler/browse_frm/thread/fb83a5437e07b928/ba9781abcd3406ca' target='_blank'>groups-beta.google.com</a>#ba9781abcd3406ca</p>
 <a name='Test::TAP'></a><h3>Test::TAP</h3>
 <p>Yuval Kogman announced the release of two new modules to CPAN which provid Pugs smoke html.</p>
@@ -73,7 +73,7 @@
 <p>Roger Hale noticed a small problem with parrotcode.org.  Robert Spier fixed it.</p>
 <p><a href='http://groups-beta.google.com/group/perl.perl6.internals/browse_frm/thread/8ab9759222802158/cc3f9249ea9441a9' target='_blank'>groups-beta.google.com</a>#cc3f9249ea9441a9</p>
 <a name='nci.t failure under MinGW'></a><h3>nci.t failure under MinGW</h3>
-<p>FranÁois Perrad fixed a MinGW test failure.  Leo applied the patch.</p>
+<p>Fran√ßois Perrad fixed a MinGW test failure.  Leo applied the patch.</p>
 <p><a href='http://groups-beta.google.com/group/perl.perl6.internals/browse_frm/thread/4a44170fc7012544/0638cc2ec3747287' target='_blank'>groups-beta.google.com</a>#0638cc2ec3747287</p>
 <a name='trailing space with ${LD_OUT}'></a><h3>trailing space with ${LD_OUT}</h3>
 <p>Andy Dougherty fixed an old bug with LD_OUT having trailing space.  Leo applied the patch.</p>
@@ -106,14 +106,14 @@
 <p>Nick Glencross provided a patch which fixes some typos in docs.  chromatic applied it with a few extra tweaks.</p>
 <p><a href='http://groups-beta.google.com/group/perl.perl6.internals/browse_frm/thread/d75f7b9d5c4c8103/d473935613cca66e' target='_blank'>groups-beta.google.com</a>#d473935613cca66e</p>
 <a name='Parrot Security'></a><h3>Parrot Security</h3>
-<p>B¡RTH¡ZI Andr·s wondered about the general security mechanisms that Parrot would provided.  Dan assured him that security would be a fundamental part of Parrot.  He also provided a sketch of the security model which sparked some discussion.</p>
+<p>B√ÅRTH√ÅZI Andr√°s wondered about the general security mechanisms that Parrot would provided.  Dan assured him that security would be a fundamental part of Parrot.  He also provided a sketch of the security model which sparked some discussion.</p>
 <p><a href='http://groups-beta.google.com/group/perl.perl6.internals/browse_frm/thread/6285245dd83ead1b/d029a1bd60ba207c' target='_blank'>groups-beta.google.com</a>#d029a1bd60ba207c</p>
 <p><a href='http://groups-beta.google.com/group/perl.perl6.internals/browse_frm/thread/becd70c749ed8802/b2cc77c111663f98' target='_blank'>groups-beta.google.com</a>#b2cc77c111663f98 -- sketch</p>
 <a name='debian arm failure'></a><h3>debian arm failure</h3>
 <p>Falls Huang reported a build failure on Debian-arm.  Leo provided a pointer in the write direction.</p>
 <p><a href='http://groups-beta.google.com/group/perl.perl6.internals/browse_frm/thread/b06bf58efba82f2e/fb7f013cb9f7acab' target='_blank'>groups-beta.google.com</a>#fb7f013cb9f7acab</p>
 <a name='missing make target'></a><h3>missing make target</h3>
-<p>FranÁois Perrad notice that `make src/revision.c` couldn't handle .svn/entries.  Jens Rieks fixed the problem.</p>
+<p>Fran√ßois Perrad notice that `make src/revision.c` couldn't handle .svn/entries.  Jens Rieks fixed the problem.</p>
 <p><a href='http://groups-beta.google.com/group/perl.perl6.internals/browse_frm/thread/fc24f59f5f8e18bd/1202ce973afc6c31' target='_blank'>groups-beta.google.com</a>#1202ce973afc6c31</p>
 <a name='JIT generation help'></a><h3>JIT generation help</h3>
 <p>Adam Preble put out a call for some general advice on understanding Parrots JIT.  Leo provided some general dvice.</p>
@@ -165,7 +165,7 @@
 <p>Steven Philip Schubiger provided a patch fixing some small spelling errors.  He worried that perhaps he was needless picking nits.  I don't think so, but Warnock applies.</p>
 <p><a href='http://groups-beta.google.com/group/perl.perl6.internals/browse_frm/thread/83fc0d3cb83d9e04/e452b42305facec0' target='_blank'>groups-beta.google.com</a>#e452b42305facec0</p>
 <a name='Win32 ICU error'></a><h3>Win32 ICU error</h3>
-<p>FranÁois Perrad fixed a small mistake in the naming of icudt.lib.  chromatic applied the patch.</p>
+<p>Fran√ßois Perrad fixed a small mistake in the naming of icudt.lib.  chromatic applied the patch.</p>
 <p><a href='http://groups-beta.google.com/group/perl.perl6.internals/browse_frm/thread/a88e134e75e0fb96/7cc20604fbe7b7e6' target='_blank'>groups-beta.google.com</a>#7cc20604fbe7b7e6</p>
 <a name='Drunken Parrot'></a><h3>Drunken Parrot</h3>
 <p>Cory Spencer has succeed in making LISP run on Parrot and uncovered a few GC bugs in the process.  Everyone was impressed.</p>
@@ -193,7 +193,7 @@
 <p>Juerd wondered what sort of character classes matched nonbreaking spaces.  Larry replied that they did, but possulated a &lt;bws&gt; class for breaking whitespace.</p>
 <p><a href='http://groups-beta.google.com/group/perl.perl6.language/browse_frm/thread/cd7710fe025526db/0159190cdac55ae1' target='_blank'>groups-beta.google.com</a>#0159190cdac55ae1</p>
 <a name='trim() and words()'></a><h3>trim() and words()</h3>
-<p>Marcus Adair wondered about <code> trim </code> and <code> words </code> and if they actually existed.  It seems that trim will exist all though words might be spelled ´$stringª.</p>
+<p>Marcus Adair wondered about <code> trim </code> and <code> words </code> and if they actually existed.  It seems that trim will exist all though words might be spelled ¬´$string¬ª.</p>
 <p><a href='http://groups-beta.google.com/group/perl.perl6.language/browse_frm/thread/42c0bc951df70bc4/a08367349c36ed44' target='_blank'>groups-beta.google.com</a>#a08367349c36ed44</p>
 <a name='&lt;[]&gt; ugly and hard to type'></a><h3>&lt;[]&gt; ugly and hard to type</h3>
 <p>There was some complaining that character classes are difficult to type.  This is considered a feature as character classes do not handle internaionalization well.</p>
@@ -214,7 +214,7 @@
 <p>Larry decide that the range operator in character classes should change to <code> .. </code>.  Much discussion ensued.  I like it.</p>
 <p><a href='http://groups-beta.google.com/group/perl.perl6.language/browse_frm/thread/eb469e49d67ee887/5d5ce1a957b4a656' target='_blank'>groups-beta.google.com</a>#5d5ce1a957b4a656</p>
 <a name='tainted variables'></a><h3>tainted variables</h3>
-<p>B¡RTH¡ZI Andr·s wondered if he could mark variables as tainted.  Luke Palmer showed him a way.</p>
+<p>B√ÅRTH√ÅZI Andr√°s wondered if he could mark variables as tainted.  Luke Palmer showed him a way.</p>
 <p><a href='http://groups-beta.google.com/group/perl.perl6.language/browse_frm/thread/9627c979812b1881/18e4deaee9092db2' target='_blank'>groups-beta.google.com</a>#18e4deaee9092db2</p>
 <a name='temp variables that can be redeclared'></a><h3>temp variables that can be redeclared</h3>
 <p>Aaron Sherman wants a way to redeclare variables without getting a warning.  He suggested <code> temp </code>.  Larry suggested <code> ok </code> to turn off a warning, but doesn't think Aaron's feature is really necessary.  No official ruling yet (I think).</p>

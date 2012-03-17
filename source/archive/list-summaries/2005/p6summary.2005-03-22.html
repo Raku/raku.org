@@ -64,7 +64,7 @@
 <p>Rod Adams wanted to know how for would behave with various types of functions or codeblocks.  Luke Palmer provided answers.</p>
 <p><a href='http://groups-beta.google.com/group/perl.perl6.language/browse_frm/thread/f89531093cc2e3da/cd015186c0b67a77' target='_blank'>groups-beta.google.com</a>#cd015186c0b67a77</p>
 <a name='adding interfaces to arguments'></a><h3>adding interfaces to arguments</h3>
-<p>Thomas Sandlaﬂ wondered when arguments to function would be decorated with roles from the function signature if they didn't exist.  Larry conjectured about allowing different views on objects versus mixing in various roles.  This led people to talk about covariant typing.  An array of ints will always return you a number and an array of numbers will always accept an int.  But an array of ints will not necessarily accept a number and an array of numbers will not necessarily return an int.  Thus changing your view can be valid when writing and not when reading or vice versa.</p>
+<p>Thomas Sandla√ü wondered when arguments to function would be decorated with roles from the function signature if they didn't exist.  Larry conjectured about allowing different views on objects versus mixing in various roles.  This led people to talk about covariant typing.  An array of ints will always return you a number and an array of numbers will always accept an int.  But an array of ints will not necessarily accept a number and an array of numbers will not necessarily return an int.  Thus changing your view can be valid when writing and not when reading or vice versa.</p>
 <p><a href='http://groups-beta.google.com/group/perl.perl6.language/browse_frm/thread/d7d6bd1506544ee5/9433d70b82708e82' target='_blank'>groups-beta.google.com</a>#9433d70b82708e82</p>
 <a name='pugs too lazy'></a><h3>pugs too lazy</h3>
 <p>Miroslav Silovic noticed that closing a file handle in pugs did not force all the thunks associated with the file.  While this was a bug in pugs, it led to conversation about whether = should be lazy or eager.  Larry thinks that it will be safer to start eager and become lazy then vice versa.</p>
@@ -253,13 +253,13 @@ Stevan Little pointed him to the in progress attempt to build just such a databa
 <p>Nick Glencross found a segfault when splicing an IntList.  Jens Rieks provided a patch that allowed parrot to die earlier and cleaner.  Leo fixed the problem.</p>
 <p><a href='http://groups-beta.google.com/group/perl.perl6.internals/browse_frm/thread/825d0b2ee8e15d73/bd72ed3b4004ce9c' target='_blank'>groups-beta.google.com</a>#bd72ed3b4004ce9c</p>
 <a name='Documenting the MinGW build'></a><h3>Documenting the MinGW build</h3>
-<p>FranÁois Perrad provided a patch updating documentation for building with MinGW.  Warnock applies.</p>
+<p>Fran√ßois Perrad provided a patch updating documentation for building with MinGW.  Warnock applies.</p>
 <p><a href='http://groups-beta.google.com/group/perl.perl6.internals/browse_frm/thread/c64adac9b6b4b822/dcdeb12bb567f52e' target='_blank'>groups-beta.google.com</a>#dcdeb12bb567f52e</p>
 <a name='segfaulting md5sums'></a><h3>segfaulting md5sums</h3>
 <p>Nick Glencross decided to check up on his md5sum library.  It still compiles, but it segfaults.  Leo found and fixed the GC bug.</p>
 <p><a href='http://groups-beta.google.com/group/perl.perl6.internals/browse_frm/thread/6ef839077855a882/e90e4226ded8159f' target='_blank'>groups-beta.google.com</a>#e90e4226ded8159f</p>
 <a name='Parrot_Exec_OS_Command'></a><h3>Parrot_Exec_OS_Command</h3>
-<p>FranÁois Perrad noticed that MinGW was very particular about how one execs OS commands.  He wondered if this should be fixed at the configure layer or the Parrot_Exec_OS_Command layer.  Dan explained that it was not intended to be language independant, and that a language independent version should go in a library.</p>
+<p>Fran√ßois Perrad noticed that MinGW was very particular about how one execs OS commands.  He wondered if this should be fixed at the configure layer or the Parrot_Exec_OS_Command layer.  Dan explained that it was not intended to be language independant, and that a language independent version should go in a library.</p>
 <p><a href='http://groups-beta.google.com/group/perl.perl6.internals/browse_frm/thread/9872aae4f7d39836/e4496796bc505458' target='_blank'>groups-beta.google.com</a>#e4496796bc505458</p>
 <a name='Namespaces in PIR'></a><h3>Namespaces in PIR</h3>
 <p>Leo posted a call for comments on PIR namespaces.  Dan suggested a small addition.</p>
