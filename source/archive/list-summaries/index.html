@@ -1,7 +1,4 @@
 [% setvar title = "This Week in Perl 6" %]
-[% page.morehead = BLOCK %]
- <link rel="alternate" type="application/rss+xml" title="Perl6 List Summaries" href="index.rss">
-[% END %]
 
 <P>
 Matt and Piers extract the information you <i>need to know</i> from the <A HREF="../lists">perl6
@@ -12,39 +9,850 @@ mailing lists</a>.
 <b>By Matt Fowles and Piers Cawley</B>
 </p>
 
-[% page.sidebar = BLOCK %]
-<UL>
-  <LI><A HREF="#2005">2005</A></LI>
-  <LI><A HREF="#2004">2004</A></LI>
-  <LI><A HREF="#2003">2003</A></LI>
-  <LI><A HREF="#2002">2002</A></LI>
-</UL>
 
-<BR>
-<BR>
-<CENTER>
-<A HREF="index.rss"><IMG BORDER=0 SRC="/simages/rss.gif"></A>
-</CENTER>
-[% END %]
-
-[%
-   PROCESS "perl6/list-summaries/summary-index";
-   USE date;
-   c_year = 0;
--%]
-[% FOR d IN dates;
-  dd = d.split('-');
-%]
-[%      IF c_year != dd.0;
-            "</UL>" UNLESS c_year == 0;
-            c_year = dd.0;
-%] 
-[%  %]
-<A NAME="[% c_year %]"><H2>[% c_year %]</H2></A>
-[%      END %]
-<LI><A HREF="[% dd.0 %]/p6summary.[% d %].html"
-  >[% date.calc.Month_to_Text( dd.1 ) %] [% dd.2 %], [% dd.0 %]</A>
-
-[% END %]
-</UL>
+ 
+<A NAME="2006"><H2>2006</H2></A> 
+ 
+<LI><A HREF="2006/p6summary.2006-02-12.html"
+  >February 12, 2006</A> 
+ 
+ 
+ 
+<LI><A HREF="2006/p6summary.2006-02-07.html"
+  >February 07, 2006</A> 
+ 
+ 
+ 
+<LI><A HREF="2006/p6summary.2006-01-24.html"
+  >January 24, 2006</A> 
+ 
+ 
+ 
+<LI><A HREF="2006/p6summary.2006-01-11.html"
+  >January 11, 2006</A> 
+ 
+ 
+ 
+<LI><A HREF="2006/p6summary.2006-01-01.html"
+  >January 01, 2006</A> 
+ 
+ 
+</UL> 
+ 
+<A NAME="2005"><H2>2005</H2></A> 
+ 
+<LI><A HREF="2005/p6summary.2005-12-18.html"
+  >December 18, 2005</A> 
+ 
+ 
+ 
+<LI><A HREF="2005/p6summary.2005-12-12.html"
+  >December 12, 2005</A> 
+ 
+ 
+ 
+<LI><A HREF="2005/p6summary.2005-12-04.html"
+  >December 04, 2005</A> 
+ 
+ 
+ 
+<LI><A HREF="2005/p6summary.2005-11-27.html"
+  >November 27, 2005</A> 
+ 
+ 
+ 
+<LI><A HREF="2005/p6summary.2005-11-21.html"
+  >November 21, 2005</A> 
+ 
+ 
+ 
+<LI><A HREF="2005/p6summary.2005-11-13.html"
+  >November 13, 2005</A> 
+ 
+ 
+ 
+<LI><A HREF="2005/p6summary.2005-10-30.html"
+  >October 30, 2005</A> 
+ 
+ 
+ 
+<LI><A HREF="2005/p6summary.2005-10-25.html"
+  >October 25, 2005</A> 
+ 
+ 
+ 
+<LI><A HREF="2005/p6summary.2005-10-09.html"
+  >October 09, 2005</A> 
+ 
+ 
+ 
+<LI><A HREF="2005/p6summary.2005-10-02.html"
+  >October 02, 2005</A> 
+ 
+ 
+ 
+<LI><A HREF="2005/p6summary.2005-09-25.html"
+  >September 25, 2005</A> 
+ 
+ 
+ 
+<LI><A HREF="2005/p6summary.2005-09-19.html"
+  >September 19, 2005</A> 
+ 
+ 
+ 
+<LI><A HREF="2005/p6summary.2005-09-11.html"
+  >September 11, 2005</A> 
+ 
+ 
+ 
+<LI><A HREF="2005/p6summary.2005-08-22.html"
+  >August 22, 2005</A> 
+ 
+ 
+ 
+<LI><A HREF="2005/p6summary.2005-08-14.html"
+  >August 14, 2005</A> 
+ 
+ 
+ 
+<LI><A HREF="2005/p6summary.2005-08-10.html"
+  >August 10, 2005</A> 
+ 
+ 
+ 
+<LI><A HREF="2005/p6summary.2005-08-02.html"
+  >August 02, 2005</A> 
+ 
+ 
+ 
+<LI><A HREF="2005/p6summary.2005-07-26.html"
+  >July 26, 2005</A> 
+ 
+ 
+ 
+<LI><A HREF="2005/p6summary.2005-07-19.html"
+  >July 19, 2005</A> 
+ 
+ 
+ 
+<LI><A HREF="2005/p6summary.2005-07-12.html"
+  >July 12, 2005</A> 
+ 
+ 
+ 
+<LI><A HREF="2005/p6summary.2005-07-05.html"
+  >July 05, 2005</A> 
+ 
+ 
+ 
+<LI><A HREF="2005/p6summary.2005-06-28.html"
+  >June 28, 2005</A> 
+ 
+ 
+ 
+<LI><A HREF="2005/p6summary.2005-06-21.html"
+  >June 21, 2005</A> 
+ 
+ 
+ 
+<LI><A HREF="2005/p6summary.2005-06-07.html"
+  >June 07, 2005</A> 
+ 
+ 
+ 
+<LI><A HREF="2005/p6summary.2005-05-31.html"
+  >May 31, 2005</A> 
+ 
+ 
+ 
+<LI><A HREF="2005/p6summary.2005-05-24.html"
+  >May 24, 2005</A> 
+ 
+ 
+ 
+<LI><A HREF="2005/p6summary.2005-05-18.html"
+  >May 18, 2005</A> 
+ 
+ 
+ 
+<LI><A HREF="2005/p6summary.2005-05-03.html"
+  >May 03, 2005</A> 
+ 
+ 
+ 
+<LI><A HREF="2005/p6summary.2005-04-26.html"
+  >April 26, 2005</A> 
+ 
+ 
+ 
+<LI><A HREF="2005/p6summary.2005-04-19.html"
+  >April 19, 2005</A> 
+ 
+ 
+ 
+<LI><A HREF="2005/p6summary.2005-04-12.html"
+  >April 12, 2005</A> 
+ 
+ 
+ 
+<LI><A HREF="2005/p6summary.2005-04-05.html"
+  >April 05, 2005</A> 
+ 
+ 
+ 
+<LI><A HREF="2005/p6summary.2005-03-22.html"
+  >March 22, 2005</A> 
+ 
+ 
+ 
+<LI><A HREF="2005/p6summary.2005-03-07.html"
+  >March 07, 2005</A> 
+ 
+ 
+ 
+<LI><A HREF="2005/p6summary.2005-02-22.html"
+  >February 22, 2005</A> 
+ 
+ 
+ 
+<LI><A HREF="2005/p6summary.2005-02-08.html"
+  >February 08, 2005</A> 
+ 
+ 
+ 
+<LI><A HREF="2005/p6summary.2005-01-31.html"
+  >January 31, 2005</A> 
+ 
+ 
+ 
+<LI><A HREF="2005/p6summary.2005-01-18.html"
+  >January 18, 2005</A> 
+ 
+ 
+ 
+<LI><A HREF="2005/p6summary.2005-01-11.html"
+  >January 11, 2005</A> 
+ 
+ 
+ 
+<LI><A HREF="2005/p6summary.2005-01-03.html"
+  >January 03, 2005</A> 
+ 
+ 
+</UL> 
+ 
+<A NAME="2004"><H2>2004</H2></A> 
+ 
+<LI><A HREF="2004/p6summary.2004-12-20.html"
+  >December 20, 2004</A> 
+ 
+ 
+ 
+<LI><A HREF="2004/p6summary.2004-12-06.html"
+  >December 06, 2004</A> 
+ 
+ 
+ 
+<LI><A HREF="2004/p6summary.2004-11-29.html"
+  >November 29, 2004</A> 
+ 
+ 
+ 
+<LI><A HREF="2004/p6summary.2004-11-22.html"
+  >November 22, 2004</A> 
+ 
+ 
+ 
+<LI><A HREF="2004/p6summary.2004-11-15.html"
+  >November 15, 2004</A> 
+ 
+ 
+ 
+<LI><A HREF="2004/p6summary.2004-11-08.html"
+  >November 08, 2004</A> 
+ 
+ 
+ 
+<LI><A HREF="2004/p6summary.2004-11-01.html"
+  >November 01, 2004</A> 
+ 
+ 
+ 
+<LI><A HREF="2004/p6summary.2004-10-23.html"
+  >October 23, 2004</A> 
+ 
+ 
+ 
+<LI><A HREF="2004/p6summary.2004-10-17.html"
+  >October 17, 2004</A> 
+ 
+ 
+ 
+<LI><A HREF="2004/p6summary.2004-09-24.html"
+  >September 24, 2004</A> 
+ 
+ 
+ 
+<LI><A HREF="2004/p6summary.2004-09-17.html"
+  >September 17, 2004</A> 
+ 
+ 
+ 
+<LI><A HREF="2004/p6summary.2004-09-10.html"
+  >September 10, 2004</A> 
+ 
+ 
+ 
+<LI><A HREF="2004/p6summary.2004-09-03.html"
+  >September 03, 2004</A> 
+ 
+ 
+ 
+<LI><A HREF="2004/p6summary.2004-08-27.html"
+  >August 27, 2004</A> 
+ 
+ 
+ 
+<LI><A HREF="2004/p6summary.2004-08-20.html"
+  >August 20, 2004</A> 
+ 
+ 
+ 
+<LI><A HREF="2004/p6summary.2004-08-06.html"
+  >August 06, 2004</A> 
+ 
+ 
+ 
+<LI><A HREF="2004/p6summary.2004-07-31.html"
+  >July 31, 2004</A> 
+ 
+ 
+ 
+<LI><A HREF="2004/p6summary.2004-07-25.html"
+  >July 25, 2004</A> 
+ 
+ 
+ 
+<LI><A HREF="2004/p6summary.2004-07-18.html"
+  >July 18, 2004</A> 
+ 
+ 
+ 
+<LI><A HREF="2004/p6summary.2004-07-10.html"
+  >July 10, 2004</A> 
+ 
+ 
+ 
+<LI><A HREF="2004/p6summary.2004-07-04.html"
+  >July 04, 2004</A> 
+ 
+ 
+ 
+<LI><A HREF="2004/p6summary.2004-06-27.html"
+  >June 27, 2004</A> 
+ 
+ 
+ 
+<LI><A HREF="2004/p6summary.2004-06-21.html"
+  >June 21, 2004</A> 
+ 
+ 
+ 
+<LI><A HREF="2004/p6summary.2004-06-06.html"
+  >June 06, 2004</A> 
+ 
+ 
+ 
+<LI><A HREF="2004/p6summary.2004-05-23.html"
+  >May 23, 2004</A> 
+ 
+ 
+ 
+<LI><A HREF="2004/p6summary.2004-05-09.html"
+  >May 09, 2004</A> 
+ 
+ 
+ 
+<LI><A HREF="2004/p6summary.2004-05-02.html"
+  >May 02, 2004</A> 
+ 
+ 
+ 
+<LI><A HREF="2004/p6summary.2004-04-25.html"
+  >April 25, 2004</A> 
+ 
+ 
+ 
+<LI><A HREF="2004/p6summary.2004-04-18.html"
+  >April 18, 2004</A> 
+ 
+ 
+ 
+<LI><A HREF="2004/p6summary.2004-04-04.html"
+  >April 04, 2004</A> 
+ 
+ 
+ 
+<LI><A HREF="2004/p6summary.2004-03-28.html"
+  >March 28, 2004</A> 
+ 
+ 
+ 
+<LI><A HREF="2004/p6summary.2004-03-21.html"
+  >March 21, 2004</A> 
+ 
+ 
+ 
+<LI><A HREF="2004/p6summary.2004-03-14.html"
+  >March 14, 2004</A> 
+ 
+ 
+ 
+<LI><A HREF="2004/p6summary.2004-03-07.html"
+  >March 07, 2004</A> 
+ 
+ 
+ 
+<LI><A HREF="2004/p6summary.2004-02-29.html"
+  >February 29, 2004</A> 
+ 
+ 
+ 
+<LI><A HREF="2004/p6summary.2004-02-22.html"
+  >February 22, 2004</A> 
+ 
+ 
+ 
+<LI><A HREF="2004/p6summary.2004-02-15.html"
+  >February 15, 2004</A> 
+ 
+ 
+ 
+<LI><A HREF="2004/p6summary.2004-02-08.html"
+  >February 08, 2004</A> 
+ 
+ 
+ 
+<LI><A HREF="2004/p6summary.2004-02-01.html"
+  >February 01, 2004</A> 
+ 
+ 
+ 
+<LI><A HREF="2004/p6summary.2004-01-25.html"
+  >January 25, 2004</A> 
+ 
+ 
+ 
+<LI><A HREF="2004/p6summary.2004-01-18.html"
+  >January 18, 2004</A> 
+ 
+ 
+ 
+<LI><A HREF="2004/p6summary.2004-01-11.html"
+  >January 11, 2004</A> 
+ 
+ 
+ 
+<LI><A HREF="2004/p6summary.2004-01-04.html"
+  >January 04, 2004</A> 
+ 
+ 
+</UL> 
+ 
+<A NAME="2003"><H2>2003</H2></A> 
+ 
+<LI><A HREF="2003/p6summary.2003-12-28.html"
+  >December 28, 2003</A> 
+ 
+ 
+ 
+<LI><A HREF="2003/p6summary.2003-12-21.html"
+  >December 21, 2003</A> 
+ 
+ 
+ 
+<LI><A HREF="2003/p6summary.2003-12-14.html"
+  >December 14, 2003</A> 
+ 
+ 
+ 
+<LI><A HREF="2003/p6summary.2003-12-07.html"
+  >December 07, 2003</A> 
+ 
+ 
+ 
+<LI><A HREF="2003/p6summary.2003-11-30.html"
+  >November 30, 2003</A> 
+ 
+ 
+ 
+<LI><A HREF="2003/p6summary.2003-11-23.html"
+  >November 23, 2003</A> 
+ 
+ 
+ 
+<LI><A HREF="2003/p6summary.2003-11-16.html"
+  >November 16, 2003</A> 
+ 
+ 
+ 
+<LI><A HREF="2003/p6summary.2003-11-09.html"
+  >November 09, 2003</A> 
+ 
+ 
+ 
+<LI><A HREF="2003/p6summary.2003-11-02.html"
+  >November 02, 2003</A> 
+ 
+ 
+ 
+<LI><A HREF="2003/p6summary.2003-10-26.html"
+  >October 26, 2003</A> 
+ 
+ 
+ 
+<LI><A HREF="2003/p6summary.2003-10-19.html"
+  >October 19, 2003</A> 
+ 
+ 
+ 
+<LI><A HREF="2003/p6summary.2003-10-12.html"
+  >October 12, 2003</A> 
+ 
+ 
+ 
+<LI><A HREF="2003/p6summary.2003-10-05.html"
+  >October 05, 2003</A> 
+ 
+ 
+ 
+<LI><A HREF="2003/p6summary.2003-09-28.html"
+  >September 28, 2003</A> 
+ 
+ 
+ 
+<LI><A HREF="2003/p6summary.2003-09-21.html"
+  >September 21, 2003</A> 
+ 
+ 
+ 
+<LI><A HREF="2003/p6summary.2003-09-14.html"
+  >September 14, 2003</A> 
+ 
+ 
+ 
+<LI><A HREF="2003/p6summary.2003-09-07.html"
+  >September 07, 2003</A> 
+ 
+ 
+ 
+<LI><A HREF="2003/p6summary.2003-08-31.html"
+  >August 31, 2003</A> 
+ 
+ 
+ 
+<LI><A HREF="2003/p6summary.2003-08-24.html"
+  >August 24, 2003</A> 
+ 
+ 
+ 
+<LI><A HREF="2003/p6summary.2003-08-17.html"
+  >August 17, 2003</A> 
+ 
+ 
+ 
+<LI><A HREF="2003/p6summary.2003-08-10.html"
+  >August 10, 2003</A> 
+ 
+ 
+ 
+<LI><A HREF="2003/p6summary.2003-08-03.html"
+  >August 03, 2003</A> 
+ 
+ 
+ 
+<LI><A HREF="2003/p6summary.2003-07-27.html"
+  >July 27, 2003</A> 
+ 
+ 
+ 
+<LI><A HREF="2003/p6summary.2003-07-20.html"
+  >July 20, 2003</A> 
+ 
+ 
+ 
+<LI><A HREF="2003/p6summary.2003-07-13.html"
+  >July 13, 2003</A> 
+ 
+ 
+ 
+<LI><A HREF="2003/p6summary.2003-07-06.html"
+  >July 06, 2003</A> 
+ 
+ 
+ 
+<LI><A HREF="2003/p6summary.2003-06-29.html"
+  >June 29, 2003</A> 
+ 
+ 
+ 
+<LI><A HREF="2003/p6summary.2003-06-22.html"
+  >June 22, 2003</A> 
+ 
+ 
+ 
+<LI><A HREF="2003/p6summary.2003-06-15.html"
+  >June 15, 2003</A> 
+ 
+ 
+ 
+<LI><A HREF="2003/p6summary.2003-06-08.html"
+  >June 08, 2003</A> 
+ 
+ 
+ 
+<LI><A HREF="2003/p6summary.2003-06-01.html"
+  >June 01, 2003</A> 
+ 
+ 
+ 
+<LI><A HREF="2003/p6summary.2003-05-25.html"
+  >May 25, 2003</A> 
+ 
+ 
+ 
+<LI><A HREF="2003/p6summary.2003-05-18.html"
+  >May 18, 2003</A> 
+ 
+ 
+ 
+<LI><A HREF="2003/p6summary.2003-05-11.html"
+  >May 11, 2003</A> 
+ 
+ 
+ 
+<LI><A HREF="2003/p6summary.2003-05-04.html"
+  >May 04, 2003</A> 
+ 
+ 
+ 
+<LI><A HREF="2003/p6summary.2003-04-27.html"
+  >April 27, 2003</A> 
+ 
+ 
+ 
+<LI><A HREF="2003/p6summary.2003-04-20.html"
+  >April 20, 2003</A> 
+ 
+ 
+ 
+<LI><A HREF="2003/p6summary.2003-04-13.html"
+  >April 13, 2003</A> 
+ 
+ 
+ 
+<LI><A HREF="2003/p6summary.2003-04-06.html"
+  >April 06, 2003</A> 
+ 
+ 
+ 
+<LI><A HREF="2003/p6summary.2003-03-30.html"
+  >March 30, 2003</A> 
+ 
+ 
+ 
+<LI><A HREF="2003/p6summary.2003-03-23.html"
+  >March 23, 2003</A> 
+ 
+ 
+ 
+<LI><A HREF="2003/p6summary.2003-03-16.html"
+  >March 16, 2003</A> 
+ 
+ 
+ 
+<LI><A HREF="2003/p6summary.2003-03-09.html"
+  >March 09, 2003</A> 
+ 
+ 
+ 
+<LI><A HREF="2003/p6summary.2003-03-02.html"
+  >March 02, 2003</A> 
+ 
+ 
+ 
+<LI><A HREF="2003/p6summary.2003-02-23.html"
+  >February 23, 2003</A> 
+ 
+ 
+ 
+<LI><A HREF="2003/p6summary.2003-02-16.html"
+  >February 16, 2003</A> 
+ 
+ 
+ 
+<LI><A HREF="2003/p6summary.2003-02-09.html"
+  >February 09, 2003</A> 
+ 
+ 
+ 
+<LI><A HREF="2003/p6summary.2003-02-02.html"
+  >February 02, 2003</A> 
+ 
+ 
+ 
+<LI><A HREF="2003/p6summary.2003-01-26.html"
+  >January 26, 2003</A> 
+ 
+ 
+ 
+<LI><A HREF="2003/p6summary.2003-01-19.html"
+  >January 19, 2003</A> 
+ 
+ 
+ 
+<LI><A HREF="2003/p6summary.2003-01-12.html"
+  >January 12, 2003</A> 
+ 
+ 
+ 
+<LI><A HREF="2003/p6summary.2003-01-05.html"
+  >January 05, 2003</A> 
+ 
+ 
+</UL> 
+ 
+<A NAME="2002"><H2>2002</H2></A> 
+ 
+<LI><A HREF="2002/p6summary.2002-12-29.html"
+  >December 29, 2002</A> 
+ 
+ 
+ 
+<LI><A HREF="2002/p6summary.2002-12-22.html"
+  >December 22, 2002</A> 
+ 
+ 
+ 
+<LI><A HREF="2002/p6summary.2002-12-15.html"
+  >December 15, 2002</A> 
+ 
+ 
+ 
+<LI><A HREF="2002/p6summary.2002-12-08.html"
+  >December 08, 2002</A> 
+ 
+ 
+ 
+<LI><A HREF="2002/p6summary.2002-12-01.html"
+  >December 01, 2002</A> 
+ 
+ 
+ 
+<LI><A HREF="2002/p6summary.2002-11-24.html"
+  >November 24, 2002</A> 
+ 
+ 
+ 
+<LI><A HREF="2002/p6summary.2002-11-17.html"
+  >November 17, 2002</A> 
+ 
+ 
+ 
+<LI><A HREF="2002/p6summary.2002-11-10.html"
+  >November 10, 2002</A> 
+ 
+ 
+ 
+<LI><A HREF="2002/p6summary.2002-11-03.html"
+  >November 03, 2002</A> 
+ 
+ 
+ 
+<LI><A HREF="2002/p6summary.2002-10-27.html"
+  >October 27, 2002</A> 
+ 
+ 
+ 
+<LI><A HREF="2002/p6summary.2002-10-20.html"
+  >October 20, 2002</A> 
+ 
+ 
+ 
+<LI><A HREF="2002/p6summary.2002-09-29.html"
+  >September 29, 2002</A> 
+ 
+ 
+ 
+<LI><A HREF="2002/p6summary.2002-09-22.html"
+  >September 22, 2002</A> 
+ 
+ 
+ 
+<LI><A HREF="2002/p6summary.2002-09-15.html"
+  >September 15, 2002</A> 
+ 
+ 
+ 
+<LI><A HREF="2002/p6summary.2002-09-08.html"
+  >September 08, 2002</A> 
+ 
+ 
+ 
+<LI><A HREF="2002/p6summary.2002-09-01.html"
+  >September 01, 2002</A> 
+ 
+ 
+ 
+<LI><A HREF="2002/p6summary.2002-08-25.html"
+  >August 25, 2002</A> 
+ 
+ 
+ 
+<LI><A HREF="2002/p6summary.2002-08-18.html"
+  >August 18, 2002</A> 
+ 
+ 
+ 
+<LI><A HREF="2002/p6summary.2002-08-11.html"
+  >August 11, 2002</A> 
+ 
+ 
+ 
+<LI><A HREF="2002/p6summary.2002-08-04.html"
+  >August 04, 2002</A> 
+ 
+ 
+ 
+<LI><A HREF="2002/p6summary.2002-07-28.html"
+  >July 28, 2002</A> 
+ 
+ 
+ 
+<LI><A HREF="2002/p6summary.2002-07-21.html"
+  >July 21, 2002</A> 
+ 
+ 
+ 
+<LI><A HREF="2002/p6summary.2002-07-14.html"
+  >July 14, 2002</A> 
+ 
+ 
+ 
+<LI><A HREF="2002/p6summary.2002-07-07.html"
+  >July 07, 2002</A> 
+ 
+ 
+ 
+<LI><A HREF="2002/p6summary.2002-06-30.html"
+  >June 30, 2002</A> 
+ 
+ 
+ 
+<LI><A HREF="2002/p6summary.2002-06-23.html"
+  >June 23, 2002</A> 
+ 
+ 
+</UL> 
 
