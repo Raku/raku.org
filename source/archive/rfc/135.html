@@ -1,0 +1,35 @@
+[% setvar title Require explicit m on matches, even with ?? and // as delimiters. %]
+<h3>This file is part of the Perl 6 Archive</h3>
+    <p>To see what is currently happening visit <a href="http://www.perl6.org/">http://www.perl6.org/</a></p>
+<div class='pod'>
+<a name='TITLE'></a><h1>TITLE</h1>
+<p>Require explicit m on matches, even with ?? and // as delimiters.</p>
+<a name='VERSION'></a><h1>VERSION</h1>
+<pre>  Maintainer: Nathan Torkington &lt;<a href='mailto:gnat@frii.com'>gnat@frii.com</a>&gt;
+  Date: 20 Aug 2000
+  Last Modified: 15 Sep 2000
+  Mailing List: <a href='mailto:perl6-language@perl.org'>perl6-language@perl.org</a>
+  Number: 135
+  Version: 3
+  Status: Frozen</pre>
+<a name='ABSTRACT'></a><h1>ABSTRACT</h1>
+<p><code>?...?</code> and <code>/.../</code> are what makes Perl hard to tokenize.  Requiring
+them to be written <code>m?...?</code> and <code>m/.../</code> would solve this.</p>
+<a name='CHANGES'></a><h1>CHANGES</h1>
+<p>Version 2 of this RFC redirects discussion of this topic to
+<a href='mailto:perl6-language-regex@perl.org.'>perl6-language-regex@perl.org.</a></p>
+<a name='DESCRIPTION'></a><h1>DESCRIPTION</h1>
+<p>Damian Conway's Text::Balanced module does a pretty good job of
+tokenizing Perl code.  However, bare <code>/.../</code> and <code>?...?</code> require
+semantic analyis to distinguish them from division and the hook
+(<code>A?B:C</code>) operator.</p>
+<p>To remove this hassle, and thus permit programs that analyze the
+source-code of other programs, I propose requiring that all matches
+require an explicit <code>m</code>.</p>
+<a name='IMPLEMENTATION'></a><h1>IMPLEMENTATION</h1>
+<p>Remove the bare <code>/.../</code> and <code>?...?</code> from the grammar :-)  When
+converting perl5 programs to perl6, put the <code>m</code> in.</p>
+<a name='REFERENCES'></a><h1>REFERENCES</h1>
+<p>perl6-language message
+<code><a href='mailto:200008182343.JAA00690@indy05.csse.monash.edu.au'>200008182343.JAA00690@indy05.csse.monash.edu.au</a></code> by Damian Conway</p>
+</div>

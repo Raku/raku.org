@@ -1,0 +1,94 @@
+[% setvar title lvalue subs should receive the rvalue as an argument %]
+<h3>This file is part of the Perl 6 Archive</h3>
+    <p>To see what is currently happening visit <a href="http://www.perl6.org/">http://www.perl6.org/</a></p>
+<div class='pod'>
+<a name='TITLE'></a><h1>TITLE</h1>
+<p>lvalue subs should receive the rvalue as an argument</p>
+<a name='VERSION'></a><h1>VERSION</h1>
+<pre>  Maintainer: Andy Wardley &lt;<a href='mailto:abw@kfs.org'>abw@kfs.org</a>&gt;
+  Date: 15 Aug 2000
+  Mailing List: <a href='mailto:perl6-language@perl.org'>perl6-language@perl.org</a>
+  Number: 107
+  Version: 1
+  Status: Developing</pre>
+<a name='ABSTRACT'></a><h1>ABSTRACT</h1>
+<p>This RFC proposes that lvalue subs, when invoked as such, should receive
+the rvalue being assigned to it as an argument.</p>
+<a name='DESCRIPTION'></a><h1>DESCRIPTION</h1>
+<p>Take a simple object:</p>
+<pre>    package Person;
+    sub new {
+	my ($class, $name) = @_;
+	bless { name =&gt; $name }, $class;
+    }
+    sub name {
+	my $self = shift;
+	if (@_) {
+	    $self-&gt;{name} = shift;
+	    print &quot;changed name to $self-&gt;{name}\n&quot;;
+	}
+	return $self-&gt;{ name };
+    }</pre>
+<p>We define a simple accessor method, <code>name</code>, to marshal access to the
+internal name field.  In this example it prints a message when the
+name is changed but in the real world it might do something far more
+important.  The method can be used to get or set this field.</p>
+<pre>    my $p = Person-&gt;new(&quot;Gandalf&quot;);
+    print &quot;name: $p-&gt;name\n&quot;;	    # &quot;name: Gandalf&quot;
+    $p-&gt;name(&quot;Mithrandir&quot;);	    # &quot;changed name to Mithrandir&quot;
+    print &quot;name: $p-&gt;name\n&quot;;	    # &quot;name: Mithrandir&quot;</pre>
+<p>We can define this method as an <code>lvalue</code> sub allowing it to be used
+directly in assignment statements.  Note that we must remove the
+'return' in the last line of the method.</p>
+<pre>    sub name : lvalue {
+	my $self = shift;
+	if (@_) {		    # Danger Will Robinson!
+	    $self-&gt;{name} = shift;
+	    print &quot;changed name to $self-&gt;{name}\n&quot;;
+	}
+	$self-&gt;{name};
+    }
+
+    package main;
+    my $p = Person-&gt;new(&quot;Gandalf&quot;);
+    $p-&gt;name = &quot;Mithrandir&quot;;</pre>
+<p>This &quot;works&quot; in the sense that the Person name is updated, but it
+doesn't work the same as when called as a regular object method.  The
+reason is that lvalue calls don't pass the new value to the method.
+Our check of <code>@_</code> in the method returns false so the method doesn't
+know that an attempt is being made to update the field.  Instead it
+blindy returns the internal field which Perl can then update directly,
+using some kind of hidden magic and trickery.</p>
+<pre>    $p-&gt;name('Gandalf');	    # &quot;changed name to Gandalf&quot;
+    $p-&gt;name = 'Mithrandir';	    # !! silence !!
+    print &quot;name: $p-&gt;name\n&quot;;	    # &quot;name: Mithrandir&quot;</pre>
+<p>The Person name is now set to 'Mithrandir', but managed to bypass the
+marshalling code that we carefully constructed to trap any attempts to
+update this field.  This is inconsistent and allows the object
+encapsulation to be violated.</p>
+<p>It is proposed that lvalue subs should be called with the rvalue
+passed as a regular argument.  Thus,</p>
+<pre>    $p-&gt;name = 'Mithrandir';</pre>
+<p>would be directly equivalent to</p>
+<pre>    $p-&gt;name('Mithrandir');</pre>
+<p>This would allow accessor methods to detect, and if necessary,
+intercept any attempts to update a particular field, even when
+called as an lvalue sub.</p>
+<p>We might want to consider a general rule stating that the rvalue is
+added to the end of any existing argument list.  This, it would be
+possible to do this:</p>
+<pre>    $obj-&gt;method($x, $y) = $z;</pre>
+<p>and have the method called as if written:</p>
+<pre>    $obj-&gt;method($x, $y, $z);</pre>
+<p>This might make more sense when combined with named parameters.</p>
+<pre>    $p-&gt;name(warnings =&gt; 0) = 'Mithrandir';
+    $p-&gt;name(%options) = $value;</pre>
+<p>equivalent to:</p>
+<pre>    $p-&gt;name(warnings =&gt; 0, 'Mithrandir');
+    $p-&gt;name(%options, $value);</pre>
+<p>This may be a bad thing.  The author makes no judgement either way.</p>
+<a name='IMPLEMENTATION'></a><h1>IMPLEMENTATION</h1>
+<p>Hopefully trivial.</p>
+<a name='REFERENCES'></a><h1>REFERENCES</h1>
+<p>None</p>
+</div>

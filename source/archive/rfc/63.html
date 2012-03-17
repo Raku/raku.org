@@ -1,0 +1,184 @@
+[% setvar title Exception handling syntax %]
+<h3>This file is part of the Perl 6 Archive</h3>
+    <p>To see what is currently happening visit <a href="http://www.perl6.org/">http://www.perl6.org/</a></p>
+<div class='pod'>
+<a name='TITLE'></a><h1>TITLE</h1>
+<p>Exception handling syntax</p>
+<a name='VERSION'></a><h1>VERSION</h1>
+<pre>  Maintainer: Peter Scott &lt;<a href='mailto:peter@psdt.com'>peter@psdt.com</a>&gt;
+  Date: 8 Aug 2000
+  Last Modified: 23 Aug 2000
+  Mailing List: <a href='mailto:perl6-language-errors@perl.org'>perl6-language-errors@perl.org</a>
+  Number: 63
+  Version: 4
+  Status: Retired
+  Replaced-By: 88</pre>
+<a name='ABSTRACT'></a><h1>ABSTRACT</h1>
+<p>This RFC has been merged into RFC 88.  The text of the last version
+prior to the merge is left below for archival purposes only.  Anyone
+interested in browsing this for historical reasons probably has way
+too much time on their hands :-)</p>
+<p>This RFC proposes an exception handling syntax for Perl 6.  It was
+originally adapted from Graham Barr's <code>Error.pm</code> module, but it's
+been modified enough since then that he might not want the blame by
+association :-)</p>
+<a name='DESCRIPTION'></a><h1>DESCRIPTION</h1>
+<p>An exception handling mechanism is proposed with the following syntax:</p>
+<pre>       exception EXCEPTION
+
+       try BLOCK catch [EXCEPTION [, ...] ] BLOCK ...
+       try BLOCK catch [EXCEPTION [, ...] ] BLOCK ... continue BLOCK
+       try BLOCK catch EXPR BLOCK ...
+       try BLOCK catch EXPR BLOCK ... continue BLOCK
+       try BLOCK continue BLOCK
+
+       throw EXCEPTION [ (attributes) ]
+       throw EXPR</pre>
+<a name='Flow of control'></a><h2>Flow of control</h2>
+<p>1. When an exception is thrown perl looks for the enclosing <code>try</code> block;
+if there is none then program <code>die</code>s with the text in the <code>message</code>
+attribute of the exception,
+which is what the exception stringifies to.</p>
+<p>2. If there is an enclosing <code>try</code> block perl goes through the associated
+<code>catch</code> blocks in order. If the <code>catch</code> criteria succeed (the exception
+class matches one in a list, or a <code>catch</code> expression evaluates to true, or
+the <code>catch</code> block catches everything), the <code>catch</code> block is executed. If
+the <code>catch</code> block throws an exception, it becomes the 'current' exception
+(with a link to the previous one), otherwise there is no longer a current
+exception.</p>
+<p>3. Whether or not a catch block was executed, the <code>continue</code> block is now
+executed if there is one. If the <code>continue</code> block throws an exception, it
+becomes the 'current' exception (with a link to the previous one if there
+was one). At this point, if there is a current exception, go to step 1.</p>
+<p>The exception object is passed into each block in <code>$_[0]</code>.</p>
+<p>Note that <code>try</code> is a keyword, not a function.  This is solely so that
+a <code>;</code> is not needed at the end of the last block, since so many people
+are bound to think it shouldn't be there and forget.</p>
+<p><code>try</code>, <code>catch</code>, and <code>continue</code> blocks share the same lexical scope, in
+the same way that <code>while</code> and <code>continue</code> currently do.  This is so that
+variables (e.g., filehandles) defined in the <code>try</code> block can be operated
+on in the other blocks.</p>
+<p>There is debate over whether <code>try</code> should be <code>eval</code> so as not to use
+another keyword.  Since it has different semantics (rethrows uncaught
+exceptions), it should not be <code>eval</code>; but if this happens, then surely
+<code>eval BLOCK</code> should be retired since it is so similar there would be
+confusion over what to use for exception handling.  And no-one would
+get the semicolons right :-)</p>
+<p>While <code>try</code> and <code>catch</code> are new keywords, <code>throw</code> and <code>exception</code>
+don't need to be; they're just functions.</p>
+<a name='Exceptions'></a><h2>Exceptions</h2>
+<p>Exceptions are objects belonging to some <code>Exception</code> class.  <code>throw</code>ing
+an exception creates the object; therefore, <code>EXCEPTION</code> above is just a
+class name (possibly including some <code>::</code>).</p>
+<p>The <code>exception</code> function is just syntactic sugar for creating a new
+exception class;it merely amounts to <code>@EXCEPTION::ISA = 'Exception'</code>.</p>
+<p><code>throw</code> takes as argument either an exception class and attributes (could
+be implemented as a class method with indirect object syntax) or an
+expression evaluating to an exception object (could be implemented as core
+function).</p>
+<a name='Exception classes - rethrowing'></a><h2>Exception classes - rethrowing</h2>
+<p>RFC 80 proposes standard exception classes and methods for core exceptions.
+This RFC doesn't need to repeat those, but it can expound upon the
+semantics that exception classes ought to have.  Assume wlog that they
+all inherit from a base class, <code>Exception</code>.  Some people think that
+exceptions should not be rethrown implicitly.  We can provide a boolean flag
+in the class or even the exception object itself to be checked for this:</p>
+<pre>      sub Exception::IO::implicit_rethrow { 0 }        # One class
+      sub Exception::implicit_rethrow     { 0 }        # All classes
+      throw Exception::Socket(implicit_rethrow =&gt; 0);  # Just this exception</pre>
+<p>[Note: it had been proposed that this functionality would be provided by a
+method <code>uncaught_handler</code> which would be called if an exception wasn't
+caught.  But if that routine decided to rethrow the exception, the
+<code>continue</code> block
+would not get called at the right time.  However, there are objections to
+the &quot;action-at-a-distance&quot; semantics of the above proposal.]</p>
+<a name='Exception classes - ignoring'></a><h2>Exception classes - ignoring</h2>
+<p>Note that we could also make it possible to selectively or globally ignore
+exceptions, so that perl continues executing the line after the <code>throw</code>
+statement.  Just import a <code>ignore</code> function that takes a class name:</p>
+<pre>      ignore Exception::IO;     # Ignore all I/O exceptions
+      ignore Exception;         # Ignore all exceptions</pre>
+<p>and when perl sees the <code>throw</code>, it just does nothing.  (Or do it by
+overriding a base class method as for <code>implicit_rethrow</code> if you don't want
+to put another function in the namespace.)  Since <code>throw</code> and <code>die</code>
+should be essentially identical, this would allow any kind of exception to
+be ignored, not just the ones that were <code>throw</code>n.  There is violent
+opposition to this proposal; I should note, though, that even if it were
+not implemented, it might well be possible not to avoid people doing it by
+overriding the <code>throw</code> function in one or more exception classes.</p>
+<a name='Examples'></a><h2>Examples</h2>
+<p>These examples assume some core exception classes, although the
+mechanism can be implemented even if core exception classes aren't.
+The nature of exceptions is that they are most useful on lengthy code;
+code brief enough to be a readable example also makes a functionally
+poor example.</p>
+<pre>       exception Exception::MyDB;
+       sub foo {
+           open_database();
+           # database-munging code
+           throw Exception::MyDB(message =&gt; 'permission denied');
+           close_database();
+           open_network_connection();
+           # network munging code
+           throw Exception::IO(message =&gt; 'timeout');  #  In Socket.pm, perhaps
+           close_network_connection();
+           }
+
+       try {
+           foo();
+       } catch Exception::MyDB, Exception::DBI {
+           close_database();
+           # other stuff
+       } catch Exception::IO {
+           close_network_connection();
+           # other stuff
+       } catch {
+           my $err = shift;
+           warn &quot;Some other kind of error in foo: $err\n&quot;;
+           throw $err;      # Re-throw exception (just 'cuz we wanted to)
+       }</pre>
+<a name='IMPLEMENTATION'></a><h1>IMPLEMENTATION</h1>
+<p>A <code>throw</code> is just a <code>die</code> passed an object that stringifies to the
+message you will die with if nothing catches the exception; therefore
+users can use code that throws exceptions without using the exception-handling
+mechanism.  They should also be able to wrap a <code>try</code> block around code
+that doesn't know about exceptions but does call <code>die</code>, and have that
+caught as well; perl should turn the <code>die</code> text into an exception object
+with the same text, in the base <code>Exception</code> class.</p>
+<a name='$SIG{__DIE__}'></a><h2>$SIG{__DIE__}</h2>
+<p>Many people want &lt;$SIG{__DIE__}&gt; to be axed altogether, since it fires
+immediately when anything throws an exception, rather than being a handler
+of last resort.  If a <code>try</code> block implicitly does <code>local $SIG{__DIE__}</code>,
+it could protect itself, though.  So this RFC doesn't</p>
+<a name='NOTES'></a><h1>NOTES</h1>
+<p>This RFC is very similar to RFC 88, which has slightly different syntax
+and adds functionality for adding exceptions to a stack.  While this author
+considers that to be going a bit too far (he's tried it before and found he
+never made use of anything under the top level of the stack), he wouldn't
+mind if RFC 88 got adopted instead.</p>
+<p>This RFC is attempting to stake out a more minimalist position.  Some people
+think it should be even more minimal by using <code>eval</code> instead of <code>try</code>, and
+an <code>else</code> instead of multiple <code>catch</code> blocks.  One advantage of their
+approach is that you can use an expression for the exception you wish to
+catch in a <code>switch</code> block:</p>
+<pre>      eval { ... }
+      else {
+          switch ($@) {
+              case ^_-&gt;isa('Exception::IO') { ... }
+              case ^_-&gt;my_method            { ... }
+      }</pre>
+<p>Now in this case, the problem arises, how should the code implicitly
+rethrow uncaught exceptions?  Without having to look inside the <code>switch</code>
+statement to see what it did?  Most of the proponents of this model think
+that uncaught exceptions should not be implicitly rethrown; one suggests
+that the programmer should <code>undef $@</code> at the end of every successful
+&lt;case&gt; block, so that perl rethrows any <code>$@</code> still extant at the end of
+the <code>else</code>.  This is a quite excellent suggestion that should be
+considered if this proposal is evaluated as requiring too many new
+keywords: our objection to it is that it requires the programmer to insert
+<code>undef $@</code> in every instance of by far the the most common type of clause.</p>
+<a name='REFERENCES'></a><h1>REFERENCES</h1>
+<p>Error.pm (<code><a href='http://search.cpan.org/doc/GBARR/Error-0.13/Error.pm' target='_blank'>search.cpan.org</a></code>)</p>
+<p>RFC 80: Exception objects and classes for builtins</p>
+<p>RFC 88: Structured Exception Handling Mechanism (Try)</p>
+</div>

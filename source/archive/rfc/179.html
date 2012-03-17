@@ -1,0 +1,41 @@
+[% setvar title More functions from set theory to manipulate arrays %]
+<h3>This file is part of the Perl 6 Archive</h3>
+    <p>To see what is currently happening visit <a href="http://www.perl6.org/">http://www.perl6.org/</a></p>
+<div class='pod'>
+<a name='TITLE'></a><h1>TITLE</h1>
+<p>More functions from set theory to manipulate arrays</p>
+<a name='VERSION'></a><h1>VERSION</h1>
+<pre>  Maintainer: Gael Pegliasco &lt;<a href='mailto:gael.pegliasco@telecorporate.com'>gael.pegliasco@telecorporate.com</a>&gt;
+  Date: 30 Aug 2000
+  Mailing List: <a href='mailto:perl6-language@perl.org'>perl6-language@perl.org</a>
+  Number: 179
+  Version: 1
+  Status: Developing</pre>
+<a name='ABSTRACT'></a><h1>ABSTRACT</h1>
+<p>When programming in perl we need really often to calculate
+union, intersection, difference between arrays. It will be
+cool if such functions could be part of the perl6 language.</p>
+<a name='DESCRIPTION'></a><h1>DESCRIPTION</h1>
+<p>Functions from Set theory are often needed when manipulating arrays,
+I'd like to to find most of them in the new perl6 language.</p>
+<p>The most usefull and needed are, for me,</p>
+<p>- union
+- intersection
+- difference</p>
+<p>after we could find some others like :</p>
+<p>- &quot;unicity&quot; to eliminate duplicated elements</p>
+<a name='IMPLEMENTATION'></a><h1>IMPLEMENTATION</h1>
+<p>I'd like to use these functions in this way :</p>
+<pre> @c = union (@a, @b); 
+ # wich is different from @c = (@a, @b) because union do not duplicate
+ same elements
+
+ @c = intersection (@a, @b);
+ @c = diff(@a, @b);
+ </pre>
+<a name='Checkpointing'></a><h2>Checkpointing</h2>
+<p>Don't know what to put here.</p>
+<a name='Event loop'></a><h2>Event loop</h2>
+<a name='REFERENCES'></a><h1>REFERENCES</h1>
+<p>Set Theory</p>
+</div>

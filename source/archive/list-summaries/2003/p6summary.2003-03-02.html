@@ -1,0 +1,169 @@
+[% setvar title The Perl 6 Summary for the week ending 20030302 %]
+<h3>This file is part of the Perl 6 Archive</h3>
+    <p>To see what is currently happening visit <a href="http://www.perl6.org/">http://www.perl6.org/</a></p>
+<div class='pod'>
+<a name='The Perl 6 Summary for the week ending 20030302'></a><h1>The Perl 6 Summary for the week ending 20030302</h1>
+<p>Welcome back to another episode in the ongoing saga that is the Perl 6
+development process (or at least my attempt to describe it).</p>
+<p>We kick off with perl6-internals.</p>
+<a name='IMCC calling conventions'></a><h2>IMCC calling conventions</h2>
+<p>Piers Cawley attempted to describe tail call optimizations, why they
+were a good thing and why a caller saves calling convention made such
+optimizations easier (possible?). He wondered if he hadn't just
+succeeded in muddying the waters still further. Jerome Vouillon
+appeared to understand what Piers was going on about and pointed out
+that a caller saves scheme also helps with exception
+handling. Benjamin Goldberg wondered about Perl 5's <code>goto &amp;func</code>
+semantics which can be looked at as a 'sort of' tail call (except you
+don't actually get much of an optimization with Perl 5 as it stands)
+and proposed a callee saves scheme for doing tail call optimization
+which didn't optimize away an unnecessary pair of save/restores. Dan
+pointed out that, while <code>goto &amp;func</code> (which is sort of like tail call
+optimization in Perl 5) would have to be supported, tail call
+optimization made more sense if you didn't have to use any special
+syntax to make use of it.</p>
+<p><a href='http://groups.google.com/groups?threadm=m2el5xzix5.fsf@TiBook.bofh.org.uk' target='_blank'>groups.google.com</a></p>
+<a name='A couple of easy questions...'></a><h2>A couple of easy questions...</h2>
+<p>David (Cuny?) wondered how he could determine the data type of an
+arbitrary PMC and whether there were any pre-built Windows binaries of
+Parrot available. Leon Brocard pointed him at the <code>typeof</code> operator
+in answer to the first question but punted on the second. Leo
+T&ouml;tsch also pointed at <code>typeof</code>. David noted that it didn't
+seem to be available in his 0.0.9 installation and was recommended to
+use the CVS version, and discussion drifted toward wondering when
+Parrot 0.1.0 would see the light of day. (Not before at least one of
+either objects or exceptions is implemented apparently).</p>
+<p>Nobody answered the 'pre built Windows binary' part of David's
+question.</p>
+<p><a href='http://groups.google.com/groups?threadm=200302250146.32194.dcuny@lanset.com' target='_blank'>groups.google.com</a></p>
+<a name='More on optimizing the JIT with IMCC'></a><h2>More on optimizing the JIT with IMCC</h2>
+<p>In last week's summary I mentioned that Sean O'Rourke had suggested
+getting IMCC to store a control flow graph in bytecode, which the JIT
+could use to optimize things more effectively. Sean read this and
+pointed out that it wasn't his idea but was actually an area of active
+research and gave a pointer to some information. He also pointed to a
+USENIX paper which discussed adding a full data-flow compiler into a
+JVM which could then generate code that ran faster than a lightweight
+JIT, especially for long-running programs. Sean's original link was to
+a subscription only site but Jason 'Research wants to be free' Gloudon
+found a public version of the paper. Dan was fascinated, but was
+worried about availability of engineering time, not wishing to presume
+on Leo, Daniel and everyone who's done JIT work.</p>
+<p>Dan said that he'd 'rather have a lower-overhead JIT with a win for
+shorter programs than a high-overhead one with a win for long-running
+programs'. Leo pointed out that, at the moment we already have a high
+overhead JIT with most of the cost paid at load time and showed some
+of these costs. Dan and Leo then discussed what kind of metadata would
+be needed from IMCC (or some external tool) in order to improve
+matters.</p>
+<p>Meanwhile, the original 'Using IMCC as JIT optimizer' thread continued
+as Leo committed some more changes both to code and to the
+documentation in <b><i>jit.pod</i></b>. The new version of the JIT optimizing
+IMCC should be platform independent and apparently runs 95% of
+Parrot's tests on an i386.</p>
+<p>Phil Hassey wondered why we even had a set number of registers in the
+JVM in the first place. He wondered if it would be possible to have
+each block of code declare 'I need 12 registers for this bloc' and let
+the JIT system do the appropriate register spilling magic with the
+system registers. Leo said that this is approximately what the JIT
+optimizer does at the moment and outlined some of the problems
+associated with it.</p>
+<p>Angel Faus had some questions and suggestions about the optimization
+approach that Leo was taking, with particular reference to the amount
+of copies to and from memory and proposed an efficient way
+forward. Nicholas Clark wondered if some of Angel's suggestions mean
+that imc (IMCC source code) had now usurped the role of parrot bytecode
+and muttered something about premature optimization and the lack of
+objects, exceptions, IO or a Z-code interpreter. Leo bridled slightly
+at 'premature optimization' and wondered what was important about a
+Z-code interpreter ('Z-code interpreter' is, according to Nicholas,
+'obfuscated shorthand for &quot;dynamic opcode libraries&quot; and &quot;reading
+foreign bytecode&quot;.')</p>
+<p>Toward the end of the week, Leo checked in a final patch related to
+this experiment and commented that, to do things <i>right</i>, JIT
+optimization should move in the direction that Angel Faus had
+outlined.</p>
+<p><a href='http://groups.google.com/groups?threadm=Pine.GSO.4.32.0302260915220.20398-100000@gradlab.ucsd.edu' target='_blank'>groups.google.com</a></p>
+<p><a href='http://citeseer.nj.nec.com/krintz01using.html' target='_blank'>citeseer.nj.nec.com</a> -- Sean's first link</p>
+<p><a href='http://www-hydra.stanford.edu/publications/JVM02.pdf' target='_blank'>www-hydra.stanford.edu</a> -- 'Free'
+paper</p>
+<p><a href='http://groups.google.com/groups?threadm=3E5B428A.8020809@toetsch.at' target='_blank'>groups.google.com</a> -- IMCC as JIT Optimizer thread</p>
+<p><a href='http://groups.google.com/groups?threadm=3E5F6F31.4010801@toetsch.at' target='_blank'>groups.google.com</a> -- Leo's Last (-Oj) patch</p>
+<a name='Parrot 0.0.10 freeze'></a><h2>Parrot 0.0.10 freeze</h2>
+<p>Steve Fink announced that it had been brought to his attention that we
+were overdue for another release and announced that he'd like to have
+a Parrot feature freeze on March 8, with a Parrot 0.0.10 release a
+week after that (or a Parrot 0.1.0 release if someone sneaks objects
+or exceptions in under the wire...).</p>
+<p>Jerome Quelin wondered about a codename and Benjamin Goldberg
+commented that 'we don't have any of objects, exceptions, or a
+real IO system' and suggested that we use 'Kakapo', which is a large,
+flightless parrot. Garret G&ouml;bbel suggested the rather wonderful
+'Orange Juice' in homage to Leo's recent work on the <code>-Oj</code> JIT
+optimization switch.</p>
+<p><a href='http://groups.google.com/groups?threadm=20030226051941.GD4244@foxglove' target='_blank'>groups.google.com</a></p>
+<a name='Dan's plans'></a><h2>Dan's plans</h2>
+<p>Dan outlined his plan for the string rework (discussed last
+week). Nobody said anything, maybe they liked it.</p>
+<p>Dan also outlined some requirements for the final Parrot build system,
+again, nobody comment.</p>
+<p>And, right at the end of the week, he released his second attempt at
+an object spec. This one definitely got comments, but I'll cover them
+in the next summary.</p>
+<p><a href='http://groups.google.com/groups?threadm=a05200f00ba82ac3472f2@' target='_blank'>groups.google.com</a>[63.120.19.221] -- Strings</p>
+<p><a href='http://groups.google.com/groups?threadm=a05200f0aba83fd7ecc50@' target='_blank'>groups.google.com</a>[63.120.19.221] -- Builds</p>
+<p><a href='http://groups.google.com/groups?threadm=a05200f03ba882e2a2fcb@' target='_blank'>groups.google.com</a>[63.120.19.221] -- Objects</p>
+<a name='PSteve Peters' Patches Prevent Parrot Peeves'></a><h2>PSteve Peters' Patches Prevent Parrot Peeves</h2>
+<p>Steve Peters released a flurry of patches to eliminate compilation
+warnings during Parrot compilation. Leo wasn't sure about one of them,
+but I assume that most of them will be applied at some point.</p>
+<a name='Meanwhile, in perl6-language'></a><h1>Meanwhile, in perl6-language</h1>
+<p>Things were even quieter than last week with all of 10 messages, one
+of which was last week's summary.</p>
+<a name='Arrays, lists, referencing'></a><h2>Arrays, lists, referencing</h2>
+<p>Paul Johnson had observed that changing the order of evaluation (of
+terms in a list) -- which is currently undefined in theory whilst being
+left to right in practice -- would almost certainly break a great
+deal. He suggested that it would be sensible for Perl 6 to define such
+an order.</p>
+<p>Larry agreed, commenting that 'The fact that Perl 5 doesn't define it
+is merely an oversight, brought on no doubt by a lack of oversight.
+But as you point out it can deduced by observation of all the various
+implementations of Perl.' Which made at least one person smile.</p>
+<a name='Predefined properties/traits/etc.'></a><h2>Predefined properties/traits/etc.</h2>
+<p>Last week, Simon Cozens asked that someone 'please compile a list of
+all the &quot;is foo&quot; properties that have been suggested/accepted as being
+pre-defined by the language.' as he couldn't keep track of them all.</p>
+<p>This week someone (who also happened to be Simon Cozens) did just
+that. Allison Randal went through Simon's list commenting on what he'd
+got right and wrong, and explaining the general rule (properties and
+traits are lower case, class names are capitalized, so <code>is Foo</code>
+mean that something is a 'Foo', while <code>is bar</code> relates to a 'bar'
+property). The rest of the thread was taken up with confusion between
+Munich and Zurich.</p>
+<p><a href='http://groups.google.com/groups?threadm=87k7fjnidx.fsf_-_@simoncozens-2.dsl.easynet.co.uk' target='_blank'>groups.google.com</a></p>
+<a name='Acknowledgements, Announcements and Apologies'></a><h1>Acknowledgements, Announcements and Apologies</h1>
+<p>I'm getting the feeling of someone sat in the calm before the
+storm. perl6-language has been very quiet these last few weeks, I'm
+guessing that people don't want to distract Larry from the important
+business of producing an Apocalypse. Rumours abound of a draft in
+circulation among the Perl 6 core design team... Maybe this week will
+see its publication and the level of discussion in the language list
+will rise once more. Until then I'm enjoying the calm.</p>
+<p>Still no American Odyssey web page. One day, I promise.</p>
+<p>If you appreciated this summary, please consider one or more of the
+following options:</p>
+<ul>
+<li><a name='Send money to the Perl Foundation at donate.perl-foundation.org/ and help support the ongoing development of Perl.'></a>Send money to the Perl Foundation at
+<a href='http://donate.perl-foundation.org/' target='_blank'>donate.perl-foundation.org</a> and help support the ongoing
+development of Perl.</li>
+<li><a name='Get involved in the Perl 6 process. The mailing lists are open to all. dev.perl.org/perl6/ and www.parrotcode.org/ are good starting points with links to the appropriate mailing lists.'></a>Get involved in the Perl 6 process. The mailing lists are open  to
+all. <a href='http://dev.perl.org/perl6/' target='_blank'>dev.perl.org</a> and <a href='http://www.parrotcode.org/' target='_blank'>www.parrotcode.org</a>
+are good starting points with links to the appropriate mailing lists.</li>
+<li><a name='Send feedback, flames, money, job offers or a Schneider 90/5.8 Super Angulon XL lens to p<a href='mailto:6summarizer@bofh.org.uk'>6summarizer@bofh.org.uk</a>'></a>Send feedback, flames, money, job offers or a Schneider 90/5.8 Super
+Angulon XL lens to <i><a href='http://search.cpan.org/perldoc?<a href='mailto:p6summarizer@bofh.org.uk'>p6summarizer@bofh.org.uk</a>'>p<a href='mailto:6summarizer@bofh.org.uk'>6summarizer@bofh.org.uk</a></a></i></li>
+</ul>
+<p>This week's summary was again sponsored by Darren Duncan. Thanks
+Darren. If you'd like to become a summary sponsor, drop me a line at
+<i><a href='http://search.cpan.org/perldoc?<a href='mailto:p6summarizer@bofh.org.uk'>p6summarizer@bofh.org.uk</a>'>p<a href='mailto:6summarizer@bofh.org.uk'>6summarizer@bofh.org.uk</a></a></i>.</p>
+</div>

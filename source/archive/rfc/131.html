@@ -1,0 +1,58 @@
+[% setvar title Internal String Storage to be Opaque %]
+<h3>This file is part of the Perl 6 Archive</h3>
+    <p>To see what is currently happening visit <a href="http://www.perl6.org/">http://www.perl6.org/</a></p>
+<div class='pod'>
+<a name='TITLE'></a><h1>TITLE</h1>
+<p>Internal String Storage to be Opaque</p>
+<a name='VERSION'></a><h1>VERSION</h1>
+<pre>  Maintainer: Simon Cozens &lt;<a href='mailto:simon@brecon.co.uk'>simon@brecon.co.uk</a>&gt;
+  Date: 18 Aug 2000
+  Mailing List: <a href='mailto:perl6-internals@perl.org'>perl6-internals@perl.org</a>
+  Number: 131
+  Version: 1
+  Status: Developing</pre>
+<a name='ABSTRACT'></a><h1>ABSTRACT</h1>
+<p>Perl 5.6.0 tried to mix UTF8 and non-UTF8 strings inside SVs, meaning
+that every time you had to do something with a string, you had to check
+whether it was UTF8 or not, and if so probably do something slightly
+different to it instead. A single internal encoding which is opaque to
+the programmer Would Be Nice.</p>
+<a name='DISCUSSION'></a><h1>DISCUSSION</h1>
+<ul>
+<li><a name='Why a single internal encoding?'></a>Why a single internal encoding?</li>
+<p>Let's imagine what happens if we have a string encoded in UTF8 and a
+string encoded in UTF16 and we need to concatenate them. What on earth
+do you do here? A byte-by-byte concatenation with no encoding change is
+<b>probably</b> the wrong thing, but it might not be. So, what happens at
+present is that one or the other has to get recoded. You can either
+change the original string to the new encoding (which makes you wonder
+why you bothered having separate encodings anyway) or you can take a
+copy and convert that. (which is the same, only more expensive)</p>
+<p>A single encoding gets rid of all this mess.</p>
+<li><a name='Won't it mess up binary-level manipulation?'></a>Won't it mess up binary-level manipulation?</li>
+<p>'Course not. This is the internal representation we're talking about.
+It's only a convenience to the core, and doesn't relate specifically to
+what's coming into or going out of Perl from the user's point of view.</p>
+<li><a name='Oh, yuck, doesn't that mean a lot of costly conversions?'></a>Oh, yuck, doesn't that mean a lot of costly conversions?</li>
+<p>When data enters and leaves the core? Hmm, yes, I suppose it does. But
+that's life. Sorry.</p>
+<li><a name='Huh, OK. So what's the internal representation going to be?'></a>Huh, OK. So what's the internal representation going to be?</li>
+<p>That's the thing. It doesn't matter. It <b>shouldn't</b> matter. Keep it
+pluggable; you could have everything in Latin1, in UTF8, in UTF16, or
+who knows what, but the core developer shouldn't have to care. One good
+way to achieve this is to have the string presented in the variable as
+an array of wchars or similar. The point is that it's the same for
+everything, so comparisons don't suck.</p>
+<li><a name='Won't this lead to incompatibilities between builds?'></a>Won't this lead to incompatibilities between builds?</li>
+<p>Maybe. But would it matter? The end user certainly doesn't care what
+internal representation is used, and any module or program authors that
+depend on that can be found guilty of &quot;unwarranted chumminess&quot;. The only
+difference would be between builds that use Unicode and those that
+don't.</p>
+<li><a name='So I bet you're going to insist that everyone uses Unicode?'></a>So I bet you're going to insist that everyone uses Unicode?</li>
+<p>You got it. But of course, you get to choose your UTF. For what it's
+worth.</p>
+</ul>
+<a name='REFERENCES'></a><h1>REFERENCES</h1>
+<p><a href='http://perlhacker.org/articles/unihandle.html' target='_blank'>perlhacker.org</a></p>
+</div>

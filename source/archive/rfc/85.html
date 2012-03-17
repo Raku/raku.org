@@ -1,0 +1,78 @@
+[% setvar title All perl generated errors should have a unique identifier %]
+<h3>This file is part of the Perl 6 Archive</h3>
+    <p>To see what is currently happening visit <a href="http://www.perl6.org/">http://www.perl6.org/</a></p>
+<div class='pod'>
+<a name='TITLE'></a><h1>TITLE</h1>
+<p>All perl generated errors should have a unique identifier</p>
+<a name='VERSION'></a><h1>VERSION</h1>
+<pre>  Maintainer: Chaim Frenkel &lt;<a href='mailto:chaimf@pobox.com'>chaimf@pobox.com</a>&gt;
+  Date: 9 Aug 2000
+  Last Modified: 19 Sep 2000
+  Mailing List: <a href='mailto:perl6-language@perl.org'>perl6-language@perl.org</a>
+  Number: 85
+  Version: 2
+  Status: Developing</pre>
+<a name='ABSTRACT'></a><h1>ABSTRACT</h1>
+<p>All perl generated errors should have a unique identity. So that
+changes in the text should not cause breakage in code.</p>
+<a name='DESCRIPTION'></a><h1>DESCRIPTION</h1>
+<p>Currently many programs handle error returns by examining the text of
+the error returned in $@. This makes changes in the text of the error
+message, an issue for the backwards compatibility police.</p>
+<p>In addition error messages can be localized without effecting a
+working script.</p>
+<a name='CHANGES'></a><h1>CHANGES</h1>
+<li><a name='Removed any mention of language implementation as part of this RFC. This is too dependent upon other changes in the language.'></a>Removed any mention of language implementation as part of this RFC.
+This is too dependent upon other changes in the language.</li>
+<a name='IMPLEMENTATION'></a><h1>IMPLEMENTATION</h1>
+<p>Each unique identifier once assigned as part of a stable release
+of perl will be guarenteed never to be changed, or if the error
+text is removed, never to be reused.</p>
+<p>This RFC currently makes no attempt to define the actual methodology
+of how the unique ids are assigned or how they will be made available
+at the language level.</p>
+<p>However some discussion was sparked by the original RFC and is left
+as a historical note.</p>
+<a name='Appendix'></a><h1>Appendix</h1>
+<a name='Unique number'></a><h2>Unique number</h2>
+<p>Each error message will be assigned a unique number. The number
+could be made accessible via the $@ in a numeric context.</p>
+<p>This would be simple and direct. With no major hassles.</p>
+<a name='Unique String'></a><h2>Unique String</h2>
+<p>Each error message will have a unique string assigned.</p>
+<p>The unique string could be accessible as</p>
+<pre>	$@-&gt;id</pre>
+<p>An id string could have some structure associated to enable
+better handling. One suggestion was to follow the lead of VMS.</p>
+<pre>	facility:
+		The program (or, in perl's case, the thing that errored)
+	status:
+		I=information, W=warning, E=error, S=Severe error
+	message-code:
+		A one word abbreviation for the text message 
+
+	text message:
+		A human readable string with more detail
+
+	A sample error:
+
+	%APPEND-I-CREATED, MEM.SUM;1 created</pre>
+<p>For perl the actual text would be in $@.</p>
+<p>or rather than make the user break up the text string the values
+could be supplied as</p>
+<pre>	$@-&gt;id		# The unique identifier for this error
+	$@-&gt;facility	# regex, io, syscall
+	$@-&gt;severity	# Fatal, Warning, Informationl, </pre>
+<a name='Aknowledgements'></a><h1>Aknowledgements</h1>
+<p>Bryan C. Warnock &lt;<a href='mailto:bwarnock@gtemail.net'>bwarnock@gtemail.net</a>&gt;
+Peter Scott &lt;<a href='mailto:Peter@PSDT.com'>Peter@PSDT.com</a>&gt;
+Uri Guttman &lt;<a href='mailto:uri@sysarch.com'>uri@sysarch.com</a>&gt;
+Ariel Scolnicov &lt;<a href='mailto:ariels@compugen.co.il'>ariels@compugen.co.il</a>&gt;
+Juanma Barranquero &lt;<a href='mailto:lektu@uol.com.br'>lektu@uol.com.br</a>&gt;
+&quot;Paul L. Allen&quot; &lt;<a href='mailto:pla@softflare.net'>pla@softflare.net</a>&gt;
+Brian Wheeler &lt;<a href='mailto:bdwheele@wombat.educ.indiana.edu'>bdwheele@wombat.educ.indiana.edu</a>&gt;</p>
+<a name='REFERENCES'></a><h1>REFERENCES</h1>
+<p>IBM Messages and Codes</p>
+<p>VMS (anyone have a reference)</p>
+<p>SCCS</p>
+</div>

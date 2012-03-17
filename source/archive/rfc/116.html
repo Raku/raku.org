@@ -1,0 +1,589 @@
+[% setvar title Efficient numerics with perl %]
+<h3>This file is part of the Perl 6 Archive</h3>
+    <p>To see what is currently happening visit <a href="http://www.perl6.org/">http://www.perl6.org/</a></p>
+<div class='pod'>
+<a name='TITLE'></a><h1>TITLE</h1>
+<p>Efficient numerics with perl</p>
+<a name='VERSION'></a><h1>VERSION</h1>
+<pre>  Maintainer: pdl-porters team &lt;<a href='mailto:pdl-porters@jach.hawaii.edu'>pdl-porters@jach.hawaii.edu</a>&gt;
+  Date: 16 Aug 2000
+  Last Modified: 30 Sep 2000
+  Mailing List: <a href='mailto:perl6-language-data@perl.org'>perl6-language-data@perl.org</a>
+  Number: 116
+  Version: 3
+  Status: Frozen</pre>
+<a name='DISCUSSION'></a><h1>DISCUSSION</h1>
+<p>Not much happened. Most seemed to be dumbfounded by the density
+of the description. What we really need is a good manual or
+book on PDL as a reference. Short of this we have this RFC :(.</p>
+<p>At the very least it should help to point out that good support
+for numerical functionality is more than just matrix multiplication
+on multidim arrays.</p>
+<p>The RFCs on multi-dimensional arrays for Perl6 address some of the
+issues discussed in this RFC.</p>
+<a name='ABSTRACT'></a><h1>ABSTRACT</h1>
+<p>This RFC describes basic requirements of a numerical object/variable
+type for perl. A reference implementation (that could almost certainly
+do with some syntactical sweetening) is provided. It is currently
+available as the PDL distribution. A few key concepts of the reference
+implementation will be described. Any efforts to get numerical
+support into the perl core should provide means to either easily
+hook a numerical core into perl to achieve this or supply the
+features at the core design level. Current implementation
+aspects are sketched.</p>
+<p>This RFC is <i>not</i> really asking for any feature in particular
+but rather a description of existing PDL features <i>and</i> implementation
+aspects to show what's possible and desired in a numerical module.</p>
+<p>It is also the pdl-porters' contribution to <i>overstuff everybodies
+brains</i> [1].</p>
+<a name='DESCRIPTION'></a><h1>DESCRIPTION</h1>
+<p>PDL provides an object class to compactly store and speedily
+manipulate the large N-dimensional data arrays which are the bread and
+butter of scientific computing.</p>
+<p>Apart from the object representation itself PDL implements
+three key concepts which its users have found critical for
+efficient and enjoyable numerical computing with perl:</p>
+<ul>
+<li><a name='slices or smart references'></a>slices or <i>smart references</i></li>
+<li><a name='PDL threading -- automated optimized looping over elementary operations'></a>PDL threading -- automated optimized looping over elementary operations</li>
+<li><a name='Code generation and/or algorithmic abstraction'></a>Code generation and/or algorithmic abstraction</li>
+</ul>
+<a name='Compact typed multi-dimensional arrays'></a><h2>Compact typed multi-dimensional arrays</h2>
+<p>The basic data object of PDL is a zero- to multidimensional array
+of numbers, all of the same data type (for efficiency reasons,
+it is desirable to store the numbers in the native binary format and
+consecutively in memory instead of having a Perl SV for each one).
+Perl6 could come up with a representation for such types as part
+of its core (or be sufficiently flexible in its SV design).</p>
+<p>It is also critical to be able to specify a range of types,
+for example PDL offers support for single and double precision
+(float/double) as well as a variety of integer types ('byte',
+'ushort', 'short', 'long'). A future implementation should
+support a complex type at the core level. In the current
+implemenetation this is difficult due to parser limitations
+of the code generator (<code>PDL::PP</code>) and C's lack of an intrinsic
+complex type.</p>
+<a name='Smart references and transformations: slicing and dicing'></a><h2>Smart references and transformations: slicing and dicing</h2>
+<p>During data analysis it is often desirable to be able to refer to
+parts of the data, for example <i>every other number in this vector</i>
+without allocating new storage: if the original vector is 100Mb long,
+we don't want to allocate and copy the data for another 50Mb
+vector. For this purpose PDL supports &quot;virtual piddles&quot;, which are
+pointers to parts of other piddles (the implementation is transparent,
+virtual piddles appearing just as any other piddle object to the
+user).</p>
+<pre>  $a = zeroes(1000,1000,100); # more than 100MB worth of data
+  $b = $a-&gt;slice('0:-1:2');   # virtual piddle of every 2nd element
+  $b *= 2;                    # changes the elements in $a</pre>
+<p><code>slice</code> is just one example of this type of operation. <code>$b</code> contains
+only information how to access <code>$a</code>'s data rather than a copy. Similarly,
+a transposed object with the first two dimensions exchanged is easily
+obtained:</p>
+<pre>  $c = $a-&gt;xchg(0,1); # exchange dimension 0 and 1</pre>
+<p>Again, <code>$c</code> only contains information how to access <code>$a</code>'s data.</p>
+<p>Similarly we can create an index:</p>
+<pre>  $i = pdl(1,9,27); # a number of indices
+  $c = $a-&gt;index($i);</pre>
+<p>Changing <code>$c</code> changes <code>$a</code> (and vice versa). However in this
+case PDL makes no nice optimisation and manipulating <code>$c</code> uses memory
+for temps even though the changes are propagated back. The crucial point
+is that <code>$c</code> and <code>$a</code> are tightly linked objects that propagate
+changes in either to the other (in a way similar to dataflow). Find
+out more about this in the implementation section.
+An optimisation is in principle possible, and would be useful
+for all array types not just PDL ones.</p>
+<p>Similar optimizations for sparse and non-rectangular arrays would
+be desirable, this would be especially useful in a perl for numerics.</p>
+<a name='Signatures: threading over elementary operations'></a><h2>Signatures: threading over elementary operations</h2>
+<p>In a large number of practical situations encountered in scientific
+numerical programming fundamental (simple) operations are
+iterated over many (small) chunks of (multi-dimensional) data.</p>
+<p>A very simple examples is addition</p>
+<pre>  $c = $a + $b</pre>
+<p>of two multi-dimensional arrays (PDL objects). The fundamental
+operation is the addition of two scalar elements. This fundamental
+operation is just iterated over all pairs of elements of <code>$a</code> and
+<code>$b</code> and results placed element by element into <code>$c</code>.</p>
+<p>Based on this observation PDL introduced the notion of <i>PDL threading</i>
+to implement such functionality in a flexible and efficient way:
+it provides tools (<code>PDL::PP</code>) to define those optimized innermost
+loops (the fundamental operations) and establishes a framework to
+efficiently execute loops over these fundamental operations
+automatically as prescribed by the dimensionality of the input data. Most
+importantly, those loops over the innermost fundamental operations
+can generally be run in parallel (i.e. run in separate <i>threads</i>).
+PDL currently has experimental support to exploit this observation.</p>
+<p>Two examples using the inner product as the fundamental
+operation may serve to illustrate the idea. To convert an RGB image into a
+greyscale image an inner product with a triple of weights with
+each RGB triple is performed:</p>
+<pre>  $grey = inner $rgb, pdl(0.301,0.586,0.113);</pre>
+<p>The key is here that regardless of the number of trailing dimensions
+of the RGB object <code>$rgb</code> (which has a shape [3,.....]) the
+fundamental operation (the inner product) is speedily iterated
+over all triples of the data. So <code>$rgb</code> could be a single RGB
+pixel (shape [3]), a line of RGB data (shape [3,x]), an RGB image
+(shape [3,x,y]), a stack of RGB images ([3,x,y,z]) and so on.</p>
+<p>Each function that can be used in such a way in PDL has a <i>signature</i>
+that symbolically states dimensions consumed and generated in a fundamental
+operation. Illustrating this by the two functions we have used
+above the signatures of addition and inner product are</p>
+<pre>  a(); b(); [o] c()    # addition, we use ';'s as separators
+  a(n); b(n); [o] c()  # inner product  </pre>
+<p>In this symbolic notation <code>[o]</code> flags arguments which
+are created (output arguments). The symbols in parentheses name
+any dimensions of the variables involved. Empty parentheses refer to
+scalars (0-dim). So addition takes two scalar input arguments
+and generates one output scalar. The inner product consumes, as
+expected, two one-dimensional input args (symbolized by <code>a(n)</code>
+and <code>b(n)</code>) to produce a scalar output (<code>[o] c()</code>).</p>
+<p>To complete the picture PDL has rules how
+these fundamental operations consume chunks of data of the
+input args to produce a muti-dimensional result of chunks
+of output data (the possibly multi-dimensional result piddle).
+The user decides exactly how those operations are
+iterated over his data by manipulating the dimensions
+of the input data appropriately.
+That is illustrated in the promised second example.</p>
+<p>Those familar with linear algebra will know that
+a matrix product consists of the result of inner products
+between all pairs of row and column vectors of two
+input matrices. Not surprisingly we can therefore use the
+inner product to compute the matrix product of two PDL
+objects <code>$a</code> and <code>$b</code>:</p>
+<pre> $c =  inner $a-&gt;dummy(1), $b-&gt;xchg(0,1)-&gt;dummy(2);</pre>
+<p><code>dummy</code> and <code>xchg</code> are dimension manipulation functions
+(of the smart reference type) that are used to change the
+dimensionality of the input piddles so that the inner
+product is iterated over the desired pairs of sub-vectors
+and placed into the resulting piddle <code>$c</code>. We do not expect
+the casual reader to follow the details of this example
+but to appreciate the underlying idea.</p>
+<p>The essence of <i>PDL threading</i> is here that (1) it is a useful
+feature in <i>many</i> practical situations (2) can be very efficiently
+implemented and (3) exposes parallelism in the underlying algorithm.</p>
+<p>One could go as far as saying that the ideas underlying
+<i>threading</i> are PDL's main programming paradigm and
+the user is expected to rethink his approach accordingly for
+optimal performance.</p>
+<a name='Defining new PDL functions -- Glue code generation'></a><h2>Defining new PDL functions -- Glue code generation</h2>
+<p>One of the foremost design criteria was to implement a small set of
+core structures, routines and code generators that would depend
+heavily on each other. The rest of the package (implementing the real
+numerical functionality) should only depend on the external interface
+of these core functions.</p>
+<p>Encapsulation can be achieved by consciously looking for
+code that would be repeated in subroutines and either making a new
+subroutine or a code generator do the job for the programmer. This
+way, when the repeated code suddenly needs to be different, there
+is no painstaking need of changing all instances of it - simply
+changing the subroutine or code generator will do it. We emphasize this
+because this kind of thinking seems to be forgotten all too often.</p>
+<p>PDL introduced the code generator PDL::PP to create
+subroutines from concise descriptions to allow the programmer
+to focus on the algorithmic side of things. In many ways PDL::PP
+can be thought of as the XS of PDL: it is complex to learn, powerful,
+allows easy interfacing at the C-level and is, once mastered, straightforward
+to use. Beyond that using PDL::PP ensures that new routines follow uniform
+calling conventions and support PDL threading, slicing, etc.</p>
+<p>In the current implementation it suffers from similar problems as XS
+in perl5: the syntax is strange and hard to learn, it is also feature
+incomplete (i.e. certain things can not be done right now). However,
+it implements a number of ideas that we find are absolutely crucial
+to pertain and develop further in a numerically friendly perl:
+algorithmic abstraction, encapsulation and provision of a tool
+for easy interfacing to the hundreds of existing numerical, graphics
+and IO libraries that are to be tapped into.</p>
+<p>As an illustration for the abstraction that is achieved, here is the
+definition for an inner product function. This definition tells the
+code generator (<code>PDL::PP</code>) to generate the appropriate XS code that
+will then be compiled as part of a new loadable PDL module:</p>
+<pre>   pp_def(
+        'inner',
+        Pars =&gt; 'a(n); b(n); [o]c(); ', # the signature, see above
+        Code =&gt; 'double tmp = 0;
+                 loop(n) %{ tmp += $a() * $b(); %}
+                 $c() = tmp;' );</pre>
+<p>The above code specifies firstly that the two first vectors must have
+the same first dimension and the third vector will not have that
+dimension. Inside the loop it is possible to use <code>$a()</code> without
+specifying the index because we have specified that we are looping
+over the dimension called <code>n</code>. Notice that we do not do any
+checking that <code>$a</code> and <code>$b</code> have the same sized first
+dimension - we just tell PDL::PP that we expect this to be so and it
+checks whether any data passed to the <code>inner</code> routine obeys this
+assumption and <code>croak</code>s if it does not.</p>
+<p>After installation the user can then use</p>
+<pre>	$c = inner $a,$b;</pre>
+<p>to compute the inner product of two piddles.</p>
+<p>The code clearly illustrates the abstraction achieved, making no
+reference to an actual data type or how the vectors are stored. This
+kind of abstraction is similar to the ideas used in the C++ Standard
+Template Library.  As a bonus, the use of PP means a
+lot of the tedious housekeeping of programming can be automated.
+Almost all index troubles vanish when writing and using these
+subroutines: all the necessary index checks are done automatically by
+the code generator.</p>
+<p>The code generator also ensures that calling the function with
+arguments that have more dimensions than the function expects works as
+well - the function is simply repeatedly called in a loop over all
+these dimensions (<i>threaded</i> over the dimensions in PDL parlance),
+providing a fast way of performing many similar operations in a row
+without going back to the Perl level (with the latest versions of PDL,
+it is possible to use multiple OS-level threads for these loops,
+enabling an easy way of gaining from a multiprocessor computer). This
+<i>threading</i> allows many algorithms to be expressed concisely and PDL
+scripts rarely have cause for loops over elements on the Perl level.</p>
+<p>In a future perl this functionality might be integrated with a perl (JIT?)
+compiler. Code could be specified in perl(-like?) syntax and compiled into an
+optimized C level transformation as required.</p>
+<p>If this sounds rather vague it is not by accident -- we still lack a clear
+idea how to optimally achieve this goal. A nice perlish syntax to
+replace the PP gibberish should certainly be the starting point.</p>
+<a name='IMPLEMENTATION'></a><h1>IMPLEMENTATION</h1>
+<p>The PDL core is currently suffering from similar problems as
+perl 5: it works but is poorly documented and many hacks make it
+increasingly difficult to modify and maintain. But it works <code>;)</code>.</p>
+<p>In any case, some of the perl6 guys have asked for a rundown of
+the principal guts of the implementation. Here it goes...</p>
+<a name='Compact, typed multi-dimensional arrays'></a><h2>Compact, typed multi-dimensional arrays</h2>
+<p>On the Perl side, an opaque scalar reference turned out to be the most
+practical representation: Perl5 allows overloading of operators so
+<code>$c=$a+$b</code> can mean &quot;add the objects (here representing matrices)
+<code>$a</code> and <code>$b</code> and store the result in the scalar <code>$c</code> with whatever
+type that the result has&quot;.  As with any perl object, new objects can
+be easily derived from piddles for specialised purposes.</p>
+<p>In Perl6 it may be desirable to use <code>@syntax</code> for all arrays - whether
+compact, implementing smart references, or not. The use of <code>$a</code> for
+PDL arrays and <code>@a</code> for normal perl arrays <b>is</b> confusing, we would
+like to see some unification. Ideally perl arrays would support some,
+or all, of the PDL features whether they are multi-dimensional
+or not.</p>
+<ul>
+<li><a name='What is in a Piddle.'></a>What is in a Piddle.</li>
+<p>The PDL structure is defined in <code>pdl.h</code></p>
+<pre>	struct pdl {
+	   unsigned long magicno; /* Always stores PDL_MAGICNO as a sanity check */
+	     /* This is first so most pointer accesses to wrong type are caught */
+	   int state;        /* What's in this pdl */
+
+	   pdl_trans *trans; /* Opaque pointer to internals of transformation from
+				parent */
+
+	   pdl_vaffine *vafftrans;
+
+	   void*    sv;      /* (optional) pointer back to original sv.
+				  ALWAYS check for non-null before use.
+				  We cannot inc refcnt on this one or we'd
+				  never get destroyed */
+
+	   void *datasv;        /* Pointer to SV containing data. Refcnt inced */
+	   void *data;            /* Null: no data alloced for this one */
+	   int nvals;           /* How many values allocated */
+	   int datatype;
+	   PDL_Long   *dims;      /* Array of data dimensions */
+	   PDL_Long   *dimincs;   /* Array of data default increments */
+	   short    ndims;     /* Number of data dimensions */
+
+	   unsigned char *threadids;  /* Starting index of the thread index set n */
+	   unsigned char nthreadids;
+
+	   pdl *progenitor; /* I'm in a mutated family. make_physical_now must
+			       copy me to the new generation. */
+	   pdl *future_me;  /* I'm the &quot;then&quot; pdl and this is my &quot;now&quot; (or more modern
+			       version, anyway */
+
+	   pdl_children children;
+
+	   short living_for; /* perl side not referenced; delete me when */
+
+	   PDL_Long   def_dims[PDL_NDIMS];   /* Preallocated space for efficiency */
+	   PDL_Long   def_dimincs[PDL_NDIMS];   /* Preallocated space for efficiency */
+	   unsigned char def_threadids[PDL_NTHREADIDS];
+
+	   struct pdl_magic *magic;
+
+	   void *hdrsv; /* &quot;header&quot;, settable from outside */
+	};</pre>
+<p>This is quite a structure for just storing some data in - what is going on?</p>
+<li><a name='Data storage'></a>Data storage</li>
+<p>We are going to start with some of the simpler members: first of all,
+there is the member</p>
+<pre>	void *datasv;</pre>
+<p>which is really a pointer to a Perl SV structure (<code>SV *</code>). The SV is
+expected to be representing a string, in which the data of the piddle
+is stored in a tightly packed form. This pointer counts as a reference
+to the SV so the reference count has been incremented when the <code>SV *</code>
+was placed here. This pointer is allowed to have the value <code>NULL</code> which
+means that there is no Perl SV for this data - for instance, the data
+might be allocated by a <code>mmap</code> operation. Note the use of an SV*
+was purely for convenience, it allows easy transformation of
+packed data from files into piddles. Other implementations are not
+excluded.</p>
+<p>The actual pointer to data is stored in the member</p>
+<pre>	void *data;</pre>
+<p>which contains a pointer to a memory area with space for</p>
+<pre>	int nvals;</pre>
+<p>data items of the data type of this piddle.</p>
+<p>The data type of the data is stored in the variable</p>
+<pre>	int datatype;</pre>
+<p>the values for this member are given in the enum <code>pdl_datatypes</code>, discussed
+above.</p>
+<li><a name='Dimensions'></a>Dimensions</li>
+<p>The number of dimensions in the piddle is given by the member</p>
+<pre>	int ndims;</pre>
+<p>which shows how many entries there are in the arrays</p>
+<pre>	PDL_Long   *dims;      
+	PDL_Long   *dimincs;</pre>
+<p>These arrays are intimately related: <code>dims</code> gives the sizes of the dimensions
+and <code>dimincs</code> is always calculated by the code</p>
+<pre>	int inc = 1;
+        for(i=0; i&lt;it-&gt;ndims; i++) {
+		it-&gt;dimincs[i] = inc; inc *= it-&gt;dims[i];
+	}</pre>
+<p>in the routine <code>pdl_resize_defaultincs</code> in <code>pdlapi.c</code>.
+What this means is that the dimincs can be used to calculate the offset
+by code like</p>
+<pre>	int offs = 0;
+	for(i=0; i&lt;it-&gt;ndims; i++) {
+		offs += it-&gt;dimincs[i] * index[i];
+	}</pre>
+<p>but this is not always the right thing to do,
+at least without checking for certain things first.</p>
+<li><a name='Default storage'></a>Default storage</li>
+<p>Since the vast majority of piddles don't have more than 6 dimensions,
+it is more efficient to have default storage for the dimensions and dimincs
+inside the PDL struct.</p>
+<pre>   	PDL_Long   def_dims[PDL_NDIMS];   
+   	PDL_Long   def_dimincs[PDL_NDIMS]; </pre>
+<p>The <code>dims</code> and <code>dimincs</code> may be set to point to the beginning of these
+arrays if <code>ndims</code> is smaller than or equal to the compile-time constant
+<code>PDL_NDIMS</code>. This is important to note when freeing a piddle struct.
+The same applies for the threadids:</p>
+<pre>   	unsigned char def_threadids[PDL_NTHREADIDS];</pre>
+<li><a name='Magic'></a>Magic</li>
+<p>It is possible to attach magic to piddles, much like Perl's own magic
+mechanism. If the member pointer</p>
+<pre>	   struct pdl_magic *magic;</pre>
+<p>is nonzero, the PDL has some magic attached to it. The implementation
+of magic is discussed below.</p>
+<li><a name='State'></a>State</li>
+<p>One of the first members of the structure is</p>
+<pre>	int state;</pre>
+<p>The possible flags and their meanings are given in <code>pdl.h</code>.</p>
+<li><a name='Transformations and virtual affine transformations'></a>Transformations and virtual affine transformations</li>
+<p>As you should already know, piddles often carry information about
+where they come from. For example, the code</p>
+<pre>	$b = $a-&gt;slice(&quot;2:5&quot;);
+	$b .= 1;</pre>
+<p>will alter $a. This information is stored in the members</p>
+<pre>   	pdl_trans *trans; 
+   	pdl_vaffine *vafftrans;</pre>
+<p><code>pdl_trans</code> and <code>pdl_vaffine</code> are structures that we will look at in
+more detail below.</p>
+<li><a name='The Perl SVs'></a>The Perl SVs</li>
+<p>When piddles are referred to through Perl SVs, we store an additional
+reference to it in the member</p>
+<pre>	void*    sv;</pre>
+<p>in order to be able to return a reference to the user when he wants to
+inspect the transformation structure on the Perl side.</p>
+<p>Also, we store an opaque</p>
+<pre>	void *hdrsv; </pre>
+<p>which is just for use by the user to hook up arbitrary data with this sv.</p>
+</ul>
+<a name='Smart references and transformations: slicing and dicing'></a><h2>Smart references and transformations: slicing and dicing</h2>
+<p>Smart references and most other fundamental functions
+operating on piddles are implemented via <i>transformations</i>
+which are represented by the type <code>pdl_trans</code> in PDL.</p>
+<p>A transformation links input and output piddles and contains
+all the infrastructure that defines how</p>
+<ul>
+<li><a name='output piddles are obtained from input piddles'></a>output piddles are obtained from input piddles</li>
+<li><a name='changes in smartly linked output piddles (e.g. the child of a sliced parent piddle) are flown back to the input piddle in transformations where this is supported (the most often used example being slice here).'></a>changes in smartly linked output piddles (e.g. the <i>child</i>
+of a sliced <i>parent</i> piddle) are flown back to the input
+piddle in transformations where this is supported (the most
+often used example being <code>slice</code> here).</li>
+<li><a name='datatype and size of output piddles that need to be created are obtained'></a>datatype and size of output piddles that need to be created
+are obtained</li>
+</ul>
+<p>In general, executing a PDL function on a group of piddles
+results in creation of a transformation of the requested
+type that links all input and output arguments (at least
+those that are piddles). In PDL functions that support
+data flow between input and output args (e.g. <code>slice</code>,
+<code>index</code>) this transformation links <i>parent</i> (input) and
+<i>child</i> (output) piddles permanently until either the link is
+explicitly broken by user request (<code>sever</code> at the perl level)
+or all parents and childen have been destroyed. In those
+cases the transformation is lazy-evaluated, e.g. only executed
+when piddle values are actually accessed.</p>
+<p>In <i>non-flowing</i> functions, for example addition (<code>+</code>) and inner
+products (<code>inner</code>), the transformation is installed just as
+in flowing functions but then the transformation is immediately
+executed and destroyed (breaking the link between input and output args)
+before the function returns.</p>
+<p>It should be noted that the close link between input and output args
+of a flowing function requires that piddle objects that are linked in
+such a way be kept alive beyond the point where they have gone
+out of scope from the point of view of perl:</p>
+<pre>  $a = zeroes(20);
+  $b = $a-&gt;slice('2:4');
+  undef $a;    # last reference to $a is now destroyed</pre>
+<p>Although $a should now be destroyed according to perl's rules
+the underlying <code>*pdl</code> must actually only be freed when <code>$b</code>
+also goes out of scope (since it still references
+internally some of <code>$a</code>'s data). This example demonstrates that such
+a dataflow paradigm between PDL objects necessitates a special
+destruction algorithm that takes the links between piddles
+into account and couples the lifespan of those objects. The
+non-trivial algorithm is implemented in the function
+<code>pdl_destroy</code> in <b><i>pdlapi.c</i></b>.</p>
+<a name='What's in a pdl_trans'></a><h2>What's in a <code>pdl_trans</code></h2>
+<p>All transformations are implemented as structures</p>
+<pre>  struct XXX_trans {
+	int magicno; /* to detect memory overwrites */
+	short flags; /* state of the trans */
+	pdl_transvtable *vtable;   /* the all important vtable */
+	void (*freeproc)(struct pdl_trans *);  /* Call to free this trans
+		(in case we had to malloc some stuff dor this trans) */
+        pdl *pdls[NP]; /* The pdls involved in the transformation */
+	int __datatype; /* the type of the transformation */
+        /* in general more members
+        /* depending on the actual transformation (slice, add, etc)
+	 */
+  };</pre>
+<p>The transformation identifies all <code>pdl</code>s involved in the trans</p>
+<pre>  pdl *pdls[NP];</pre>
+<p>with <code>NP</code> depending on the number of piddle args of the particular
+trans. It records a state</p>
+<pre>  short flags;</pre>
+<p>and the datatype</p>
+<pre>  int __datatype;</pre>
+<p>of the trans (to which all piddles must be converted unless
+they are explicitly typed). Most important is the pointer to
+the vtable that contains the actual functionality</p>
+<pre> pdl_transvtable *vtable;</pre>
+<p>The vtable structure in turn looks something like (slightly
+simplified from <b><i>pdl.h</i></b> for clarity)</p>
+<pre>  typedef struct pdl_transvtable {
+	pdl_transtype transtype;
+	int flags;
+	int nparents;   /* number of parent pdls (input) */
+	int npdls;      /* number of child pdls (output) */
+	char *per_pdl_flags;  /* optimization flags */
+	void (*redodims)(pdl_trans *tr);  /* figure out dims of children */
+	void (*readdata)(pdl_trans *tr);  /* flow parents to children  */
+	void (*writebackdata)(pdl_trans *tr); /* flow backwards */
+	void (*freetrans)(pdl_trans *tr); /* Free both the contents and it of
+					the trans member */
+	pdl_trans *(*copy)(pdl_trans *tr); /* Full copy */
+  	int structsize;
+	char *name; /* For debuggers, mostly */
+  } pdl_transvtable;</pre>
+<p>We focus on the callback functions:</p>
+<pre>  	void (*redodims)(pdl_trans *tr);</pre>
+<p><code>redodims</code> will work out the dimensions of piddles that need
+to be created and is called from within the API function that
+should be called to ensure that the dimensions of a piddle are
+accessible (<b><i>pdlapi.c</i></b>):</p>
+<pre>   void pdl_make_physdims(pdl *it)</pre>
+<p><code>readdata</code> and <code>writebackdata</code> are responsible for the actual
+computations of the child data from the parents or parent data
+from those of the children, respectively (the dataflow aspect).
+The PDL core makes sure that these are called as needed when
+piddle data is accessed (lazy-evaluation). The general API
+function to ensure that a piddle is up-to-date is</p>
+<pre>  void pdl_make_physvaffine(pdl *it)</pre>
+<p>which should be called before accessing piddle data from
+XS/C (see <b><i>Core.xs</i></b> for some examples).</p>
+<p><code>freetrans</code> frees dynamically allocated memory associated
+with the trans as needed and <code>copy</code> can copy the transformation.</p>
+<p>The transformation and vtable code is hardly ever written by
+hand but rather generated by <code>PDL::PP</code> from concise descriptions
+(see the example of the definition of <code>inner</code> above).</p>
+<p>Certain types of transformations can be optimized very
+efficiently obviating the need for explicit <code>readdata</code>
+and <code>writebackdata</code> methods. Those transformations are
+called <i>pdl_vaffine</i>. Most dimension manipulating
+functions (e.g., <code>slice</code>, <code>xchg</code>) belong to this class.</p>
+<p>The basic trick is that parent and child of such a transformation work
+on the same (shared) block of data which they just choose
+to interpret differently (by dusing different <code>dims</code>, <code>dimincs</code> and
+<code>offs</code> on the same data, compare the <code>pdl</code> structure above).
+Each operation on a piddle sharing
+data with another one in this way is therefore automatically flown
+from child to parent and back -- they are reading and writing
+the same block of memory. This is currently not perl thread safe --
+no big loss since the whole PDL core is not reentrant
+(perl threading <code>!=</code> PDL threading).</p>
+<p>A more detailed description of <i>vaffines</i> will be added
+in a later version of this document.</p>
+<a name='Signatures: threading over elementary operations'></a><h2>Signatures: threading over elementary operations</h2>
+<p>Most of that functionality is implemented in the file <b><i>pdlthread.c</i></b>.
+The <code>PDL::PP</code> generated functions (in particular the
+<code>readdata</code> and <code>writebackdata</code> callbacks) use this infrastructure to
+make sure that the fundamental operation implemented by the
+trans is performed in agreement with PDL's threading semantics.</p>
+<a name='Defining new PDL functions -- Glue code generation'></a><h2>Defining new PDL functions -- Glue code generation</h2>
+<p>Please, see <i><a href='http://search.cpan.org/perldoc?PDL::PP'>PDL::PP</a></i> and examples in the PDL distribution. Implementation
+and syntax are currently far from perfect.</p>
+<p>As the above example on the definition of <code>inner</code> suggests,
+the principal functionality
+is implemented through the function <code>pp_def</code> which takes a hash
+of directives as a concise specification of the desired functionality.
+The <code>Code</code> and <code>RedoDimsCode</code> fields contain the algorithmic specification
+in a home grown pseudo code syntax that has some faint similarity to
+a mixture of perl, XS and C. Here we could do with some good ideas
+for improvement. From this description <code>PDL::PP</code> produces C and XS code
+(which will go away in a future perl?) by processing the hash through a
+translation table.</p>
+<p>The ability to write the fundamental algorithm in a perlish way
+(or even in perl) that is optimized by (ideally JIT) compilation
+is what we are really after.</p>
+<a name='SUMMARY'></a><h1>SUMMARY</h1>
+<p>We have explained the key ideas which make PDL work, and work well. It remains
+to be determined which of these might belong in the core of perl6, in order
+to make PDL work more seamlessly, and which belong in the module.</p>
+<p>Our take on this: perl6 should support a compact, numerical array type which is
+overloadable and can be manipulated with nice syntax. A key point is to abolish the
+visual distinction between perl arrays (<code>@x</code>) and PDL arrays (<code>$x</code>) which is confusing
+but forced upon us by the current object paradigm. There is also considerable
+scope for improving syntax to make numerical Perl more user-friendly - this is explained
+in more detail by the RFCs on Ranges and Default Methods.</p>
+<p>Compact arrays should support virtual slices when being manipulated.</p>
+<p>It seems to us that the more detailed/generalised PDL threading paradigm is
+beyond the core and belongs in a module. Some syntactical hooks would be
+appreciated though so one could at least say code like this at the Perl level:</p>
+<pre>        sub mysub : PDL {
+                my($a, $b) = @_;
+                signature('a(n), b(n)');
+                loop(n) {   # n a bareword, loop has prototype
+                # Threaded code
+                }
+	}</pre>
+<a name='SEE ALSO'></a><h1>SEE ALSO</h1>
+<p><i><a href='http://search.cpan.org/perldoc?PDL'>PDL</a></i> (<a href='http://pdl.sourceforge.net/PDLdocs)' target='_blank'>pdl.sourceforge.net</a></p>
+<p><a href='http://pdl.perl.org' target='_blank'>pdl.perl.org</a></p>
+<p><a href='http://pdl.sourceforge.net/FAQ' target='_blank'>pdl.sourceforge.net</a></p>
+<p>perl6 RFCs on Ranges and Default Methods.</p>
+<p>Matlab</p>
+<p>IDL (the one from rsinc)</p>
+<p>Yorick</p>
+<p>Mathematica</p>
+<p>NumPython <a href='http://starship.python.net/~da/numtut/' target='_blank'>starship.python.net</a></p>
+<p>Hords of other array-oriented languages, try
+<a href='http://SAL.KachinaTech.COM/A/2/index.shtml' target='_blank'>SAL.KachinaTech.COM</a></p>
+<p>RFCs on multidim arrays 202-207, 231</p>
+<p>[1] LW:</p>
+<pre>    Let me just add that I don't mind the brainstorming at all.  To be a
+    good language designer, you have to stuff your brain with what you
+    *could* do before you can reasonably choose what you *will* do.  At the
+    moment, I'm not only trying to follow along here; I'm also reading all
+    the books on computer languaes I can get my hands on--not just to look
+    for ideas to steal, but also to remind myself of the mindset Perl was
+    designed to escape.
+
+    In fact, I'd go as far as to say that it's imperative that you
+    overstuff your brain to the point where you no longer feel tempted to
+    overstuff the language.  Hypotheticality is your friend.</pre>
+</div>

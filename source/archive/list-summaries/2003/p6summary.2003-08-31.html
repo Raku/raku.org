@@ -1,0 +1,161 @@
+[% setvar title The Perl 6 Summary for the week ending 20030831 %]
+<h3>This file is part of the Perl 6 Archive</h3>
+    <p>To see what is currently happening visit <a href="http://www.perl6.org/">http://www.perl6.org/</a></p>
+<div class='pod'>
+<a name='The Perl 6 Summary for the week ending 20030831'></a><h1>The Perl 6 Summary for the week ending 20030831</h1>
+<p>Welcome to this week's Perl 6 summary. This week, for one week only
+I'm going to break with a long established summary tradition. No,
+that doesn't mean I won't be mentioning Leon Brocard this week. Nope,
+this week we're going to start by discussing what's been said on the
+perl6-language list this week.</p>
+<p>Now that's out of the way, we'll continue with a summary of the
+internals list.</p>
+<a name='Continuation Passing is becoming the One True Calling Style'></a><h2>Continuation Passing is becoming the One True Calling Style</h2>
+<p>Jos Visser had some code that broke in an interesting fashion when
+<code>find_lex</code> through an exception, so he asked the list about it. Leo
+T&ouml;tsch explained that exceptions and old style subs don't play
+at all well together. It seems to me that the total and utter
+deprecation of subs using the old style calling conventions is not
+far distant.</p>
+<p><a href='http://groups.google.com/groups?threadm=20030825090032.GG1125@jadzia.ao.abnamro.nl' target='_blank'>groups.google.com</a></p>
+<a name='Embedding Parrot in Perl'></a><h2>Embedding Parrot in Perl</h2>
+<p>Luke Palmer has started to learn XS in the service of his project to
+embed Parrot in Perl. Unsurprisingly, he had a few questions. He got
+a few answers.</p>
+<p><a href='http://groups.google.com/groups?threadm=20030825164459.GA14410@babylonia.flatirons.org' target='_blank'>groups.google.com</a></p>
+<a name='Implementing ISA'></a><h2>Implementing ISA</h2>
+<p>Leo T&ouml;tsch has implemented <code>isa</code>. The unfashionably lowercased
+chromatic argued that what Leo had implemented should actually be
+called <code>does</code>. Chris Dutton thought <code>does</code> should be an alias for
+<code>has</code>. Piers Cawley thinks he might be missing something.</p>
+<p><a href='http://groups.google.com/groups?threadm=3F4A582C.9030200@nextra.at' target='_blank'>groups.google.com</a></p>
+<a name='More on constant PMCs and classes'></a><h2>More on constant PMCs and classes</h2>
+<p>Leo T&ouml;tsch's RFC on constant PMCs and classes from last week
+continued to attract comments about possible interfaces and
+implementations.</p>
+<p><a href='http://groups.google.com/groups?threadm=3F4363FF.2010204@nextra.at' target='_blank'>groups.google.com</a></p>
+<a name='A miscellany of newbie questions'></a><h2>A miscellany of newbie questions</h2>
+<p>James Michael DuPont a bunch of questions and suggestions about
+bytecode emission, the JIT and about possibly extracting the Parrot
+object system into a separate library. Leo supplied answers.</p>
+<p><a href='http://groups.google.com/groups?threadm=20030826142908.48488.qmail@web41507.mail.yahoo.com' target='_blank'>groups.google.com</a></p>
+<a name='What the heck is active data?'></a><h2>What the heck is active data?</h2>
+<p>Dan clarified what he'd meant when he talked about Active Data. His
+one sentence definition being '&quot;Active Data&quot; is data that takes some
+active role in its use -- reading, writing, modifying, deleting or
+using in some activity'. The consequences of such data are far
+reaching; even if your code has no active data in it, Dan points out
+that you still have to take the possibility into account, or solve
+the halting problem.</p>
+<p>Benjamin Goldberg seemed to think that you didn't need to solve the
+halting problem, you could just add scads of metadata to everything
+and do dataflow analysis at compile time. I look forward with interest
+to his implementation.</p>
+<p>Matt Fowles wondered why active data necessitated keyed variants of
+all the ops, asking instead why we couldn't have a <code>prepkeyed</code> op to
+return an appropriate specialized PMC to use in the next op. Dan
+agreed that such an approach was possible, but not necessarily very
+efficient. Leo T&ouml;tsch disagreed with him though.</p>
+<p>TOGoS wondered if this meant that we wouldn't know whether <code>set Px,
+Py</code> did binding or morphing until runtime. (It doesn't. <code>set</code> always
+simply copies a pointer). In an IRC conversation with Dan we realised
+that some of this confusion arises from the fact that <code>set_string</code>
+and friends behave as if they were called <code>assign_string</code>; to get
+the expected <code>set_string</code> semantics you'd have to do:</p>
+<pre>    new Px, .PerlUndef
+    set_string Px, &quot;some string&quot;</pre>
+<p>Hopefully this is going to get fixed.</p>
+<p><a href='http://groups.google.com/groups?threadm=a0521060ebb71b3c71432@' target='_blank'>groups.google.com</a>[63.120.19.221]</p>
+<a name='Mission haiku'></a><h2>Mission haiku</h2>
+<p>&lt;blockquote&gt;Nicholas Clark&lt;br/&gt;
+To make some kind of mark&lt;br/&gt;
+Committed haiku.&lt;br/&gt;
+Don't you.&lt;/blockquote&gt;</p>
+<p>Nicholas Clark
+To make some kind of mark
+Committed haiku.
+Don't you.</p>
+<p>Yes, I know that's not a haiku. It's a Clerihew. I suggest that
+anyone else who feels tempted to perpetrate verse on list restrict
+themselves to a sestina or a villanelle, or maybe a sonnet.</p>
+<p>I also note that POD is a lousy format for setting poetry in.</p>
+<p><a href='http://groups.google.com/groups?threadm=20030828001111.O4286@plum.flirble.org' target='_blank'>groups.google.com</a></p>
+<a name='J&uuml;rgen gets De-Warnocked'></a><h2>J&uuml;rgen gets De-Warnocked</h2>
+<p>J&uuml;rgen B&ouml;mmels had been caught on the horns of Warnock's
+Dilemma over a patch he submitted a while back. It turns out that he'd
+been Warnocked in part because both Leo and Dan thought he already had
+commit rights. So that got fixed. Welcome to the ranks of Parrot
+committers J&uuml;rgen, you've deserved it for a while.</p>
+<p><a href='http://groups.google.com/groups?threadm=m2znhuksi3.fsf@helium.physik.uni-kl.de' target='_blank'>groups.google.com</a></p>
+<a name='Parrot Z-machine'></a><h2>Parrot Z-machine</h2>
+<p>New face Amir Karger wants to write the Parrot Z-machine
+implementation and had a few questions about stuff. So far he's been
+Warnocked.</p>
+<p><a href='http://groups.google.com/groups?threadm=20030828131707.8989.qmail@web40705.mail.yahoo.com' target='_blank'>groups.google.com</a></p>
+<a name='Notifications'></a><h2>Notifications</h2>
+<p>Dan described how Parrot's notification system would work, and what
+that means for weak references. Michael Schwern thought the outlined
+notification system would also be awfully useful for debugger watch
+expressions. Tim Bunce worried about some edge cases.</p>
+<p><a href='http://groups.google.com/groups?threadm=a05210614bb743d52fe3f@' target='_blank'>groups.google.com</a>[63.120.19.221]</p>
+<a name='MSVC++ complaints'></a><h2>MSVC++ complaints</h2>
+<p>Vladimir Lipskiy (who's been doing some stellar work recently on
+various build issues amongst other things) found some problems trying
+to build Parrot with MSVC++ and asked for help in working out how to
+fix them. J&uuml;rgen B&ouml;mmels suggested a fix, which Vladimir
+liked in principle, but noted that there were still some issues it
+didn't quite fix.</p>
+<p><a href='http://groups.google.com/groups?threadm=007301c36dd1$7b68e410$589d943e@87w5ovc8gmxcahy' target='_blank'>groups.google.com</a></p>
+<a name='vtable-&gt;dump'></a><h2><code>vtable-&gt;dump</code></h2>
+<p>Leo T&ouml;tsch thought that, if only for debugging, it would be
+really handy for PMCs to offer a <code>dump</code> method which would return a
+string representation of the PMC. Dan thought that a better approach
+would be to get freeze/thaw working for PMCs and have the debugger
+know how to dump a frozen PMC. This seemed to open up a whole big can
+of worms as Leo, Dan and others discussed what was needed from the
+serialization toolset and what its interface should look
+like.</p>
+<p>Nicholas Clark threw a googly down the pitch with his description of
+a possible attack on serialization schemes (possibly originating with
+Jonathan Stowe) that seems deeply tricky to work around.</p>
+<p><a href='http://groups.google.com/groups?threadm=3F4F27B4.7070909@nextra.at' target='_blank'>groups.google.com</a></p>
+<p><a href='http://groups.google.com/groups?threadm=20030830125952.S4286@plum.flirble.org' target='_blank'>groups.google.com</a></p>
+<a name='exit opcode'></a><h2><code>exit</code> opcode</h2>
+<p>Leo checked in a small change to Parrot, making <code>exit</code> throw an
+exception rather than simply quitting the program. Of course, unless
+the exception is caught, parrot will exit anyway. He also proposed
+changing the startup parameters by moving the ARGV array from P0 to
+P5 for consistency with the Parrot Calling conventions. For some
+reason this sparked off an enormous thread discussing how to return
+from the main function.</p>
+<p>Dan liked the the idea, so Leo checked a patch in and fixed up as
+many of the examples and languages as he could find, but he expects
+that he hasn't caught 'em all.</p>
+<p><a href='http://groups.google.com/groups?threadm=3F4F390E.6080809@nextra.at' target='_blank'>groups.google.com</a></p>
+<a name='Acknowledgements, Announcements, Apologies'></a><h1>Acknowledgements, Announcements, Apologies</h1>
+<p>I'm really, really sorry about the Clerihew. But not sorry enough to
+remove it.</p>
+<p>Thanks to everyone involved in making sure I only got one and a
+half of last week's predictions right. (The half prediction was to do
+with my writing real Perl code, I didn't. But I <i>did</i> release the
+Paris code, you can find it on CPAN at
+<a href='http://search.cpan.org/search?query=Heritable::Types' target='_blank'>search.cpan.org</a>&amp;mode=dist
+if you're interested.)</p>
+<p>Thanks to Gill for seven and 2 days (as I write this) of wedded
+bliss.</p>
+<p>Check out <a href='http://www.bofh.org.uk/' target='_blank'>www.bofh.org.uk</a> for more of my
+writing (and thanks to those who have already popped by).</p>
+<p>As ever, if you've appreciated this summary, please consider one or
+more of the following options:</p>
+<ul>
+<li><a name='Send money to the Perl Foundation at donate.perl-foundation.org/ and help support the ongoing development of Perl.'></a>Send money to the Perl Foundation at
+<a href='http://donate.perl-foundation.org/' target='_blank'>donate.perl-foundation.org</a> and help support the ongoing
+development of Perl.</li>
+<li><a name='Get involved in the Perl 6 process. The mailing lists are open to all. dev.perl.org/perl6/ and www.parrotcode.org/ are good starting points with links to the appropriate mailing lists.'></a>Get involved in the Perl 6 process. The mailing lists are open  to
+all. <a href='http://dev.perl.org/perl6/' target='_blank'>dev.perl.org</a> and <a href='http://www.parrotcode.org/' target='_blank'>www.parrotcode.org</a>
+are good starting points with links to the appropriate mailing lists.</li>
+<li><a name='Send feedback, flames, money, requests for consultancy, photographic and writing commissions, or the soul of your first born to p<a href='mailto:6summarizer@bofh.org.uk'>6summarizer@bofh.org.uk</a>'></a>Send feedback, flames, money, requests for consultancy, photographic
+and writing commissions, or the soul of your first born to
+<i><a href='http://search.cpan.org/perldoc?<a href='mailto:p6summarizer@bofh.org.uk'>p6summarizer@bofh.org.uk</a>'>p<a href='mailto:6summarizer@bofh.org.uk'>6summarizer@bofh.org.uk</a></a></i></li>
+</ul>
+</div>

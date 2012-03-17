@@ -1,0 +1,62 @@
+[% setvar title Data: sprintf() with overloaded objects %]
+<h3>This file is part of the Perl 6 Archive</h3>
+    <p>To see what is currently happening visit <a href="http://www.perl6.org/">http://www.perl6.org/</a></p>
+<div class='pod'>
+<a name='TITLE'></a><h1>TITLE</h1>
+<p>Data: sprintf() with overloaded objects</p>
+<a name='VERSION'></a><h1>VERSION</h1>
+<pre>  Maintainer: Ilya Zakharevich &lt;<a href='mailto:ilya@math.ohio-state.edu'>ilya@math.ohio-state.edu</a>&gt;
+  Date: 15 Sep 2000
+  Mailing List: <a href='mailto:perl6-language-data@perl.org'>perl6-language-data@perl.org</a>
+  Number: 235
+  Version: 1
+  Status: Developing</pre>
+<a name='ABSTRACT'></a><h1>ABSTRACT</h1>
+<p>This RFC proposes a support of sprintf() with overloaded objects;</p>
+<a name='DESCRIPTION'></a><h1>DESCRIPTION</h1>
+<p>The problems:</p>
+<ul>
+<li><a name='too many different flavors to support, many of them equivalent;'></a>too many different flavors to support, many of them equivalent;</li>
+<li><a name='Many different flags, a lot of work to implement them all.'></a>Many different flags, a lot of work to implement them all.</li>
+<li><a name='* in the flags.'></a><code>*</code> in the flags.</li>
+</ul>
+<p>One would want an interface which allows to get acceptable results with
+a minimal of work, but also allows as fine control as possible if needed.
+The solution:</p>
+<ul>
+<li><a name='merge many flavors into groups, with one overloaded operation per group. For example, '%i' and '%d' should invoke the same overloaded operation keyed by %d (or %?d, see below).'></a>merge many flavors into groups, with one overloaded operation per group.
+For example, <code>'%i'</code> and <code>'%d'</code> should invoke the same overloaded operation
+keyed by <code>%d</code> (or <code>%?d</code>, see below).</li>
+<li><a name='provide the actual letter (and flags!) as an argument to disambiguate it inside the group;'></a>provide the actual letter (and flags!) as an argument to disambiguate it
+inside the group;</li>
+<li><a name='provide two operations to overload per group (only one of them should be used), for example '%+040d' should invoke the operation keyed by '%?d' if present, otherwise one keyed by '%d', then would postprocess the results. Similarly, '%d' should invoke the operation keyed by '%d' if present, otherwise one keyed by '%d'.'></a>provide <i>two</i> operations to overload per group (only one of them should
+be used), for example <code>'%+040d'</code> should invoke the operation keyed by
+<code>'%?d'</code> if present, otherwise one keyed by <code>'%d'</code>, then would postprocess
+the results.  Similarly, <code>'%d'</code> should invoke the operation keyed by
+<code>'%d'</code> if present, otherwise one keyed by <code>'%d'</code>.</li>
+<li><a name='If * is present in the flags, the count is provided as an additional argument to the corresponding method. (One additional argument per each *.)'></a>If <code>*</code> is present in the flags, the count is provided as an additional
+argument to the corresponding method.  (One additional argument per each <code>*</code>.)</li>
+</ul>
+<p>For example, if method <code>'%d'</code> is overloaded by the method <code>FORMAT_D</code>,
+and <code>'%?d'</code> is not overloaded, then</p>
+<pre>  sprintf('%s %0*i %s', '--', $overloaded_object, 10, '--')</pre>
+<p>calls</p>
+<pre>  $overloaded_object-&gt;FORMAT_D('0*i', 10);</pre>
+<p>and postprocesses the result.</p>
+<a name='Composite objects'></a><h1>Composite objects</h1>
+<p>The &quot;standard&quot; semantic of processing flags in the overloaded methods for
+composite objects (such as complex numbers or vectors) should be:
+delegate the flags to components &quot;as is&quot;.  (As opposed to applying widths
+to the <i>total</i> field.)</p>
+<p>There may be obvious exceptions: for complex numbers <code>+</code>/<code>-</code> before the
+imaginary part is needed, but if one inserts this sign no matter what,
+the format <code>'%+10i'</code> would result in a double <code>+</code> sign or <code>+-</code> or <code>--</code>.
+The other approach of prepending <code>'+'</code> to the flags no matter what would
+omit space for the format <code>'% 10i'</code>.</p>
+<a name='MIGRATION ISSUES'></a><h1>MIGRATION ISSUES</h1>
+<p>NONE</p>
+<a name='IMPLEMENTATION'></a><h1>IMPLEMENTATION</h1>
+<p>More or less straightforward</p>
+<a name='REFERENCES'></a><h1>REFERENCES</h1>
+<p>RFC ???</p>
+</div>

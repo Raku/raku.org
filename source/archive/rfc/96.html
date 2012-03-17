@@ -1,0 +1,117 @@
+[% setvar title A Base Class for Exception Objects %]
+<h3>This file is part of the Perl 6 Archive</h3>
+    <p>To see what is currently happening visit <a href="http://www.perl6.org/">http://www.perl6.org/</a></p>
+<div class='pod'>
+<a name='TITLE'></a><h1>TITLE</h1>
+<p>A Base Class for Exception Objects</p>
+<a name='VERSION'></a><h1>VERSION</h1>
+<pre>  Maintainer: Tony Olekshy &lt;<a href='mailto:olekshy@avrasoft.com'>olekshy@avrasoft.com</a>&gt;
+  Date: 12 Aug 2000
+  Last Modified: 1 Oct 2000
+  Mailing List: <a href='mailto:perl6-language-errors@perl.org'>perl6-language-errors@perl.org</a>
+  Number: 96
+  Version: 2
+  Status: Withdrawn</pre>
+<a name='ABSTRACT'></a><h1>ABSTRACT</h1>
+<p>The contents of this RFC are now covered by RFC 88 and RFC 80.</p>
+<a name='DESCRIPTION'></a><h1>DESCRIPTION</h1>
+<p>A number of topics in the Perl 6 RFC discussions have touched on
+the concept of a sanctioned or canonical base class for exception
+objects.</p>
+<p>This RFC considers a basic proposal for a base class for exception
+objects that can be used with core Perl, traditional eval, die, and
+$@ functionality, and with exception handling mechanisms like RFC 63
+and RFC 88.</p>
+<p>One of the attributes of an exception object is its class name.
+This can be changed via inheritance, and a hierarchy of isa
+relationships can be arranged.  Exception handing mechanisms can
+arrange to have catch behaviour depend on these relationships.</p>
+<a name='Instance Variables'></a><h2>Instance Variables</h2>
+<p>The following exception object instance variables are supported by
+this base class.</p>
+<pre>    tag
+
+	This is a string which module developers can use to assign
+	a unique &quot;identifier&quot; to each exception object constructor
+	invocation in the module.
+
+	What should the default be if not otherwise specified?
+
+    severity
+
+	This is some sort of &quot;priority&quot; (such as info v/s fatal) on
+	which handing can be based.  The details need to be worked
+	out.
+
+	What should the default be if not otherwise specified?
+
+    message
+
+	This is a description of the exception in language intended
+	for the &quot;end user&quot;.  This is the only required ivar, so as
+	such the constructor treats it specially.
+
+    debug
+
+	This is a place for additional description that is not
+	intended for the end user (because it is &quot;too technical&quot;
+	or &quot;sensitive&quot;).
+
+    file
+
+	The file from which the constructor was called.
+
+    line
+
+	The line from which the constructor was called.
+
+    object
+
+	If the exception is related to an object, it can be
+	specified here.  Should this be a weak reference?
+
+    sysmsg
+
+	This a place for the internal exceptions raised by Perl
+	to record system information, along the lines of $!.</pre>
+<p>Methods</p>
+<pre>    sub new
+    {
+	my ($C, $msg, %A) = @_;
+
+	exists $A{file}   or $A{file}   = caller ...
+	exists $A{line}   or $A{line}   = caller ...
+	exists $A{sysmsg} or $A{sysmsg} = magic  ...
+
+	bless {message =&gt; $msg, %A}, ref $C || $C;
+	}
+
+    sub tag      { @_ &gt; 1 and $_[0]-&gt;{tag}      = $_[1]; $_[0]-&gt;{tag}      }
+    sub severity { @_ &gt; 1 and $_[0]-&gt;{severity} = $_[1]; $_[0]-&gt;{severity} }
+    sub message  { @_ &gt; 1 and $_[0]-&gt;{message}  = $_[1]; $_[0]-&gt;{message}  }
+    sub debug    { @_ &gt; 1 and $_[0]-&gt;{debug}    = $_[1]; $_[0]-&gt;{debug}    }
+    sub file     { @_ &gt; 1 and $_[0]-&gt;{file}     = $_[1]; $_[0]-&gt;{file}     }
+    sub line     { @_ &gt; 1 and $_[0]-&gt;{line}     = $_[1]; $_[0]-&gt;{line}     }
+    sub object   { @_ &gt; 1 and $_[0]-&gt;{object}   = $_[1]; $_[0]-&gt;{object}   }
+    sub sysmsg   { @_ &gt; 1 and $_[0]-&gt;{sysmsg}   = $_[1]; $_[0]-&gt;{sysmsg}   }</pre>
+<a name='IMPACT'></a><h1>IMPACT</h1>
+<p>Once a standard set of attributes is decided on, RFC 88 can be
+revised to provide exception tests like:</p>
+<pre>    except tag =&gt; &quot;ABC.1234&quot; =&gt; catch { ... }
+
+    except severity =&gt; &quot;Fail&quot; =&gt; catch { ... }</pre>
+<a name='ISSUES'></a><h1>ISSUES</h1>
+<p>How to extend ivars and control namespace?</p>
+<p>How to extend methods and control namespace?</p>
+<p>Default values for tag and severity?</p>
+<p>How to categorize severity?</p>
+<p>How to arrange the exception class hierarchy for the Perl core?</p>
+<p>How to tag exceptions in the Perl core?</p>
+<p>What assertions should be placed on the instance variables?</p>
+<p>What should stringification return?</p>
+<a name='REFERENCES'></a><h1>REFERENCES</h1>
+<p>RFC 70: Allow exception-based error-reporting.</p>
+<p>RFC 80: Exception objects and classes for builtins.</p>
+<p>RFC 63: Exception handling syntax proposal (Error.pm)</p>
+<p>RFC 88: Structured Exception Handling Mechanism (Try.pm)</p>
+</div>

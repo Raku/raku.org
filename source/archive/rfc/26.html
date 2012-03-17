@@ -1,0 +1,42 @@
+[% setvar title Named operators versus functions %]
+<h3>This file is part of the Perl 6 Archive</h3>
+    <p>To see what is currently happening visit <a href="http://www.perl6.org/">http://www.perl6.org/</a></p>
+<div class='pod'>
+<a name='TITLE'></a><h1>TITLE</h1>
+<p>Named operators versus functions</p>
+<a name='VERSION'></a><h1>VERSION</h1>
+<pre>  Maintainer: Johan Vromans &lt;<a href='mailto:jvromans@squirrel.nl'>jvromans@squirrel.nl</a>&gt;
+  Date: 4 Aug 2000
+  Last Modified: 28 Aug 2000
+  Mailing List: <a href='mailto:perl6-language@perl.org'>perl6-language@perl.org</a>
+  Number: 26
+  Version: 2
+  Status: Frozen</pre>
+<a name='ABSTRACT'></a><h1>ABSTRACT</h1>
+<p>Perl distinguishes named operators and functions. For Perl6, this
+disctinction can be dropped.</p>
+<a name='DESCRIPTION'></a><h1>DESCRIPTION</h1>
+<p>Named operators, like <code>abs</code>, can be called like functions in which
+case they behave like functions. This has always been so in Perl.</p>
+<p>Recent versions of Perl allow user-defined functions to be called as
+operators, using context coercion templates to resolve argument
+passing.</p>
+<p>Larry said: &quot;Theoretically, we'd like to make subs run as fast as ops.&quot;</p>
+<p>Since there is no real difference between named operators and
+functions anymore, they can be treated identically. The difference in
+terminology can be applied to how it is called instead of how it is
+defined.</p>
+<p>So, a <i>function</i> is a user-defined or built-in function called with a
+parenthesized list of arguments, and a <i>named operator</i> is a
+user-defined or built-in function called with its arguments &quot;bare&quot;.
+The latter form is subject to the usual restrictions.</p>
+<p>Note that this applies to the language aspects. The actual
+implementation may be different for user-defined and built-in
+functions.</p>
+<a name='CHANGES'></a><h1>CHANGES</h1>
+<p>After the first release we had some discussions on perl6-language. These
+discussions didn't add any new insights.  The discussion is over, and
+it's now up to Larry to decide.</p>
+<a name='REFERENCES'></a><h1>REFERENCES</h1>
+<p>[i] perldoc perlop</p>
+</div>

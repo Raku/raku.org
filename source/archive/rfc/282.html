@@ -1,0 +1,40 @@
+[% setvar title Open-ended slices %]
+<h3>This file is part of the Perl 6 Archive</h3>
+    <p>To see what is currently happening visit <a href="http://www.perl6.org/">http://www.perl6.org/</a></p>
+<div class='pod'>
+<a name='TITLE'></a><h1>TITLE</h1>
+<p>Open-ended slices</p>
+<a name='VERSION'></a><h1>VERSION</h1>
+<pre>  Maintainer: Simon Cozens &lt;<a href='mailto:simon@brecon.co.uk'>simon@brecon.co.uk</a>&gt;
+  Date: 24 Sep 2000
+  Mailing List: <a href='mailto:perl6-language@perl.org'>perl6-language@perl.org</a>
+  Number: 282
+  Version: 1
+  Status: Developing</pre>
+<a name='ABSTRACT'></a><h1>ABSTRACT</h1>
+<p>The dreaded <code>@array[$foo...]</code> rears its ugly head again.</p>
+<a name='DESCRIPTION'></a><h1>DESCRIPTION</h1>
+<p>How many times have you wanted <b>just</b> the last two return values from a
+function? And how many times have you got frustrated that you can't work
+out how many things there are in a list and you have to decant it to an
+array:</p>
+<pre>    @thingy = function()
+    for (@thingy[3..$#thingy]) { ... }</pre>
+<p>Horrible, isn't it? People want something better.</p>
+<p>I thought about it last year or so, and produced a couple of patches. It
+seemed then that the right syntax was not, for instance:</p>
+<pre>    (function())[3...-1]</pre>
+<p>because sometimes you want <code>$x..$y</code> to return the empty list, but
+actually:</p>
+<pre>    (function())[3...]</pre>
+<p>(Or <code>[3..]</code>. It doesn't matter.)</p>
+<p>Someone else on Perl5-Porters wanted this recently too, so it isn't just
+me.</p>
+<a name='IMPLEMENTATION'></a><h1>IMPLEMENTATION</h1>
+<p>It's new syntax, so it isn't going to break anything, and I did produce
+patches against 5.6, so it is possible. It's a question of adding
+another rule to the grammar, which flags that the slice should be
+computed at run time.</p>
+<a name='REFERENCES'></a><h1>REFERENCES</h1>
+<p>None.</p>
+</div>

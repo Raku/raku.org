@@ -1,0 +1,52 @@
+[% setvar title Arrays: @#arr for getting the dimensions of an array %]
+<h3>This file is part of the Perl 6 Archive</h3>
+    <p>To see what is currently happening visit <a href="http://www.perl6.org/">http://www.perl6.org/</a></p>
+<div class='pod'>
+<a name='TITLE'></a><h1>TITLE</h1>
+<p>Arrays: @#arr for getting the dimensions of an array</p>
+<a name='VERSION'></a><h1>VERSION</h1>
+<pre>  Maintainer: Buddha Buck &lt;<a href='mailto:bmbuck@14850.com'>bmbuck@14850.com</a>&gt;
+  Date: 8 Sep 2000
+  Last Modified: 19 Sep 2000
+  Mailing List: <a href='mailto:perl6-language-data@perl.org'>perl6-language-data@perl.org</a>
+  Number: 206
+  Version: 2
+  Status: Frozen</pre>
+<a name='ABSTRACT'></a><h1>ABSTRACT</h1>
+<p>This RFC proposes the use of the @# prefix to get the bounds and
+dimensionality of a multidimensional array.</p>
+<a name='DESCRIPTION'></a><h1>DESCRIPTION</h1>
+<p>The $#array notation is useful for getting the upper bound of a
+unidimensional array, but is not as useful for getting the upper bounds of
+a multidimensional array. A multidimensional array should have a list of
+upper bounds, not a single upper bound.</p>
+<p>This RFC proposes using @#array, analogous to $#array, to get the list of
+upper bounds for a multidimensional array @array. The length of @#array
+would indicate the dimensionality of @array.</p>
+<a name='Example'></a><h2>Example</h2>
+<pre>   sub printbounds (\@) {
+     my $arrayref = shift;
+     my $array = @$arrayref;
+     print &quot;D:&quot;, scalar @#arrayref,&quot; B:(&quot;,join(',',@#arrayref),&quot;)\n&quot;;
+   }
+
+   my int @a :bounds(2,2,2,2,2);
+   printbounds(@a); # &quot;D:5 B:(2,2,2,2,2)\n&quot;
+
+   my int @b :bounds(@a); # create @b the same size as @a
+   printbounds(@b); # &quot;D:5 B:(2,2,2,2,2)\n&quot;
+
+   my @c = (1,2,3,4,5,6,7,8,9,10);
+   printbounds(@c); # &quot;D:1 B:(9)\n&quot;</pre>
+<a name='IMPLEMENTATION'></a><h1>IMPLEMENTATION</h1>
+<p>Presumably, multidimensional arrays would have to store their bounds
+somewhere to have the semantics provided in RFC 203. This operator would
+simply return to the user those stored bounds.</p>
+<p>Where an array is declared without ':bounds', @# returns the largest
+bounds of each dimension that has been accessed:</p>
+<pre>   my int @d = ();
+   $d[[3,4]] = 5;
+   @e = @#d;        # (3,4)</pre>
+<a name='REFERENCES'></a><h1>REFERENCES</h1>
+<p>RFC 203: Notation for declaring and creating arrays</p>
+</div>

@@ -1,0 +1,195 @@
+[% setvar title All Perl core functions should return objects %]
+<h3>This file is part of the Perl 6 Archive</h3>
+    <p>To see what is currently happening visit <a href="http://www.perl6.org/">http://www.perl6.org/</a></p>
+<div class='pod'>
+<a name='TITLE'></a><h1>TITLE</h1>
+<p>All Perl core functions should return objects</p>
+<a name='VERSION'></a><h1>VERSION</h1>
+<pre>   Maintainer: Nathan Wiger &lt;<a href='mailto:nate@wiger.org'>nate@wiger.org</a>&gt;
+   Date: 8 Aug 2000
+   Last-Modified: 15 Sep 2000
+   Mailing List: <a href='mailto:perl6-language-objects@perl.org'>perl6-language-objects@perl.org</a>
+   Number: 73
+   Version: 2
+   Status: Frozen
+   Requires: RFC 159</pre>
+<a name='ABSTRACT'></a><h1>ABSTRACT</h1>
+<p>In the past, Perl has only provided two return options for its builtin
+functions: scalars or lists. In a scalar context, only one select value
+was returned, greatly impacting the functionality of the function
+(unless you like pulling apart long lists, or pain, or both).</p>
+<p>The reason this was done was to allow easy access to string/numeric
+data, and because polymorphic objects were not a reality. However,
+objects can use the mechanisms described in <b>RFC 159: True Polymorphic
+Objects</b> to become strings, numbers, and other data types on-demand in
+Perl 6. As such, we should make all Perl functions return objects in a
+scalar context in Perl 6.</p>
+<a name='NOTES ON FREEZE'></a><h1>NOTES ON FREEZE</h1>
+<p>This is mainly a philosophical document designed to show how the methods
+described in <b>RFC 159: True Polymorphic Objects</b> can be used to give us
+a greater amount of core power in Perl 6. One actual proposed
+implementation of these ideas can be found in <b>RFC 48</b>, which suggests
+a new <code>date</code> function which produces a polymorphic object in scalar
+context.</p>
+<p>The only fear was performance-related; however, as Dan Sugalski himself
+pointed out, the -internals group will probably wind up putting vtable
+stuff in core. In this case, performance should not be a concern because
+OO will be tightly integrated from ground up.</p>
+<a name='DESCRIPTION'></a><h1>DESCRIPTION</h1>
+<p>When several of the mechanisms proposed in other RFC's combine,
+especially <b>RFC 159</b>, we have the power in Perl 6 to pass many more
+things around as objects, converting them to strings/numbers/etc as
+they're needed. This gives us much power, since we present both objects
+and &quot;true&quot; scalars to beginners and advanced Perl users alike with one
+common set of functions. As such, objects are embedded in Perl from the
+ground up.</p>
+<p>Others have proposed typing objects, and extracting them that way:</p>
+<pre>   my $uid   = getpwnam $user;    # &quot;true&quot; scalar uid
+   my pw $pw = getpwnam $user;    # object of type &quot;pw&quot;</pre>
+<p>However, this has a couple problems:</p>
+<pre>   1. You have to have the correct object class and, at
+      the very least, alter your script's syntax.
+
+   2. You can't make $pw look like $uid transparently.</pre>
+<p>Instead, having objects that walk and talk like scalars on demand is a
+more powerful approach. Note that this RFC does not necessarily preclude
+being able to type objects and pull out specific classes. The two
+approaches could be combined, giving multi-class objects that can be
+transparently accessed as &quot;true&quot; scalars.</p>
+<p>We'll start out with complex examples, where it's obvious how this is a
+benefit, and go down to simpler functions, where it might be less
+obvious.</p>
+<a name='Complex Functions'></a><h2>Complex Functions</h2>
+<p>Let's choose <code>stat</code>, since it's an easy target. Currently, it only
+returns one of two things:</p>
+<pre>   1. A massive 13-element list (LIST context)
+   2. A boolean success/failure (SCALAR context)</pre>
+<p>Neither of these is particularly useful, unless you like pain. To get a
+decent interface, you have to use <code>File::stat</code> or some other module.
+Instead, let's put an object-oriented interface in the core:</p>
+<pre>   $stat = stat $file;        # returns an object
+   @stat = stat $file;        # legacy list (like current)
+   %stat = stat $file;        # hash (see RFC 21)
+
+   print &quot;$stat&quot;;             # calls $stat-&gt;STRING, which 
+                              # could print the filename or
+                              # some other useful piece of info</pre>
+<p>Note that our legacy calling methods are unaffected, but we now have an
+object too. The boolean truth value is simplistic to determine still,
+you simply have to say:</p>
+<pre>   $stat = stat $file or die &quot;Can't stat $file: $!&quot;;</pre>
+<p>The object methods of the <code>$stat</code> object are powerful enough that
+special cases like <code>_</code> no longer have to exist. You can stat multiple
+files out of order and still get the benefits of cached <code>stat</code> calls by
+using the object interface:</p>
+<pre>   $f1 = stat $file1 or die;
+   $f2 = stat $file2 or die;
+   
+   if ( $f1-&gt;size &gt; 0 and $f2-&gt;owner == 0 ) {
+      print &quot;root-owned $file1 is mode &quot;, $f1-&gt;mode &amp; 07777;
+      if ( $f1-&gt;mtime &gt; time ) {
+          # here, &quot;$f1&quot; is $f1-&gt;STRING == $f1-&gt;filename
+          warn &quot;Warning: bad mojo, $f1 has an mtime in the future!\n&quot;;
+      }
+   }</pre>
+<p>Now, we have a full object-oriented <code>stat</code> implementation, wrapped in a
+tidy function that can work just like Perl 5's if you want it to.</p>
+<p>As a second example, let's examine <code>getpwnam</code>, whose return options
+are:</p>
+<pre>   1. A pretty dang big 9-element list
+   2. The numeric user id</pre>
+<p><code>getpwnam</code> differs from <code>stat</code> in that you have to actually use what
+you get in a <code>SCALAR</code> context in many situations. However, this can be
+easily addressed thanks to <b>RFC 159</b>:</p>
+<pre>   $pw = getpwnam $username;         # get the object
+   die &quot;Not root&quot; unless ($pw == 0); # -&gt;NUMBER, which produces the
+                                     # numeric uid, like currently</pre>
+<p>Here, the current return value (numeric user id) is preserved. No need
+to redo any of the documentation - but advanced users can be told &quot;By
+the way, $pw is actually an object...&quot; and so on.</p>
+<a name='Medium-Level Functions'></a><h2>Medium-Level Functions</h2>
+<p>As a medium-level example, let's take <code>fork</code>. At first, making what's
+returned from <code>fork</code> into an object might not seem to have much use.
+However, consider how cool it would be if <code>fork</code> maintained stuff like:</p>
+<pre>    $fork = fork;    # create a new process
+
+    $fork-&gt;pid       # current pid
+    $fork-&gt;ppid      # parent's process id
+    $fork-&gt;errno     # EAGAIN, for example
+    $fork-&gt;is_parent # parent?
+    $fork-&gt;is_child  # child?</pre>
+<p>Then, you could fork multiple times, without having to worry about
+maintaining info on which fork is which - it's all right there in the
+<code>$fork</code> objects. Furthermore, the default function would be
+$fork-&gt;pid, yielding the ability to treat fork the same as it has
+always acted. Adapted from Camel-3 p. 715:</p>
+<pre>   if ( $pid = fork ) {
+      # parent here
+      print &quot;fork returned with errno &quot;, $fork-&gt;errno;
+   }</pre>
+<p>This example is fairly trite, true. However, I'm sure others who do a
+lot of forking can fill the object in with valuable data they wish they
+could preserve easily.</p>
+<p>As a second example, consider <code>system</code>. Who cares, right? Return
+success or failure. But consider:</p>
+<pre>   $sys = system &quot;some command&quot;;   # object
+  
+   $sys-&gt;command     # for record-keeping 
+   $sys-&gt;errno       # system errno || 0
+   $sys-&gt;stdout      # standard output from command
+   $sys-&gt;stderr      # standard error from command
+  </pre>
+<p>There's probably more stuff that could go in there too. Why do this? For
+example:</p>
+<pre>   $sys = system &quot;command&quot;;
+   if ( $sys-&gt;errno ) {
+      warn $sys-&gt;command, &quot; failed with error &quot;,
+           $sys-&gt;errno;
+      die &quot;Error output: &quot;, $sys-&gt;stderr;
+   }</pre>
+<p>For one simple operation, this seems like overkill. And it is. However,
+remember that the success value is still in there as the creation of the
+object:</p>
+<pre>   system(&quot;command&quot;) or die &quot;command failed: $?\n&quot;;</pre>
+<p>That certainly looks familiar. :-)</p>
+<p>Again, you get the entire power of objects hidden behind a clean,
+familiar looks-like-Perl-5 frontend.</p>
+<a name='Simple Functions'></a><h2>Simple Functions</h2>
+<p>Okay, who cares about getting an object back from <code>chomp</code>? Is that
+really necessary?</p>
+<p>&gt;From a functional standpoint, most string-related functions would be
+overkill. For example, <code>chomp</code>, <code>grep</code>, etc. The main advantage is not
+with string manipulation functions, but rather with functions that do
+complicated stuff and return lots of values, like <code>date</code>, <code>stat</code>, etc.</p>
+<p>Just for kicks, though, consider <code>chomp</code>:</p>
+<pre>   $newstr = chomp $string;        # new syntax, RFC 58
+
+   print &quot;new string is $newstr&quot;;  # calls $chomp-&gt;STRING
+   print $newstr-&gt;numchars, &quot; were chomped\n&quot;;</pre>
+<p>You get the idea.</p>
+<a name='MIGRATION'></a><h1>MIGRATION</h1>
+<p>If done right, none. We simply have to use the methods described in
+<b>RFC 159</b> to properly overload the objects so they appear to work &quot;just
+like the same old scalars&quot; they've always been. Again, the key goal is
+hiding this stuff just under the hood, so all the power is there but it
+doesn't get in the way of one-liners.</p>
+<a name='IMPLEMENTATION'></a><h1>IMPLEMENTATION</h1>
+<p>Assuming this RFC is accepted, we should take Dan Sugalski's suggestion
+and create a list of those functions that this would be a real win for,
+and start with these. The ones that pop out in my mind are functions
+like <code>stat</code> that return huge lists of complex values. I think this
+would be a Big Win for these types of functions.</p>
+<p>I'll gladly write up this list if the RFC is adopted, but in the
+meantime in order to meat the deadline I must hurriedly update my other
+RFC's! :-}</p>
+<a name='REFERENCES'></a><h1>REFERENCES</h1>
+<p>Many many discussions by lots of people about something like this.
+Most I've read are available on the perl5-porters archive at:
+<a href='http://www.xray.mpe.mpg.de/mailing-lists/perl5-porters/' target='_blank'>www.xray.mpe.mpg.de</a></p>
+<p>RFC 159: True Polymorphic Objects</p>
+<p>RFC 48: Replace localtime() and gmtime() with date() and utcdate()</p>
+<p>RFC 37: Positional Return Lists Considered Harmful</p>
+<p>RFC 21: Replace <code>wantarray</code> with a generic <code>want</code> function</p>
+<p>RFC 58: <code>chomp()</code> changes.</p>
+<p>RFC 49: Objects should have builtin stringifying STRING method</p>
+</div>

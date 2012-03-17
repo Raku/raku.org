@@ -1,0 +1,50 @@
+[% setvar title Higher resolution time values %]
+<h3>This file is part of the Perl 6 Archive</h3>
+    <p>To see what is currently happening visit <a href="http://www.perl6.org/">http://www.perl6.org/</a></p>
+<div class='pod'>
+<a name='TITLE'></a><h1>TITLE</h1>
+<p>Higher resolution time values</p>
+<a name='VERSION'></a><h1>VERSION</h1>
+<pre>  Maintainer: Gisle Aas &lt;<a href='mailto:gisle@ActiveState.com'>gisle@ActiveState.com</a>&gt;
+  Date: 2 Aug 2000
+  Mailing List: <a href='mailto:perl6-language@perl.org'>perl6-language@perl.org</a>
+  Number: 7
+  Version: 1
+  Status: Developing</pre>
+<a name='ABSTRACT'></a><h1>ABSTRACT</h1>
+<p>All functions that return time values (seconds since epoch) should use
+floating point numbers to return as much precision as the platform
+supports.  All functions that take time values as arguments should
+work for fractional seconds if the platform supports it.</p>
+<a name='DESCRIPTION'></a><h1>DESCRIPTION</h1>
+<p>Perl5 only support 1 second resolution on time values.  In order to
+get higher resolution timing an external module (Time::HiRes)
+currently need to be used.  This situation ought to be improved in
+perl6.</p>
+<p>All functions that return time values (seconds since epoch) should use
+floating point numbers to return as much precision as the platform
+supports.  This include the following builtin functions:</p>
+<pre>  time
+  stat    /* atime, mtime and ctime fields */
+  times   /* already float */</pre>
+<p>All functions that take time values as arguments should work for
+fractional seconds if the platform supports it.  This include the
+following builtin functions:</p>
+<pre>  sleep
+  alarm
+  utime</pre>
+<p>One problem with using doubles to represent time values is that it
+will not always be able to represent all of the time precision that
+the platform actually support.  For instance time() value with Unix
+epoch represented with 15 decimal digit float precision will only
+support around 10 µs resolution for current timestamps.</p>
+<a name='IMPLEMENTATION'></a><h1>IMPLEMENTATION</h1>
+<p>Should be straight forward.  Configure might need to figure out some
+more about what hires-timer interfaces are available if it does not
+already do this.</p>
+<a name='PERL5 PORTABILITY'></a><h1>PERL5 PORTABILITY</h1>
+<p>Calls to time() could be transformed to int(time()) when converting
+perl5 programs to perl6.</p>
+<a name='REFERENCES'></a><h1>REFERENCES</h1>
+<p>Time::HiRes module on CPAN</p>
+</div>

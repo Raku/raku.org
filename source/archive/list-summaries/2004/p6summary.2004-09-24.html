@@ -1,0 +1,157 @@
+[% setvar title The Perl 6 Summary for the week ending 2004-09-24 %]
+<h3>This file is part of the Perl 6 Archive</h3>
+    <p>To see what is currently happening visit <a href="http://www.perl6.org/">http://www.perl6.org/</a></p>
+<div class='pod'>
+<a name='The Perl 6 Summary for the week ending 2004-09-24'></a><h1>The Perl 6 Summary for the week ending 2004-09-24</h1>
+<p>So, this is my last summary before I start my teaching
+practice. Hopefully I've got things set up so writing the summary isn't
+going to interfere with that, and vice versa.</p>
+<a name='This week in perl6-compiler'></a><h1>This week in perl6-compiler</h1>
+<a name='State of Rules'></a><h2>State of Rules</h2>
+<p>Discussion of the state of the Perl 6 compiler (with particular
+reference to the rules engine) continued. People were concerned with
+making sure that the rules engine that Luke and Patrick are working on
+would be flexible enough to cope with different languages in
+'closures'.</p>
+<a name='Synopsis 5 updated'></a><h2>Synopsis 5 updated</h2>
+<p>Ed Peschko asked that there be some way of 'turning the rules engine
+inside out' to make something which, given a rule, would generate
+strings that could match against it. Actually, this is the second time
+Ed asked for this, as Luke reminded him. Luke went on to implement
+a generator in hypothetical perl 6, which seemed to please everyone but
+Ed.</p>
+<p>Rod Adams wins the 'making the summarizer smile wryly' occasional
+prize.</p>
+<p><a href='http://groups.google.com/groups?threadm=20040920215812.GA9454@mdssdev05' target='_blank'>groups.google.com</a></p>
+<a name='Meanwhile, in perl6-internals'></a><h1>Meanwhile, in perl6-internals</h1>
+<a name='Problems Reimplementing Parrot Forth'></a><h2>Problems Reimplementing Parrot Forth</h2>
+<p>Matt Diephouse fell foul of problems with the <code>compile</code> and <code>compreg</code>
+opcodes in his efforts to reimplement Parrot Forth in PIR. Steve Fink
+made some suggestions for workarounds based on his work on writing a
+regular expression compiler.</p>
+<p>&gt;From further discussion, it seems that, if you're implementing a stack
+based language, you'd do well to manage the language's stack yourself
+rather than using Parrot's User stack which is interestingly scoped.</p>
+<p><a href='http://groups.google.com/groups?threadm=198c873804091714515c11197d@mail.gmail.com' target='_blank'>groups.google.com</a></p>
+<a name='__init not being magically called'></a><h2><code>__init</code> not being magically called</h2>
+<p>Will Coleda had some problems with a class's <code>__init</code> function not
+being called magically. Nobody else could reproduce the problem. After a
+certain amount of confusion, Will did <code>make realclean; perl
+Configure.pl; make; make test</code> and all was well again.</p>
+<p>If you're experiencing a weird problem, it's probably best to do the
+rebuild before posting to the list. Or you could fix the build system to
+have more accurate dependencies...</p>
+<p><a href='http://groups.google.com/groups?threadm=414D3726.1070103@coleda.com' target='_blank'>groups.google.com</a></p>
+<a name='Incremental collector and finalization'></a><h2>Incremental collector and finalization</h2>
+<p>Jeff Clites had some questions about how finalizers interact with the
+work that Leo's been doing on implementing an incremental garbage
+collector for Parrot. Leo had some thoughts, but noted that there's
+still a problem with ordered finalization and destruction.</p>
+<p>[Your summarizer is really starting to get a feel for why old school GC
+types really don't like finalizers...]</p>
+<p><a href='http://groups.google.com/groups?threadm=002F1A0F-0AC3-11D9-8600-000393A6B9DA@mac.com' target='_blank'>groups.google.com</a></p>
+<a name='Python bytecode volunteers'></a><h2>Python bytecode volunteers</h2>
+<p>Dan asked for volunteers to finish the task of getting python bytecode
+working on Parrot; he reckoned that the work was mostly done, but that
+neither he nor Leo have the time to go the last couple of yards.</p>
+<p>Come on people, this would definitely be a cool thing to have.</p>
+<p><a href='http://groups.google.com/groups?threadm=a06110401bd74d011bd71@' target='_blank'>groups.google.com</a>[10.0.1.5]</p>
+<a name='mod_parrot 0.0'></a><h2>mod_parrot 0.0</h2>
+<p>Jeff Horwitz announced the release of version 0.0 of his mod_parrot
+Apache module. It's remarkably powerful for version 0.0</p>
+<p><a href='http://groups.google.com/groups?threadm=Pine.LNX.4.44.0409201512210.7974-100000@booger.sixgeeks.org' target='_blank'>groups.google.com</a></p>
+<a name='The compile op and building compilers'></a><h2>The <code>compile</code> op and building compilers</h2>
+<p>Dan had some thoughts on tidying up the spec for the <code>compreg</code> and
+<code>compile</code> operators and asked for comments before he nailed the spec
+down. Steve Fink and Leo had comments.</p>
+<p><a href='http://groups.google.com/groups?threadm=a06110405bd750b80ab4a@' target='_blank'>groups.google.com</a>[10.0.1.5]</p>
+<a name='Misc. remarks about YAPC::EU'></a><h2>Misc. remarks about YAPC::EU</h2>
+<p>Leo popped up to thank everyone who'd donated to The Perl Foundation
+and thus supported the purchase of shiny new Apple Powerbook G4 that
+he'd used to run his presentation at YAPC Europe in Belfast.</p>
+<p>He went on to outline some of the things he'd done and heard in Belfast,
+including the fact that one French teacher is using Parrot for teaching
+assembly language.</p>
+<p><a href='http://groups.google.com/groups?threadm=4150301E.7050409@toetsch.at' target='_blank'>groups.google.com</a></p>
+<a name='Parrot m4 0.0.8'></a><h2>Parrot m4 0.0.8</h2>
+<p>Bernhard Schmalhofer announced version 0.0.8 of Parrot m4. There's no
+new functionality 'just' some structural improvement and tidying.</p>
+<p><a href='http://groups.google.com/groups?threadm=rt-3.0.11-31659-96593.15.6775143505678@perl.org' target='_blank'>groups.google.com</a></p>
+<a name='Parrot TCL'></a><h2>Parrot TCL</h2>
+<p>Will Coleda posted a progress report on his Parrot TCL implementation
+which is progressing gradually towards being a full blown TCL
+implementation; he's working towards using special Tcl* PMCs with real
+TCL semantics instead of the current scheme which uses Perl PMCs.</p>
+<p><a href='http://groups.google.com/groups?threadm=41517393.30204@coleda.com' target='_blank'>groups.google.com</a></p>
+<a name='Namespaces, Part 1'></a><h2>Namespaces, Part 1</h2>
+<p>Dan posted the first part of his Namespaces spec. There was, of course,
+much discussion. Inevitably, there was another revision, and further discussion.</p>
+<p><a href='http://groups.google.com/groups?threadm=a06110415bd77687142d1@' target='_blank'>groups.google.com</a>[10.0.1.5]</p>
+<p><a href='http://groups.google.com/groups?threadm=a0611040fbd7a051cf273@' target='_blank'>groups.google.com</a>[172.24.18.155] -- The revised version</p>
+<a name='Towards a new call scheme'></a><h2>Towards a new call scheme</h2>
+<p>Leo posted an overview of the work he was doing on Parrot's internals
+to get a faster calling scheme in place (as discussed endlessly). The
+usual perl6-internals discussion and revision process swung into
+action.</p>
+<p><a href='http://groups.google.com/groups?threadm=4152DA7E.1050603@toetsch.at' target='_blank'>groups.google.com</a></p>
+<a name='Hello everybody'></a><h2>Hello everybody</h2>
+<p>Remember the French teacher that Leo mentioned? Well, the man himself, Christian
+Aperghis-Tramoni popped up on the list and pointed everyone at his work
+so far, and asked for help in finding more information.</p>
+<p>If anyone would like to translate Christian's work from French to
+English...</p>
+<p><a href='http://groups.google.com/groups?threadm=25961BC4-0DF4-11D9-BEF3-000393BBDA08@dil.univ-mrs.fr' target='_blank'>groups.google.com</a></p>
+<a name='Bits of introspection'></a><h2>Bits of introspection</h2>
+<p>Leo announced that he'd started work on adding more introspection
+features to Parrot, accessible through the <code>interpinfo</code> op. All of
+which looks very cool.</p>
+<p><a href='http://groups.google.com/groups?threadm=41540125.3070401@toetsch.at' target='_blank'>groups.google.com</a></p>
+<a name='Why lexical pads'></a><h2>Why lexical pads</h2>
+<p>Klaas-Jan wondered why Parrot had support for lexical pads, as he
+thought that PIR's <code>.local</code> syntax was good enough...</p>
+<p>Several people explained (essentially, lexical pads are <code>really</code> handy,
+bordering on the essential, when you're implementing a language with
+closures).</p>
+<p><a href='http://groups.google.com/groups?threadm=41542942.5080304@home.nl' target='_blank'>groups.google.com</a></p>
+<a name='Meanwhile, in perl6-language'></a><h1>Meanwhile, in perl6-language</h1>
+<p>Discussion of various synopses continued.</p>
+<p>Larry can be very persuasive when he's right.</p>
+<p>Michele Dondi is a chap.</p>
+<p>Trying to run a thread across multiple mailing lists is the sort of
+thing that annoys a summarizer.</p>
+<p>You have to write something before it goes in the core.</p>
+<p>Patrick hopes to have a first cut at the Perl 6 rules engine available
+within a couple of weeks.</p>
+<a name='Pipeline Performance'></a><h2>Pipeline Performance</h2>
+<p>Luke showed off Perl 6's little known <code>gather {...; take ... }</code>
+construct in some example code. People were impressed.</p>
+<p><a href='http://groups.google.com/groups?threadm=d60j42vy.fsf@jonadab.homeip.net' target='_blank'>groups.google.com</a></p>
+<a name='Unary dot and custom control'></a><h2>Unary dot and custom control</h2>
+<p>Luke Palmer wondered about topicalization and scope in:</p>
+<pre>    method foo () {
+        preserve {
+            .bar;
+        }
+    }</pre>
+<p>In particular, he hoped that the topic that <code>.bar</code> sees is the topic
+that's lexically current.</p>
+<p>Larry set his mind to rest. (Well, he set my mind to rest).</p>
+<p><a href='http://groups.google.com/groups?threadm=20040920132514.GA11388@babylonia.flatirons.org' target='_blank'>groups.google.com</a></p>
+<a name='attributes/methods on sigils'></a><h2>attributes/methods on sigils</h2>
+<p>Michele Dondi wondered if sigils could be &quot;(sort of special) operators
+... thus allowing attributes/methods or even adverbs&quot;. Larry's response
+was superbly deadpan.</p>
+<p><a href='http://groups.google.com/groups?threadm=Pine.LNX.4.60.0409211313430.18712@q.pcteor1.mi.infn.it' target='_blank'>groups.google.com</a></p>
+<a name='The usual footer'></a><h1>The usual footer</h1>
+<p>Hmm... maybe I should trying doing the perl6-language summary like that
+every week; it's certainly quicker to write like that. Let me know what
+you think.</p>
+<p>If you find these summaries useful or enjoyable, please consider
+contributing to the Perl Foundation to help support the development of
+Perl. You might also like to send feedback or contributions to a
+'getting Piers to OSCON 2005' fund to mailto:<a href='mailto:pdcawley@bofh.org.uk'>pdcawley@bofh.org.uk</a></p>
+<p><a href='http://donate.perl-foundation.org/' target='_blank'>donate.perl-foundation.org</a> -- The Perl Foundation</p>
+<p><a href='http://dev.perl.org/perl6/' target='_blank'>dev.perl.org</a> -- Perl 6 Development site</p>
+<p>Or, you can check out my website.</p>
+<p><a href='http://www.bofh.org.uk/' target='_blank'>www.bofh.org.uk</a></p>
+</div>

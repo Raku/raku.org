@@ -1,0 +1,59 @@
+[% setvar title Add memoize into the standard library %]
+<h3>This file is part of the Perl 6 Archive</h3>
+    <p>To see what is currently happening visit <a href="http://www.perl6.org/">http://www.perl6.org/</a></p>
+<div class='pod'>
+<a name='TITLE'></a><h1>TITLE</h1>
+<p>Add memoize into the standard library</p>
+<a name='VERSION'></a><h1>VERSION</h1>
+<pre>  Maintainer: Adam Turoff &lt;<a href='mailto:ziggy@panix.com'>ziggy@panix.com</a>&gt;
+  Date: 14 Sep 2000
+  Last Modified: 18 Sep 2000
+  Mailing List: <a href='mailto:perl6-stdlib@perl.org'>perl6-stdlib@perl.org</a>
+  Number: 228
+  Version: 2
+  Status: Frozen</pre>
+<a name='ABSTRACT'></a><h1>ABSTRACT</h1>
+<p>Caching through memoization is a very useful construct.  It should be a
+standard module.</p>
+<a name='DESCRIPTION'></a><h1>DESCRIPTION</h1>
+<p>Memoization is a very useful technique to transparently cache
+function return values.  It can be used to quickly optimize
+recursive functions, or functions that take a long time to
+execute (such as gethostbyname).</p>
+<p>A version of Memoize.pm should be added into the Perl6 standard
+library, and it should be added as a pragmatic module (i.e. memoize.pm).</p>
+<p>Adding Memoize plugins (Memoize::Expire, etc.) into the standard library
+is a separate discussion.</p>
+<a name='NOTES ON FREEZE'></a><h1>NOTES ON FREEZE</h1>
+<p>There were no real objections to including memoize.pm in the Perl6 core.</p>
+<a name='OUTSTANDING ISSUES'></a><h1>OUTSTANDING ISSUES</h1>
+<p>A few people mentioned that using memoize() as a function has some
+action-at-a-distance qualities, although it is useful for caching
+builtin functions such as cos() and sin().</p>
+<p>Bart Lateur mentioned that using a sub attribute would be logical:</p>
+<pre>	sub foo :memoize {
+	}</pre>
+<p>While this does have merit, it does raise a few issues, such as being
+able to turn on various Memoize extensions (such as expiry, tied
+caches, etc.).  On the other hand, this syntax does have merit for
+using the default set of memoize options on a sub, without any
+action-at-a-distance after effects.</p>
+<p>These problems start to deal with language issues, such as being able
+to use parameterized sub attributes, and internals issues, such as
+being able to find sub attributes defined and implemented in an
+extension.  Neither of these are within the charter of perl6-stdlib
+to figure out.</p>
+<a name='MIGRATION ISSUES'></a><h1>MIGRATION ISSUES</h1>
+<p>None.</p>
+<a name='IMPLEMENTATION'></a><h1>IMPLEMENTATION</h1>
+<p>Add memoize into the perl6 source tarball, as a pragmatic module.</p>
+<p>The Perl6 language may allow some workarounds to be avoided, such
+as using a string value to specify the function to be memoized.</p>
+<a name='REFERENCES'></a><h1>REFERENCES</h1>
+<p>Memoize.pm  <a href='http://search.cpan.org/search?dist=Memoize' target='_blank'>search.cpan.org</a></p>
+<p>MiniMemoize from TPJ: <a href='http://perl.plover.com/MiniMemoize/memoize.html' target='_blank'>perl.plover.com</a></p>
+<p>Bart Lauter's commentary on a Perl6-ish way to memoize subs:
+<a href='http://www.mail-archive.com/perl6-stdlib@perl.org/msg00073.html' target='_blank'>www.mail-archive.com</a></p>
+<p>Leon Brocard's message on removing memoize's action-at-a-distance
+nature: <a href='http://www.mail-archive.com/perl6-stdlib@perl.org/msg00075.html' target='_blank'>www.mail-archive.com</a></p>
+</div>

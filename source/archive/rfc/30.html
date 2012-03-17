@@ -1,0 +1,91 @@
+[% setvar title STDIN, STDOUT, STDERR, ARGV, and DATA should become scalars %]
+<h3>This file is part of the Perl 6 Archive</h3>
+    <p>To see what is currently happening visit <a href="http://www.perl6.org/">http://www.perl6.org/</a></p>
+<div class='pod'>
+<a name='TITLE'></a><h1>TITLE</h1>
+<p>STDIN, STDOUT, STDERR, ARGV, and DATA should become scalars</p>
+<a name='VERSION'></a><h1>VERSION</h1>
+<pre>  Maintainer: Nathan Wiger &lt;<a href='mailto:nate@wiger.org'>nate@wiger.org</a>&gt;
+  Date: 4 Aug 2000
+  Last Modified: 14 Sep 2000
+  Mailing List: <a href='mailto:perl6-language-io@perl.org'>perl6-language-io@perl.org</a>
+  Number: 30
+  Version: 4
+  Status: Frozen</pre>
+<a name='ABSTRACT'></a><h1>ABSTRACT</h1>
+<p>Consensus has been reached that filehandles (currently
+barewords) will be revamped to become true $scalars, to
+make them consistent with other Perl variables.</p>
+<p><code>STDIN</code>, <code>STDOUT</code>, <code>STDERR</code>, and <code>DATA</code> should follow suit and be
+renamed <code>$STDIN</code>, <code>$STDOUT</code>, <code>$STDERR</code>, and <code>$DATA</code>, becoming
+full-fledged scalar <b>fileobjects</b>. In addition, <code>ARGV</code> should become
+<code>$ARGV</code> as well. The old function of <code>$ARGV</code> (the currently open
+filename) will be available via polymorphism.</p>
+<a name='NOTES ON FREEZE'></a><h1>NOTES ON FREEZE</h1>
+<p>This was pretty much accepted by everyone, since it follows logically
+from filehandles becoming scalars. A few clarifications were added, but
+it otherwise remains the same from the previous version.</p>
+<a name='DESCRIPTION'></a><h1>DESCRIPTION</h1>
+<a name='$STDIN, $STDOUT, $STDERR'></a><h2>$STDIN, $STDOUT, $STDERR</h2>
+<p>Currently, filehandles are barewords, such as FILE and
+PIPE. However, for Perl 6 these are planned to be renamed
+to true &quot;single-whatzitz&quot; types (thanks Tom) and prefixed
+with a $. So, the current:</p>
+<pre>   print FILE &quot;$stuff\n&quot;;</pre>
+<p>Will become something like:</p>
+<pre>   print $FILE &quot;$stuff\n&quot;;</pre>
+<p>STDIN, STDOUT, and STDERR need to follow suit. We should
+change</p>
+<pre>   print STDERR &quot;$stuff\n&quot;;</pre>
+<p>to:</p>
+<pre>   print $STDERR &quot;$stuff\n&quot;;</pre>
+<p>This makes them consistent with other Perl variables, such
+as @ARGV, %ENV, $VERSION, etc, all of which have the correct
+distiguishing prefix for their type.</p>
+<a name='$DATA'></a><h2>$DATA</h2>
+<p><code>DATA</code> should follow suit, becoming <code>$DATA</code>.</p>
+<a name='$ARGV'></a><h2>$ARGV</h2>
+<p>In addition, <code>ARGV</code> should be renamed to <code>$ARGV</code>. However, this
+overlaps with the already-existing <code>$ARGV</code> (currently open filename),
+appearing to cause problems. But never fear! Polymorphic objects to the
+rescue:</p>
+<pre>   while (&lt;$ARGV&gt;) {                 # used as fileobject
+       next if ($ARGV eq $lastfile)  # $ARGV-&gt;STRING, filename
+       print &quot;Now reading $ARGV&quot;;    # $ARGV-&gt;STRING, filename
+       dostuff($_);
+       $lastfile = $ARGV;            # copies object, but that's ok
+                                     # because will have -&gt;STRING too
+   }</pre>
+<p>This means that $ARGV will be both the filehandle *and* the name of the
+file, but it will automatically morph to suit your needs depending on
+context.</p>
+<p>Additionally, <code>ARGVOUT</code> should either follow suit, or be wrapped into
+<code>$ARGV</code> ($ARGV-&gt;OUT?), whichever makes more sense.</p>
+<a name='IMPLEMENTATION'></a><h1>IMPLEMENTATION</h1>
+<p>All references to these bareword filehandles will have to be changed.</p>
+<p>In addition, $STDIN, $STDOUT, and $STDERR should be standard, read-write
+variables. If a person wants to do this:</p>
+<pre>   $STDOUT = $myfilehandle;
+   print &quot;Watch out!&quot;;</pre>
+<p>They should be able to. The same should (probably) go for <code>$DATA</code> and
+<code>$ARGV</code>.</p>
+<a name='MIGRATION'></a><h1>MIGRATION</h1>
+<p>The p52p6 translator needs to be able to spot instances of barewords and
+globs and translate them to scalars:</p>
+<pre>   print STDERR @foo;       -&gt;   print $STDERR @foo;
+   dostuff(\*STDIN);        -&gt;   dostuff($STDIN); 
+   print while(&lt;ARGV&gt;);     -&gt;   print while(&lt;$ARGV&gt;);
+   select(STDERR);          -&gt;   $DEFOUT = $STDERR;    # RFC 129
+   tie *STDOUT, 'Apache';   -&gt;   tie Apache $STDOUT;   # RFC 200</pre>
+<p>A similar process will have to be done with all other filehandle
+conversions as well, so this may well be handled implicitly by the more
+general conversion. We may be able to ignore globs since these should
+handle scalars implicitly as aliases.</p>
+<a name='REFERENCES'></a><h1>REFERENCES</h1>
+<p><a href='http://www.mail-archive.com/perl6-language@perl.org/msg03279.html' target='_blank'>www.mail-archive.com</a></p>
+<p>RFC 14: Modify open() to support FileObjects and Extensibility</p>
+<p>RFC 159: True Polymorphic Objects</p>
+<p>RFC 129: Replace default filehandle/select with $DEFOUT, $DEFERR, $DEFIN</p>
+<p>RFC 200: Objects: Revamp tie to support extensibility (Massive tie
+changes)</p>
+</div>

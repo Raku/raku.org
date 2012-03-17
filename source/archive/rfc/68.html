@@ -1,0 +1,27 @@
+[% setvar title Eliminate the optional C<sub> for C<BEGIN> etc block declarations %]
+<h3>This file is part of the Perl 6 Archive</h3>
+    <p>To see what is currently happening visit <a href="http://www.perl6.org/">http://www.perl6.org/</a></p>
+<div class='pod'>
+<a name='TITLE'></a><h1>TITLE</h1>
+<p>Eliminate the optional <code>sub</code> for <code>BEGIN</code> etc block declarations</p>
+<a name='VERSION'></a><h1>VERSION</h1>
+<pre>  Maintainer: Peter Scott &lt;<a href='mailto:peter@psdt.com'>peter@psdt.com</a>&gt;
+  Date: 8 Aug 2000
+  Last Modified: 29 Aug 2000
+  Mailing List: <a href='mailto:perl6-language@perl.org'>perl6-language@perl.org</a>
+  Number: 68
+  Version: 2
+  Status: Frozen</pre>
+<a name='ABSTRACT'></a><h1>ABSTRACT</h1>
+<p>The <code>sub</code> keyword is currently optional on <code>BEGIN</code>, <code>END</code>, <code>CHECK</code>,
+<code>INIT</code>.  Almost certainly no-one ever uses it.  It should be eliminated
+as an option.</p>
+<a name='DESCRIPTION'></a><h1>DESCRIPTION</h1>
+<p><code>BEGIN</code> etc have special semantics making them different from ordinary
+subroutines; telling the user that they can use the <code>sub</code> keyword gives
+a false impression.</p>
+<a name='IMPLEMENTATION'></a><h1>IMPLEMENTATION</h1>
+<p>Obvious.</p>
+<a name='REFERENCES'></a><h1>REFERENCES</h1>
+<p><i><a href='http://search.cpan.org/perldoc?perlmod#Package Constructors and Destructors'>&quot;Package Constructors and Destructors&quot; in perlmod</a></i></p>
+</div>

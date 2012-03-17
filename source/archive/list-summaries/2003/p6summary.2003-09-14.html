@@ -1,0 +1,175 @@
+[% setvar title The Perl 6 Summary for the week ending 20030914 %]
+<h3>This file is part of the Perl 6 Archive</h3>
+    <p>To see what is currently happening visit <a href="http://www.perl6.org/">http://www.perl6.org/</a></p>
+<div class='pod'>
+<a name='The Perl 6 Summary for the week ending 20030914'></a><h1>The Perl 6 Summary for the week ending 20030914</h1>
+<p>Welcome to this week's Perl 6 Summary. And what better way could there
+be of spending the morning of your 36th birthday than by reading through
+a bunch of old messages in a couple of mailing lists and boiling them
+down into a summary?</p>
+<p>Hmm... you have a point. Still, I'd just spend the day feeling
+slightly guilty if I did that. And I'd spend more than just the day
+feeling guilty if I did that, but thanks for the offer.</p>
+<p>Ahem.</p>
+<p>Continuing the thread of &quot;So little was said we might as well get it
+over with and move onto the meat of the week&quot;, we'll start this week
+with the language list.</p>
+<a name='Dispatch on context'></a><h2>Dispatch on context</h2>
+<p>Piers Cawley wondered about doing multiple dispatch based on context
+and came up with a scheme which involved wrapping multimethods in a
+simple method that would 'reify' context so that it could be used as
+a multimethod argument. Luke Palmer came up with a better notation
+for handling class arguments to multimethods than Piers's
+suggestion...</p>
+<p><a href='http://groups.google.com/groups?threadm=m2ad9f3d45.fsf@huge.bofh.org.uk' target='_blank'>groups.google.com</a></p>
+<a name='Next Apocalypse'></a><h2>Next Apocalypse</h2>
+<p>In a transparent (and successful) attempt to generate some traffic on
+the language list, Jonathan Scott Duff wondered when the next
+Apocalypse was due. (If anyone's reading this who isn't up to speed
+on the Perl 6 design process, Apocalypses are Larry's design
+documents which describe the syntax and semantics of Perl 6. In
+theory they reflect the structure of <i>Programming Perl</i>, but the
+order may vary slightly).</p>
+<p>Dan Sugalski popped up with an answer &quot;Not for a while&quot;. The thing
+is, the next Apocalypse is objects, and judging by the amount of time
+it took Dan to get object internals finalized (hah!) over on
+perl6-internals, getting objects right in Perl 6 is going to take a
+time. Dan thought that Damian may well get Exegesis 7, formats, out
+sooner. (Apocalypse 7 boiled down to the following: &quot;See
+Damian&quot;). However, Damian is currently on holiday for the first time
+in too long, Dan hoped (and I agree) that Damian wouldn't answer
+for a few weeks.</p>
+<p>There was general agreement that getting objects right deserved as
+much time as it needed. Luke Palmer dropped a few hints though (and
+made your summarizer happy by noting that 'the standard library will
+definitely be mutable at runtime'.</p>
+<p><a href='http://groups.google.com/groups?threadm=20030909195935.GA12981@lighthouse.tamucc.edu' target='_blank'>groups.google.com</a></p>
+<a name='Macro arguments themselves'></a><h2>Macro arguments themselves</h2>
+<p>Alex Burr responded to a question about Macro arguments that Luke
+Palmer posed on the second of August (you have to love the dizzying
+pace of life on perl6-language). Alex suggested the partial evaluation
+might be handy but predicted that nobody will write a useful partial
+evaluator for Perl 6 as the language is 'simply too big'. The thread
+went on to discuss ways of getting at syntax trees from precompiled
+code and whether or not Alex had been serious in his prediction.</p>
+<p><a href='http://groups.google.com/groups?threadm=4a2pti6f1vl.fsf@x-cbga-03.eu.broadcom.com' target='_blank'>groups.google.com</a></p>
+<a name='Meanwhile, in perl6-internals'></a><h2>Meanwhile, in perl6-internals</h2>
+<a name='Of AST And YAL'></a><h2>Of AST And YAL</h2>
+<p>At the back end of last week, Leo T&ouml;tsch announced that he was
+looking into the AST (Abstract Syntax Tree) interface to Parrot by
+implementing parts of Yet Another Language (YAL). What's been done so
+far looks remarkably impressive, and Leo wondered whether to commit
+the changes. He noted that the work was currently totally standalone
+and could be distributed as a tar file instead.</p>
+<p>Michal Wallace liked it, noting that he'd like to merge in all the
+pirate code generation stuff. James Michal DuPont suggested using the
+redland RDF API, and representing the syntax trees with RDF. Not
+being a fan of XML (Who is?) Leo was unconvinced, worrying that he
+wasn't keen on having an external library in such a central place in
+Parrot. James pointed out that RDF isn't necessarily XML, and that
+the redland API wasn't quite the same as the redland library.</p>
+<p>Meanwhile, Leo put a YAL distribution up on his web page.</p>
+<p><a href='http://groups.google.com/groups?threadm=3F5B5EA9.7090102@nextra.at' target='_blank'>groups.google.com</a></p>
+<p><a href='http://toetsch.at/yal/' target='_blank'>toetsch.at</a></p>
+<a name='vtable-&gt;dump'></a><h2>vtable-&gt;dump</h2>
+<p>The &quot;How to do serialization right&quot; thread rumbled on. Threads
+continue to make things hard.</p>
+<p><a href='http://groups.google.com/groups?threadm=20030907232125.C4286@plum.flirble.org' target='_blank'>groups.google.com</a></p>
+<a name='Parrot Z-Machine'></a><h2>Parrot Z-Machine</h2>
+<p>Amir Karger continued his investigation of what would be needed to
+get Parrot emulating the Z-machine. Later in the week he announced
+that he was about to start coding. Go Amir!</p>
+<p><a href='http://groups.google.com/groups?threadm=20030907043016.59097.qmail@web40703.mail.yahoo.com' target='_blank'>groups.google.com</a></p>
+<a name='Moving IMCC'></a><h2>Moving IMCC</h2>
+<p>Everyone admits that <b><i>languages/imcc</i></b> is the wrong place for
+something as central to Parrot as IMCC. Leo wants to make a top-level
+<b><i>imcc</i></b> directory. Dan wants to move the current top-level C code to
+a <b><i>core</i></b> directory and move the IMCC stuff into that directory as
+well (without an <b><i>imcc</i></b> subdirectory). Quite what the Right Thing is
+hasn't yet been decided so IMCC remains in the wrong place. Robert
+Spier thought that we should wait 'til after the next Parrot release
+anyway.</p>
+<p><a href='http://groups.google.com/groups?threadm=3F5C7509.9080108@nextra.at' target='_blank'>groups.google.com</a></p>
+<a name='Leon Brocard Speaks!'></a><h2>Leon Brocard Speaks!</h2>
+<p>Leo T&ouml;tsch noted that there appeared to be a few ops missing,
+for instance there are <code>neg_p_p</code>, <code>neg_i_i</code>, and <code>neg_i</code> ops but
+no <code>neg_p</code>, he wondered if the 'missing' ops should be implemented or
+simply worked around. Leon Brocard thought that implementing the
+missing ops was the best course as it made it much easier to target
+Parrot. He noted that we could always move the logic into the
+assembler later if we decide to prune ops. Dan agreed. Leo set about
+implementing, throwing up the occasional question about semantics.</p>
+<p><a href='http://groups.google.com/groups?threadm=3F5CD9B1.4060701@nextra.at' target='_blank'>groups.google.com</a></p>
+<a name='FEATURE FREEZE'></a><h2>FEATURE FREEZE</h2>
+<p>As of Sunday 14th, Parrot is feature frozen in preparation for the
+next Parrot release. We're not sure whether this will be 0.1.0 or
+0.0.11, but there's definitely a release coming soon. Steve Fink, who
+reserves the right to call it the &quot;hairy tulip&quot; release, nevertheless
+invited suggestions for release codenames.</p>
+<p><a href='http://groups.google.com/groups?threadm=20030909054344.GD3328@foxglove' target='_blank'>groups.google.com</a></p>
+<a name='Luke's Timely Destruction Scheme'></a><h2>Luke's Timely Destruction Scheme</h2>
+<p>Luke Palmer released the second revision of a patch implementing his
+proposed timely destruction scheme. He claimed that in his benchmarks
+he was seeing a 1000% speedup for lazy DOD runs, which can't be
+bad. Dan, Leo and Daniel Grunblatt all asked Luke for his benchmark
+programming, suggesting that it go in the <b><i>examples/benchmarks</i></b>
+directory. Dan also asked for Luke to have a go at writing a good
+torture test for the system. Assuming it survived the torture test,
+Dan thought we could commit the changes.</p>
+<p><a href='http://groups.google.com/groups?threadm=20030910045232.GA17779@babylonia.flatirons.org' target='_blank'>groups.google.com</a></p>
+<a name='File Spec'></a><h2>File Spec</h2>
+<p>Vladimir Lipskiy posted a patch implementing a new variant of File
+Spec for the Parrot internals. (File Spec is a method of decoupling
+file paths from the gory details of particular operating system
+interpretations of what a file path looks like). It seems from the
+subsequent discussion that Vladimir and Michael Schwern have a
+fundamental disagreement about how a File Spec module should work.</p>
+<p><a href='http://groups.google.com/groups?threadm=002501c37835$eadba990$b19d943e@87w5ovc8gmxcahy' target='_blank'>groups.google.com</a></p>
+<a name='Embedding interface to PMCs'></a><h2>Embedding interface to PMCs</h2>
+<p>Arthur Bergman, the Ponie Jockey asked if there was any documentation
+or code extant to help him figure out how to use PMCs in embedded
+mode. Apparently there isn't.</p>
+<p><a href='http://groups.google.com/groups?threadm=11E0C1CC-E473-11D7-98CB-000A95A2734C@nanisky.com' target='_blank'>groups.google.com</a></p>
+<a name='Win32 Tinder suggestions'></a><h2>Win32 Tinder suggestions</h2>
+<p>Dan is in the process of setting up the TPF Win32 tinderbox
+machine. However, he's not a windows person at all, so he solicited
+suggestions as to which particular build options would make useful
+tinderboxes. Melvin Smith offered up several suggestions of compilers
+etc.</p>
+<p><a href='http://groups.google.com/groups?threadm=Pine.LNX.4.44.0309111451250.29895-100000@redcap.sidhe.org' target='_blank'>groups.google.com</a></p>
+<a name='The P6E challenge!'></a><h2>The P6E challenge!</h2>
+<p>In the Win32 Tinder thread, Dan told Melvin Smith (and by extension
+everyone else) that &quot;it's your job, if you choose to accept it, to
+help make [Perl 6 Essentials] horribly out-of-date.&quot; Nicholas Clark
+wondered if there would be prizes for people who make the most
+paragraphs obsolete, and if anyone was counting. (It looks like
+Nicholas just volunteered). Dan reckoned that yes there would be a
+prize, the winner would get a mention in the forward of the next
+version, but he wasn't sure whether that would include a signed copy
+of the new version or a hand corrected copy of the old
+one... Nicholas voted for the hand corrected copy, and I second that
+suggestion.</p>
+<p><a href='http://groups.google.com/groups?threadm=Pine.LNX.4.44.0309111513150.29895-100000@redcap.sidhe.org' target='_blank'>groups.google.com</a></p>
+<p><a href='http://www.ccl4.org/~nick/P/p6ee++.jpeg' target='_blank'>www.ccl4.org</a> -- Hand correction #1</p>
+<a name='Acknowledgements, Announcements, Apologies'></a><h1>Acknowledgements, Announcements, Apologies</h1>
+<p>I'm afraid I still don't have the info about the Perl Foundation's
+Parrot related grants. I'll nudge Gav and hopefully have something
+for you all next week.</p>
+<p>I promise there will be new content at
+<a href='http://www.bofh.org.uk:8080/' target='_blank'>www.bofh.org.uk</a> this week.</p>
+<p>As ever, if you've appreciated this summary, please consider one or
+more of the following options:</p>
+<ul>
+<li><a name='Send money to the Perl Foundation at donate.perl-foundation.org/ and help support the ongoing development of Perl.'></a>Send money to the Perl Foundation at
+<a href='http://donate.perl-foundation.org/' target='_blank'>donate.perl-foundation.org</a> and help support the ongoing
+development of Perl.</li>
+<li><a name='Get involved in the Perl 6 process. The mailing lists are open to all. dev.perl.org/perl6/ and www.parrotcode.org/ are good starting points with links to the appropriate mailing lists.'></a>Get involved in the Perl 6 process. The mailing lists are open  to
+all. <a href='http://dev.perl.org/perl6/' target='_blank'>dev.perl.org</a> and <a href='http://www.parrotcode.org/' target='_blank'>www.parrotcode.org</a>
+are good starting points with links to the appropriate mailing lists.</li>
+<li><a name='Send feedback, flames, money, requests for consultancy, photographic and writing commissions, or the secret of eternal youth to p<a href='mailto:6summarizer@bofh.org.uk'>6summarizer@bofh.org.uk</a>'></a>Send feedback, flames, money, requests for consultancy, photographic
+and writing commissions, or the secret of eternal youth to
+<i><a href='http://search.cpan.org/perldoc?<a href='mailto:p6summarizer@bofh.org.uk'>p6summarizer@bofh.org.uk</a>'>p<a href='mailto:6summarizer@bofh.org.uk'>6summarizer@bofh.org.uk</a></a></i></li>
+</ul>
+<p>Right, I'm off to enjoy the rest of my birthday. See you all next
+week.</p>
+</div>

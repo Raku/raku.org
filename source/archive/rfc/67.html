@@ -1,0 +1,100 @@
+[% setvar title Deep Copying, aka, cloning around. %]
+<h3>This file is part of the Perl 6 Archive</h3>
+    <p>To see what is currently happening visit <a href="http://www.perl6.org/">http://www.perl6.org/</a></p>
+<div class='pod'>
+<a name='TITLE'></a><h1>TITLE</h1>
+<p>Deep Copying, aka, cloning around.</p>
+<a name='VERSION'></a><h1>VERSION</h1>
+<pre>  Maintainer: Peter Scott &lt;<a href='mailto:peter@psdt.com'>peter@psdt.com</a>&gt;
+  Date: 8 Aug 2000
+  Last Modified: 29 Aug 2000
+  Mailing List: <a href='mailto:perl6-language@perl.org'>perl6-language@perl.org</a>
+  Number: 67
+  Version: 3
+  Status: Frozen</pre>
+<a name='ABSTRACT'></a><h1>ABSTRACT</h1>
+<p>Perl should have a <code>clone</code> method for deep copying of hierarchical data
+structures.</p>
+<p>Damian Conway mooted a <code>clone</code> function for deep copying of objects as
+part of an earlier discussion.  This RFC expands upon that and gives it
+special attention.  I expect several iterations of this RFC from feedback.</p>
+<a name='DESCRIPTION'></a><h1>DESCRIPTION</h1>
+<p>The language interface is the <code>clone</code> method which takes an object as
+argument and returns a copy of it as result:</p>
+<ul>
+<li><a name='clone SCALAR'></a>clone SCALAR</li>
+<li><a name='clone SCALAR, CALLBACK'></a>clone SCALAR, CALLBACK</li>
+<pre>      $copy = clone($obj)
+
+      $copy = clone($obj, sub { die 'Filehandle copying not allowed' })</pre>
+<p>The <code>CALLBACK</code> is an optional function to be called if <code>clone</code> encounters
+a filehandle, dirhandle, or object with magic or an XS implementation.  It
+will either throw an exception or return a value to be used as the cloned
+filehandle.</p>
+</ul>
+<a name='IMPLEMENTATION'></a><h1>IMPLEMENTATION</h1>
+<a name='Default'></a><h2>Default</h2>
+<p>The default functionality will switch on <code>ref SCALAR</code> and recursively
+create new data structures in the way many people have written
+themselves.  Here, for instance, is Garrett Goebel
+(<code><a href='mailto:garrett@scriptpro.com'>garrett@scriptpro.com</a></code>)'s version implementing circular reference checking:</p>
+<pre>      our %SEEN = ();
+      our $DEPTH = 0;
+      sub clone { # Dereference and return a deep copy of whatever's passed
+          our %SEEN;
+          local $_ = ref($_[0]) or return $_[0];
+          exists $SEEN{$_} and return $SEEN{$_};
+          $DEPTH++;
+
+          my $rval =
+            /^HASH$/   ? {map {clone($_)} (%{$_[0]})}
+          : /^ARRAY$/  ? [map {clone($_)} @{$_[0]} ]
+          : /^SCALAR$/ ? \${$_[0]}
+          : /^FORMAT$/ ? $_[0] # Shallow copy until we figure out
+          : /^Regexp$/ ? $_[0] # B.pm and Class::Tom show the way
+          : /^REF$/    ? $_[0] # how to deep copy these. Note:
+          : /^IO$/     ? $_[0] # &quot;
+          : /^GLOB$/   ? $_[0] # &quot;
+          : /^CODE$/   ? $_[0] # &quot; (B::Deparse)
+          : $_[0]-&gt;CLONE;
+
+          --$DEPTH
+          and $SEEN{$_} = $rval
+          or %SEEN = ();
+          $rval;
+      }</pre>
+<a name='Blessed objects'></a><h2>Blessed objects</h2>
+<p>If <code>clone</code> encounters a blessed object <code>$obj</code> say, it will call
+<code>$obj-</code>CLONE(CALLBACK)&gt;.  If the <code>CLONE</code> method is not defined in
+<code>$obj</code>'s class or any of its superclasses, <code>UNIVERSAL::CLONE</code> will carry
+out the default functionality on the internal representation of
+<code>$obj</code>.  Probably this will mean little more than calling <code>clone</code>.</p>
+<p>Classes (e.g., DBI) may well choose to throw an exception in their <code>CLONE</code>
+methods.</p>
+<a name='Filehandles'></a><h2>Filehandles</h2>
+<p>If <code>clone</code> encounters an <code>IO::Handle</code>, its default behavior will be to
+make a copy of the filehandle (debatable: perhaps the default should be to
+throw an exception) unless a <code>CALLBACK</code> function was specified, in which
+case it will use the return value of <code>CALLBACK</code>.</p>
+<a name='Tied variables'></a><h2>Tied variables</h2>
+<p>If <code>clone</code> encounters a tied variable, it will call the <code>CLONE</code> method in
+the class of the underlying implementation object or fall back to
+<code>UNIVERSAL::CLONE</code>.  (Note: perhaps all missing functions from tied
+classes should punt to <code>UNIVERSAL</code>.  But that is outside the scope of this
+RFC.)</p>
+<a name='Cyclic references'></a><h2>Cyclic references</h2>
+<p>The <code>clone</code> function should detect circular references and replicate the
+same structure in the copy.  One implementation that suggests itself is to
+keep a hash of input references with output references as values.  It has
+been suggested that the code to do this will already be available in the
+garbage collector.</p>
+<a name='Exceptions'></a><h2>Exceptions</h2>
+<p>If an exception is thrown anywhere during the copying, it needs to be
+trapped so that <code>clone</code> can clean up any cyclic references it has created,
+then rethrown.</p>
+<a name='REFERENCES'></a><h1>REFERENCES</h1>
+<p>The <i><a href='http://search.cpan.org/perldoc?Storable'>Storable</a></i> module
+(<a href='http://search.cpan.org/doc/RAM/Storable-0.7.0/Storable.pm).' target='_blank'>search.cpan.org</a></p>
+<p>The <i><a href='http://search.cpan.org/perldoc?Data::Dumper'>Data::Dumper</a></i> module
+(<a href='http://search.cpan.org/doc/GSAR/perl-5.6.0/ext/Data/Dumper/Dumper.pm).' target='_blank'>search.cpan.org</a></p>
+</div>

@@ -1,0 +1,186 @@
+[% setvar title Interface polymorphism considered lovely %]
+<h3>This file is part of the Perl 6 Archive</h3>
+    <p>To see what is currently happening visit <a href="http://www.perl6.org/">http://www.perl6.org/</a></p>
+<div class='pod'>
+<a name='TITLE'></a><h1>TITLE</h1>
+<p>Interface polymorphism considered lovely</p>
+<a name='VERSION'></a><h1>VERSION</h1>
+<pre>  Maintainer: Piers Cawley &lt;<a href='mailto:pdcawley@bofh.org.uk'>pdcawley@bofh.org.uk</a>&gt;
+  Date: 20 Sep 2000
+  Last Modified: 29 Sep 2000
+  Mailing List: <a href='mailto:perl6-language-objects@perl.org'>perl6-language-objects@perl.org</a>
+  Number: 265
+  Version: 3
+  Status: Frozen</pre>
+<a name='ABSTRACT'></a><h1>ABSTRACT</h1>
+<p>Add a mechanism for declaring class interfaces with a further method
+for declaring that a class implements said interface. There should be
+(at least) runtime checking to ensure that a class actually *does*
+implement said interface, with an option to have compile time checks
+made.</p>
+<a name='NOTES ON FREEZE'></a><h1>NOTES ON FREEZE</h1>
+<p>Nothing has changed since version 2. There's still probably stuff that
+could use working on, but the deadline looms like a big loomy thing,
+so into the freezer it goes.</p>
+<a name='CHANGES'></a><h1>CHANGES</h1>
+<ul>
+<li><a name='Notes'></a>Notes</li>
+<p>I've tried to add [Note ...] lines in bits where I need some further
+input to try and nail the RFC down.</p>
+<li><a name='More compile time errors'></a>More compile time errors</li>
+<p>It's now a compile time error if an interface file tries to do
+anything other than pre declare methods.</p>
+<li><a name='Added a reference to RFC 193 use delegation.'></a>Added a reference to RFC 193 <code>use delegation</code>.</li>
+<li><a name='Removed the 'too ugly to live' :must(Foo) suggestion.'></a>Removed the 'too ugly to live' :must(Foo) suggestion.</li>
+<p>I didn't like it, Damian didn't like it, and it was Damian's idea. So
+it's gone.</p>
+</ul>
+<a name='DISCUSSION'></a><h1>DISCUSSION</h1>
+<ul>
+<li><a name='Damian points out that the distinction between use base and use interface don't need to be distinguished. I believe that, although it may be the case that there's no need to make the distinction in the internals of perl, the distinction is a useful mnemonic one for the programmer, and (I think) separating the different meanings into different pragmata potentially simplifies the implementation of both of 'em.'></a>Damian points out that the distinction between <code>use base</code> and <code>use
+interface</code> don't need to be distinguished. I believe that, although
+it may be the case that there's no need to make the distinction in the
+internals of perl, the distinction is a useful mnemonic one for the
+programmer, and (I think) separating the different meanings into
+different pragmata potentially simplifies the implementation of both of
+'em.</li>
+<p>He also further points out that <code>use deferred</code> isn't strictly
+necessary. I counter that it may not be necessary, but it'd be a
+simple pragma module to write and would again serve to help clarify
+the programmers intent.</p>
+</ul>
+<a name='DESCRIPTION'></a><h1>DESCRIPTION</h1>
+<a name='Rationale'></a><h2>Rationale</h2>
+<p>To (mis)quote Damian Conway &quot;Inheritance polymorphism proliferates
+pretend classes&quot;.</p>
+<p>The idea is that <code>my Dog $spot</code> will eventually give us some real
+performance gains, so more folks will want to use it. But this leads
+to a proliferation of 'ghost' base classes that are simply there to
+provide a handle for <code>my Foo $bar</code> optimization.</p>
+<p>So, I propose that we move such classes sideways and make them into
+first class interfaces. By supporting interface polymorphism the way
+is opened for adding more stricture in projects that *need* it, as
+well as allowing for the possibility of compile time optimization for
+classes that use the interface structure.</p>
+<p>&lt;This needs some more fleshing out&gt;</p>
+<a name='Syntax'></a><h2>Syntax</h2>
+<p>My current thought is that an interface file would look something
+like:</p>
+<pre>  interface Fetcher;
+
+  sub fetch;</pre>
+<p>Note the new keyword, interface, this works just like package but with
+the restriction that it can only contain subroutine declarations.</p>
+<p>A Class that implements the interface would then look like:</p>
+<pre>  package TrainedCat;
+
+  use strict 'implementation';
+  use strict;
+
+  use base 'Cat';
+  use interface 'Fetcher';
+
+  sub fetch {
+     my TrainedCat $self = shift;
+     my $thing = shift;
+
+     return $self-&gt;can_lift($thing) ? $thing : undef;
+  }</pre>
+<p>Note the <code>use strict 'implementation'</code>, this declaration implies that
+interface conformance shall be checked at compile time. If the
+<code>TrainedCat</code> class doesn't implement the <code>Fetcher</code> interface in full
+then compilation shall fail. Without this stricture constraint the
+compiler shall throw a warning.</p>
+<p>If an interface file contains anything but forward subroutine
+declarations the compiler shall throw an error.</p>
+<p>[NOTE: What about interface inheritance hierarchies, thoughts please]</p>
+<p>Of course, Perl being Perl and all lovely and dynamic, there's a good
+chance that some of the methods that implement the interface aren't
+actually compiled up at the end of the compilation phase. Therefore we
+have:</p>
+<pre>  package LazyDog;
+
+  use strict 'implementation';
+  use interface 'Fetcher';
+
+  use deferred qw/fetch/;
+
+  ...
+
+  sub AUTOLOAD {
+    ...
+    *fetch=sub {...}; goto &amp;fetch;
+    ...
+  }</pre>
+<p><code>use deferred</code> informs the compiler that the method will be available
+when it's needed, even if it isn't actually in the symbol table/class
+hierarchy just yet.</p>
+<p>In client code, lexicals that are typed into interfaces only require
+that the objects assigned to them satisfy the interface. ie. They
+don't care about an objects class, they just care what it can do. (If
+only life were like that...)</p>
+<pre>  use strict 'interfaces';
+
+  my Fetcher $x;
+  my Dog $spot;
+  my NetSnarfer $z;
+  my $method = 'fetch';
+
+  # Compile time stuff
+  $x = $z;        # ok because $z can fetch
+  $x = $spot;     # ok because $spot can fetch
+  $x-&gt;fetch();    # ok because Fetcher-&gt;can('fetch');
+  $x-&gt;bark();     # not ok because ! Fetcher-&gt;can('bark');
+  # Runtime stuff
+  $x-&gt;$method();  # ok because Fetcher-&gt;can('fetch');
+  $method='bark';
+  $x-&gt;$method();  # runtime error because ! Fetcher-&gt;can('bark')</pre>
+<p>Without the <code>my strict 'interfaces'</code> declaration, these errors get
+demoted to compile time warnings. Of course, without the stricture any
+compiler optimizations become somewhat tricky.</p>
+<a name='Another possible syntax'></a><h2>Another possible syntax</h2>
+<p>Nathan Torkington suggested another syntax:</p>
+<pre>  package Cat implements Pet;
+  package Dog implements Pet;</pre>
+<p>Which is kind of neat.</p>
+<a name='Implications?'></a><h2>Implications?</h2>
+<p>Because the compiler will know about available methods for typed
+variables it may become possible to have Damian's named argument magic
+for method calls, though this is a tad scary to me...</p>
+<a name='IMPLEMENTATION'></a><h1>IMPLEMENTATION</h1>
+<p>I have some ideas about this, and I believe it may be possible to do a
+good chunk of the runtime/compile time behaviour in pure perl, but if
+we are to gain performance gains for more than just the programmer
+(though it's my contention that the potential time savings available to
+the programmer who's bug hunting are reason enough for this change)
+this stuff should be usable in core. And I know little of the core.</p>
+<p>I've thought about this some more, using an interface should imply a
+check block along the lines of:</p>
+<pre>  package Dog;
+
+  CHECK {
+      foreach my $interface (@IMPLEMENTS) {
+          foreach my $method (keys %{$::{$interface}}) {
+              die &quot;Method $method not implemented&quot; unless
+                  implements::can_somehow('Dog', $method);
+          }
+      }
+  }</pre>
+<p>where <code>implements::can_somehow</code> is similar to UNIVERSAL::can but it
+walks the inheritance tree.</p>
+<a name='MIGRATION'></a><h1>MIGRATION</h1>
+<p>I'm not sure that there are any migration issues, what with this being
+a new bunch of syntax and all...</p>
+<a name='REFERENCES'></a><h1>REFERENCES</h1>
+<p>RFC 218: <code>my Dog $spot</code> is just an assertion</p>
+<p>Some of the subsequent discussion of this RFC contains some discussion
+of adding interface polymorphism to perl.</p>
+<p>RFC 193: Objects : Core support for method delegation</p>
+<p>If a package delegates a bunch of its methods, the compile time checks
+should notice this and (possibly) count them as contributing to the
+implementation of the interface.</p>
+<p>Java.</p>
+<p>Java is one language that springs to mind that uses interface
+polymorphism. Don't let this put you off -- if we must steal something
+from Java let's steal something good.</p>
+</div>

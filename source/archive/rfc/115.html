@@ -1,0 +1,105 @@
+[% setvar title Overloadable parentheses for objects %]
+<h3>This file is part of the Perl 6 Archive</h3>
+    <p>To see what is currently happening visit <a href="http://www.perl6.org/">http://www.perl6.org/</a></p>
+<div class='pod'>
+<a name='TITLE'></a><h1>TITLE</h1>
+<p>Overloadable parentheses for objects</p>
+<a name='VERSION'></a><h1>VERSION</h1>
+<pre>  Maintainer: pdl-porters team &lt;<a href='mailto:pdl-porters@jach.hawaii.edu'>pdl-porters@jach.hawaii.edu</a>&gt;
+  Date: 16 Aug 2000
+  Last Modified: 30 Sep 2000
+  Mailing List: <a href='mailto:perl6-language@perl.org'>perl6-language@perl.org</a>
+  Number: 115
+  Version: 3
+  Status: Frozen</pre>
+<a name='DISCUSSION'></a><h1>DISCUSSION</h1>
+<p>There was hardly any response to this RFC. That can be
+interpreted in a number of ways <code>;)</code>. RFC 231 suggests
+an alternative way to get what we tried to get from
+this RFC: Syntactical ease of making slices of multidim
+array objects. RFC 231 suggests</p>
+<pre>   $a-&gt;[1..3; 4] * $b-&gt;[];</pre>
+<p>&gt;From our point of view this is not too bad but we would like
+to get rid of the requirement for <code>-&gt;</code>. An extended <code>tie</code>
+mechanism with possibility of overloaded operations on those
+arrays might do it. But then again, if we get all those
+polymorphic methods we could also allow the one suggested by
+this RFC -- TIMTOWTDI.</p>
+<a name='ABSTRACT'></a><h1>ABSTRACT</h1>
+<p>This RFC proposes syntactic support for a polymorphic method
+that can be defined for blessed references. It would
+allow the parentheses <code>()</code> to be used for a variety of convenient
+syntaxes for objects. This is principally motivated by a need
+of PDL for a simple syntax of PDL object slicing.</p>
+<a name='DESCRIPTION'></a><h1>DESCRIPTION</h1>
+<a name='Motivation'></a><h2>Motivation</h2>
+<p>Currently, PDL objects have to use quite an unwieldy syntax
+for the all important slicing and indexing. In perl5 the syntax is</p>
+<pre>  $n1 = $n-1;                       # since we need to stringify
+  $y = $x-&gt;slice(&quot;0:$n1:4&quot;);
+  $y = $x-&gt;slice(&quot;0:${\($n-1)}:4&quot;); # even more horrible
+  </pre>
+<p>This should be contrasted with the less cluttered syntax offered
+by numerical Python and commercial systems such as Matlab and IDL:</p>
+<pre>  y = x[0:n-1:4]; 
+  </pre>
+<p>In perl we desire to say:</p>
+<pre> $y = $x(0:$n-1,4); # or, depending on the choice of separator
+ $y = $x(0:$n-1;4); # see also RFC 169</pre>
+<p>Note that we need to keep l-value subs in perl6 to avoid related
+types of syntactical clumsiness if <code>$x()</code> can invoke a subroutine
+(see below).</p>
+<pre>  $x(0:$n-1:4) *= 2;</pre>
+<p>should be allowed, as well as the long form</p>
+<pre>  $x-&gt;slice(0:$n-1:4) *= 2;</pre>
+<p><i><a href='#RFC 81'>&quot;RFC 81&quot;</a></i> and related RFCs propose introducing ranges as part of the
+syntax cleanup, this RFC proposes <code>()</code> overloading for
+objects.</p>
+<a name='Overloading ()'s'></a><h2>Overloading <code>()</code>'s</h2>
+<p>If classes allowed the definition of a method that is invoked with a
+syntax akin to one used with sub refs (but without the need for the
+<code>&amp;</code> dereferencing) we could have the cake and eat it.  The parentheses
+method notion seems general enough to be useful for other classes.</p>
+<a name='Examples:'></a><h2>Examples:</h2>
+<p>A possible scenario could be as follows. The class PDL
+defines a default method that is invoked when a syntax
+like</p>
+<pre>  $&lt;variable_name&gt;(args)</pre>
+<p>is used, where <code>$&lt;variable_name&gt;</code> is supposed to be an
+instance of the class in question (here PDL).</p>
+<p>The PDL package would contain the definition of the
+method <code>PARENTHESES</code> (a polymorphic method along the lines of RFC 159):</p>
+<pre>  package PDL;
+
+   ....
+
+  sub PARENTHESES {
+	my $this = shift;
+	$this-&gt;slice(@_);
+  }</pre>
+<p>This would allow for the creation of a variety of powerful syntaxes
+for different kinds of objects. For example in PDL we might
+wish to use <code>()</code> to slice by index value and in a derived class
+PDL::World <code>()</code> would slice by physical real-value coordinate.</p>
+<p>One could think of this as saying that <code>()</code> is an
+operators which can be overloaded.</p>
+<p>Note that we still would like to have such a feature even if
+Perl 6 provided its own multi-dim array type. It would
+give us the freedom to provide an object oriented interface
+to these arrays and/or derive classes from it <i>and</i> have
+convenient slicing syntax.</p>
+<a name='IMPLEMENTATION'></a><h1>IMPLEMENTATION</h1>
+<p>Changes to the parser to allow the new syntax.
+We are not aware of any other conflicts with existing
+or proposed language features.</p>
+<a name='SEE ALSO'></a><h1>SEE ALSO</h1>
+<p>RFC 159: True Polymorphic Objects</p>
+<p>RFC 117: Perl syntax support for ranges</p>
+<p>RFC 81: Lazily evaluated list generation functions</p>
+<p>RFC 169: Proposed syntax for matrix element access and slicing</p>
+<p>RFC 231: Data: Multi-dimensional arrays/hashes and slices</p>
+<p><i><a href='http://search.cpan.org/perldoc?PDL'>PDL</a></i> (<a href='http://pdl.sourceforge.net/PDLdocs)' target='_blank'>pdl.sourceforge.net</a></p>
+<p><a href='http://pdl.perl.org' target='_blank'>pdl.perl.org</a></p>
+<p>Numerical Python:</p>
+<p><a href='http://starship.python.net/~da/numtut/' target='_blank'>starship.python.net</a></p>
+</div>

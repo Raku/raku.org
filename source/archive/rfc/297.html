@@ -1,0 +1,49 @@
+[% setvar title Attributes for compiler hints %]
+<h3>This file is part of the Perl 6 Archive</h3>
+    <p>To see what is currently happening visit <a href="http://www.perl6.org/">http://www.perl6.org/</a></p>
+<div class='pod'>
+<a name='TITLE'></a><h1>TITLE</h1>
+<p>Attributes for compiler hints</p>
+<a name='VERSION'></a><h1>VERSION</h1>
+<pre>  Maintainer: Simon Cozens &lt;<a href='mailto:simon@brecon.co.uk'>simon@brecon.co.uk</a>&gt;
+  Date: 25 Sep 2000
+  Mailing List: <a href='mailto:perl6-internals@perl.org'>perl6-internals@perl.org</a>
+  Number: 297
+  Version: 1
+  Status: Developing</pre>
+<a name='ABSTRACT'></a><h1>ABSTRACT</h1>
+<p>Allow the user to provide type hinting to the Perl translator using
+variable and subroutine attributes.</p>
+<a name='DESCRIPTION'></a><h1>DESCRIPTION</h1>
+<p><b>I AM NOT ADVOCATING STRONG TYPING</b>.</p>
+<p>When people talk about a Perl compiler, what they actually <b>want</b> is a
+translator; they don't want the hassle of a Perl run time environment. A
+true Perl-to-C translator for Perl 5 may or may not be possible; for
+Perl 6, it should be possible. Even if it isn't totally possible,
+this RFC will still apply to whatever replaces <code>B::C</code>.</p>
+<p>Even so, we'd need to lug around the new SVs for each Perl variable.
+This proposal allows the user to give hints to optimise the variables
+used by the translator, and narrow the gap between Perl and the target
+language.</p>
+<p>Note that this is for the translator and for the translator only; it has
+no effect on what happens when the user's program is interpreted using
+the normal <b><i>perl</i></b> bytecode compiler and virtual machine. The hints are
+non-binding. You can quite easily say:</p>
+<pre>    my $x : integer;
+    $x = 0.5;</pre>
+<p>The Perl interpreter will ignore the hint at run time; or, at least,
+it'll try using an <code>int</code> and find it needs to convert to a <code>float</code> at
+best and an <code>SV</code> at worst. The interpreter will Do The Right Thing,
+anyhow.</p>
+<p>However, if you want to translate the thing to C or any other typed
+language, that's going to blow up. It might not compile, or it might
+compile and behave weirdly. Your fault. Lie to Perl, and it will get
+you.</p>
+<a name='IMPLEMENTATION'></a><h1>IMPLEMENTATION</h1>
+<p>Have the translator or compiler recognise sub and variable attributes
+such as <code>int</code>, <code>string</code>, <code>ref</code>, <code>float</code> and so on. Attempt to use
+the appropriate type when translating Perl to a typed language. No
+effect on the Perl interpreter; ignore the attributes.</p>
+<a name='REFERENCES'></a><h1>REFERENCES</h1>
+<p>RFC ??: &quot;Kick out all ops - libprt&quot;.</p>
+</div>

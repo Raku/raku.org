@@ -1,0 +1,140 @@
+[% setvar title The Perl 6 Summary for the week ending 2004-08-27 %]
+<h3>This file is part of the Perl 6 Archive</h3>
+    <p>To see what is currently happening visit <a href="http://www.perl6.org/">http://www.perl6.org/</a></p>
+<div class='pod'>
+<a name='The Perl 6 Summary for the week ending 2004-08-27'></a><h1>The Perl 6 Summary for the week ending 2004-08-27</h1>
+<p>Where does the time go? I blame folk festivals. Once I'm getting busy
+with the teacher training I'm going to have weekends free to write the
+summaries. And if you'll believe that...</p>
+<p>We start with perl6-internals.</p>
+<a name='Incremental garbage collection'></a><h2>Incremental garbage collection</h2>
+<p>Discussion of implementing incremental garbage collection continued.</p>
+<a name='Calling conventions for unprototyped subroutines'></a><h2>Calling conventions for unprototyped subroutines</h2>
+<p>Mattia Barbon asked for some clarification of how the calling
+conventions work for unprototyped subroutines in IMCC. Specifically,
+whether IMCC was behaving as documented in the Parrot Design Document
+(PDD3). Leo reassured him that the TODO entry that had caused his
+disquiet was obsolete and that IMCC does the right thing.</p>
+<p><a href='http://groups.google.com/groups?threadm=Mahogany-0.66.0-1060-20040821-182506.00@rbnet.it' target='_blank'>groups.google.com</a></p>
+<a name='Compile op with return values'></a><h2>Compile op with return values</h2>
+<p>Steve Fink asked how to go about returning something from dynamically
+compiled code. He, Leo and Dan went over the issues. An unnamed (and as
+yet unvolunteered) volunteer will probably write it all up and add it
+to the parrot compiler FAQ.</p>
+<p><a href='http://groups.google.com/groups?threadm=20040822060343.GI563@foxglove' target='_blank'>groups.google.com</a></p>
+<a name='NCI and callback functions'></a><h2>NCI and callback functions</h2>
+<p>Stephane Peiry and Leo continued to work on getting NCI callbacks
+working with the GTK library. They finally tracked the problem down,
+but it looks awfully like Stephane's going to have to reimplement the
+<code>gtk_main</code> loop to get everything working. Best of luck
+Stephane. ParrotGTK would definitely be a cool thing.</p>
+<p><a href='http://groups.google.com/groups?threadm=20040822164755.GA23921@pittypanda' target='_blank'>groups.google.com</a></p>
+<a name='Planet Parrot'></a><h2>Planet Parrot</h2>
+<p>Robert Spier announced the creation of Planet Parrot, an aggregator of
+Parrot related blogs. If you have such a blog, Robert would probably be
+interested in hearing from you.</p>
+<p><a href='http://groups.google.com/groups?threadm=4129706F.6090304@pobox.com' target='_blank'>groups.google.com</a></p>
+<p><a href='http://planet.parrotcode.org/' target='_blank'>planet.parrotcode.org</a></p>
+<a name='GC/DOD API'></a><h2>GC/DOD API</h2>
+<p>Leo and Dan continued to discuss and work on documenting Parrot's
+memory management API.</p>
+<p><a href='http://groups.google.com/groups?threadm=a0611040cbd4f9cce3f0b@' target='_blank'>groups.google.com</a>[172.24.10.164]</p>
+<a name='NCI GC issues'></a><h2>NCI GC issues</h2>
+<p>Dan noticed a problem with garbage collection and NCI PMCs. Leo tracked
+the problem down and fixed it.</p>
+<p>I love it when a plan comes together.</p>
+<p><a href='http://groups.google.com/groups?threadm=200408271316.i7RDGIE02447@thu8.leo.home' target='_blank'>groups.google.com</a></p>
+<a name='Opinions on base behaviour'></a><h2>Opinions on base behaviour</h2>
+<p>Base behaviour is disgusting and should be stamped out I tell you. We
+have a moral duty to...</p>
+<p>Ah...</p>
+<p>Actually, the subject refers to Dan and Leo's desire to nail down the
+behaviour of Parrot's basic types. He outlined the issues and asked for
+discussion. And that's what he got.</p>
+<p>It looks like Parrot's going to have a reasonably complete set of
+numeric types which will allow accuracy nerds to avoid reals for as
+long as possible. Which will be nice.</p>
+<p><a href='http://groups.google.com/groups?threadm=a06110403bd502ac7855b@' target='_blank'>groups.google.com</a>[172.24.10.164]</p>
+<p><a href='http://groups.google.com/groups?threadm=a0611040ebd51295d034c@' target='_blank'>groups.google.com</a>[172.24.10.164]</p>
+<p><a href='http://groups.google.com/groups?threadm=a06110416bd52357268b0@' target='_blank'>groups.google.com</a>[172.24.10.164]</p>
+<p><a href='http://groups.google.com/groups?threadm=a0611041abd52737df346@' target='_blank'>groups.google.com</a>[172.24.10.164]</p>
+<p><a href='http://groups.google.com/groups?threadm=a06110400bd53ecfa74a4@' target='_blank'>groups.google.com</a>[10.0.1.2]</p>
+<a name='Concat, Cows &amp; Basil'></a><h2>Concat, Cows &amp; Basil</h2>
+<p>Comfortably winning the &quot;weirdest subject line of the week&quot; award, Sam
+Phillips laid out some of the problems he's having implementing a Basil
+compiler which targets Parrot. Leo supplied answers.</p>
+<p><a href='http://groups.google.com/groups?threadm=412B2D64.7000204@mac.com' target='_blank'>groups.google.com</a></p>
+<a name='Low level math[s] op behaviour'></a><h2>Low level math[s] op behaviour</h2>
+<p>As well as discussing basic types, Dan opened a discussion of the
+proper semantics of Parrot's low level maths (yeah, he spelt it
+'math', but I'm English and I'll spell it correctly) operators. In
+particular he proposed variants that throw exceptions if strange things
+happen.</p>
+<p><a href='http://groups.google.com/groups?threadm=a06110409bd5107fa798b@' target='_blank'>groups.google.com</a>[172.24.10.164]</p>
+<a name='Benchmark stuff'></a><h2>Benchmark stuff</h2>
+<pre> Joshua Gatcomb posted some patches he'd made to F&lt;parrotbench.pl&gt; to
+ make it a little less fragile and more useful. A few days later he
+ announced a slightly more finished set of patches (Leo had checked his
+ original patches in rather sooner than expected). </pre>
+<p><a href='http://groups.google.com/groups?threadm=20040824182920.63794.qmail@web60804.mail.yahoo.com' target='_blank'>groups.google.com</a></p>
+<p><a href='http://groups.google.com/groups?threadm=20040825225912.13884.qmail@web60809.mail.yahoo.com' target='_blank'>groups.google.com</a></p>
+<a name='Resuscitating a mod_parrot'></a><h2>Resuscitating a mod_parrot</h2>
+<p>Dan Sugalski looked upon mod_parrot and saw that it was cool, to the
+point of being laid out on a mortuary slab. He thought that the time
+had come to try and put some life back into the project, now that
+Parrot's so much more capable. He asked for volunteers and Jeff Horwitz
+seems to be (the only?) one of 'em.</p>
+<p><a href='http://groups.google.com/groups?threadm=a0611041dbd52934064f5@' target='_blank'>groups.google.com</a>[172.24.10.164]</p>
+<a name='PMC instantiation'></a><h2>PMC instantiation</h2>
+<p>Leo posted another of his discussion documents, this time on
+instantiating PMCs. No response so far.</p>
+<p><a href='http://groups.google.com/groups?threadm=412D9577.4090409@toetsch.at' target='_blank'>groups.google.com</a></p>
+<a name='Meanwhile, in perl6-language'></a><h1>Meanwhile, in perl6-language</h1>
+<a name='Return with no expression.'></a><h2>Return with no expression.</h2>
+<p>In the usual freewheeling perl6-language way, a thread entitled 'return
+with no expression' ended up discussion how to disambiguate a <code>::</code>
+which is part of <code>... ?? ... :: ...</code> expression and <code>::</code> in its role
+as module sigil. (According to Luke it's easy; white space is
+required).</p>
+<p><a href='http://groups.google.com/groups?threadm=20040820162108.GA18201@wall.org' target='_blank'>groups.google.com</a></p>
+<a name='Synopses discussed'></a><h2>Synopses discussed</h2>
+<p>Discussion of the draft synopses continued</p>
+<p><a href='http://groups.google.com/groups?threadm=BD4C401F.1E983' target='_blank'>groups.google.com</a>%siracusa@mindspring.com - Synopsis 2</p>
+<a name='POD tables?'></a><h2>POD tables?</h2>
+<p>Aaron Sherman wondered if Perl 6's incarnation of POD would have
+support for tables. Luke wasn't overly keen on Aaron's proposed syntax,
+and Larry pointed out that they'd managed to use Perl 5's POD and some
+clever processing to write tables for the third edition of Programming
+Perl. Once again, it seems that everyone agrees that POD is great, but
+could be greater, but nobody can agree on how to <i>make</i> it
+greater. Me, I think Larry got it right enough.</p>
+<p><a href='http://groups.google.com/groups?threadm=4126D251.9070105@ajs.com' target='_blank'>groups.google.com</a></p>
+<a name='Constructors and mixins'></a><h2>Constructors and mixins</h2>
+<p>Ovid had some questions about how Constructors work in Perl 6 and about
+how to disambiguate methods when using Roles. Larry and Damian provided
+answers.</p>
+<p><a href='http://groups.google.com/groups?threadm=20040822150448.25180.qmail@web60804.mail.yahoo.com' target='_blank'>groups.google.com</a></p>
+<a name='Instantiation'></a><h2>Instantiation</h2>
+<p>Instantiation was on Aaron Sherman's mind too. He proposed some
+syntactic sugar for creating objects at 'use' time. For some reason,
+syntactic sugar proposals do seem to create lots of discussion.</p>
+<p><a href='http://groups.google.com/groups?threadm=1093279983.1171.104.camel@pps' target='_blank'>groups.google.com</a></p>
+<a name='Announcements, Apologies, Acknowledgements'></a><h1>Announcements, Apologies, Acknowledgements</h1>
+<p>I am reliably informed that a lot of last week's links were
+broken. Which is odd because the code to generate them hasn't
+changed. It looks like the problem's down to the gateway between
+nntp.perl.org and groups.google.com being slightly radished at present.</p>
+<p>However, I'm going to stick with the Google links in this summary in
+the hopes that normal service will be returned shortly and things will
+get backfilled. If anyone has a handy tool for getting from a message id
+to an archive URL that works then I'd be happy to hear from them.</p>
+<p>If you find these summaries useful or enjoyable, please consider
+contributing to the Perl Foundation to help support the development of
+Perl. You might also like to send feedback or contributions to a
+'getting Piers to OSCON 2005' fund to mailto:<a href='mailto:pdcawley@bofh.org.uk'>pdcawley@bofh.org.uk</a></p>
+<p><a href='http://donate.perl-foundation.org/' target='_blank'>donate.perl-foundation.org</a> -- The Perl Foundation</p>
+<p><a href='http://dev.perl.org/perl6/' target='_blank'>dev.perl.org</a> -- Perl 6 Development site</p>
+<p>Amazingly, there's a small amount of newer content on my website this
+week. Will wonders never cease?</p>
+<p><a href='http://www.bofh.org.uk/' target='_blank'>www.bofh.org.uk</a></p>
+</div>

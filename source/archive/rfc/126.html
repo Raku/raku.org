@@ -1,0 +1,94 @@
+[% setvar title Ensuring Perl's object-oriented future %]
+<h3>This file is part of the Perl 6 Archive</h3>
+    <p>To see what is currently happening visit <a href="http://www.perl6.org/">http://www.perl6.org/</a></p>
+<div class='pod'>
+<a name='TITLE'></a><h1>TITLE</h1>
+<p>Ensuring Perl's object-oriented future</p>
+<a name='VERSION'></a><h1>VERSION</h1>
+<pre>  Maintainer: John Siracusa &lt;<a href='mailto:siracusa@mindspring.com'>siracusa@mindspring.com</a>&gt;
+  Date: 16 Aug 2000
+  Last Modified: 28 Aug 2000
+  Mailing List: <a href='mailto:perl6-language@perl.org'>perl6-language@perl.org</a>
+  Number: 126
+  Version: 2
+  Status: Frozen</pre>
+<a name='ABSTRACT'></a><h1>ABSTRACT</h1>
+<p>Object-oriented features were added to Perl with version 5, and in many
+ways still appear somewhat &quot;tacked on&quot;, with perhaps undue respect
+for the Old Ways of Perl 4.  We have a chance to change things for the
+better with Perl 6.</p>
+<p>Perl 6 should allow object-oriented programming with the same ease and
+efficiency that it allows procedural programming.</p>
+<a name='DESCRIPTION'></a><h1>DESCRIPTION</h1>
+<p>There are many RFC's already on objects and classes in Perl.  I'd like
+to tie all the disparate implementation-specific RFC's together with a
+unifying direction: ensuring that people who like to program with
+object-oriented Perl get the native language features they need to do so
+cleanly and efficiently.</p>
+<p>There are a lot of stumbling blocks to efficient object-oriented
+programming in Perl 5.  It's great that the implementation allows so
+much flexibility, and some very clever things can be done with all that
+rope (see Damian Conway's wonderful book), but to quote Larry Wall:</p>
+<pre>    &quot;Although the Perl Slogan is There's More Than One Way to Do It,
+     I hesitate to make 10 ways to do something.&quot;</pre>
+<p>Guess how many ways there are to make classes and objects and methods in
+Perl. The bottom line is that we're really using hashes and arrays and
+scalars and the concept of &quot;blessing&quot; to dandy up Perl 4 into an
+object-oriented language.</p>
+<p>This wouldn't bother me so much if it wasn't also incredibly inefficient
+relative to procedural Perl.  Of course object-oriented design will
+always have more overhead, but it shouldn't have <i>that</i> much more.</p>
+<p>To put it another way, no one should ever be tempted to do this:</p>
+<pre>    $obj-&gt;{'attribute'}</pre>
+<p>for efficiency reasons inside a tight loop or what have you.  (And no,
+the solution is not to &quot;use C when you need efficiency.&quot;  I shouldn't
+need to use portable assembler to access an object attribute
+efficiently.)  Whatever the syntax turns out to be, simple things like
+object attribute accessors should not only be faster than doing this
+in Perl 5:</p>
+<pre>    $obj-&gt;attribute</pre>
+<p>they should even be faster than the naughty, encapsulation-destroying,
+implementation-revealing hash-lookup above.  As for performance relative
+to procedural Perl code, I'm thinking something along the lines of
+Objective C's efficiency vs. plain C.  Objective C is nearly as dynamic
+as Perl and doesn't give up too much to plain C in terms of execution
+speed.  (And as a superset of a procedural language, it's a good analogy
+for Perl's o-o implementation.)</p>
+<p>I don't think pseudohashes and such go far enough.  I don't want &quot;faster
+hash-based objects&quot; or just &quot;faster method dispatch&quot;, I want real,
+honest to goodness classes with attributes and methods and such that are
+distinct, both in syntax and implementation, from other Perl data
+structures like hashes and arrays.</p>
+<p>Yes, this may force Perl 6 to make decisions about exactly which
+object-oriented features will be &quot;natively&quot; supported in Perl.  But this
+is not all bad.  After all, someone somewhere decided how the procedural
+stuff should work; there aren't 50 ways to return a value from a
+function, for example.  Decisions have to be made and syntax has to be
+created.  There will still be plenty of Ways to Do It, in my opinion.</p>
+<p>The old procedural model should remain, of course.  I'm not advocating a
+Java-like transformation into object-oriented bondage.  And I'm not
+saying that every one of Perl's internal functions and operators should
+be replaced with object-oriented variants.  All I'm asking for is a
+better world for object-oriented Perl programmers.</p>
+<p>I think it's important to focus on this so it doesn't get lost in all
+the discussion of new letters to tack onto &quot;m/.../sogie&quot; and new syntax
+for range operators and such ;)  And I think it's something that
+everyone can agree on, since there's a lot of benefit to be had, and no
+down-side that I can see.</p>
+<p>Let's make Perl 6 an awesome language for object-oriented development.</p>
+<a name='IMPLEMENTATION'></a><h1>IMPLEMENTATION</h1>
+<p>That's up to the other relevant RFC's.</p>
+<a name='NOTES'></a><h1>NOTES</h1>
+<p>According to the author, this is a &quot;mission-statement&quot; type of RFC,
+rather than a specific feature request or proposal. It generally seemed
+to meet with approval and has therefore been frozen.  This RFC has since
+spawned many more specific RFCs that are currently hashing out the more
+concrete details of Perl 6 OO.</p>
+<a name='REFERENCES'></a><h1>REFERENCES</h1>
+<p>Damian Conway's &quot;Object Oriented Perl&quot;</p>
+<p>RFC 95: Object Classes</p>
+<p>RFC 73: All Perl core functions should return objects</p>
+<p>RFC 80: Exception objects and classes for builtins</p>
+<p>All the other present and future RFC's dealing with object-oriented
+Perl 6 features.</p>
+</div>

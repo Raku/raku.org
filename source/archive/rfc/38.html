@@ -1,0 +1,49 @@
+[% setvar title Standardise Handling Of Abnormal Numbers Like Infinities And NaNs %]
+<h3>This file is part of the Perl 6 Archive</h3>
+    <p>To see what is currently happening visit <a href="http://www.perl6.org/">http://www.perl6.org/</a></p>
+<div class='pod'>
+<a name='TITLE'></a><h1>TITLE</h1>
+<p>Standardise Handling Of Abnormal Numbers Like Infinities And NaNs</p>
+<a name='VERSION'></a><h1>VERSION</h1>
+<pre>  Maintainer: Jarkko Hietaniemi &lt;<a href='mailto:jhi@iki.fi'>jhi@iki.fi</a>&gt;
+  Date: 5 Aug 2000
+  Mailing List: <a href='mailto:perl6-internals@perl.org'>perl6-internals@perl.org</a>
+  Number: 38
+  Version: 2
+  Status: Developing</pre>
+<a name='ABSTRACT'></a><h1>ABSTRACT</h1>
+<p>The handling of various abnormal numeric entities like infinities
+(positive, negative), not-a-numbers (NaNs, various kinds of those,
+signaling, non-signaling), epsilons (positive and negative) is left to
+the native math libraries.  A more concerted effort to standardise the
+behaviour of Perl across platforms would be desirable.</p>
+<a name='DESCRIPTION'></a><h1>DESCRIPTION</h1>
+<p>The abstract pretty much took care of it.</p>
+<a name='IMPLEMENTATION'></a><h1>IMPLEMENTATION</h1>
+<p>In an SV have bits that mark whether the numeric aspect of the scalar
+is abnormal and if so, what kind of abnormality are we dealing with.
+The Perl math operations have to watch out for those bits and do The
+Right Thing before the native math ops kick in, so that for example
+infinity + anything-but-nan = infinity, anything + nan = nan, and so on.</p>
+<p>Watching out for the abnormality bits may be a performance hit.  If
+so, it may be possible during the configuration phase probe how well
+the native math semantics obey the semantics we define for Perl, and
+let the native math take care of where it and us agree.</p>
+<p>mjd quoth:</p>
+<pre>	If Perl supported bignums as a native scalar type, then
+	handling of nans and infinities would come out of that naturally.
+
+	Supporting bignums in Perl would insulate users from details
+	of integer and float size on native platforms and would
+	improve portability of Perl programs.
+
+	Programs would be more robust.  Instead of failing
+	mysteriously when a number overflowed, they would continue to
+	work properly.
+	
+	Prior art:  Lisp.</pre>
+<a name='REFERENCES'></a><h1>REFERENCES</h1>
+<pre>	Math::Complex
+	PDL::Math [suggested by Tim Jenness]
+	p6rfc for bigints [to be written]</pre>
+</div>

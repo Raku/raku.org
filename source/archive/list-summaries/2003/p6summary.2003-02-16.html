@@ -1,0 +1,105 @@
+[% setvar title The Perl 6 summary for the week ending 20030216 %]
+<h3>This file is part of the Perl 6 Archive</h3>
+    <p>To see what is currently happening visit <a href="http://www.perl6.org/">http://www.perl6.org/</a></p>
+<div class='pod'>
+<a name='The Perl 6 summary for the week ending 20030216'></a><h1>The Perl 6 summary for the week ending 20030216</h1>
+<p>Welcome to the all new, entirely unaltered, all singing, all dancing
+Perl 6 summary. Your beacon of reliability in the crazy world that is
+Perl 6 design and development.</p>
+<p>Another quiet week. Even quieter than last week in fact, unless my
+mail spent some of the time up the spout, but I don't think so.</p>
+<p>So, as is traditional, we kick off with perl6-internals</p>
+<a name='CGP - The Computed Goto Prederefed Runloop'></a><h2>CGP - The Computed Goto Prederefed Runloop</h2>
+<p>Last week I mentioned that nobody seemed to have commented on Dan's
+bet with Guido van Rossum that Parrot would outperform Python by OSCON
+2004. (I also missed the fact that the penalty for losing the bet now
+involves cream pies as well as $10 and a round of drinks...). After I
+posted the summary to the mailing lists, Leopold T&ouml;tsch informed
+me that he had commented indirectly by announcing his new, improved,
+ludicrously quick runloop that combines computed GOTOs and
+predereferencing. Whatever that means.</p>
+<p>This week, Leo and Nicholas Clark worked out how to combine the
+blistering pace of the JIT core (for operations that had been
+translated into hand hacked machine code) with the blistering pace of
+the CGP runloop (for the other ops). As far as I can tell, this
+involved turning the idea 'inside out', the VM actually starts up
+running JIT compiled code and calls out to the CGP core to execute
+non-JITable sequences of ops. The numbers for this approach look
+fantastic (quite stunningly quick...) So Leo checked it in.</p>
+<p><a href='http://groups.google.com/groups?threadm=3E48C71A.2090708@toetsch.at' target='_blank'>groups.google.com</a></p>
+<p><a href='http://groups.google.com/groups?threadm=3E4BBD29.7060307@toetsch.at' target='_blank'>groups.google.com</a> -- Some numbers</p>
+<p><a href='http://groups.google.com/groups?threadm=3E4CEF66.7020900@toetsch.at' target='_blank'>groups.google.com</a> -- Check in notice</p>
+<a name='Optimized runloops and threading issues'></a><h2>Optimized runloops and threading issues</h2>
+<p>Last week we were reminded that JIT and Predereferenced runloops don't
+work in a threaded environment. This week Jerome Vouillon pointed out
+an approach that looks like it could fix that (it seemed to convince
+Leo). Dan (possibly playing mail catchup) said he was okay with having
+to fall back to the old fast core (as opposed to the current, stupidly
+fast core) in the presence of threads, but Leo seem to think that,
+using Jerome's scheme we'll be able to have our cake, eat it and still
+throw the cream pie at the Python team. Huzzah!</p>
+<p><a href='http://groups.google.com/groups?threadm=20030214133916.GA19119@strontium.pps.jussieu.fr' target='_blank'>groups.google.com</a></p>
+<a name='keyed_int issues'></a><h2><code>keyed_int</code> issues</h2>
+<p>Leo T&ouml;tsch had wondered about why
+<code>{get,set}_&lt;type&gt;_keyed_int</code> vtable methods needed to take an <code>INTVAL*</code>
+value instead of a plain <code>INTVAL</code> as it introduced some possibly unneeded
+conditional code, a stack variable for the key and made life hard for
+JIT code. It looks like the pointer is a holdover from an early
+approach to doing multidimensional keyed structures.</p>
+<p><a href='http://groups.google.com/groups?threadm=3E4B76E8.2040509@toetsch.at' target='_blank'>groups.google.com</a></p>
+<a name='Changes to the calling convention and other fallout'></a><h2>Changes to the calling convention and other fallout</h2>
+<p>Dan returned from the Sebastapol Perl 6 meeting with a few
+announcements and one change in the parrot calling convention (how
+many calling conventions have we had now?).</p>
+<p><a href='http://groups.google.com/groups?threadm=a05200f00ba72cc9686b5@' target='_blank'>groups.google.com</a>[63.120.19.221]</p>
+<a name='Macro support in IMCC'></a><h2>Macro support in IMCC</h2>
+<p>J&uuml;rgen B&ouml;mmels announced that he'd implemented macro
+expansion in IMCC (Yay J&uuml;rgen!). Leo liked it, but requested a
+few changes before he'd check it in, so hopefully, some time soon the
+mainline IMCC will have macros, which is very nice.</p>
+<p><a href='http://groups.google.com/groups?threadm=rt-21033-51310.14.4462403001212@bugs6.perl.org' target='_blank'>groups.google.com</a></p>
+<a name='Meanwhile, in perl6-language'></a><h1>Meanwhile, in perl6-language</h1>
+<p>Almost all the discussion was about the difference between arrays and
+lists. Deborah Ariel Pickett came up with a good list of questions
+about arrays and array references in scalar and list contexts, which
+Michael Lazzaro answered (very neatly I thought) with a list of their
+different contextual behaviours. Deborah extended Michael's list to
+hashes and hashrefs in a reasonably obvious way. Smylers came up with
+a possible new sigquote (after paraphrasing): &quot;We should limit new
+features to those that arise from a desire for the functionality
+rather than a desire to use up 'spare' syntax&quot;. (Okay, it's not
+exactly <i>snappy</i>, but I think it's important).</p>
+<p><a href='http://groups.google.com/groups?threadm=200302120056.h1C0uaec026963@bruce.csse.monash.edu.au' target='_blank'>groups.google.com</a> -- Deborah's questions</p>
+<p><a href='http://groups.google.com/groups?threadm=90876177-3EB9-11D7-A9B7-00050245244A@cognitivity.com' target='_blank'>groups.google.com</a> -- Michael's answers</p>
+<p>And that wraps it up for the language list. I'm sure it'll pick up
+again soon though. There are rumours of a draft apocalypse in the next
+couple of weeks, and presumably that implies a real apocalypse soon
+after. Assuming we haven't had another kind of Apocalypse in the mean
+time.</p>
+<a name='Announcements, Acknowledgements and AnotherWordBeginningWithA'></a><h1>Announcements, Acknowledgements and AnotherWordBeginningWithA</h1>
+<p>This week's summary was again prepared in the comfy chair with
+surprisingly few distractions apart from the late arrival of mail from
+Leon Brocard announcing that he'd implemented a brainf*ck compiler in
+brainf*ck, but that didn't really happen this week so I've got no
+excuse for mentioning Leon's name in this summary.</p>
+<p>Thanks to everyone who dropped us a line about our American Odyssey;
+I'm hoping I'll have one of those web page things up at some point
+with a rough itinerary in case anyone wants to come and throw rotten
+tomatoes at me (or, preferably, buy me sushi).</p>
+<p>Proofreading services were again down to Aspell and me.</p>
+<p>If you  appreciated this summary, please consider one or more of the
+following options:</p>
+<ul>
+<li><a name='Send money to the Perl Foundation at donate.perl-foundation.org/ and help support the ongoing development of Perl.'></a>Send money to the Perl Foundation at
+<a href='http://donate.perl-foundation.org/' target='_blank'>donate.perl-foundation.org</a> and help support the ongoing
+development of Perl.</li>
+<li><a name='Get involved in the Perl 6 process. The mailing lists are open to all. dev.perl.org/perl6/ and www.parrotcode.org/ are good starting points with links to the appropriate mailing lists.'></a>Get involved in the Perl 6 process. The mailing lists are open  to
+all. <a href='http://dev.perl.org/perl6/' target='_blank'>dev.perl.org</a> and <a href='http://www.parrotcode.org/' target='_blank'>www.parrotcode.org</a>
+are good starting points with links to the appropriate mailing lists.</li>
+<li><a name='Send feedback, flames, money, job offers or 17 inches of aluminium goodness to p<a href='mailto:6summarizer@bofh.org.uk'>6summarizer@bofh.org.uk</a>'></a>Send feedback, flames, money, job offers or 17 inches of aluminium
+goodness to <i><a href='http://search.cpan.org/perldoc?<a href='mailto:p6summarizer@bofh.org.uk'>p6summarizer@bofh.org.uk</a>'>p<a href='mailto:6summarizer@bofh.org.uk'>6summarizer@bofh.org.uk</a></a></i></li>
+</ul>
+<p>This week's summary was, once more, sponsored by Darren Duncan. Thanks
+Darren. If you'd like to become a summary sponsor, drop me a line at
+<i><a href='http://search.cpan.org/perldoc?<a href='mailto:p6summarizer@bofh.org.uk'>p6summarizer@bofh.org.uk</a>'>p<a href='mailto:6summarizer@bofh.org.uk'>6summarizer@bofh.org.uk</a></a></i>.</p>
+</div>

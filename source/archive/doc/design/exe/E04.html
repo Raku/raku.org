@@ -1,0 +1,1396 @@
+[% setvar title Exegesis 4: Syntax %]
+<h3>This file is part of the Perl 6 Archive</h3>
+    <p>To see what is currently happening visit <a href="http://www.perl6.org/">http://www.perl6.org/</a></p>
+<div class='pod'>
+<a name='TITLE'></a><h1>TITLE</h1>
+<p>Exegesis 4: Syntax</p>
+<a name='AUTHOR'></a><h1>AUTHOR</h1>
+<p>Damian Conway &lt;<a href='mailto:damian@conway.org'>damian@conway.org</a>&gt;</p>
+<a name='VERSION'></a><h1>VERSION</h1>
+<pre>  Maintainer: Larry Wall &lt;<a href='mailto:larry@wall.org'>larry@wall.org</a>&gt;
+  Date: 2 Apr 2002
+  Last Modified: 30 May 2006
+  Number: 4
+  Version: 2</pre>
+<p>[Update: Please note that this was written several years ago, and
+a number of things have changed since then.  Rather than changing
+the original document, we'll be inserting &quot;Update&quot; notes like this
+one to tell you where the design has since evolved.  (For the better,
+we hope).  In any event, for the latest Perl 6 design (or to figure out
+any cryptic remarks below) you should read the Synopses, which are kept
+very much more up-to-date than either the Apocalypses or Exegeses.]</p>
+<ul>
+<li><a name='And I'd se-ell my-y so-oul for flow of con-tro-ol ... over Perl'></a><b><i>And I'd se-ell my-y so-oul for flow of con-tro-ol ... over Perl</i></b></li>
+<ul>
+<li><a name='-- The Motels, &quot;Total Control&quot; (Perl 6 remix)'></a><b>-- The Motels, &quot;Total Control&quot; (Perl 6 remix)</b></li>
+</ul>
+</ul>
+<p>In Apocalypse 4, Larry explains the fundamental changes to flow and
+block control in Perl 6. The changes bring fully integrated exceptions;
+a powerful new switch statement; a coherent mechanism for polymorphic
+matching; a greatly enhanced <code>for</code> loop; and unification of blocks,
+subroutines and closures.</p>
+<p>Let's dive right in.</p>
+<a name='&quot;Now, Witness the Power of This Fully Operational Control Structure&quot;'></a><h1>&quot;Now, Witness the Power of This Fully <i>Operational</i> Control
+Structure&quot;</h1>
+<p>We'll consider a simple interactive
+<i><a href='#www.calculator.org/rpn.html'>RPN calculator</a></i>. The real
+thing would have many more operators and values, but that's not
+important right now.</p>
+<pre>    class Err::BadData is Exception {...}
+
+    module Calc;</pre>
+<p>[Update: This syntactic form is allowed only for the entire file.]</p>
+<pre>    my class NoData is Exception {
+        method warn(*@args) { die @args }
+    }
+
+    my %var;
+
+    my sub get_data ($data) {
+        given $data {
+            when /^\d+$/    { return %var{&quot;&quot;} = $_ }
+            when 'previous' { return %var{&quot;&quot;} // fail NoData }
+            when %var       { return %var{&quot;&quot;} = %var{$_} }
+            default         { die Err::BadData : msg=&gt;&quot;Don't understand $_&quot; }
+        }  
+    }
+
+    sub calc (str $expr, int $i) {
+        our %operator is private //= (
+            '*'  =&gt; { $^a * $^b },
+            '/'  =&gt; { $^a / $^b },
+            '~'  =&gt; { ($^a + $^b) / 2 },
+        );</pre>
+<p>[Update: There is no private property.  And this would be a good place
+for a constant declaration.</p>
+<pre>        constant %operator =
+            '*'  =&gt; { $^a * $^b },
+            '/'  =&gt; { $^a / $^b },
+            '~'  =&gt; { ($^a + $^b) / 2 };</pre>
+<p>Note also that the right side of a list= doesn't require parens any more.]</p>
+<pre>        my @stack;
+        my $toknum = 1;
+        for split /\s+/, $expr -&gt; $token {
+            try {
+                when %operator {
+                    my @args = splice @stack, -2;
+                    push @stack, %operator{$token}(*@args)
+                }
+                when '.', ';', '=' {
+                    last
+                }
+
+                use fatal;
+                push @stack, get_data($token);
+
+                CATCH {
+                    when Err::Reportable     { warn $!; continue }
+                    when Err::BadData        { $!.fail(at=&gt;$toknum) }
+                    when NoData              { push @stack, 0 }
+                    when /division by zero/  { push @stack, Inf }
+                }
+            }
+
+            NEXT { $toknum++ }
+        }
+        fail Err::BadData: msg=&gt;&quot;Too many operands&quot; if @stack &gt; 1;
+        return %var{'$' _ $i} = pop(@stack) but true;</pre>
+<p>[Update: Concatenation is now <code>~</code> instead of underline.]</p>
+<pre>    }
+
+    module main;
+
+    for 1..Inf -&gt; $i {
+        print &quot;$i&gt; &quot;;
+        my $expr = &lt;&gt; err last;  </pre>
+<p>[Update: <code>&lt;&gt;</code> is now <code>=*</code> or some such.]</p>
+<pre>        print &quot;$i&gt; $( Calc::calc(i=&gt;$i, expr=&gt;$expr) )\n&quot;;
+    }</pre>
+<a name='An Exceptionally Promising Beginning'></a><h1>An Exceptionally Promising Beginning</h1>
+<p>The calculator is going to handle internal and external errors using
+Perl 6's OO exception mechanism. This means that we're going to need
+some classes for those OO exceptions to belong to.</p>
+<p>To create those classes, the <code>class</code> keyword is used. For example:</p>
+<pre>    class Err::BadData is Exception {...}</pre>
+<p>After this declaration, <code>Err::BadData</code> is a class name (or rather, by
+analogy to &quot;filehandle,&quot; it's a &quot;classname&quot;). Either way, it can then
+be used as a type specifier wherever Perl 6 expects one. Unlike Perl 5,
+that classname is not a bareword string: It's a genuine first-class
+symbol in the program. In object-oriented terms, we could think of a
+classname as a meta-object -- an object that describes the attributes
+and behavior of other objects.</p>
+<p>Modules and packages are also first class in Perl 6, so we can also
+refer to their names directly, or take references to them, or look them
+up in the appropriate symbol table.</p>
+<p>Classes can take properties, just like variables and values. Generally,
+those properties will specify variations in the behavior of the class.
+For example:</p>
+<pre>    class B::Like::Me is interface;</pre>
+<p>specifies that the <code>B::Like::Me</code> class defines a (Java-like) interface
+that any subclass must implement.</p>
+<p>[Update: We now use <code>role</code> declarations for interfaces, by the way.]</p>
+<p>The <code>is Exception</code> is not, however, a standard property. Indeed,
+<code>Exception</code> is the name of another (standard, built-in) class. When a
+classname like this is used as if it were a property, the property it
+confers is inheritance. Specifically, <code>Err::BadData</code> is defined as
+inheriting from the <code>Exception</code> base class. In Perl 5, that would have
+been:</p>
+<pre>    # Perl 5 code
+    package Err::BadData;
+    use base 'Exception';</pre>
+<p>So now class <code>Err::BadData</code> will have all the exceptionally useful
+properties of the <code>Exception</code> class.</p>
+<p>Having classnames as &quot;first class&quot; symbols of the program means that
+it's also important to be able to pre-declare them (to avoid
+compile-time &quot;no such class or module&quot; errors). So we need a new syntax
+for declaring the existence of classes/modules/packages, without
+actually defining their behavior.</p>
+<p>To do that we write:</p>
+<pre>    class MyClass {...}</pre>
+<p>That right. That's real, executable, Perl 6 code.</p>
+<p>We're defining the class, but using the new Perl 6 &quot;yada-yada-yada&quot;
+operator in a block immediately after the classname. By using the
+&quot;I'm-eventually-going-to-put-something-here-but-not-just-yet&quot; marker,
+we indicate that this definition is only a stub or placeholder. In this
+way, we introduce the classname into the current scope without needing
+to provide the complete description of the class.</p>
+<p>By the way, this is also the way we can declare other types of symbols
+in Perl 6 without actually defining them:</p>
+<pre>    module Alpha {...}
+    package Beta {...}
+    method Gamma::delta(Gamma $self: $d1, $d2) {...}
+    sub epsilon() {...}</pre>
+<p>In our example, the <code>Err::BadData</code> classname is introduced in
+precisely that way:</p>
+<pre>    class Err::BadData is Exception {...}</pre>
+<p>which means that we can refer to the class by name, even though it has
+not yet been completely defined.</p>
+<p>In fact, in this example, <code>Err::BadData</code> is <i>never</i> completely
+defined. So we'd get a fatal compile-time error: &quot;Missing definition
+for class Err::BadData.&quot; Then we'd realize we either forgot to
+eventually define the class, or that we had really meant to write:</p>
+<pre>    class Err::BadData is Exception {}   # Define new exception class with
+                                         # no methods or attributes
+                                         # except those it inherits
+                                         # See below.</pre>
+<a name='Lexical Exceptions'></a><h1>Lexical Exceptions</h1>
+<p>Most of the implementation of the calculator is contained in the
+<code>Calc</code> module. In Perl 6, modules are specified using the <code>module</code>
+keyword:</p>
+<pre>    module Calc;</pre>
+<p>which is similar in effect to a Perl 5:</p>
+<pre>    # Perl 5 code
+    package Calc;</pre>
+<p>Modules are not quite the same as packages in Perl 6. Most
+significantly, they have a different export mechanism: They export via
+a new, built-in, declarative mechanism (which will be described in a
+future Apocalypse) and the symbols they export are exported lexically
+by default.</p>
+<p>The first thing to appear in the module is a class declaration:</p>
+<pre>    my class NoData is Exception {
+        method warn(*@args) { die @args }
+    }</pre>
+<p>This is another class derived from <code>Exception</code>, but one that has two
+significant differences from the declaration of <code>class Err::BadData</code>:</p>
+<ul>
+<li><a name='The leading my makes it lexical in scope, and'></a>The leading <code>my</code> makes it lexical in scope, and</li>
+<li><a name='the trailing braces give it an associated block in which its attributes and methods can be specified.'></a>the trailing braces give it an associated block in which its
+attributes and methods can be specified.</li>
+</ul>
+<p>Let's look at each of those.</p>
+<p><code>NoData</code> exceptions are only going to be used within the <code>Calc</code>
+module itself. So it's good software engineering to make them visible
+only within the module itself.</p>
+<p>Why? Because if we ever attempt to refer to the exception class outside
+<code>Calc</code> (e.g. if we tried to catch such an exception in <code>main</code>), then
+we'll get a compile-time &quot;No such class: NoData&quot; error. Any such errors
+would indicate a flaw in our class design or implementation.</p>
+<p>In Perl 6, classes are first-class constructs. That is, like variables
+and subroutines, they are &quot;tangible&quot; components of a program, denizens
+of a symbol table, able to be referred to both symbolically and by
+explicit reference:</p>
+<pre>    $class = \Some::Previously::Defined::Class;
+
+    # and later
+
+    $obj = $class.new();</pre>
+<p>Note that the back slash is actually optional in that first line, just
+as it would be for an array or hash in the same position.</p>
+<p>&quot;First class&quot; also means that classnames live in a symbol table. So it
+follows that they can be defined to live in the current <i>lexical</i>
+symbol table (i.e. <code>%MY::</code>), by placing a <code>my</code> before them.</p>
+<p>A lexical class or module is only accessible in the lexical scope in
+which it's declared. Of course, like Perl 5 packages, Perl 6 classes
+and modules don't usually <i>have</i> an explicit lexical scope associated
+with their declaration. They are implicitly associated with the
+surrounding lexical scope (which is normally a file scope).</p>
+<p>But we can give them their own lexical scope to preside over by adding
+a block at the end of their declaration:</p>
+<pre>    class Whatever {
+        # definition here
+    }</pre>
+<p>This turns out to be important. Without the ability to specify a
+lexical scope over which the class has effect, we would be stuck with
+no way to embed a &quot;nested&quot; lexical class:</p>
+<pre>    class Outer;
+    # class Outer's namespace
+
+    my class Inner;
+
+    # From this line to the end of the file 
+    # is now in class Inner's namespace</pre>
+<p>In Perl 6, we avoid this problem by writing:</p>
+<pre>    class Outer;
+    # class Outer's namespace
+
+    my class Inner {
+        # class Inner's namespace
+    }
+
+    # class Outer's namespace again</pre>
+<p>In our example, we use this new feature to redefine <code>NoData</code>'s <code>warn</code>
+method (upgrading it to a call to <code>die</code>). Of course, we could also
+have done that with just:</p>
+<pre>    my class NoData is Exception;       # Open NoData's namespace
+    method warn(*@args) { die @args }   # Defined in NoData's namespace</pre>
+<p>but then we would have needed to &quot;reopen&quot; the <code>Calc</code> module's
+namespace afterward:</p>
+<pre>    module Calc;                        # Open Calc's namespace
+
+    my class NoData is Exception;       # Open NoData's (nested) namespace
+    method warn(*@args) { die @args }   # Defined in NoData's namespace
+
+    module Calc;                        # Back to Calc's namespace</pre>
+<p>[Update: And, in fact, that package-switching syntax is now disallowed.
+You have to use the block form for any declaration but the file scope.]</p>
+<p>Being able to &quot;nest&quot; the <code>NoData</code> namespace:</p>
+<pre>    module Calc;                            # Open Calc's namespace
+
+    my class NoData is Exception {          # Open NoData's (nested) namespace
+        method warn(*@args) { die @args }   # Defined in NoData's namespace
+    }
+
+    # The rest of module Calc defined here.</pre>
+<p>is much cleaner.</p>
+<p>By the way, because classes can now have an associated block, they can
+even be anonymous:</p>
+<pre>    $anon_class = class { 
+        # definition here
+    };
+
+    # and later
+
+    $obj = $anon_class.new();</pre>
+<p>which is a handy way of implementing &quot;singleton&quot; objects:</p>
+<pre>    my $allocator = class { 
+                        my $.count = &quot;ID_000001&quot;;
+                        method next_ID { $.count++ }
+                    }.new;
+
+    # and later...
+
+    for @objects {
+        $_.set_id( $allocator.next_ID );
+    }</pre>
+<a name='Maintaining Your State'></a><h1>Maintaining Your State</h1>
+<p>To store the values of any variables used by the calculator, we'll use
+a single hash, with each key being a variable name:</p>
+<pre>    my %var;</pre>
+<p>Nothing more to see here. Let's move along.</p>
+<a name='It's a Given'></a><h1>It's a Given</h1>
+<p>The <code>get_data</code> subroutine may be given a number (i.e. a literal
+value), a numerical variable name (i.e. <code>'$1'</code>, <code>'$2'</code>, etc.) , or
+the keyword <code>'previous'</code>.</p>
+<p>It then looks up the information in the <code>%var</code> hash, using a switch
+statement to determine the appropriate look-up:</p>
+<pre>    my sub get_data ($data) {
+        given $data {</pre>
+<p>The <code>given $data</code> evaluates its first argument (in this case,
+<code>$data</code>) in a scalar context, and makes the result the &quot;topic&quot; of each
+subsequent <code>when</code> inside the block associated with the <code>given</code>.
+(Though, just between us, that block is merely an anonymous closure
+acting as the <code>given</code>'s second argument -- in Perl 6 <i>all</i> blocks are
+merely closures that are slumming it.)</p>
+<p>Note that the <code>given $data</code> statement also makes <code>$_</code> an alias for
+<code>$data</code>. So, for example, if the <code>when</code> specifies a pattern:</p>
+<pre>    when /^\d+$/  { return %var{&quot;&quot;} = $_ }</pre>
+<p>then that pattern is matched against the contents of <code>$data</code> (i.e.
+against the current topic). Likewise, caching and returning <code>$_</code> when
+the pattern matches is the same as caching and returning <code>$data</code>.</p>
+<p>After a <code>when</code>'s block has been selected and executed, control
+automatically passes to the end of the surrounding <code>given</code> (or, more
+generally, to the end of whatever block provided the <code>when</code>'s topic).
+That means that <code>when</code> blocks don't &quot;fall through&quot; in the way that
+<code>case</code> statements do in C.</p>
+<p>You can also explicitly send control to the end of a <code>when</code>'s
+surrounding <code>given</code>, using a <code>break</code> statement. For example:</p>
+<pre>    given $number {
+        when /[02468]$/ {
+            if ($_ == 2) {
+                warn &quot;$_ is even and prime\n&quot;;
+                break;
+            }           
+            warn &quot;$_ is even and composite\n&quot;;
+        }
+        when &amp;is_prime {
+            warn &quot;$_ is odd and prime\n&quot;;
+        }
+        warn &quot;$_ is odd and composite\n&quot;;
+    }</pre>
+<p>Alternatively, you can explicitly tell Perl not to automatically
+<code>break</code> at the end of the <code>when</code> block. That is, tell it to &quot;fall
+through&quot; to the statement immediately after the <code>when</code>. That's done
+with a <code>continue</code> statement (which is the new name for The Statement
+Formerly Known As <code>skip</code>):</p>
+<pre>    given $number {
+        when &amp;is_prime   { warn &quot;$_ is prime\n&quot;; continue; }
+        when /[13579]$/  { warn &quot;$_ is odd&quot;; }
+        when /[02468]$/  { warn &quot;$_ is even&quot;; }
+    }</pre>
+<p>In Perl 6, a <code>continue</code> means: &quot;continue executing from the next
+statement after the current <code>when</code>, rather than jumping out of the
+surrounding <code>given</code>.&quot; It has nothing to do with the old Perl 5
+<code>continue</code> block, which in Perl 6 becomes <code>NEXT</code>.</p>
+<p>The &quot;topic&quot; that <code>given</code> creates can also be aliased to a name of our
+own choosing (though it's <i>always</i> aliased to <code>$_</code> no matter what
+else we may do). To give the topic a more meaningful name, we just need
+to use the &quot;topical arrow&quot;:</p>
+<pre>    given check_online().{active}{names}[0] -&gt; $name {
+        when /^\w+$/  { print &quot;$name's on first\n&quot; }
+        when /\?\?\?/    { print &quot;Who's on first\n&quot; }
+    }</pre>
+<p>[Update: Would now be written more like:</p>
+<pre>    given check_online()&lt;active&gt;&lt;names&gt;[0] -&gt; $name {
+        when /^ \w+ $/   { say &quot;$name's on first&quot; }
+        when / \?\?\? /  { say &quot;Who's on first&quot; }
+    }</pre>
+<p>]</p>
+<p>Having been replaced by the dot, the old Perl 5 arrow operator is given
+a new role in Perl 6. When placed after the topic specifier of a
+control structure (i.e. the scalar argument of a <code>given</code>, or the list
+of a <code>for</code>), it allows us to give an extra name (apart from <code>$_</code>) to
+the topic associated with that control structure.</p>
+<p>In the above version, the <code>given</code> statement declares a lexical
+variable <code>$name</code> and makes it yet another way of referring to the
+current topic. That is, it aliases both <code>$name</code> and <code>$_</code> to the value
+specified by <code>check_online().{active}{names}[0]</code>.</p>
+<p>This is a fundamental change from Perl 5, where <code>$_</code> was only aliased
+to the current topic in a <code>for</code> loop. In Perl 6, the current topic --
+whatever its name and however you make it the topic -- is <i>always</i>
+aliased to <code>$_</code>.</p>
+<p>That implies that everywhere that Perl 5 used <code>$_</code> as a default (i.e.
+<code>print</code>, <code>chomp</code>, <code>split</code>, <code>length</code>, <code>eval</code>, etc.), Perl 6 uses
+the current topic:</p>
+<pre>    for @list -&gt; $next {        # iterate @list, aliasing each element to 
+                                # $next (and to $_)
+        print if length &gt; 10;   # same as: print $next if length $next &gt; 10
+        %count{$next}++;
+    }</pre>
+<p>[Update: There is no <code>length</code> function any more.  You have to specify
+<code>.chars</code> or <code>.bytes</code> or some such.]</p>
+<p>This is subtly different from the &quot;equivalent&quot; Perl 5 code:</p>
+<pre>    # Perl 5 code
+    for my $next (@list) {      # iterate @list, aliasing each element to 
+                                # $next (but not to $_)
+        print if length &gt; 10;   # same as: print $_ if length $_ &gt; 10
+                                # using the $_ value from *outside* the loop
+        %count{$next}++;
+    }</pre>
+<p>If you had wanted this Perl 5 behavior in Perl 6, then you'd have to
+say explicitly what you meant:</p>
+<pre>    my $outer_underscore := $_;
+    for @list -&gt; $next {
+        print $outer_underscore
+            if length $outer_underscore &gt; 10;
+        %count{$next}++;
+    }</pre>
+<p>which is probably a good thing in code that subtle.</p>
+<p>Oh, and yes: the <code>p52p6</code> translator program <i>will</i> take that new
+behavior into account and correctly convert something pathological
+like:</p>
+<pre>    # Perl 5 code
+    while (&lt;&gt;) {
+        for my $elem (@list) {
+            print if $elem % 2;
+        }
+    }</pre>
+<p>to:</p>
+<pre>    # Perl 6 code
+    for &lt;&gt; {
+        my $some_magic_temporary_variable := $_;
+        for @list -&gt; $elem {
+            print $some_magic_temporary_variable if $elem % 2;
+        }
+    }</pre>
+<p>Note that this works because, in Perl 6, a call to <code>&lt;&gt;</code> is
+lazily evaluated in list contexts, including the list of a <code>for</code> loop.</p>
+<p>[Update: The first argument to a &quot;pointy sub&quot; is always aliased to <code>$_</code>
+now as well.]</p>
+<a name='Other whens'></a><h1>Other whens</h1>
+<p>The remaining cases of the data look-up are handled by subsequent
+<code>when</code> statements. The first:</p>
+<pre>    when 'previous' { return %var{&quot;&quot;} // fail NoData }</pre>
+<p>handles the special keyword <code>&quot;previous&quot;</code>. The previous value is always
+stored in the element of <code>%var</code> whose key is the empty string.</p>
+<p>If, however, that previous value is undefined, then the defaulting
+operator -- <code>//</code> -- causes the right-hand side of the expression to be
+evaluated instead. That right-hand side is a call to the <code>fail</code> method
+of class <code>NoData</code> (and could equally have been written
+<code>NoData.fail()</code>).</p>
+<p>The standard <code>fail</code> method inherited from the <code>Exception</code> class
+constructs an instance of the appropriate class (i.e. an exception
+object) and then either throws that exception (if the <code>use fatal</code>
+pragma is in effect) or else returns an <code>undef</code> value from the scope
+in which the <code>fail</code> was invoked. That is, the <code>fail</code> acts like a
+<code>die SomeExceptionClass</code> or a <code>return undef</code>, depending on the state
+of the <code>use fatal</code> pragma.</p>
+<p>[Update: Instead of returning a bare <code>undef</code>, the current language
+returns a kind of undef that contains the unthrown exception that would
+have been thrown under <code>use fatal</code>.]</p>
+<p>This is possible because, in Perl 6, <i>all</i> flow-of-control --
+including the normal subroutine <code>return</code> -- is exception-based. So,
+when it is supposed to act like a <code>return</code>, the <code>Exception::fail</code>
+method simply throws the special <code>Ctl::Return</code> exception, which
+<code>get_data</code>'s caller will (automagically) catch and treat as a normal
+return.</p>
+<p>So then why not just write the usual:</p>
+<pre>    return undef;</pre>
+<p>instead?</p>
+<p>The advantage of using <code>fail</code> is that it allows the <i>callers</i> of
+<code>get_data</code> to decide how that subroutine should signal failure. As
+explained above, normally <code>fail</code> fails by returning <code>undef</code>. But if a
+<code>use fatal</code> pragma is in effect, any invocation of <code>fail</code> instead
+throws the corresponding exception.</p>
+<p>What's the advantage in that? Well, some people feel that certain types
+of failures ought to be taken deadly seriously (i.e. they should kill
+you unless you explicitly catch and handle them). Others feel that the
+same errors really aren't all that serious and you should be allowed
+to, like, chill man and just groove with the heavy consequences, dude.</p>
+<p>The <code>fail</code> method allows you, the coder, to stay well out of that kind
+of fruitless religious debate.</p>
+<p>When you use <code>fail</code> to signal failure, not only is the code nicely
+documented at that point, but the mode of failure becomes
+caller-selectable. Fanatics can <code>use fatal</code> and make each failure
+punishable by death; hippies can say <code>no fatal</code> and make each failure
+just return <code>undef</code>.</p>
+<p>[Update: The default is now somewhere between those extremes; to throw
+an explicit exception if the unthrown exception is not examined in
+some fashion before being thrown away.]</p>
+<p>You no longer have to get caught up in endless debate as to whether the
+exception-catching:</p>
+<pre>    try { $data = get_data($str) }
+        // warn &quot;Couldn't get data&quot; }</pre>
+<p>is inherently better or worse than the <code>undef</code>-sensing:</p>
+<pre>    do { $data = get_data($str) }
+        // warn &quot;Couldn't get data&quot;;</pre>
+<p>Instead, you can just write <code>get_data</code> such that There's More Than One
+Way To Fail It.</p>
+<p>By the way, <code>fail</code> can fail in other ways, too: in different contexts
+or under different pragmas. The most obvious example would be inside a
+regex, where it would initiate back-tracking. More on that in
+Apocalypse 5.</p>
+<a name='Still Other Whens'></a><h1>Still Other Whens</h1>
+<p>Meanwhile, if <code>$data</code> isn't a number or the <code>&quot;previous&quot;</code> keyword,
+then maybe it's the name of one of the calculator's variables. The
+third <code>when</code> statement of the switch tests for that:</p>
+<pre>    when %var   { return %var{&quot;&quot;} = %var{$_} }</pre>
+<p>If a <code>when</code> is given a hash, then it uses the current topic as a key
+in the hash and looks up the corresponding entry. If that value is
+true, then it executes its block. In this case, that block caches the
+value that was looked up (i.e. <code>%var{$_}</code>) in the &quot;previous&quot; slot and
+returns it.</p>
+<p>&quot;Aha!&quot; you say, &quot;that's a bug! What if the value of <code>%var{$_}</code> is
+false?!&quot; Well, if it were possible for that to ever happen, then it
+certainly <i>would</i> be a bug, and we'd have to write something ugly:</p>
+<pre>    when defined %var{$_}   { return %var{&quot;&quot;} = %var{$_} }</pre>
+<p>But, of course, it's much easier just to redefine Truth, so that any
+literal zero value stored in <code>%var</code> is no longer false. See below.</p>
+<p>Finally, if the <code>$data</code> isn't a literal, then a <code>&quot;previous&quot;</code>, or a
+variable name, it must be an invalid token, so the default alternative
+in the switch statement throws an <code>Err::BadData</code> exception:</p>
+<pre>    default     { die Err::BadData : msg=&gt;&quot;Don't understand $_&quot; }</pre>
+<p>Note that, here again, we are actually executing a method call to:</p>
+<pre>    Err::BadData.die(msg=&gt;&quot;Don't understand $_&quot;);</pre>
+<p>as indicated by the use of the colon after the classname.</p>
+<p>Of course, by using <code>die</code> instead of <code>fail</code> here, we're giving
+clients of the <code>get_data</code> subroutine no choice but to deal with
+<code>Err::BadData</code> exceptions.</p>
+<a name='An Aside: the &quot;Smart Match&quot; Operator'></a><h1>An Aside: the &quot;Smart Match&quot; Operator</h1>
+<p>The rules governing how the argument of a <code>when</code> is matched against
+the current topic are designed to be as DWIMish as possible. Which
+means that they are actually quite complex. They're listed in
+Apocalypse 4, so we won't review them here.</p>
+<p>Collectively, the rules are designed to provide a generic &quot;best attempt
+at matching&quot; behavior. That is, given two values (the current topic and
+the <code>when</code>'s first argument), they try to determine whether those
+values can be combined to produce a &quot;smart match&quot; -- for some
+reasonable definitions of &quot;smart&quot; and &quot;match.&quot;</p>
+<p>That means that one possible use of a Perl 6 switch statement is simply
+to test <i>whether</i> two values match without worrying about <i>how</i> those
+two values match:</p>
+<pre>    sub hey_just_see_if_dey_match_willya ($val1, $val2) {
+        given $val1 {
+            when $val2 { return 1 }
+            default    { return 0 }
+        }
+    }</pre>
+<p>That behavior is sufficiently useful that Larry wanted to make it much
+easier to use. Specifically, he wanted to provide a generic &quot;smart
+match&quot; operator.</p>
+<p>So he did. It's called <code>=~</code>.</p>
+<p>[Update: Now called <code>~~</code> instead.]</p>
+<p>Yes, the humble Perl 5 &quot;match a string against a regex&quot; operator is
+promoted in Perl 6 to a &quot;smart-match an <i>anything</i> against an
+<i>anything</i>&quot; operator. So now:</p>
+<pre>    if ($val1 =~ $val2) {...}</pre>
+<p>works out the most appropriate way to compare its two scalar operands.
+The result might be a numeric comparison (<code>$val1 == $val2</code>) or a
+string comparison (<code>$val1 eq $val2</code>) or a subroutine call
+(<code>$val1.($val2)</code>) or a pattern match (<code>$val1 =~ /$val2/</code>) or whatever
+else makes the most sense for the actual run-time types of the two
+operands.</p>
+<p>This new turbo-charged &quot;smart match&quot; operator will also work on arrays,
+hashes and lists:</p>
+<pre>    if @array =~ $elem {...}        # true if @array contains $elem
+
+    if $key =~ %hash {...}          # true if %hash{$key}
+
+    if $value =~ (1..10) {...}      # true if $value is in the list
+
+    if $value =~ ('a',/\s/,7) {...} # true if $value is eq to 'a'
+                                    #   or if $value contains whitespace
+                                    #   or if $value is == to 7</pre>
+<p>[Update: lists are no longer automatically smart matched distributively.
+You can always use <code>any(...)</code> for that, or the <code>|</code> junctional operator.]</p>
+<p>That final example illustrates some of the extra intelligence that Perl
+6's <code>=~</code> has: When one of its arguments is a list (<i>not</i> an array),
+the &quot;smart match&quot; operator recursively &quot;smart matches&quot; each element and
+ORs the results together, short-circuiting if possible.</p>
+<a name='Being Calculating'></a><h1>Being Calculating</h1>
+<p>The next component of the program is the subroutine that computes the
+actual results of each expression that the user enters. It takes a
+string to be evaluated and an integer indicating the current iteration
+number of the main input loop (for debugging purposes):</p>
+<pre>    sub calc (str $expr, int $count) {</pre>
+<a name='Give us a little privacy, please'></a><h1>Give us a little privacy, please</h1>
+<p>Perl 5 has a really ugly idiom for creating &quot;durable&quot; lexical
+variables: variables that are lexically scoped but stick around from
+call to call.</p>
+<p>If you write:</p>
+<pre>    sub whatever {
+        my $count if 0;
+        $count++;
+        print &quot;whatever called $count times\n&quot;;
+    }</pre>
+<p>then the compile-time aspect of a <code>my $count</code> declaration causes
+<code>$count</code> to be declared as a lexical in the subroutine block. However,
+at run-time -- when the variable would normally be (re-)allocated --
+the <code>if 0</code> prevents that process. So the original lexical variable is
+not replaced on each invocation, and is instead shared by them all.</p>
+<p>This awful <code>if 0</code> idiom works under most versions of Perl 5, but it's
+really just a freakish accident of Perl's evolution, not a carefully
+designed and lovingly crafted feature. So just say &quot;No!&quot;.</p>
+<p>Perl 6 allows us to do the same thing, but without feeling the need to
+wash afterward.</p>
+<p>To understand how Perl 6 cleans up this idiom, notice that the durable
+variable is really much more; like a package variable that just happens
+to be accessible only in a particular lexical scope. That kind of
+restricted-access package variable is going to be quite common in Perl
+6 -- as an attribute of a class.</p>
+<p>So the way we create such a variable is to declare it as a package
+variable, but with the <code>is private</code> property:</p>
+<pre>    module Wherever;
+
+    sub whatever {
+        our $count is private;
+        $count++;
+        print &quot;whatever called $count times\n&quot;;
+    }</pre>
+<p>Adding <code>is private</code> causes Perl to recognize the existence of the
+variable <code>$count</code> within the <code>Wherever</code> module, but then to restrict
+its accessibility to the lexical scope in which it is first declared.
+In the above example, any attempt to refer to <code>$Wherever::count</code>
+outside the <code>&amp;Wherever::whatever</code> subroutine produces a compile-time
+error. It's still a package variable, but now you can't use it anywhere
+but in the nominated lexical scope.</p>
+<p>[Update: We now use <code>state</code> variables for that.]</p>
+<p>Apart from the benefit of replacing an ugly hack with a clean explicit
+marker on the variable, the real advantage is that Perl 6 private
+variables can be also be initialized:</p>
+<pre>    sub whatever {
+        our $count is private //= 1;
+        print &quot;whatever called $count times\n&quot;;
+        $count++;
+    }</pre>
+<p>That initialization is performed the first time the variable
+declaration is encountered during execution (because that's the only
+time its value is <code>undef</code>, so that's the only time the <code>//=</code> operator
+has any effect).</p>
+<p>[Update: That's now just</p>
+<pre>    sub whatever {
+        state $count = 1;
+        say &quot;whatever called $count times&quot;;
+        $count++;
+    }</pre>
+<p>The <code>=</code> automatically happens only the first time through.]</p>
+<p>In our example program we use that facility to do a one-time-only
+initialization of a private package hash. That hash will then be used
+as a (lexically restricted) look-up table to provide the
+implementations for a set of operator symbols:</p>
+<pre>        our %operator is private //= (
+            '*'  =&gt; { $^a * $^b },
+            '/'  =&gt; { $^a / $^b },
+            '~'  =&gt; { ($^a + $^b) / 2 },
+        );</pre>
+<p>Each key of the hash is an operator symbol and the corresponding value
+is an anonymous subroutine that implements the appropriate operation.
+Note the use of the &quot;place-holder&quot; variables (<code>$^a</code> and <code>$^b</code>) to
+implicitly specify the parameters of the closures.</p>
+<p>Since all the data for the <code>%operator</code> hash is constant, we could have
+achieved a similar effect with:</p>
+<pre>        my %operator is constant = (
+            '*'  =&gt; { $^a * $^b },
+            '/'  =&gt; { $^a / $^b },
+            '~'  =&gt; { ($^a + $^b) / 2 },
+        );</pre>
+<p>Notionally this is quite different from the <code>is private</code> version, in
+that -- theoretically -- the lexical constant would be reconstructed
+and reinitialized on each invocation of the <code>calc</code> subroutine.
+Although, in practice, we would expect the compiler to notice the
+constant initializer and optimize the initialization out to
+compile-time.</p>
+<p>If the initializer had been a run-time expression, then the
+<code>is private</code> and <code>is constant</code> versions would behave very
+differently:</p>
+<pre>    our %operator is private //= todays_ops();   # Initialize once, the first
+                                                 # time statement is reached.
+                                                 # Thereafter may be changed
+                                                 # at will within subroutine.
+
+    my %operator is constant = todays_ops();     # Re-initialize every time
+                                                 # statement is reached.
+                                                 # Thereafter constant
+                                                 # within subroutine</pre>
+<p>[Update: The behavior of <code>=</code> now always DWYMs from the declarator,
+whether it's <code>constant</code> (compile time), <code>state</code> (first time), <code>has</code>
+(object initialization time), or <code>our</code> or <code>my</code> (execution time).]</p>
+<a name='Let's Split!'></a><h1>Let's Split!</h1>
+<p>We then have to split the input expression into (whitespace-delimited)
+tokens, in order to parse and execute it. Since the calculator language
+we're implementing is RPN, we need a stack to store data and interim
+calculations:</p>
+<pre>    my @stack;</pre>
+<p>We also need a counter to track the current token number (for error
+messages):</p>
+<pre>    my $toknum = 1;</pre>
+<p>Then we just use the standard <code>split</code> built-in to break up the
+expression string, and iterate through each of the resulting tokens
+using a <code>for</code> loop:</p>
+<pre>    for split /\s+/, $expr -&gt; $token {</pre>
+<p>There are several important features to note in this <code>for</code> loop. To
+begin with, there are no parentheses around the list. In Perl 6, they
+are not required (they're not needed for <i>any</i> control structure),
+though they are certainly still permissible:</p>
+<pre>    for (split /\s+/, $expr) -&gt; $token {</pre>
+<p>More importantly, the declaration of the iterator variable (<code>$token</code>)
+is no longer to the left of the list:</p>
+<pre>    # Perl 5 code
+    for my $token (split /\s+/, $expr) {</pre>
+<p>Instead, it is specified via a topical arrow to the right of the list.</p>
+<p>By the way, somewhat surprisingly, the Perl 6 arrow operator <i>isn't</i> a
+binary operator. (Actually, neither is the Perl 5 arrow operator, but
+that's not important right now.)</p>
+<p>Even more surprisingly, what the Perl 6 arrow operator is, is a synonym
+for the declarator <code>sub</code>. That's right, in Perl 6 you can declare an
+anonymous subroutine like so:</p>
+<pre>    $product_plus_one = -&gt; $x, $y { $x*$y + 1 };</pre>
+<p>The arrow behaves like an anonymous <code>sub</code> declarator:</p>
+<pre>    $product_plus_one = sub($x, $y) { $x*$y + 1 };</pre>
+<p>except that its parameter list doesn't require parentheses. That
+implies:</p>
+<ul>
+<li><a name='The Perl 6 for, while, if, and given statements each take two arguments: an expression that controls them and a subroutine/closure that they execute. Normally, that closure is just a block (in Perl6 all blocks are really closures):'></a>The Perl 6 <code>for</code>, <code>while</code>, <code>if</code>, and <code>given</code> statements each take
+two arguments: an expression that controls them and a
+subroutine/closure that they execute. Normally, that closure is just a
+block (in Perl6 <i>all</i> blocks are really closures):</li>
+<pre>    for 1..10 {         # no comma needed before opening brace
+        print
+    }</pre>
+<p>but you can also be explicit:</p>
+<pre>    for 1..10, sub {    # needs comma if a regular anonymous sub
+        print
+    }</pre>
+<p>or you can be pointed:</p>
+<pre>    for 1..10 -&gt; {      # no comma needed with arrow notation
+        print
+    }</pre>
+<p>or referential:</p>
+<pre>    for 1..10,          # needs comma if a regular sub reference
+        &amp;some_sub;</pre>
+<li><a name='The variable after the arrow is effectively a lexical variable confined to the scope of the following block (just as a subroutine parameter is a lexical variable confined to the scope of the subroutine block). Within the block, that lexical becomes an alias for the topic (just as a subroutine parameter becomes an alias for the corresponding argument).'></a>The variable after the arrow is effectively a lexical variable
+confined to the scope of the following block (just as a subroutine
+parameter is a lexical variable confined to the scope of the
+subroutine block). Within the block, that lexical becomes an alias for
+the topic (just as a subroutine parameter becomes an alias for the
+corresponding argument).</li>
+<li><a name='Topic variables created with the arrow notation are, by default, read-only aliases (because Perl 6 subroutine parameters are, by default, read-only aliases):'></a>Topic variables created with the arrow notation are, by default,
+read-only aliases (because Perl 6 subroutine parameters are, by
+default, read-only aliases):</li>
+<pre>    for @list -&gt; $i {
+        if ($cmd =~ 'incr') {
+            $i++;   # Error: $i is read-only
+        }
+    }</pre>
+<p>Note that the rule doesn't apply to the default topic (<code>$_</code>), which is
+given special dispensation to be a modifiable alias (as in Perl 5).</p>
+<li><a name='If you want a named topic to be modifiable through its alias, then you have to say so explicitly:'></a>If you want a named topic to be modifiable through its alias, then you
+have to say so explicitly:</li>
+<pre>    for @list -&gt; $i is rw {
+        if ($cmd =~ 'incr') {
+            $i++;   # Okay: $i is read-write
+        }
+    }</pre>
+<li><a name='Just as a subroutine can have more than one parameter, so too we can specify more than one named iterator variable at a time:'></a>Just as a subroutine can have more than one parameter, so too we can
+specify more than one named iterator variable at a time:</li>
+<pre>    for %phonebook.kv -&gt; $name, $number {
+        print &quot;$name: $number\n&quot;
+    }</pre>
+<p>Note that in Perl 6, a hash in a list context returns a list of pairs,
+not the Perl 5-ish &quot;key, value, key, value, ...&quot; sequence. To get the
+hash contents in that format, we have to call the hash's <code>kv</code> method
+explicitly.</p>
+<p>What actually happens in this iteration (and, in fact, in all such
+instances) is that the <code>for</code> loop looks at the number of arguments its
+closure takes and iterates that many elements at a time.</p>
+<p>Note that <code>map</code> and <code>reduce</code> can do that too in Perl 6:</p>
+<pre>    # process @xs_and_ys two-at-a-time...
+    @list_of_powers = map { $^x ** $^y } @xs_and_ys;</pre>
+<p>[Update: A block parameter must now be followed by comma if there are
+more arguments.]</p>
+<pre>    # reduce list three-at-a-time   
+    $sum_of_powers  = reduce { $^partial_sum + $^x ** $^y } 0, @xs_and_ys;</pre>
+<p>And, of course, since <code>map</code> and <code>reduce</code> take a subroutine reference
+as their first argument -- instead of using the higher-order
+placeholder notation -- we could use the arrow notation here too:</p>
+<pre>    @list_of_powers = map -&gt; $x, $y { $x ** $y } @xs_and_ys;</pre>
+<p>or even an old-fashioned anonymous subroutine:</p>
+<pre>    @list_of_powers = map sub($x,$y){ $x ** $y }, @xs_and_ys;</pre>
+</ul>
+<p>Phew. If that all makes your head hurt, then don't worry. All you
+really need to remember is this: If you don't want to use <code>$_</code> as the
+name of the current topic, then you can change it by putting an arrow
+and a variable name before the block of most control statements.</p>
+<a name='A Trying Situation'></a><h1>A Trying Situation</h1>
+<p>Once the calculator's input has been split into tokens, the <code>for</code> loop
+processes each one in turn, by applying them (if they represent an
+operator), or jumping out of the loop (if they represent an
+end-of-expression marker: <code>'.'</code>, <code>';'</code>, or <code>'='</code>), or pushing them
+onto the stack (since anything else must be an operand):</p>
+<pre>    try {
+        when %operator {                # apply operator
+            my @args = splice @stack, -2;
+            push @stack, %operator{$token}(*@args);
+        }
+
+        when '.', ';', '=' {           # or jump out of loop
+            last;
+        }
+
+        use fatal;
+        push @stack, get_data($token);  # or push operand</pre>
+<p>The first two possibilities are tested for using <code>when</code> statements.
+Recall that a <code>when</code> tests its first argument against the current
+topic. In this case, however, the token was made the topic by the
+surrounding <code>for</code>. This is a significant feature of Perl 6: <code>when</code>
+blocks can implement a switch statement <i>anywhere</i> there is a valid
+topic, not just inside a <code>given</code>.</p>
+<p>The block associated with <code>when %operator</code> will be selected if
+<code>%operator{$token}</code> is true (i.e. if there is an operator
+implementation in <code>%operator</code> corresponding to the current topic). In
+that case, the top two arguments are spliced from the stack and passed
+to the closure implementing that operation
+(<code>%operator{$token}(*@args)</code>). Note that there would normally be a dot
+(<code>.</code>) operator between the hash entry (i.e. a subroutine reference)
+and the subroutine call, like so:</p>
+<pre>    %operator{$token}.(*@args)</pre>
+<p>but in Perl 6 it may be omitted since it can be inferred (just as an
+inferrable <code>-&gt;</code> can be omitted in Perl 5).</p>
+<p>Note too that we used the flattening operator (<code>*</code>) on <code>@args</code>,
+because the closure returned by <code>%operator{$token}</code> expects two
+scalar arguments, not one array.</p>
+<p>[Update: That would be the <code>[,]</code> operator now.]</p>
+<p>The second <code>when</code> simply exits the loop if it finds an
+&quot;end-of-expression&quot; token. In this example, the argument of the <code>when</code>
+is a list of strings, so the <code>when</code> succeeds if any of them matches
+the token.</p>
+<p>Of course, since the entire body of the <code>when</code> block is a single
+statement, we could also have written the <code>when</code> as a statement
+modifier:</p>
+<pre>        last when '.', ';', '=';</pre>
+<p>The fact that <code>when</code> has a postfix version like this should come as no
+surprise, since <code>when</code> is simply another control structure like <code>if</code>,
+<code>for</code>, <code>while</code>, etc.</p>
+<p>The postfix version of <code>when</code> does have one interesting feature. Since
+it governs a statement, rather than a block, it does not provide the
+block-<code>when</code>'s automatic &quot;<code>break</code> to the end of my topicalizing
+block&quot; behavior. In this instance, it makes no difference since the
+<code>last</code> would do that anyway.</p>
+<p>The final alternative -- pushing the token onto the stack -- is simply
+a regular Perl <code>push</code> command. The only interesting feature is that it
+calls the <code>get_data</code> subroutine to pre-translate the token if
+necessary. It also specifies a <code>use fatal</code> so that <code>get_data</code> will
+fail by an throwing exception, rather than returning <code>undef</code>.</p>
+<p>The loop tries each of these possibilities in turn. And &quot;tries&quot; is the
+operative word here, because either the application of operations or
+the pushing of data onto the stack may fail, resulting in an exception.
+To prevent that exception from propagating all the way back to the main
+program and terminating it, the various alternatives are placed in a
+<code>try</code> block.</p>
+<p>A <code>try</code> block is the Perl 6 successor to Perl 5's <code>eval</code> block.
+Unless it includes some explicit error handling code (see
+<i><a href='#Where's the Catch???'>&quot;Where's the Catch???&quot;</a></i>), it acts exactly like a Perl 5
+<code>eval {...}</code>, intercepting a propagating exception and converting it
+to an <code>undef</code> return value:</p>
+<pre>    try { $quotient = $numerator / $denominator } // warn &quot;couldn't divide&quot;;</pre>
+<a name='Where's the Catch???'></a><h1>Where's the Catch???</h1>
+<p>In Perl 6, we aren't limited to just blindly catching a propagating
+exception and then coping with an <code>undef</code>. It is also possible to set
+up an explicit handler to catch, identify and deal with various types
+of exceptions. That's done in a <code>CATCH</code> block:</p>
+<pre>    CATCH {
+        when Err::Reportable     { warn $!; continue }
+        when Err::BadData        { $!.fail(at=&gt;$toknum) }
+        when NoData              { push @stack, 0 }
+        when /division by zero/  { push @stack, Inf }
+    }</pre>
+<p>A <code>CATCH</code> block is like a <code>BEGIN</code> block (hence the capitalization).
+Its one argument is a closure that is executed if an exception ever
+propagates as far as the block in which the <code>CATCH</code> was declared. If
+the block eventually executes, then the current topic is aliased to the
+error variable <code>$!</code>. So the typical thing to do is to populate the
+exception handler's closure with a series of <code>when</code> statements that
+identify the exception contained in <code>$!</code> and handle the error
+appropriately. More on that <i><a href='#Catch as Catch Can'>in a moment</a></i>.</p>
+<p>The <code>CATCH</code> block has one additional property. When its closure has
+executed, it transfers control to the end of the block in which it was
+defined. This means that exception handling in Perl 6 is
+non-resumptive: once an exception is handled, control passes outward,
+and the code that threw the exception is not automatically re-executed.</p>
+<p>If we did want &quot;try, try, try again&quot; exception handling instead, then
+we'd need to explicitly code a loop around the code we're trying:</p>
+<pre>    # generate exceptions (sometimes)
+    sub getnum_or_die {
+        given &lt;&gt; {                      # readline and make it the topic
+            die &quot;$_ is not a number&quot;
+                unless defined &amp;&amp; /^\d+$/;
+            return $_;
+        }
+    }
+    # non-resumptive exception handling
+    sub readnum_or_cry {
+        return getnum_or_die;       # maybe generate an exception
+        CATCH { warn $! }           # if so, warn and fall out of sub
+    }
+    # pseudo-resumptive
+    sub readnum_or_retry {
+        loop {                      # loop endlessly...
+            return getnum_or_die;   #   maybe generate an exception
+            CATCH { warn $! }       #   if so, warn and fall out of loop
+        }                           #   (i.e. loop back and try again)
+    }</pre>
+<p>Note that this isn't true resumptive exception handling. Control still
+passes outward -- to the end of the <code>loop</code> block. But then the <code>loop</code>
+reiterates, sending control back into <code>getnum_or_die</code> for another
+attempt.</p>
+<p>[Update: Resumptive exception handling can be done in Perl 6, but only
+with the cooperation of the code throwing the error.  If the exception
+object contains a resumption continuation, that continuation may be
+called to resume after the call to the throw.  In fact, some warnings are
+simply exceptions that are printed and resumed by default.]</p>
+<a name='Catch as Catch Can'></a><h1>Catch as Catch Can</h1>
+<p>Within the <code>CATCH</code> block, the example uses the standard Perl 6
+exception handling technique: a series of <code>when</code> statements. Those
+<code>when</code> statements compare their arguments against the current topic.
+In a <code>CATCH</code> block, that topic is always aliased to the error variable
+<code>$!</code>, which contains a reference to the propagating exception object.</p>
+<p>The first three <code>when</code> statements use a classname as their argument.
+When matching a classname against an object, the <code>=~</code> operator (and
+therefore any <code>when</code> statement) will call the object's <code>isa</code> method,
+passing it the classname. So the first three cases of the handler:</p>
+<pre>    when Err::Reportable   { warn $!; continue }
+    when Err::BadData      { $!.fail(at=&gt;$toknum) }
+    when NoData            { push @stack, 0 }</pre>
+<p>are (almost) equivalent to:</p>
+<pre>    if $!.isa(Err::Reportable)  { warn $! }
+    elsif $!.isa(Err::BadData)  { $!.fail(at=&gt;$toknum) }
+    elsif $!.isa(NoData)        { push @stack, 0 }</pre>
+<p>except far more readable.</p>
+<p>[Update: Actually, smartmatch calls <code>.does</code> rather than <code>.isa</code> now since
+that is defined to work for any type, not just classes.]</p>
+<p>The first <code>when</code> statement simply passes the exception object to
+<code>warn</code>. Since <code>warn</code> takes a string as its argument, the exception
+object's stringification operator (inherited from the standard
+<code>Exception</code> class) is invoked and returns an appropriate diagnostic
+string, which is printed. The <code>when</code> block then executes a <code>continue</code>
+statement, which circumvents the default &quot;<code>break</code> out of the
+surrounding topicalizer block&quot; semantics of the <code>when</code>.</p>
+<p>The second <code>when</code> statement calls the propagating exception's <code>fail</code>
+method to cause <code>calc</code> either to return or rethrow the exception,
+depending on whether <code>use fatal</code> was set. In addition, it passes some
+extra information to the exception, namely the number of the token that
+caused the problem.</p>
+<p>The third <code>when</code> statement handles the case where there is no cached
+data corresponding to the calculator's <code>&quot;previous&quot;</code> keyword, by simply
+pushing a zero onto the stack.</p>
+<p>The final case that the handler tests for:</p>
+<pre>    when /division by zero/  { push @stack, Inf }</pre>
+<p>uses a regex, rather than a classname. This causes the topic (i.e. the
+exception) to be stringified and pattern-matched against the regex. As
+mentioned above, by default, all exceptions stringify to their own
+diagnostic string. So this part of the handler simply tests whether
+that string includes the words &quot;division by zero,&quot; in which case it
+pushes the Perl 6 infinity value onto the stack.</p>
+<a name='One Dot Only'></a><h1>One Dot Only</h1>
+<p>The <code>CATCH</code> block handled bad data by calling the <code>fail</code> method of
+the current exception:</p>
+<pre>    when Err::BadData  { $!.fail(at=&gt;$toknum) }</pre>
+<p>That's a particular instance of a far more general activity: calling a
+method on the current topic. Perl 6 provides a shortcut for that -- the
+prefix unary dot operator. Unary dot calls the method that is its
+single operand, using the current topic as the implicit invocant. So
+the <code>Err::BadData</code> handler could have been written:</p>
+<pre>    when Err::BadData  { .fail(at=&gt;$toknum) }</pre>
+<p>One of the main uses of unary dot is to allow <code>when</code> statements to
+select behavior on the basis of method calls. For example:</p>
+<pre>    given $some_object {
+        when .has_data('new') { print &quot;New data available\n&quot; }
+        when .has_data('old') { print &quot;Old data still available\n&quot; }
+        when .is_updating     { sleep 1 }
+        when .can('die')      { .die(&quot;bad state&quot;) }    # $some_object.die(...)
+        default               { die &quot;internal error&quot; } # global die
+    }</pre>
+<p>Unary dot is also useful within the definition of methods themselves.
+In a Perl 6 method, the invocant (i.e. the first argument of the
+method, which is a reference to the object on which the method was
+invoked) is always the topic, so instead of writing:</p>
+<pre>    method dogtag (Soldier $self) {
+        print $self.rank, &quot; &quot;, $self.name, &quot;\n&quot;
+            unless $self.status('covert');
+    }</pre>
+<p>we can just write:</p>
+<pre>    method dogtag (Soldier $self) {     # $self is automagically the topic
+        print .rank, &quot; &quot;, .name, &quot;\n&quot;
+            unless .status('covert');
+    }</pre>
+<p>or even just:</p>
+<pre>    method dogtag {                     # @_[0] is automagically the topic
+        print .rank, &quot; &quot;, .name, &quot;\n&quot;
+            unless .status('covert');
+    }</pre>
+<p>[Update: This is no longer the case unless you declare the invocant with
+the name <code>$_</code>.  Otherwise you have to say <code>self.rank</code> or <code>$.rank</code>.]</p>
+<p>Yet another use of unary dot is as a way of abbreviating multiple
+accesses to hash or array elements. That is, <code>given</code> also implements
+the oft-coveted <code>with</code> statement. If many elements of a hash or array
+are to be accessed in a set of statements, then we can avoid the
+tedious repetition of the container name:</p>
+<pre>    # initialize from %options...
+
+    $name  = %options{name} // %options{default_name};
+    $age   = %options{age};
+    $limit = max(%options{limit}, %options{rate} * %options{count});
+    $count = $limit / %options{max_per_count};</pre>
+<p>by making it the topic and using unary dot:</p>
+<pre>    # initialize from %options...
+
+    given %options {
+        $name  = .{name} // .{default_name};
+        $age   = .{age};
+        $limit = max(.{limit}, .{rate} * .{count});
+        $count = $limit / .{max_per_count};
+    }</pre>
+<p>[Update: Would now be <code>.&lt;name&gt;</code> etc., since <code>.{...}</code> no longer
+autoquotes.]</p>
+<a name='Onward and Backward'></a><h1>Onward and Backward</h1>
+<p>Back in our example, after each token has been dealt with in its loop
+iteration, the iteration is finished. All that remains to do is
+increment the token number.</p>
+<p>In Perl 5, that would be done in a <code>continue</code> block at the end of the
+loop block. In Perl 6, it's done in a <code>NEXT</code> statement <i>within</i> the
+loop block:</p>
+<pre>    NEXT { $toknum++ }</pre>
+<p>Like a <code>CATCH</code>, a <code>NEXT</code> is a special-purpose <code>BEGIN</code> block that
+takes a closure as its single argument. The <code>NEXT</code> pushes that closure
+onto the end of a queue of &quot;next-iteration&quot; handlers, all of which are
+executed each time a loop reaches the end of an iteration. That is,
+when the loop reaches the end of its block or when it executes an
+explicit <code>next</code> or <code>last</code>.</p>
+<p>The advantage of moving from Perl 5's external <code>continue</code> to Perl 6's
+internal <code>NEXT</code> is that it gives the &quot;next-iteration&quot; handler access
+to any lexical variables declared within the loop block. In addition,
+it allows the &quot;next-iteration&quot; handler to be placed anywhere in the
+loop that's convenient (e.g. close to the initialization it's later
+supposed to clean up).</p>
+<p>For example, instead of having to write:</p>
+<pre>    # Perl 5 code
+    my $in_file, $out_file;
+    while (&lt;&gt;) {
+        open $in_file, $_ or die;
+        open $out_file, &quot;&gt; $_.out&quot; or die;
+
+        # process files here (maybe next'ing out early)
+    }
+    continue {
+        close $in_file  or die;
+        close $out_file or die;
+    }</pre>
+<p>we can just write:</p>
+<pre>    while (&lt;&gt;) {
+        my $in_file  = open $_ or die;
+        my $out_file = open &quot;&gt; $_.out&quot; or die;
+        NEXT {
+            close $in_file  or die;
+            close $out_file or die;
+        }
+
+        # process files here (maybe next'ing out early)
+    }</pre>
+<p>There's no need to declare <code>$in_file</code> and <code>$out_file</code> outside the
+loop, because they don't have to be accessible outside the loop (i.e.
+in an external <code>continue</code>).</p>
+<p>This ability to declare, access and clean up lexicals within a given
+scope is especially important because, in Perl 6, there is no reference
+counting to ensure that the filehandles close themselves automatically
+immediately at the end of the block. Perl 6's full incremental garbage
+collector <i>does</i> guarantee to eventually call the filehandle's
+destructors, but makes no promises about when that will happen.</p>
+<p>Note that there is also a <code>LAST</code> statement, which sets up a handler
+that is called automatically when a block is left for the last time.
+For example, this:</p>
+<pre>    for reverse 1..10 {
+        print &quot;$_...&quot; and flush;
+        NEXT { sleep 1 }
+        LAST { ignition() &amp;&amp; print &quot;lift-off!\n&quot; }
+    }</pre>
+<p>prints:</p>
+<pre>    10...9...8...7...6...5...4...3...2...1...lift-off!</pre>
+<p>sleeping one second after each iteration (including the last one), and
+then calling <code>&amp;ignition</code> at the end of the countdown.</p>
+<p><code>LAST</code> statements are also extremely useful in nonlooping blocks, as a
+way of giving the block a &quot;destructor&quot; with which it can clean up its
+state regardless of how it is exited:</p>
+<p>[Update: This would now be a <code>LEAVE</code> block.]</p>
+<pre>    sub handler ($value, $was_handled is rw) {
+        given $value {
+            LAST { $was_handled = 1 }
+            when &amp;odd { return &quot;$value is odd&quot; }
+            when /0$/ { print &quot;decimal compatible&quot; }
+            when /2$/ { print &quot;binary compatible&quot;; break }
+            $value %= 7;
+            when 1,3,5 { die &quot;odd residual&quot; }
+        }
+    }</pre>
+<p>In the above example, no matter how the <code>given</code> block exits -- i.e.
+via the <code>return</code> of the first <code>when</code> block, or via the (implicit)
+<code>break</code> of the second <code>when</code>, or via the (explicit and redundant)
+<code>break</code> of the third <code>when</code>, or via the <code>&quot;odd residual&quot;</code> exception,
+or by falling off the end of the <code>given</code> block -- the <code>$was_handled</code>
+parameter is always correctly set.</p>
+<p>Note that the <code>LAST</code> is essential here. It wouldn't suffice to write:</p>
+<pre>    sub handler ($value, $was_handled is rw) {
+        given $value {
+            when &amp;odd { return '$value is odd&quot; }
+            when /3$/ { print &quot;ternary compatible&quot; }
+            when /2$/ { print &quot;binary compatible&quot;; break }
+            $value %= 7;
+            when 1,3,5 { die &quot;odd residual&quot; }
+        }
+        $was_handled = 1;
+    }</pre>
+<p>because then <code>$handled</code> wouldn't be set if an exception was thrown. Of
+course, if that's actually the semantics you <i>wanted</i>, then you don't
+want <code>LAST</code> in that case.</p>
+<a name='WHY ARE YOU SHOUTING???'></a><h1>WHY ARE YOU SHOUTING???</h1>
+<p>You may be wondering why <code>try</code> is in lower case but <code>CATCH</code> is in
+upper. Or why <code>NEXT</code> and <code>LAST</code> blocks have those &quot;loud&quot; keywords.</p>
+<p>The reason is simple: <code>CATCH</code>, <code>NEXT</code> and <code>LAST</code> blocks are just
+specialized <code>BEGIN</code> blocks that install particular types of handlers
+into the block in which they appear.</p>
+<p>They install those handlers at compile-time so, unlike a <code>try</code> or a
+<code>next</code> or a <code>last</code>, they don't actually <i>do</i> anything when the
+run-time flow of execution reaches them. The blocks associated with
+them are only executed if the appropriate condition or exception is
+encountered within their scope. And, if that happens, then they are
+executed automatically, just like <code>AUTOLOAD</code>, or <code>DESTROY</code>, or
+<code>TIEHASH</code>, or <code>FETCH</code>, etc.</p>
+<p>So Perl 6 is merely continuing the long Perl tradition of using a
+capitalized keyword to highlight code that is executed automatically.</p>
+<p>In other words: I'M SHOUTING BECAUSE I WANT YOU TO BE AWARE THAT
+SOMETHING SUBTLE IS HAPPENING AT THIS POINT.</p>
+<a name='Cache and Return'></a><h1>Cache and Return</h1>
+<p>Meanwhile, back in <code>calc</code>...</p>
+<p>Once the loop is complete and all the tokens have been processed, the
+result of the calculation should be the top item on the stack. If the
+stack of items has more than one element left, then it's likely that
+the expression was wrong somehow (most probably, because there were too
+many original operands). So we report that:</p>
+<pre>    fail Err::BadData : msg=&gt;&quot;Too many operands&quot;
+        if @stack &gt; 1;</pre>
+<p>If everything is OK, then we simply pop the one remaining value off the
+stack and make sure it will evaluate true (even if its value is zero or
+<code>undef</code>) by setting its <code>true</code> property. This avoids the potential
+bug <i><a href='#Still Other Whens'>discussed earlier</a></i>.</p>
+<p>Finally, we record it in <code>%var</code> under the key <code>'$<i>n</i>'</code> (i.e. as the
+<i>n</i>-th result), and return it:</p>
+<pre>    return %var{'$' _ $i} = pop(@stack) but true;</pre>
+<p>&quot;But, but, but...&quot;, I hear you expostulate, &quot;...shouldn't that be
+<code>pop(@stack) <b>is</b> true</code>???&quot;</p>
+<p>Once upon a time, yes. But Larry has recently decided that compile-time
+and run-time properties should have different keywords. Compile-time
+properties (i.e. those ascribed to declarations) will still be
+specified with the <code>is</code> keyword:</p>
+<pre>    class Child is interface;
+    my $heart is constant = &quot;true&quot;;
+    our $meeting is private;</pre>
+<p>whereas run-time properties (i.e. those ascribed to values) will now be
+specified with the <code>but</code> keyword:</p>
+<pre>    $str = &lt;$trusted_fh&gt; but tainted(0);
+    $fh = open($filename) but chomped;
+    return 0 but true;</pre>
+<p>The choice of <code>but</code> is meant to convey the fact that run-time
+properties will generally contradict some standard property of a value,
+such as its normal truth, chompedness or tainting.</p>
+<p>It's also meant to keep people from writing the very natural, but very
+misguided:</p>
+<pre>    if ($x is true) {...}</pre>
+<p>which now generates a (compile-time) error:</p>
+<pre>    Can't ascribe a compile-time property to the run-time value of $x.
+    (Did you mean &quot;$x but true&quot; or &quot;$x =~ true&quot;?)</pre>
+<p>[Update: The true value is now <code>True</code>, short for <code>Bool::True</code>.
+This avoids confusion with the unary true() operator.]</p>
+<a name='The Forever Loop'></a><h1>The Forever Loop</h1>
+<p>Once the <code>Calc</code> module has all its functionality defined, all that's
+required is to write the main input-process-output loop. We'll cheat a
+little and write it as an infinite loop, and then (in solemn Unix
+tradition) we'll require an EOF signal to exit.</p>
+<p>The infinite loop needs to keep track of its iteration count. In Perl 5
+that would be:</p>
+<pre>    # Perl 5 code
+    for (my $i=0; 1; $i++) {</pre>
+<p>which would translate into Perl 6 as:</p>
+<pre>    loop (my $i=0; 1; $i++) {</pre>
+<p>since Perl 5's C-like <code>for</code> loop has been renamed <code>loop</code> in Perl 6 --
+to distinguish it from the Perl-like <code>for</code> loop.</p>
+<p>However, Perl 6 also allows us to create semi-infinite, lazily
+evaluated lists, so we can write the same loop much more cleanly as:</p>
+<pre>    for 0..Inf -&gt; $i {</pre>
+<p>When <code>Inf</code> is used as the right-hand operand to <code>..</code>, it signifies
+that the resulting list must be lazily built, and endlessly iterable.
+This type of loop will probably be common in Perl 6 as an easy way of
+providing a loop counter.</p>
+<p>If we need to iterate some list of values, as well as tracking a loop
+counter, then we can take advantage of another new feature of Perl 6:
+iteration streams.</p>
+<p>A regular Perl 6 <code>for</code> loop iterates a single stream of values,
+aliasing the current topic to each in turn:</p>
+<pre>    for @stream -&gt; $topic_from_stream {
+        ...
+    }</pre>
+<p>But it's also possible to specify two (or more) streams of values that
+the one <code>for</code> loop will step through <i>in parallel</i>:</p>
+<pre>    for @stream1 ; @stream2 -&gt; $topic_from_stream1 ; $topic_from_stream2 {
+        ...
+    }</pre>
+<p>Each stream of values is separated by a semicolon, and each topic
+variable is similarly separated. The <code>for</code> loop iterates both streams
+in parallel, aliasing the next element of the first stream
+(<code>@stream1</code>) to the first topic (<code>$topic_from_stream1</code>) and the next
+element of the second stream (<code>@stream2</code>) to the second topic
+(<code>$topic_from_stream2</code>).</p>
+<p>The commonest application of this will probably be to iterate a list
+and simultaneously provide an iteration counter:</p>
+<pre>    for @list; <a href='mailto:0..@list.last'>0..@list.last</a> -&gt; $next; $index {
+        print &quot;Element $index is $next\n&quot;;
+    }</pre>
+<p>It may be useful to set that out slightly differently, to show the
+parallel nature of the iteration:</p>
+<pre>    for  @list ; <a href='mailto:0..@list.last'>0..@list.last</a>
+     -&gt;  $next ; $index   {
+        print &quot;Element $index is $next\n&quot;;
+    }</pre>
+<p>It's important to note that writing:</p>
+<pre>    for @a; @b -&gt; $x; $y {...}
+    # in parallel, iterate @a one-at-a-time as $x, and @b one-at-a-time as $y</pre>
+<p>is <i>not</i> the same as writing:</p>
+<pre>    for @a, @b -&gt; $x, $y {...}
+    # sequentially iterate @a then @b, two-at-a-time as $x and $y</pre>
+<p>The difference is that semicolons separate streams, while commas
+separate elements within a single stream.</p>
+<p>If we were brave enough, then we could even combine the two:</p>
+<pre>    for @a1, @a2; @b -&gt; $x; $y1, $y2 {...}
+    # sequentially iterate @a1 then @a2, one-at-a-time as $x
+    # and, in parallel, iterate @b two-at-a-time as $y1 and $y2</pre>
+<p>This is definitely a case where a different layout would help make the
+various iterations and topic bindings clearer:</p>
+<pre>    for @a1, @a2 ;  @b
+     -&gt; $x       ;  $y1, $y2   {...}</pre>
+<p>Note, however, that the normal way in Perl 6 to step through an array's
+values while tracking its indices will almost certainly be to use the
+array's <code>kv</code> method. That method returns a list of interleaved indices
+and values (much like the hash's <code>kv</code> method returns alternating keys
+and values):</p>
+<pre>    for @list.kv -&gt; $index, $next {
+        print &quot;Element $index is $next\n&quot;;
+    }</pre>
+<p>[Update: Most of the syntax in this section is bogus.  There is
+no semicolon separator in argument lists.  Instead the mapping is
+controlled by the function around the argument list, such as each(),
+zip(), and so on.  These functions might use semicolon to separate
+separate dimensions, but would normally hide those inside parens to
+prevent confusion with statement ending semicolons.]</p>
+<a name='Read or Die'></a><h1>Read or Die</h1>
+<p>Having prompted for the next expression that the calculator will
+evaluate:</p>
+<pre>    print &quot;$i&gt; &quot;;</pre>
+<p>we read in the expression and check for an EOF (which will cause the
+<code>&lt;&gt;</code> operator to return <code>undef</code>, in which case we escape the
+infinite loop):</p>
+<pre>    my $expr = &lt;&gt; err last;</pre>
+<p>Err...<code>err</code>???</p>
+<p>In Apocalypse 3, Larry introduced the <code>//</code> operator, which is like a
+<code>||</code> that tests its left operand for definedness rather than truth.</p>
+<p>What he didn't mention (but which you probably guessed) was that there
+is also the low-precedence version of <code>//</code>. Its name is <code>err</code>:</p>
+<pre>          Operation         High Precedence       Low Precedence
+
+         INCLUSIVE OR             ||                     or
+         EXCLUSIVE OR             ~~                    xor
+          DEFINED OR              //                    err</pre>
+<p>[Update: High precedence XOR is now ^^.]</p>
+<p>But why call it <code>err</code>?</p>
+<p>Well, the <code>//</code> operator looks like a skewed version of <code>||</code>, so the
+low-precedence version should probably be a skewed version of <code>or</code>. We
+can't skew it visually (even Larry thought that using italics would be
+going a bit far), so we skew it phonetically instead:
+<code>or</code> -&gt; <code>err</code>.</p>
+<p><code>err</code> also has the two handy mnemonic connotations:</p>
+<ul>
+<li><a name='That we're handling an error marker (which a returned undef usually is)'></a>That we're handling an <b>err</b>or marker (which a returned <code>undef</code>
+usually is)</li>
+<li><a name='That we're voicing a surprised double-take after something unexpected (which a returned undef often is).'></a>That we're voicing a surprised double-take after something
+unexpected (which a returned <code>undef</code> often is).</li>
+</ul>
+<p>Besides all that, it just seems to work well. That is, something like
+this:</p>
+<pre>    my $value = compute_value(@args)
+        err die &quot;Was expecting a defined value&quot;;</pre>
+<p>reads quite naturally in English (whether you think of <code>err</code> as an
+abbreviation of &quot;on error...&quot;, or as a synonym for &quot;oops...&quot;).</p>
+<p>Note that <code>err</code> is a binary operator, just like <code>or</code>, and <code>xor</code>, so
+there's no particular need to start it on a new line:</p>
+<pre>    my $value = compute_value(@args) err die &quot;Was expecting a defined value&quot;;</pre>
+<p>In our example program, the <code>undef</code> returned by the <code>&lt;&gt;</code>
+operator at end-of-file is our signal to jump out of the main loop. To
+accomplish that we simply append <code>err last</code> to the input statement:</p>
+<pre>    my $expr = &lt;&gt; err last;</pre>
+<p>Note that an <code>or last</code> wouldn't work here, as both the empty string
+and the string &quot;0&quot; are valid (i.e. non-terminating) inputs to the
+calculator.</p>
+<a name='Just Do It'></a><h1>Just Do It</h1>
+<p>Then it's just a matter of calling <code>Calc::calc</code>, passing it the
+iteration number and the expression:</p>
+<pre>    Calc::calc(i=&gt;$i, expr=&gt;$expr)</pre>
+<p>Note that we used named arguments, so passing them in the wrong order
+didn't matter.</p>
+<p>We then interpolate the result back into the output string using the
+<code>$(...)</code> scalar interpolator:</p>
+<pre>    print &quot;$i&gt; $( Calc::calc(i=&gt;$i, expr=&gt;$expr) )\n&quot;;</pre>
+<p>We could even simplify that a little further, by taking advatage of the
+fact that subroutine calls interpolate directly into strings in Perl 6,
+provided we use the <code>&amp;</code> prefix:</p>
+<pre>    print &quot;$i&gt; &amp;Calc::calc(i=&gt;$i, expr=&gt;$expr)\n&quot;;</pre>
+<p>Either way, that's it: we're done.</p>
+<a name='Summing Up'></a><h1>Summing Up</h1>
+<p>In terms of control structures, Perl 6:</p>
+<ul>
+<li><a name='provides far more support for exceptions and exception handling,'></a>provides far more support for exceptions and exception handling,</li>
+<li><a name='cleans up and extends the for loop syntax in several ways,'></a>cleans up and extends the <code>for</code> loop syntax in several ways,</li>
+<li><a name='unifies the notions of blocks and closures and makes them interchangeable,'></a>unifies the notions of blocks and closures and makes them interchangeable,</li>
+<li><a name='provides hooks for attaching various kinds of automatic handlers to a block/closure,'></a>provides hooks for attaching various kinds of automatic handlers to a
+block/closure,</li>
+<li><a name='re-factors the concept of a switch statement into two far more general ideas: marking a value/variable as the current topic, and then doing &quot;smart matching&quot; against that topic.'></a>re-factors the concept of a switch statement into two far more general ideas:
+marking a value/variable as the current topic, and then doing &quot;smart matching&quot;
+against that topic.</li>
+</ul>
+<p>These extensions and cleanups offer us far more power and control, and
+-- amazingly -- in most cases require far less syntax. For example,
+here's (almost) the same program, written in Perl 5:</p>
+<pre>    package Err::BadData; 
+    use base 'Exception';   # which you'd have to write yourself
+
+    package NoData;         # not lexical
+    use base 'Exception';
+    sub warn { die @_ }
+
+    package Calc;
+
+    my %var;
+
+    sub get_data  {
+        my $data = shift;
+        if ($data =~ /^\d+$/)       { return $var{&quot;&quot;} = $data }
+        elsif ($data eq 'previous') { return defined $var{&quot;&quot;}
+                                                 ? $var{&quot;&quot;}
+                                                 : die NoData-&gt;new() 
+                                    }
+        elsif ($var{$data})         { return $var{&quot;&quot;} = $var{$data} }
+        else                        { die Err::BadData-&gt;new(
+                                             {msg=&gt;&quot;Don't understand $data&quot;}
+                                          )
+                                     }
+    }
+
+    sub calc {
+        my %data = @_;
+        my ($i, $expr) = @data{'i', 'expr'};
+        my %operator = (
+            '*'  =&gt; sub { $_[0] * $_[1] },
+            '/'  =&gt; sub { $_[0] / $_[1] },
+            '~'  =&gt; sub { ($_[0] + $_[1]) / 2 },
+        );
+
+        my @stack;
+        my $toknum = 1;
+        LOOP: for my $token (split /\s+/, $expr) {
+            defined eval {
+                TRY: if ($operator{$token}) {
+                    my @args = splice @stack, -2;
+                    push @stack, $operator{$token}-&gt;(@args);
+                    last TRY;
+                }
+                last LOOP if $token eq '.' || $token eq ';' || $token eq '=';
+
+                push @stack, get_data($token);
+            } || do {
+                if ($@-&gt;isa(Err::Reportable))     { warn $@; }
+                if ($@-&gt;isa(Err::BadData))        { $@-&gt;{at} = $i; die $@ }
+                elsif ($@-&gt;isa(NoData))           { push @stack, 0     }
+                elsif ($@ =~ /division by zero/)  { push @stack, ~0 }
+            }
+        }
+        continue { $toknum++ }
+        die Err::BadData-&gt;new(msg=&gt;&quot;Too many operands&quot;) if @stack &gt; 1;
+        $var{'$'.$i} = $stack[-1] . ' but true';
+        return 0+pop(@stack);
+    }
+
+    package main;
+
+    for (my $i=1; 1; $i++) {
+        print &quot;$i&gt; &quot;;
+        defined( my $expr = &lt;&gt; ) or last;
+        print &quot;$i&gt; ${\Calc::calc(i=&gt;$i, expr=&gt;$expr)}\n&quot;;
+    }</pre>
+<p>Hmmmmmmm. I know which version <i>I'd</i> rather maintain.</p>
+</div>

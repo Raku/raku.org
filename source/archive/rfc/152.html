@@ -1,0 +1,130 @@
+[% setvar title Replace invocant in @_ with self() builtin %]
+<h3>This file is part of the Perl 6 Archive</h3>
+    <p>To see what is currently happening visit <a href="http://www.perl6.org/">http://www.perl6.org/</a></p>
+<div class='pod'>
+<a name='TITLE'></a><h1>TITLE</h1>
+<p>Replace invocant in @_ with self() builtin</p>
+<a name='VERSION'></a><h1>VERSION</h1>
+<pre>  Maintainer: Nathan Wiger &lt;<a href='mailto:nate@wiger.org'>nate@wiger.org</a>&gt;
+  Date: 24 Aug 2000
+  Last Modified: 24 Sep 2000
+  Mailing List: <a href='mailto:perl6-language-objects@perl.org'>perl6-language-objects@perl.org</a>
+  Number: 152
+  Version: 2
+  Status: Frozen</pre>
+<a name='ABSTRACT'></a><h1>ABSTRACT</h1>
+<p>Currently, the invocant is passed into a sub as the first element of @_,
+leading to the familiar construct:</p>
+<pre>   my $self = shift;</pre>
+<p>However, this is a big PITA. In particular, if you support several
+different calling forms (like CGI.pm), you have to check whether $_[0]
+is a ref or class name, etc.</p>
+<p>This RFC, therefore, proposes a new builtin called <code>self()</code> which will
+return the correct invocant information. This has the added advantage
+that it is consistent with <code>caller()</code>, <code>want()</code>, &lt;ref()&gt;, and other
+context functions.</p>
+<a name='DESCRIPTION'></a><h1>DESCRIPTION</h1>
+<a name='Syntax'></a><h2>Syntax</h2>
+<p>The new function <code>self()</code> would be called in the following way:</p>
+<pre>   sub fullname {
+       my $self = self;
+       @_ ? $self-&gt;{STATE}-&gt;{fullname} = $_[0]
+          : $self-&gt;{STATE}-&gt;{fullname};
+   }
+
+   sub my_junk {
+       my $this = self;
+       $this-&gt;fork_o_matic(@_);
+   }
+
+   # Or even...
+
+   sub error {
+       carp @_ if self-&gt;config('VerboseErrors');
+   }
+
+   sub uid {
+       @_ ? self-&gt;{uid} = $_[0]
+          : self-&gt;{uid};
+   }</pre>
+<p>The return value of <code>self()</code> would be similar to the current invocant
+in $_[0], with increased flexibility. In particular, it can be called
+anywhere and everywhere, not just within a method.</p>
+<p>Depending on the context it's called in, the return value of <code>self()</code>
+will be:</p>
+<pre>   1. A reference to the object, within an object method
+
+   2. The name of the package, within a package
+
+   3. Undef, if a sub is not called as a method</pre>
+<p>These different return values give us the ability to call <code>self()</code>
+anywhere within Perl 6 code:</p>
+<pre>   package MyPackage;
+   # ... many other functions ...
+   sub do_stuff {
+       print &quot;Hello, @_&quot; if self-&gt;config('Yep');
+   }
+   self-&gt;do_stuff;           # MyPackage-&gt;do_stuff
+
+   package main;
+   my $mp = new MyPackage;
+   $mp-&gt;config('Yep') = 1;
+   $mp-&gt;do_stuff('Nate');    # prints &quot;Hello, Nate&quot;</pre>
+<p>In addition, having a routine called <code>self()</code> has the major advantage
+that it hides the internal magic and scoping from the user. Just like
+using <code>want()</code> instead of a special variable called <code>$WANT</code>, <code>self()</code>
+makes using and comprehending contexts easy, simply changing the Perl
+5 rule:</p>
+<pre>   &quot;The invocant is passed into subs as $_[0] in OO contexts&quot;</pre>
+<p>To the simpler still:</p>
+<pre>   &quot;The invocant is always gotten by calling self()&quot;</pre>
+<p>This provides a consistent interface, since <code>self()</code> can be called
+anywhere, just like <code>caller()</code>, <code>want()</code>, and other context functions.</p>
+<a name='Arguments against use invocant'></a><h2>Arguments against <code>use invocant</code></h2>
+<p>This RFC was released prior to, and remains in opposition to, RFC 233,
+which proposes a <code>use invocant</code> pragma that provides the flexibility to
+name the invocant anything you want.</p>
+<p>As many have noted, Perl is already hard enough. <code>use invocant</code> only
+gives us multiple ways to do something without adding value, only
+confusion, by promoting an inconsistent interface. Like providing a
+means to rename <code>@ARGV</code> and <code>STDIN</code> because a person prefers <code>@args</code>
+and <code>output</code>, <code>use invocant</code> further complicates an issue which should
+only be made easier.</p>
+<p>The author of this RFC <b>loves</b> Perl and loves its flexibility. However,
+just like choosing a name for <code>caller</code>, <code>want</code>, <code>print</code>, <code>@ARGV</code>,
+and so forth, we need to choose a name for <code>self</code> as well to ease the
+burden on the programmer. &quot;Choosing an interface&quot; does not amount to
+&quot;being un-Perlish&quot; as some might purport to suggest. In fact, just the
+opposite: We're decreasing the amount of time a user has to spend
+decoding somebody else's invocant naming scheme by providing a very
+Perlishly-named function. <b>This makes things easier</b>.</p>
+<p>If it is vital that the invocant must be named something specific, then
+a person can always use a sub wrapper, tie, or a typeglob to rename it
+appropriately. Actually, they don't even have to go to these extremes
+since they can still do this:</p>
+<pre>   sub getdata {
+       my $this = self;
+       return $this-&gt;{DATA}-&gt;{$_[0]};
+   }</pre>
+<p>(that is, assign to a custom variable) anywhere they want to.</p>
+<p>Finally, the author would be more than happy to settle for the selection
+of something different than <code>self</code>, such as <code>this()</code>, <code>$SELF</code>, or
+even <code>$ME</code>. The main point is that we need to choose something, because
+doing so makes the language more consistent and easier (combatting two
+widespread criticisms of Perl).</p>
+<a name='IMPLEMENTATION'></a><h1>IMPLEMENTATION</h1>
+<p>Replace the invocant usually included in $_[0] with <code>self()</code>. Stop
+passing the invocant in @_.</p>
+<a name='MIGRATION'></a><h1>MIGRATION</h1>
+<p>Backwards compatibility is simple. Subs can simply have the expression:</p>
+<pre>   unshift @_, self if self;</pre>
+<p>Added as the first line of the sub, since <code>self()</code> will return undef if
+not in an OO context.</p>
+<a name='REFERENCES'></a><h1>REFERENCES</h1>
+<p>Critique of the <code>use invocant</code> pragma:
+<a href='http://www.mail-archive.com/perl6-language@perl.org/msg03952.html' target='_blank'>www.mail-archive.com</a></p>
+<p>Outline of the benefits of <code>self</code>:
+<a href='http://www.mail-archive.com/perl6-language-objects@perl.org/msg00074.html' target='_blank'>www.mail-archive.com</a></p>
+<p>RFC 21: Replace <code>wantarray</code> with a generic <code>want</code> function</p>
+<p>RFC 233: Objects: <code>use invocant</code> pragma</p>
+</div>

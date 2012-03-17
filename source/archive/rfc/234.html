@@ -1,0 +1,67 @@
+[% setvar title Data: overloading via the SECOND operand if needed %]
+<h3>This file is part of the Perl 6 Archive</h3>
+    <p>To see what is currently happening visit <a href="http://www.perl6.org/">http://www.perl6.org/</a></p>
+<div class='pod'>
+<a name='TITLE'></a><h1>TITLE</h1>
+<p>Data: overloading via the SECOND operand if needed</p>
+<a name='VERSION'></a><h1>VERSION</h1>
+<pre>  Maintainer: Ilya Zakharevich &lt;<a href='mailto:ilya@math.ohio-state.edu'>ilya@math.ohio-state.edu</a>&gt;
+  Date: 15 Sep 2000
+  Mailing List: <a href='mailto:perl6-language-data@perl.org'>perl6-language-data@perl.org</a>
+  Number: 234
+  Version: 1
+  Status: Developing</pre>
+<a name='ABSTRACT'></a><h1>ABSTRACT</h1>
+<p>This RFC proposes a support of a situation when a more-knowledgable module may
+steal overloading from a less-knowledgable module or visa versa;</p>
+<a name='DESCRIPTION'></a><h1>DESCRIPTION</h1>
+<p>The problem: if both arguments to a binary operation are overloaded objects,
+then with the current implementation the overloaded method registered for
+the <i>first</i> argument is loaded.</p>
+<p>Sometimes it leads to problems: for example, <code>Math::BigFloat</code> objects support
+<code>Math::BigInt</code> objects as the other arguments for binary operations, but
+not visa versa, so</p>
+<pre>   print $bigfloat + $bigint;		# Works
+   print $bigint   + $bigfloat;		# Does not</pre>
+<p>Solution: provide a pragma to inform the overloading mechanism that
+<code>Math::BigFloat</code> is more versatile than <code>Math::BigInt</code></p>
+<pre>   use overload ':override', 'Math::BigFloat', 'Math::BigInt';</pre>
+<p>This would make</p>
+<pre>    $bigint * $bigfloat</pre>
+<p>call</p>
+<pre>    $bigfloat-&gt;MULTIPLY($bigint, 1)</pre>
+<p>instead of</p>
+<pre>    $bigint-&gt;MULTIPLY($bigfloat, 0)</pre>
+<p>(assuming that the MULTIPLY methods are registered for <code>'*'</code> key).</p>
+<p>This requires additional costly checks from the overloading engine.
+However, it is not hard to implement this with the following features:</p>
+<ul>
+<li><a name=''></a></li>
+<p>no cost if not used in the script;</p>
+<li><a name=''></a></li>
+<p>almost no cost if the first and the second argument are in the same package;</p>
+<li><a name=''></a></li>
+<p>almost no cost if the second argument is does not override anything;</p>
+<li><a name=''></a></li>
+<p>almost no cost if the first argument is not overriden by anything;</p>
+<li><a name=''></a></li>
+<p>in the worst case: costs a hash lookup in a hash.</p>
+</ul>
+<p>Given this, the additional overhead of the hash lookup incurs only if needed,
+this may be ignored.</p>
+<p>Overriding does not chain automatically, but if <code>:override_chain</code> is used
+instead of <code>:override</code>, the overrider will also override packages overriden
+by the package it overrides.</p>
+<p>A method to query overriding info should be provided.</p>
+<p>If <code>A</code> <i>isa</i> <code>B</code>, and <code>B</code> overrides <code>C</code>, then <code>A</code> overrides <code>C</code>.
+Similarly, if <code>C</code> <i>isa</i> <code>D</code>, then <code>A</code> overrides <code>D</code>.</p>
+<a name='MIGRATION ISSUES'></a><h1>MIGRATION ISSUES</h1>
+<p>None.</p>
+<a name='IMPLEMENTATION'></a><h1>IMPLEMENTATION</h1>
+<p>Keep a global flag whether override was ever requested.  Keep a flag in
+each package whether it is overrided by anything.  Keep a hash of packages
+which the given package overrides.  Keep these data in the overloading
+table of the package.</p>
+<a name='REFERENCES'></a><h1>REFERENCES</h1>
+<p>None.</p>
+</div>

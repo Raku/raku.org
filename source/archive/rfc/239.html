@@ -1,0 +1,181 @@
+[% setvar title IO: Standardization of Perl IO Functions to use Indirect Objects %]
+<h3>This file is part of the Perl 6 Archive</h3>
+    <p>To see what is currently happening visit <a href="http://www.perl6.org/">http://www.perl6.org/</a></p>
+<div class='pod'>
+<a name='TITLE'></a><h1>TITLE</h1>
+<p>IO: Standardization of Perl IO Functions to use Indirect Objects</p>
+<a name='VERSION'></a><h1>VERSION</h1>
+<pre>  Maintainer: Nathan Wiger &lt;<a href='mailto:nate@wiger.org'>nate@wiger.org</a>&gt;
+  Date: 15 Sep 2000
+  Last Modified: 26 Sep 2000
+  Mailing List: <a href='mailto:perl6-language-io@perl.org'>perl6-language-io@perl.org</a>
+  Number: 239
+  Version: 2
+  Status: Frozen</pre>
+<a name='ABSTRACT'></a><h1>ABSTRACT</h1>
+<p>Currently, Perl IO functions follow a C-like style, twiddling values
+passed to them and then returning 1 or 0.</p>
+<p>This RFC takes after RFC 14's modifications to open() and proposes
+similar modifications to other IO operations, in an attempt to make them
+both more internally consistent and also more flexible. These
+modifications allow increased modularity and function namespace as well.
+In most cases the changes are relatively minor, simply requiring the
+user to drop the &quot;,&quot; after the first argument.</p>
+<a name='DESCRIPTION'></a><h1>DESCRIPTION</h1>
+<p>I'm running short on time here, so here goes. The following functions
+should be modified into the new syntaxes shown below:</p>
+<pre>  $FH      =  open $file, [@args];
+  $ret     =  seek $FH $pos;                        # $FH-&gt;seek
+  $ret     =  read $FH $scalar, $len, $offset;      # $FH-&gt;read
+  $ret     =  tell $FH;                             # $FH-&gt;tell
+  $ret     =  ioctl $FH $fun, $scalar;              # $FH-&gt;ioctl
+  $ret     =  flock $FH $op;                        # $FH-&gt;flock
+  $ret     =  fnctl $FH $func, $scalar;             # $FH-&gt;fcntl
+
+  $DH      =  open dir $dir;                        # dir-&gt;open
+  $ret     =  seek $DH $pos;                        # $DH-&gt;seek
+  $ret     =  tell $DH;                             # $DH-&gt;tell
+  $ret     =  rewind $DH;                           # $DH-&gt;rewind
+
+  $FH      =  sysopen  $file, $mode, $mask;         # &quot;open sys&quot;?
+  $ret     =  sysread  $FH $scalar, $len, $offset;  # $FH-&gt;sysread
+  $ret     =  syswrite $FH $scalar, $len, $offset;  # $FH-&gt;syswrite
+  $ret     =  sysseek  $FH $pos, $whence;           # $FH-&gt;sysseek
+   
+  $SH      =  open socket $dom, $type, $proto;      # socket-&gt;open
+  $ret     =  connect $SH $name;                    # $SH-&gt;connect
+  $ret     =  recv $SH $scalar, $len, $flags;       # $SH-&gt;recv
+  $ret     =  setsockopt $SH $lev, $opt, $val;      # $SH-&gt;setsockopt
+  $ret     =  socketshut $SH $how;                  # $SH-&gt;socketshut
+ ($S1,$S2) =  open socket $dom, $type, $proto, 2;   # (socketpair)
+
+ ($R, $W)  =  pipe;                                 # &quot;open pipe&quot;?</pre>
+<p>If you read your Camel, most of these changes simply involve dropping
+the &quot;,&quot; after the first argument to take advantage of the indirect
+object syntax.</p>
+<p>This is not pure sugar. It buys us many important benefits:</p>
+<pre>   1. Fewer functions. As RFC 14 starts to note, gone are the *dir
+      functions, as well as many specialized functions. They simply
+      become member functions, increasing function namespace. So,
+      tell() can now be used on files, directories, and web docs,
+      without having to invent new function names.
+
+   2. Seemless integration with extended file types. Using this
+      syntax, we can now do this:
+
+         use http;
+         $WEB = open http &quot;<a href='http://www.yahoo.com' target='_blank'>www.yahoo.com</a>&quot;, POST;
+         flock $WEB $op;
+
+      And $WEB-&gt;flock can die as &quot;unimplemented&quot;, without this
+      having to be anywhere even remotely in core. It can exist
+      as an external module, but to the user it looks like the
+      same function used here:
+
+         $FH = open &quot;/etc/motd&quot; or die;
+         flock $FH $op;
+
+      Even though it's vastly different.  Users seen a clean,
+      coherent interface, without having to worry about the
+      nuts and bolts or calling special methods.
+
+   3. More consistent syntax. The most frequently-used IO function,
+      print, already uses an indirect object syntax for its handles.
+      This RFC simply follows the lead and extends this to other
+      IO functions as well.
+
+   4. More modular design. This tightly integrates with the idea
+      of moving certain functions out of core, like socket(). Now
+      you can simply say:
+
+         use socket;      # import socket class
+         $SH = open socket $dom, $type, $proto;
+         recv $SH $scalar, $len, $offset;      
+
+      Bingo. It walks and talks like an extensible open() thanks
+      to the lovely indirect object syntax, but all the functions
+      are actually member functions of $SH. 
+
+   5. Less stuff in core. Hand in hand with the above, stuff like 
+      recv() doesn't even have to be in the same zip code as core
+      anymore. But it walks and talks just like it was.
+
+      *Plus*, there's less namespace pollution because everything's
+      a member function. As such, no extensive checks like &quot;Arg 1
+      not a socket handle&quot; have to be done. Running a bad function
+      yields a standard error:
+
+         recv $not_a_socket, $bad, $args;
+         Can't find object method &quot;recv&quot; via &quot;$not_a_socket&quot; ...
+
+      See below for suggestions on a better error message.
+
+   6. Can extend use of the default filehandle. Thanks to this
+      approach, we can actually now use all these methods on the
+      default filehandle if we choose to, by implementing simple
+      core stubs like the following:
+
+         sub CORE::syswrite { $main::DEFOUT-&gt;syswrite(@_) }
+         sub CORE::sysread  { $main::DEFOUT-&gt;sysread(@_) }
+         sub CORE::sysseek  { $main::DEFOUT-&gt;sysseek(@_) }
+
+      Plus the core is now far more compact.
+
+   7. The ability to chain function calls, if so desired:
+
+         @f = open(&quot;&lt;/etc/motd&quot;)-&gt;readline;
+
+      Python, anyone? :-)
+
+   8. Relatively minor changes. The benefits are very large, but
+      most users will simply have to stop typing a &quot;,&quot; after the
+      first argument. The only function that includes a major
+      change is the open() function desribed in RFC 14, but even
+      this change is a step towards a more Perlish approach.</pre>
+<p>A mechanism like this could, conceivably, improve performance,
+flexibility, and consistency all at the same time if implemented
+correctly. And that's what Perl 6 is all about, right? ;-)</p>
+<a name='MIGRATION'></a><h1>MIGRATION</h1>
+<p>As mentioned above, the impact on users is actually relatively small.
+The translation script would simply have to get rid of the &quot;,&quot; after the
+first argument in the named functions, whose syntax otherwise remains
+the same as Perl currently overall.</p>
+<p>Note that while this RFC suggests getting rid of socket() and just using
+socket-&gt;open, since this is a more extensible framework (to http-&gt;open,
+ftp-&gt;open, and so on), this is not strictly required. socket() could
+remain as a module or even builtin function. The remaining syntax
+changes suggested above would remain; just rather than socket-&gt;open()
+returning a socket handle, socket() would.</p>
+<a name='IMPLEMENTATION'></a><h1>IMPLEMENTATION</h1>
+<p>Big revisions to existing functions. Most will become object member
+functions, which is actually a good thing since it means we can just
+stick them in the modules that support them, and not in the ones that
+don't.</p>
+<p>Increased namespace means we can drop historic C artifacts like
+&quot;readdir&quot; in favor of a simple &quot;read&quot;, since it will be called via the
+indirect object on directories automatically.</p>
+<p>Finally, one thing to consider is more descriptive indirect object error
+messages. We might consider changing this:</p>
+<pre>   Can't locate object method &quot;foo&quot; via package &quot;Bar&quot;</pre>
+<p>To something like this:</p>
+<pre>   Object method &quot;foo&quot; not implemented by package &quot;Bar&quot;</pre>
+<p>This is clearer and, IMO, a little more descriptive of what's actually
+happening, especially when seen in this context:</p>
+<pre>   flock $WEB $op;
+
+   Object method &quot;flock&quot; not implemented by package &quot;http&quot;</pre>
+<p>Finally, once RFC 174 gets firmed up a little more, it is quite
+conceivable that ()'s could remain around these functions, making them
+look that much more like Perl 5:</p>
+<pre>   Perl 5                         Perl 6 w/ RFC 174
+   -----------------------------  -----------------------------
+   sysread(F, $sc, $len, $off)    sysread($F $sc, $len, $off)
+   recv(S, $sc, $len, $flags)     recv($S $sc, $len, $flags)</pre>
+<p>This could, of course, extend to all of the above functions. Getting a
+comma in after that first arg might be nice too, but it's tricky. See
+discussions on RFC 174; this syntax is covered there.</p>
+<a name='REFERENCES'></a><h1>REFERENCES</h1>
+<p>RFC 14: Modify open() to support FileObjects and Extensibility</p>
+<p>RFC 174: Improved parsing and flexibility of indirect object syntax</p>
+<p>RFC 129: Replace default filehandle/select with $DEFOUT, $DEFERR, $DEFIN</p>
+</div>

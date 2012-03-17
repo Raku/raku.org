@@ -1,0 +1,69 @@
+[% setvar title Embed full URI support into Perl %]
+<h3>This file is part of the Perl 6 Archive</h3>
+    <p>To see what is currently happening visit <a href="http://www.perl6.org/">http://www.perl6.org/</a></p>
+<div class='pod'>
+<a name='TITLE'></a><h1>TITLE</h1>
+<p>Embed full URI support into Perl</p>
+<a name='VERSION'></a><h1>VERSION</h1>
+<pre>  Maintainer: Nathan Wiger &lt;<a href='mailto:nate@wiger.org'>nate@wiger.org</a>&gt;
+  Date: 14 Aug 2000
+  Last-Modified: 16 Sep 2000
+  Mailing List: <a href='mailto:perl6-language-io@perl.org'>perl6-language-io@perl.org</a>
+  Number: 100
+  Version: 2
+  Status: Frozen</pre>
+<a name='ABSTRACT'></a><h1>ABSTRACT</h1>
+<p>Currently, Perl does not natively support URIs. It would be really cool
+if it did, since this would make writing and maintaining portable
+programs a breeze.</p>
+<a name='NOTES ON FREEZE'></a><h1>NOTES ON FREEZE</h1>
+<p>The only comments received were on my crappy examples, which have been
+clarified. Everyone seemed to like the idea. I am currently developing
+the Perl 5 <code>URI::Embed</code> module as a prototype.</p>
+<a name='DESCRIPTION'></a><h1>DESCRIPTION</h1>
+<p>Full URI support gives us several benefits:</p>
+<pre>   1. It allows easy authoring of portable scripts
+
+   2. It is a stable and well-established standard
+
+   3. It is easily recognizable and very web-friendly</pre>
+<p>The key syntax benefit is #1. This lets us use URIs in any function to
+allow scripts that can be used on many platforms simultaneously:</p>
+<pre>   $fo = open 'C:\docs\private';           # non-portable
+   $fo = open 'file://C|/docs/private';    # portable
+
+   unlink &quot;/local/etc/script.conf&quot;;        # non-portable
+   unlink &quot;<a href='file:///local/etc/script.conf'>/local/etc/script.conf</a>&quot;; # portable</pre>
+<p>If portability is not a concern, then scripts can be written using the
+familiar, native syntax. Otherwise, all Perl funcs should be able to
+accept URIs so that writing portable programs is simple.</p>
+<p>Many asked &quot;Hey, how are those two any more portable? The drive letter
+is still in there.&quot; Good point. I would argue that this is where Perl
+should DWIM. For example, if a script doing this:</p>
+<pre>   $fo = open 'file://C|/docs/private';</pre>
+<p>Is run on a UNIX box, Perl should be able to realize that it's currently
+on a UNIX machine and say:</p>
+<pre>   1. Ok, lose the drive letter and '|', that's useless
+
+   2. Our file separator here is '/', so let's do this!</pre>
+<p>Then it would contruct the correct path of <code>/docs/private</code> without the
+script being changed. This is the way <code>File::Spec</code> works, basically.
+The goal of this proposal is to get the same effect by using URIs, which
+are more commonly used and understood, and easier to work with since
+they can be passed around as simple strings.</p>
+<a name='IMPLEMENTATION'></a><h1>IMPLEMENTATION</h1>
+<p><b>Internally</b>, URIs and native filenames should be converted into a
+third, different representation. This allows for the easy conversion
+back and forth between them. For example, URIs could be converted to
+native filenames and then the native filenames passed to the actual
+functions. Indeed, this is the way URIs generally work.</p>
+<p>The internal representation of Perl filenames is covered in RFC 36 and
+is beyond the scope of this RFC. Something akin to <code>File::Spec</code> is
+probably suitable.</p>
+<a name='REFERENCES'></a><h1>REFERENCES</h1>
+<p>RFC 36: Structured Internal Representation of Filenames</p>
+<p><a href='http://www.mail-archive.com/perl6-language-io@perl.org/msg00096.html' target='_blank'>www.mail-archive.com</a></p>
+<p><a href='http://www.mail-archive.com/perl6-language-io@perl.org/msg00117.html' target='_blank'>www.mail-archive.com</a></p>
+<p><a href='http://www.w3.org/Addressing/' target='_blank'>www.w3.org</a></p>
+<p>The CPAN <code>File::Spec</code> and <code>URI</code> modules (and upcoming <code>URI::Embed</code>)</p>
+</div>

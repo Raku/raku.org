@@ -1,0 +1,97 @@
+[% setvar title Perl 6 Summary for 2004-10-18 through 2004-10-23 %]
+<h3>This file is part of the Perl 6 Archive</h3>
+    <p>To see what is currently happening visit <a href="http://www.perl6.org/">http://www.perl6.org/</a></p>
+<div class='pod'>
+<a name='Perl 6 Summary for 2004-10-18 through 2004-10-23'></a><h1>Perl 6 Summary for 2004-10-18 through 2004-10-23</h1>
+<p>All~</p>
+<p>Last week I received a request to summarize perl6-language before internals.  Frankly, it seems like a reasonable idea.  Perl6-internals has always been first as long as I can remember.  So perhaps, it is time to switch it up.  Thus I give you</p>
+<a name='Perl6 Language'></a><h2>Perl6 Language</h2>
+<a name='Packrat Parsing'></a><h3>Packrat Parsing</h3>
+<p>Thomas Sandlass posted a link to an article on Packrat Parsing.  It looks like a promising techinque for small programs, all though its memory requirements may be a bit heavy for large programs.  Mr. Sandlass appears to have been Warnocked, but there are several explanations.  First he posted from google, there has been trouble in the past about such things getting through.  Second, he posted to Perl6 Language instead of Perl6 Compiler.</p>
+<p><a href='http://groups.google.com/groups?hl=en' target='_blank'>groups.google.com</a>&amp;lr=&amp;group=perl.perl6.language&amp;selm=4734c63a.0410172359.7d46d408@posting.google.com</p>
+<a name='Perl6 Compiler'></a><h2>Perl6 Compiler</h2>
+<a name='Perl6 Compiler list troubles'></a><h3>Perl6 Compiler list troubles</h3>
+<p>In the last summary, I mentioned that Perl6 Compiler has not yet found its way to google groups.  Leo seems to have had trouble subscribing to it also...  Perhaps this bears investigation?</p>
+<a name='Parrot'></a><h2>Parrot</h2>
+<a name='Unununium'></a><h3>Unununium</h3>
+<p>Dan and Steve Fink told Jacques Mony that a port to Unununium would probably require substantial changes to configure.</p>
+<p><a href='http://groups.google.com/groups?hl=en' target='_blank'>groups.google.com</a>&amp;lr=&amp;threadm=20041019045224.GA15812@kevin.fink.com&amp;prev=/groups?num=25&hl=en&lr=&group=perl.perl6.internals&start=25</p>
+<a name='grsecurity interfering with the parrot JIT/build'></a><h3>grsecurity interfering with the parrot JIT/build</h3>
+<p>Apparently our current scheme of mem_alloc_executable and mem_free_executable is not quite enough to make grsecurity happy.   Work is ongoing...</p>
+<p><a href='http://groups.google.com/groups?hl=en' target='_blank'>groups.google.com</a>&amp;lr=&amp;threadm=p04320410bd97002800b9@[192.168.40.11]&amp;prev=/groups?num=25&hl=en&lr=&group=perl.perl6.internals&start=25</p>
+<a name='signal.t failure'></a><h3>signal.t failure</h3>
+<p>Will Coleda had problems with signal.t failing while his machine was under load.  Leo pointed out that this is known behavior.  Jeff Clites was a little confused/disappointed that his earlier patches to help solve this problem had not sufficed.</p>
+<p><a href='http://groups.google.com/groups?hl=en' target='_blank'>groups.google.com</a>&amp;lr=&amp;threadm=78824CE2-21AD-11D9-942B-000393A6B9DA@mac.com&amp;prev=/groups?num=25&hl=en&lr=&group=perl.perl6.internals&start=25</p>
+<a name='New naming for parrot_interp'></a><h3>New naming for parrot_interp</h3>
+<pre> Brent 'Dax' Royal-Gordon warned everyone that he was committing a gianormous change which would effect any pending patches.  From the lack of chaos on the list, I would say that his warning worked.</pre>
+<p><a href='http://groups.google.com/groups?hl=en' target='_blank'>groups.google.com</a>&amp;lr=&amp;threadm=200410190907.i9J97iM09266@thu8.leo.home&amp;prev=/groups?num=25&hl=en&lr=&group=perl.perl6.internals&start=25</p>
+<a name='Parrot Forth'></a><h3>Parrot Forth</h3>
+<p>Michel Pelletier and Matt Diephouse discussed some of the finer points of Forth implementations and optimizations.</p>
+<p><a href='http://groups.google.com/groups?hl=en' target='_blank'>groups.google.com</a>&amp;lr=&amp;threadm=4174FF81.1010206@neb.rr.com&amp;prev=/groups?num=25&hl=en&lr=&group=perl.perl6.internals&start=25</p>
+<a name='Win32 update'></a><h3>Win32 update</h3>
+<p>Ron Blaschke gave a quick update on his progress with VC7.1 on Win32.  Looks good and keep on chugging Ron.</p>
+<a name='Downloading Parrot'></a><h3>Downloading Parrot</h3>
+<p>Jerry Wiltz asked if help in downloading Parrot (he was starting from scratch (no Perl or C compiler)) on a WinXP box.  Fred the LastNamelessOne provided a plethora of useful links.</p>
+<p><a href='http://groups.google.com/groups?hl=en' target='_blank'>groups.google.com</a>&amp;lr=&amp;threadm=d7068af9.0410191406.3929e299@posting.google.com&amp;prev=/groups?num=25&hl=en&lr=&group=perl.perl6.internals&start=0</p>
+<a name='The Return of Register Stacks'></a><h3>The Return of Register Stacks</h3>
+<p>Miroslav Silovic posted a summary of a design change that he and Leo were considering.  I asked for more details as to how it was different then something we had moved away from much earlier.  Leo provided a quite nice and thorough explanation.  Thanks.  Dan observed that this recurring thread happened nearly yearly, but that the cycle was not quite 12 months.  Dan also observed that the timing to coincide with his being sick was fortuitous.  Leo and Dan went back and forth for a while discussing the implementation and implications of it.  I believe that the end result is that we will have indirect access to registers, we will not need to have saveall/restoreall pairs around function calls, and Dan should eventually get better, but not until this is fully thrashed out.</p>
+<p><a href='http://groups.google.com/groups?hl=en' target='_blank'>groups.google.com</a>&amp;lr=&amp;threadm=41754423.2000104@puremagic.com&amp;prev=/groups?num=25&hl=en&lr=&group=perl.perl6.internals&start=0</p>
+<p><a href='http://groups.google.com/groups?hl=en' target='_blank'>groups.google.com</a>&amp;lr=&amp;threadm=200410221449.i9MEnZs07566@thu8.leo.home&amp;prev=/groups?num=25&hl=en&lr=&group=perl.perl6.internals&start=0</p>
+<p><a href='http://groups.google.com/groups?hl=en' target='_blank'>groups.google.com</a>&amp;lr=&amp;threadm=537CAAA8-225A-11D9-942B-000393A6B9DA@mac.com&amp;prev=/groups?num=25&hl=en&lr=&group=perl.perl6.internals&start=0</p>
+<p><a href='http://groups.google.com/groups?hl=en' target='_blank'>groups.google.com</a>&amp;lr=&amp;group=perl.perl6.internals&amp;selm=4178C7DD.2050806@toetsch.at</p>
+<p><a href='http://groups.google.com/groups?hl=en' target='_blank'>groups.google.com</a>&amp;lr=&amp;threadm=417A5850.6060809@toetsch.at&amp;prev=/groups?num=25&hl=en&lr=&group=perl.perl6.internals&start=0</p>
+<a name='JIT rework'></a><h3>JIT rework</h3>
+<p>As a side effect of indirect access to registers the JIT needs to be rejiggered to account for this.  Leo and Jeff Clites went back and forth working on this with what sounds like good progress being made.</p>
+<p><a href='http://groups.google.com/groups?hl=en' target='_blank'>groups.google.com</a>&amp;lr=&amp;threadm=537CAAA8-225A-11D9-942B-000393A6B9DA@mac.com&amp;prev=/groups?num=25&hl=en&lr=&group=perl.perl6.internals&start=0</p>
+<p><a href='http://groups.google.com/groups?hl=en' target='_blank'>groups.google.com</a>&amp;lr=&amp;threadm=4178E79F.1030805@toetsch.at&amp;prev=/groups?num=25&hl=en&lr=&group=perl.perl6.internals&start=0</p>
+<p><a href='http://groups.google.com/groups?hl=en' target='_blank'>groups.google.com</a>&amp;lr=&amp;threadm=200410231042.i9NAgOd09896@thu8.leo.home&amp;prev=/groups?num=25&hl=en&lr=&group=perl.perl6.internals&start=0</p>
+<a name='Win32 pernum test fix'></a><h3>Win32 pernum test fix</h3>
+<p>Ron Blaschke fixed a test failing because of -0.0.  Leo applied the patch.</p>
+<p><a href='http://groups.google.com/groups?hl=en' target='_blank'>groups.google.com</a>&amp;lr=&amp;threadm=200410200803.i9K83f413530@thu8.leo.home&amp;prev=/groups?num=25&hl=en&lr=&group=perl.perl6.internals&start=0</p>
+<a name='x86-64 problems fix'></a><h3>x86-64 problems fix</h3>
+<p>Brian Wheeler submitted a patch to fix x86-64.  Leo couldn't apply it.  Brian resubmitted.  It got mangled on the way.  Brian reresubmitted.  Leo applied it.  Thanks for perservering Brian!</p>
+<p><a href='http://groups.google.com/groups?hl=en' target='_blank'>groups.google.com</a>&amp;lr=&amp;threadm=200410200803.i9K83Jk13527@thu8.leo.home&amp;prev=/groups?num=25&hl=en&lr=&group=perl.perl6.internals&start=0</p>
+<a name='External dependencies'></a><h3>External dependencies</h3>
+<p>Robert Spier suggested several options on how to simplify the problem of Parrot and external dependencies.  Sadly, Warnock applies.</p>
+<p><a href='http://groups.google.com/groups?hl=en' target='_blank'>groups.google.com</a>&amp;lr=&amp;group=perl.perl6.internals&amp;selm=4174D905.1030008@pobox.com</p>
+<a name='mod_parrot'></a><h3>mod_parrot</h3>
+<p>Jeff Horwitz is making amazing progress with his cybernetically enhanced parrot.  Oh wait, I mean embedding parrot in to apache.  It all looks really cool and he has been able to use his experience to provide valuable crituques to us all.</p>
+<p><a href='http://groups.google.com/groups?hl=en' target='_blank'>groups.google.com</a>&amp;lr=&amp;threadm=a06200507bd9c7441ddab@[10.0.1.5]&amp;prev=/groups?num=25&hl=en&lr=&group=perl.perl6.internals&start=0</p>
+<p><a href='http://groups.google.com/groups?hl=en' target='_blank'>groups.google.com</a>&amp;lr=&amp;group=perl.perl6.internals&amp;selm=Pine.LNX.4.44.0410231234310.10254-100000@booger.sixgeeks.org</p>
+<a name='Python, Parrot, and scoping'></a><h3>Python, Parrot, and scoping</h3>
+<p>Sam Ruby has &quot;been trying to make sense of Python's scoping in the context of Parrot&quot;.  Leo, Dan, and Allen Short all rushed to his aid.</p>
+<p><a href='http://groups.google.com/groups?hl=en' target='_blank'>groups.google.com</a>&amp;lr=&amp;threadm=a0620050bbd9d7c219966@[10.0.1.5]&amp;prev=/groups?num=25&hl=en&lr=&group=perl.perl6.internals&start=0</p>
+<a name='Resizable*Array implementation'></a><h3>Resizable*Array implementation</h3>
+<p>Bernhard Schmalhofer wondered if the Resizable*Arrays should use chunked allocation.  Dan told him: No, the motivation behind them is simple and fast, thus the chunking would be unwanted overhead.  He did mention that they could do something clever (like chunking) if they got big enough...</p>
+<p><a href='http://groups.google.com/groups?hl=en' target='_blank'>groups.google.com</a>&amp;lr=&amp;threadm=4177E51D.60603@biomax.de&amp;prev=/groups?num=25&hl=en&lr=&group=perl.perl6.internals&start=0</p>
+<a name='Register Spilling'></a><h3>Register Spilling</h3>
+<p>In a flash of good news for Dan, Bill Coffman has started to put his mighty brain to work on the register spilling code.  He, Leo, and Jeff discussed various aspects of it.  I look forward eagerly to the results of getting parrot a really cool spilling algorithm (although not probably not a eagerly as Dan and his nasty pathological code ;-)</p>
+<p><a href='http://groups.google.com/groups?hl=en' target='_blank'>groups.google.com</a>&amp;lr=&amp;threadm=a0620050ebd9d9659be36@[10.0.1.5]&amp;prev=/groups?num=25&hl=en&lr=&group=perl.perl6.internals&start=0</p>
+<a name='C89 spec'></a><h3>C89 spec</h3>
+<p>Bill Coffman wondered if he could find the C89 spec so that he could ensure his changes were compliant.  Dan suggested using K&amp;R second edition.  Jeff Clites pointed out the &quot;-std=c89&quot; flag for gcc.  Michael G Schwern suggested using C99 spec (which should also contain the C89 spec) as a &quot;frightening accessory this Halloween&quot;.  Michael frightens me.</p>
+<p><a href='http://groups.google.com/groups?hl=en' target='_blank'>groups.google.com</a>&amp;lr=&amp;threadm=0A355FC2-23ED-11D9-942B-000393A6B9DA@mac.com&amp;prev=/groups?num=25&hl=en&lr=&group=perl.perl6.internals&start=0</p>
+<p><a href='http://webstore.ansi.org/ansidocstore/product.asp?sku=INCITS/ISO/IEC+9899-1999' target='_blank'>webstore.ansi.org</a></p>
+<a name='method_util.c'></a><h3>method_util.c</h3>
+<p>Leo asked what the state of the functions in src/method_util.c is.  He got Warnocked.  I would say that means they should get pitched and see what happens.</p>
+<p><a href='http://groups.google.com/groups?hl=en' target='_blank'>groups.google.com</a>&amp;lr=&amp;group=perl.perl6.internals&amp;selm=4178D4B5.5080200@toetsch.at</p>
+<a name='.include 'absolute path''></a><h3>.include 'absolute path'</h3>
+<p>Matthias Huerlemann created a patch allowing absolute paths in .include statements.  Leo responed that the implementation was not quite right, but the format of the patch was good.</p>
+<p><a href='http://groups.google.com/groups?hl=en' target='_blank'>groups.google.com</a>&amp;lr=&amp;threadm=8D37D259-2428-11D9-872F-00039394D900@tiscali.ch&amp;prev=/groups?num=25&hl=en&lr=&group=perl.perl6.internals&start=0</p>
+<a name='ICU + Redhat == Pain'></a><h3>ICU + Redhat == Pain</h3>
+<p>Joshua Gatcomb had a fairly log conversation with himself fleshing out a problem with ICU on Redhat.  Leo broke into his monologue to say that it seemed Redhat specific.</p>
+<p><a href='http://groups.google.com/groups?hl=en' target='_blank'>groups.google.com</a>&amp;lr=&amp;threadm=20041022195711.93664.qmail@web60801.mail.yahoo.com&amp;prev=/groups?num=25&hl=en&lr=&group=perl.perl6.internals&start=0</p>
+<a name='Strange segfault involving string concat'></a><h3>Strange segfault involving string concat</h3>
+<p>Matthias Hoelzl has a fairly hard to pin down segfault.  Leo suggested trying to you &quot;parrot -G&quot;, &quot;--gc-debug&quot;, and &quot;-t&quot; to track it down.  No response yet.</p>
+<p><a href='http://groups.google.com/groups?hl=en' target='_blank'>groups.google.com</a>&amp;lr=&amp;threadm=200410231047.i9NAlcU09936@thu8.leo.home&amp;prev=/groups?num=25&hl=en&lr=&group=perl.perl6.internals&start=0</p>
+<a name='pmccache'></a><h3>pmccache</h3>
+<p>Leo suggested a small perl task of making something akin to ccache for pmcs.  Jeff Clites jumped on it.</p>
+<p><a href='http://groups.google.com/groups?hl=en' target='_blank'>groups.google.com</a>&amp;lr=&amp;group=perl.perl6.internals&amp;selm=417A4B31.5090908@toetsch.at</p>
+<a name='Befunge shall live again!!'></a><h3>Befunge shall live again!!</h3>
+<pre> Stepan Roh fixed somethings with the Befunge interpreter while simultaneous accusing befunge of being unimportant.  Jerome applied some of those fixes and admonished Stepan for saying such things.  I remember a time when Befunge fleshed out many trouble some bugs in parrot and I forsee a future when Befunge will be included in webservers everywhere through the magic of mod_parrot!</pre>
+<p><a href='http://groups.google.com/groups?hl=en' target='_blank'>groups.google.com</a>&amp;lr=&amp;threadm=20041023181028.GA3948@mongueurs.net&amp;prev=/groups?num=25&hl=en&lr=&group=perl.perl6.internals&start=0</p>
+<a name='The usual footer If you find these summaries useful or enjoyable, please consider contributing to the Perl Foundation to help support the development of Perl. You might also like to send feedback to ubermatt@gmail.com'></a><h2>The usual footer
+If you find these summaries useful or enjoyable, please consider contributing to the Perl Foundation to help support the development of Perl. You might also like to send feedback to ubermatt@gmail.com</h2>
+<p><a href='http://donate.perl-foundation.org/' target='_blank'>donate.perl-foundation.org</a> -- The Perl Foundation
+<a href='http://dev.perl.org/perl6/' target='_blank'>dev.perl.org</a> -- Perl 6 Development site
+<a href='http://planet.parrotcode.org/' target='_blank'>planet.parrotcode.org</a> -- Parrot Blog aggregator</p>
+</div>

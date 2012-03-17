@@ -1,0 +1,127 @@
+[% setvar title The Perl 6 Summary for the week ending 20040201 %]
+<h3>This file is part of the Perl 6 Archive</h3>
+    <p>To see what is currently happening visit <a href="http://www.perl6.org/">http://www.perl6.org/</a></p>
+<div class='pod'>
+<a name='The Perl 6 Summary for the week ending 20040201'></a><h1>The Perl 6 Summary for the week ending 20040201</h1>
+<p>Welcome once again to Gateshead, where the skies are grey, the view is
+uninspiring, and the workmen across the road seem determined to fall
+off the ladder before they get the double glazing fitted.</p>
+<p>But enough of the gay Gateshead life, let's hurry on to the doings of
+the denizens of the perl6-internals mailing list. Who knows, we might
+even visit the inmates of perl6-language later.</p>
+<a name='Threading'></a><h2>Threading</h2>
+<p>To nobody's great surprise, we talked about threading. In particular,
+Gordon Henriksen's concerns about the all around scariness of
+<code>morph</code> (and not just in a threading context). I'm not sure I quite
+understand what's being done, but progress is definitely being made.</p>
+<p>Late in the week Dan announced that there were obviously still
+issues to be worked out before we started in on implementation (modulo
+some 'obvious' stuff). He also asked for 'real worldish' tests for
+threading in order to get some real numbers for different possible
+approaches and to see if the problem is as bad as it was first
+thought.</p>
+<p><a href='http://groups.google.com/groups?selm=a06010205bc3e9930bcac@' target='_blank'>groups.google.com</a>[192.168.1.28]</p>
+<p><a href='http://groups.google.com/groups?selm=5.1.1.6.2.20040128122120.09f96948@pop.mindspring.com' target='_blank'>groups.google.com</a></p>
+<a name='Embedding vs. extending interface types'></a><h2>Embedding vs. extending interface types</h2>
+<p>Remember last week's kerfuffle about <code>Parrot_Interp</code> vs
+<code>Parrot_INTERP</code>? Dan's resolved it be deciding that we'll just call
+it <code>Parrot_Interp</code> everywhere. Gordon Henriksen sent in the patch.</p>
+<p><a href='http://groups.google.com/groups?selm=a06010208bc3e9e36ea11@' target='_blank'>groups.google.com</a>[192.168.1.28]</p>
+<a name='Leo explains'></a><h2>Leo explains</h2>
+<p>Will Coleda (and others) have been having problems with data that
+should be inviolate getting clobbered in strange ways. After some
+effort, Will got his offending code down to 22 lines. This let Leo
+T&ouml;tsch work out what was going on, and in the referenced post he
+explained all. Essentially, the Copy on Write logic for handling
+register (and other) stacks is broken. The workaround is not to use
+Continuations and Exception Handlers. Fixes are welcome. Please.</p>
+<p><a href='http://groups.google.com/groups?selm=40177A46.6060308@toetsch.at' target='_blank'>groups.google.com</a></p>
+<a name='Testing Signal Handlers'></a><h2>Testing Signal Handlers</h2>
+<p>Leo asked for help with sorting out the testing code for some
+signal handling tests that seemed to be confusing the harness quite
+badly. Uri Guttman came up with some suggested workarounds, as did
+Mike Schwern. Leo found a third way. (If you've ever tried to write
+test with <code>fork</code> in it, it's worth taking a look at both Uri and
+Schwern's answers.</p>
+<p><a href='http://groups.google.com/groups?selm=401639A9.8030107@toetsch.at' target='_blank'>groups.google.com</a></p>
+<a name='The costs of sharing revisited'></a><h2>The costs of sharing revisited</h2>
+<p>Last week, Leo posted some scary numbers implying that using a shared
+PMC led to terrible slowdowns. This week he posted the latest numbers,
+and things are looking up.</p>
+<pre>   $ time perl-58-th shared_ref.pl
+
+   real 0m8.694s
+
+   $ time parrot shared_ref.pasm
+
+   real 0m0.375</pre>
+<p>(and that's an unoptimized Parrot). Elizabeth Mattijsen was moved to
+ask for a ponie.</p>
+<p><a href='http://groups.google.com/groups?selm=40178375.8080103@toetsch.at' target='_blank'>groups.google.com</a></p>
+<a name='Cunning stunts with with UnManagedStruct'></a><h2>Cunning stunts with with UnManagedStruct</h2>
+<p>Donning his devious head, Leo demonstrated the use of UnManagedStruct
+to allow for unlimited self-inspection and self-modification of Parrot
+state. Which isn't really something we want to be possible. In the
+opinion of Luke Palmer and Jeff Clites, the costs of removing this
+capability aren't worth paying. As Jeff Clites pointed out, you only
+use UnManagedStructs when you're calling out to a native library, and
+once you introduce a native library all bets are already off.</p>
+<p><a href='http://groups.google.com/groups?selm=401683E8.8000505@toetsch.at' target='_blank'>groups.google.com</a></p>
+<a name='Michael Scott: hero of the week'></a><h2>Michael Scott: hero of the week</h2>
+<p>Over the past few weeks Michael Scott has gradually been making the
+parrot distribution a kinder, gentler place with his sterling efforts
+to tidy up and generally improve the existing documentation. This week
+he rationalized/added documentation for everything in <b><i>src/</i></b> (with the
+exception of <b><i>malloc.c</i></b> and <b><i>malloc-trace.c</i></b>). He's working on
+documenting <b><i>examples/</i></b> now.</p>
+<p>The response to his announcement was overwhelmingly and understandably
+positive (The consensus is that Mike rocks). Now if we can just
+<i>keep</i> everything in such good condition...</p>
+<p><a href='http://groups.google.com/groups?selm=DDED1473-5287-11D8-8781-000A95C50226@mac.com' target='_blank'>groups.google.com</a></p>
+<a name='Parrot DBDI announced'></a><h2>Parrot DBDI announced</h2>
+<p>Tim &quot;Perl DBI&quot; Bunce announced the Parrot DBDI Project: A Database
+Driver Interface for Parrot. The goal is to have a common Parrot level
+interface to database drivers which can then be reused by different
+language specific database interfaces. For further details read the
+post; it's jolly good. And bravo Tim.</p>
+<p><a href='http://groups.google.com/groups?selm=20040127225639.GF38394@dansat.data-plan.com' target='_blank'>groups.google.com</a></p>
+<a name='Internal exception handlers'></a><h2>Internal exception handlers</h2>
+<p>Leo posted a set of macros for doing exception handling in the parrot
+core using <code>TRY/CATCH/THROW</code> etc. and asked for comments. So far he's
+been Warnocked.</p>
+<p><a href='http://groups.google.com/groups?selm=4018D0CD.4080106@toetsch.at' target='_blank'>groups.google.com</a></p>
+<a name='SDL bindings'></a><h2>SDL bindings</h2>
+<p>After Leo fixed the struct PMCs for him, chromatic has proceeded apace
+to implement SDL wrappers in Parrot. He's reached the point where he
+has code that can create an SDL window and blit a blue rectangle onto
+it. Leo applied his patches. Check out
+<b><i>examples/pni/sdl_blue_rectangle.imc</i></b> if you're interested.</p>
+<p><a href='http://groups.google.com/groups?selm=1075537672.12245.178.camel@localhost' target='_blank'>groups.google.com</a></p>
+<a name='Meanwhile, in perl6-language'></a><h1>Meanwhile, in perl6-language</h1>
+<p>Discussions continued to test the encode setups of the participants'
+mail readers...</p>
+<a name='Semantics of vector operations'></a><h2>Semantics of vector operations</h2>
+<p>A sub-thread of the discussion of the semantics of vector operations
+turned into a discussion of the meaning of 'vector' which has
+different meanings depending on whether you're a mathematician or
+Seymour Cray.</p>
+<p>Another sub-thread discussed the possible ASCII alternatives for <code>«</code>
+and <code>»</code>. I'm afraid I'm going to bottle out of attempting to
+summarize the various alternatives suggested, if only because I used
+up all my POD escape-fu last week. It looks like the <code>&lt;&lt;</code> and
+<code>&gt;&gt;</code> alternatives might be about to bite the dust in favour
+of an as yet undecided, less ambiguous, new scheme. Larry hasn't ruled
+on it yet though.</p>
+<p><a href='http://groups.google.com/groups?selm=401720E1.2030009@conway.org' target='_blank'>groups.google.com</a></p>
+<a name='Acknowledgements, Apologies, Announcements'></a><h1>Acknowledgements, Apologies, Announcements</h1>
+<p>I'd just like to announce that, if you haven't seen Eliza Carthy
+perform life, you owe it to yourself to rectify that. We went to see
+her last night and it's bucked me up enormously.</p>
+<p>If you find these summaries useful or enjoyable, please consider
+contributing to the Perl Foundation to help support the development of
+Perl. You might also like to send me feedback at
+<i><a href='http://search.cpan.org/perldoc?<a href='mailto:p6summarizer@bofh.org.uk'>p6summarizer@bofh.org.uk</a>'>p<a href='mailto:6summarizer@bofh.org.uk'>6summarizer@bofh.org.uk</a></a></i>, or drop by my website.</p>
+<p><a href='http://donate.perl-foundation.org/' target='_blank'>donate.perl-foundation.org</a> -- The Perl Foundation</p>
+<p><a href='http://dev.perl.org/perl6/' target='_blank'>dev.perl.org</a> -- Perl 6 Development site</p>
+<p><a href='http://www.bofh.org.uk/' target='_blank'>www.bofh.org.uk</a> -- My website, &quot;Just a Summary&quot;</p>
+</div>

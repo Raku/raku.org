@@ -1,0 +1,40 @@
+[% setvar title Cache byte-compiled programs and modules %]
+<h3>This file is part of the Perl 6 Archive</h3>
+    <p>To see what is currently happening visit <a href="http://www.perl6.org/">http://www.perl6.org/</a></p>
+<div class='pod'>
+<a name='TITLE'></a><h1>TITLE</h1>
+<p>Cache byte-compiled programs and modules</p>
+<a name='VERSION'></a><h1>VERSION</h1>
+<pre>  Maintainer: Simon Cozens &lt;<a href='mailto:simon@brecon.co.uk'>simon@brecon.co.uk</a>&gt;
+  Date: 25 Sep 2000
+  Mailing List: <a href='mailto:perl6-internals@perl.org'>perl6-internals@perl.org</a>
+  Number: 301
+  Version: 1
+  Status: Developing</pre>
+<a name='ABSTRACT'></a><h1>ABSTRACT</h1>
+<p>Python does it. Java does it. It's time we did it.</p>
+<a name='DESCRIPTION'></a><h1>DESCRIPTION</h1>
+<p>When Perl runs a program, it's compiled to bytecode and then the
+bytecode is executed. Now, what you could easily do is stop after
+compiling and dump out the bytecode to save you compiling it next time
+the program is run. In Perl 5, this is slow, because it's quicker to
+recompile than to read in the bytecode. In Perl 6 it'll be quick, and
+I'll have some suggestions as to how to speed it up soon.</p>
+<p>So, we check for the existence of a <code>.plc</code> file before running a
+program; if the <code>.plc</code> file is newer than the program, we use that
+instead. If there isn't a <code>.plc</code> file or it's older than the program,
+recompile and dump the bytecode to a <code>.plc</code> file. Naturally, this gives
+us the best speedup for modules which change very, very infrequently,
+rather than programs which can change a lot during development. Maybe
+you only want to do this for modules, then.</p>
+<a name='IMPLEMENTATION'></a><h1>IMPLEMENTATION</h1>
+<p>Perl 5.6 has the elements of support for <code>.plc</code> files, but it doesn't
+tell anyone about this: have a look at <code>pp_require</code> in <b><i>pp_ctl.c</i></b>.
+(Hmm, it's not in 5.7.0, but I could have sworn I've seen it in there in
+the past.)</p>
+<p>I also threw out a module called <code>ByteCache</code> onto p5p a few months ago,
+which implemented the thing as a coderef on <code>@INC</code>. Implementing it in
+<code>pp_require</code> is a cleaner way of doing it, however.</p>
+<a name='REFERENCES'></a><h1>REFERENCES</h1>
+<p>None.</p>
+</div>

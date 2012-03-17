@@ -1,0 +1,565 @@
+[% setvar title docs/pdds/pdd02_vtables.pod - Common vtable format for all variables %]
+<h3>This file is part of the Perl 6 Archive</h3>
+    <p>To see what is currently happening visit <a href="http://www.perl6.org/">http://www.perl6.org/</a></p>
+<div class='pod'>
+<a name='NAME'></a><h1>NAME</h1>
+<p>docs/pdds/pdd02_vtables.pod - Common vtable format for all variables</p>
+<a name='ABSTRACT'></a><h1>ABSTRACT</h1>
+<p>This PDD presents the vtable entries, and their order, that all
+variables MUST provide.</p>
+<a name='DESCRIPTION'></a><h1>DESCRIPTION</h1>
+<p>All parrot variables hide their guts behind a magic parrot structure
+generally referred to as a PMC, or Parrot Magic Cookie. Nothing outside
+the core of parrot (in fact, nothing outside the data type's vtable
+routines) should infer anything about a PMC (hence the Magic part).</p>
+<p>The first parameter to any vtable routine should be the current interpreter.
+The second parameter should be the PMC itself.</p>
+<p>vtables are neat because they decouple the interface and
+implementation of various object functions. This does mean, though,
+that you need to either know what functions are available and what
+they do, or have some method of finding out. It's faster if you know
+which vtable entry does what, so that's the method parrot's using.</p>
+<p>The actual vtable structure contains pointers to functions that
+implement the methods for that particular vtable.  All pointers
+must point to valid functions with appropriate prototypes.</p>
+<a name='IMPLEMENTATION'></a><h1>IMPLEMENTATION</h1>
+<a name='vtable functions'></a><h2>vtable functions</h2>
+<p>This is a list of each of the vtable methods, their prototypes, and
+a description of the method.</p>
+<p>The following functions are singleton functions. (There are no keyed
+versions of these)</p>
+<ul>
+<li><a name='void init(INTERP, PMC* self)'></a>void init(INTERP, PMC* self)</li>
+<p>The init vtable method takes an unused PMC as a parameter and turns
+it into a PMC appropriate for the class owning the vtable. Called as a
+class method.  There is also a form that accepts a PMC initializer as
+a third argument.</p>
+<li><a name='void init_pmc(INTERP, PMC* self, PMC* initializer)'></a>void init_pmc(INTERP, PMC* self, PMC* initializer)</li>
+<p>This form of the init method takes a single initializer parameter. The
+initializer is an array that contains keys and values. The meaning of
+the keys and their corresponding values is left up to the PMC.</p>
+<p>Keys are either strings or integers. If strings, the PMC is
+responsible for figuring out what the string represents. If integers,
+it means the meaning has been pre-figured based on meta-information
+from the class.</p>
+<p>For example, if a class has the known properties &quot;Size&quot;, &quot;Dimension&quot;
+and &quot;Color&quot;, they may be assigned the values 100, 101, and 102. If the
+creator of the PMC knows enough about the class to make the
+translation to numbers it may; otherwise, the raw strings may be used.
+So, for the declaration:</p>
+<pre>   my @foo Size(12), Dimension(3), Color(&quot;Green&quot;);</pre>
+<p>the init array may be [100, 12, 101, 3, 102, &quot;Green&quot;] or [&quot;Size&quot;, 12,
+&quot;Dimension&quot;, 3, &quot;Color&quot;, &quot;Green&quot;]. Note that, in all cases, the array
+is an array of PMCs. (So you get either an int PMC or a string PMC in
+the list of keys).</p>
+<li><a name='void init_pmc_props(INTERP, PMC* self, PMC* initializer, PMC* properties)'></a>void init_pmc_props(INTERP, PMC* self, PMC* initializer, PMC* properties)</li>
+<p>XXX: what does this do?</p>
+<li><a name='void morph(INTERP, PMC* self, INTVAL type)'></a>void morph(INTERP, PMC* self, INTVAL type)</li>
+<p>Turn the PMC into a PMC of type <code>type</code>. If the morphing can't be
+done in any reasonable way -- for instance if an integer is asked to turn
+into an Array -- then the PMC is first destroyed, then recreated as an
+empty PMC of the new type.</p>
+<p>This method is primarily used when the interpreter has need of
+coercing a PMC to a particular type, and isn't meant as a general
+purpose casting tool. Compilers should only emit valid transformations.</p>
+<li><a name='void mark(INTERP, PMC* self)'></a>void mark(INTERP, PMC* self)</li>
+<p>Called by the DOD when it is sweeping through the PMCs and has detected
+that this PMC is both alive and has a custom mark routine (as indicated
+by the custom mark PMC flag).</p>
+<p>If a PMC has this flag set, then it is responsible for marking all buffers
+and PMCs under its control as alive. If it does not, those PMCs or buffers
+may be collected later. This method does <i>not</i> have to call the
+<code>mark</code> method on any PMCs it marks--the DOD system takes care of
+that. (So no need to recurse into aggregate PMCs or anything of the sort).</p>
+<p>This method may allocate no memory from Parrot, nor may it alter
+Parrot's internal structures. It should have no side-effects from the
+C level either.</p>
+<p>This routine may <b>not</b> throw an exception.</p>
+<li><a name='void destroy(INTERP, PMC* self)'></a>void destroy(INTERP, PMC* self)</li>
+<p>This method is called by the DOD when it determines that a PMC is
+dead and that the PMC has marked itself as having a destroy method.</p>
+<p>When this method finishes, the PMC will be marked as dead. As such you
+should make sure that you do <i>not</i> leave any references to it in any
+parrot structure by the end of the method.</p>
+<p>This method may <i>not</i> throw an exception. It will be ignored if it does.</p>
+<li><a name='PMC* getprop(INTERP, PMC* self, STRING* key)'></a>PMC* getprop(INTERP, PMC* self, STRING* key)</li>
+<p>Return the value from the property hash of <b>self</b> keyed by <b>key</b>.
+The key should not be NULL.</p>
+<li><a name='void setprop(INTERP, PMC* self, STRING* key, PMC* value)'></a>void setprop(INTERP, PMC* self, STRING* key, PMC* value)</li>
+<p>Set the value in the property hash of <b>self</b> that is keyed by <b>key</b> to
+the value of <b>value</b>. The key should not be NULL.</p>
+<li><a name='void delprop(INTERP, PMC* self, STRING* key)'></a>void delprop(INTERP, PMC* self, STRING* key)</li>
+<p>Delete the value from the property hash of <b>self</b> keyed by <b>key</b>.
+The key should not be NULL.</p>
+<li><a name='PMC* getprops(INTERP, PMC* self)'></a>PMC* getprops(INTERP, PMC* self)</li>
+<p>Return the entire property hash for <b>self</b>.</p>
+</ul>
+<p>The following functions have a plain form, a _keyed form, and
+a _keyed_int form. The keyed forms take a PMC* or INTVAL for <i>each</i> PMC
+parameter.  The PMC* parameter for each PMC is NULL if there is no
+key for that PMC; this means that that argument is unkeyed.</p>
+<p>In some cases, the caller <i>must</i> provide a non-NULL key.  Those cases are
+explicitly stated below.  In the other cases, you may have to implement the
+keyed vtable methods and check for a NULL <b>self</b> key even if you are
+implementing a non-aggregate type.  If the <b>self</b> key is non-NULL and the
+PMC class is a non-aggregate type, the _keyed_* methods should throw an
+exception.</p>
+<p>If you do not implement the _keyed_int methods, the default will convert
+the INTVAL into a key PMC* and call the corresponding _keyed method.</p>
+<p>The keyed methods should <i>NOT</i> assume that the key pointer will be
+valid after the method exits.  The pointer may be to a
+stack variable in the calling function.</p>
+<ul>
+<li><a name='INTVAL type(INTERP, PMC* self)'></a>INTVAL type(INTERP, PMC* self)</li>
+<p>Return the type of the PMC. Type is a unique tag associated with the
+PMC when the PMC's class is loaded. Negative numbers are considered
+interpreter-specific, non-public types.</p>
+<li><a name='INTVAL type_keyed(INTERP, PMC* self, PMC* key)'></a>INTVAL type_keyed(INTERP, PMC* self, PMC* key)</li>
+<li><a name='INTVAL type_keyed_int(INTERP, PMC* self, INTVAL key)'></a>INTVAL type_keyed_int(INTERP, PMC* self, INTVAL key)</li>
+<li><a name='INTVAL type_keyed_str(INTERP, PMC* self, STRING* key)'></a>INTVAL type_keyed_str(INTERP, PMC* self, STRING* key)</li>
+<p>Return the type of the PMC indexed by <b>key</b>.  The <b>key</b> parameter
+is guaranteed not to be NULL for this method.</p>
+<li><a name='UINTVAL subtype(INTERP, PMC* self, INTVAL type)'></a>UINTVAL subtype(INTERP, PMC* self, INTVAL type)</li>
+<p>Return the subtype of a PMC. (Note that this may be unimplemented,
+and may go away). This is intended to return information about the
+PMC--what type of number or string it is, whether it's a scalar, hash,
+array, or list, and suchlike things.</p>
+<li><a name='STRING* name(INTERP, PMC* self)'></a>STRING* name(INTERP, PMC* self)</li>
+<p>Return the name of the class for the PMC.</p>
+<li><a name='PMC* clone(INTERP, PMC* self)'></a>PMC* clone(INTERP, PMC* self)</li>
+<p>Return a clone of yourself.</p>
+<li><a name='PMC* find_method(INTERP, PMC* self, STRING* method_name)'></a>PMC* find_method(INTERP, PMC* self, STRING* method_name)</li>
+<p>Return a subroutine PMC for the passed method name. This subroutine
+PMC may be cached, so the method <i>must</i> return an equivalent sub PMC
+each time, or be capable of dealing with the returned sub PMCs being
+reused.</p>
+<li><a name='INTVAL get_integer(INTERP, PMC* self)'></a>INTVAL get_integer(INTERP, PMC* self)</li>
+<p>Return the native integer value of the PMC.</p>
+<li><a name='INTVAL get_integer_keyed(INTERP, PMC* self, PMC* key)'></a>INTVAL get_integer_keyed(INTERP, PMC* self, PMC* key)</li>
+<li><a name='INTVAL get_integer_keyed_int(INTERP, PMC* self, INTVAL key)'></a>INTVAL get_integer_keyed_int(INTERP, PMC* self, INTVAL key)</li>
+<li><a name='INTVAL get_integer_keyed_str(INTERP, PMC* self, STRING* key)'></a>INTVAL get_integer_keyed_str(INTERP, PMC* self, STRING* key)</li>
+<p>Return the native integer value of the PMC indexed by <b>key</b>.
+The <b>key</b> parameter is guaranteed not to be NULL for this method.</p>
+<li><a name='FLOATVAL get_number(INTERP, PMC* self)'></a>FLOATVAL get_number(INTERP, PMC* self)</li>
+<p>Return the native floating-point value of the PMC.</p>
+<li><a name='FLOATVAL get_number_keyed(INTERP, PMC* self, PMC* key)'></a>FLOATVAL get_number_keyed(INTERP, PMC* self, PMC* key)</li>
+<li><a name='FLOATVAL get_number_keyed_int(INTERP, PMC* self, INTVAL key)'></a>FLOATVAL get_number_keyed_int(INTERP, PMC* self, INTVAL key)</li>
+<li><a name='FLOATVAL get_number_keyed_str(INTERP, PMC* self, STRING* key)'></a>FLOATVAL get_number_keyed_str(INTERP, PMC* self, STRING* key)</li>
+<p>Return the native floating-point value of the PMC indexed by <b>key</b>.
+The <b>key</b> parameter is guaranteed not to be NULL for this method.</p>
+<li><a name='BIGNUM* get_bignum(INTERP, PMC* self)'></a>BIGNUM* get_bignum(INTERP, PMC* self)</li>
+<p>Return the value of the PMC as a bignum.</p>
+<li><a name='BIGNUM* get_bignum_keyed(INTERP, PMC* self, PMC* key)'></a>BIGNUM* get_bignum_keyed(INTERP, PMC* self, PMC* key)</li>
+<li><a name='BIGNUM* get_bignum_keyed_int(INTERP, PMC* self, INTVAL key)'></a>BIGNUM* get_bignum_keyed_int(INTERP, PMC* self, INTVAL key)</li>
+<li><a name='BIGNUM* get_bignum_keyed_str(INTERP, PMC* self, STRING* key)'></a>BIGNUM* get_bignum_keyed_str(INTERP, PMC* self, STRING* key)</li>
+<p>Return the bignum value of the PMC indexed by <b>key</b>.
+The <b>key</b> parameter is guaranteed not to be NULL for this method.</p>
+<li><a name='STRING* get_string(INTERP, PMC* self)'></a>STRING* get_string(INTERP, PMC* self)</li>
+<p>Return the native string value of the PMC. This may be in the
+encoding of the PMC's choice.</p>
+<li><a name='STRING* get_string_keyed(INTERP, PMC* self, PMC* key)'></a>STRING* get_string_keyed(INTERP, PMC* self, PMC* key)</li>
+<li><a name='STRING* get_string_keyed_int(INTERP, PMC* self, INTVAL key)'></a>STRING* get_string_keyed_int(INTERP, PMC* self, INTVAL key)</li>
+<li><a name='STRING* get_string_keyed_str(INTERP, PMC* self, STRING* key)'></a>STRING* get_string_keyed_str(INTERP, PMC* self, STRING* key)</li>
+<p>Return the string value of the PMC indexed by <b>key</b>.
+The <b>key</b> parameter is guaranteed not to be NULL for this method.</p>
+<li><a name='INTVAL get_bool(INTERP, PMC* self)'></a>INTVAL get_bool(INTERP, PMC* self)</li>
+<p>Return the constant TRUE if the PMC is true, or FALSE if the PMC is
+false. The definition of truth for a given PMC will depend on the type
+of the PMC: for a scalar, it may be as simple as 0 or &quot;&quot; being false,
+and any other value being true.</p>
+<li><a name='INTVAL get_bool_keyed(INTERP, PMC* self, PMC* key)'></a>INTVAL get_bool_keyed(INTERP, PMC* self, PMC* key)</li>
+<li><a name='INTVAL get_bool_keyed_int(INTERP, PMC* self, INTVAL key)'></a>INTVAL get_bool_keyed_int(INTERP, PMC* self, INTVAL key)</li>
+<li><a name='INTVAL get_bool_keyed_str(INTERP, PMC* self, STRING* key)'></a>INTVAL get_bool_keyed_str(INTERP, PMC* self, STRING* key)</li>
+<p>Return the constant TRUE if the PMC indexed by <b>key</b> is true,
+or FALSE if the PMC indexed by <b>key</b> is false.
+The <b>key</b> parameter is guaranteed not to be NULL for this method.</p>
+<li><a name='PMC* get_pmc(INTERP, PMC* self)'></a>PMC* get_pmc(INTERP, PMC* self)</li>
+<p>Return the PMC for this PMC. While this may seem nonsensical, it's
+useful in several circumstances. If the thing being accessed may
+return something odd, for example a reference, it may return a
+value different from the PMC that get_pmc is being called on.</p>
+<li><a name='PMC* get_pmc_keyed(INTERP, PMC* self, PMC* key)'></a>PMC* get_pmc_keyed(INTERP, PMC* self, PMC* key)</li>
+<li><a name='PMC* get_pmc_keyed_int(INTERP, PMC* self, INTVAL key)'></a>PMC* get_pmc_keyed_int(INTERP, PMC* self, INTVAL key)</li>
+<li><a name='PMC* get_pmc_keyed_str(INTERP, PMC* self, STRING* key)'></a>PMC* get_pmc_keyed_str(INTERP, PMC* self, STRING* key)</li>
+<p>Return the PMC indexed by <b>key</b>.
+The <b>key</b> parameter is guaranteed not to be NULL for this method.</p>
+<li><a name='void* get_pointer(INTERP, PMC* self)'></a>void* get_pointer(INTERP, PMC* self)</li>
+<li><a name='void* get_pointer_keyed(INTERP, PMC* self, PMC* key)'></a>void* get_pointer_keyed(INTERP, PMC* self, PMC* key)</li>
+<li><a name='void* get_pointer_keyed_int(INTERP, PMC* self, INTVAL key)'></a>void* get_pointer_keyed_int(INTERP, PMC* self, INTVAL key)</li>
+<li><a name='void* get_pointer_keyed_str(INTERP, PMC* self, STRING* key)'></a>void* get_pointer_keyed_str(INTERP, PMC* self, STRING* key)</li>
+<p>Return a pointer to some data. The details of the data (type, location
+etc.) depend on the PMC.</p>
+<li><a name='void set_integer_native(INTERP, PMC* self, INTVAL value)'></a>void set_integer_native(INTERP, PMC* self, INTVAL value)</li>
+<p>Sets the PMC to the integer value passed.</p>
+<li><a name='void set_integer_same(INTERP, PMC* self, PMC* value)'></a>void set_integer_same(INTERP, PMC* self, PMC* value)</li>
+<p>Sets the PMC to the integer value of the PMC in <b>value</b>.
+In this case, <b>value</b> is guaranteed to be of the same type
+as <b>self</b> so optimizations may be made.</p>
+<li><a name='void set_integer_keyed(INTERP, PMC* self, PMC* key, INTVAL value)'></a>void set_integer_keyed(INTERP, PMC* self, PMC* key, INTVAL value)</li>
+<li><a name='void set_integer_keyed_int(INTERP, PMC* self, INTVAL key, INTVAL value)'></a>void set_integer_keyed_int(INTERP, PMC* self, INTVAL key, INTVAL value)</li>
+<li><a name='void set_integer_keyed_str(INTERP, PMC* self, STRING* key, INTVAL value)'></a>void set_integer_keyed_str(INTERP, PMC* self, STRING* key, INTVAL value)</li>
+<p>Sets the PMC indexed by <b>key</b> to the integer value passed in <b>value</b>.
+The <b>key</b> parameter is guaranteed not to be NULL for this method.</p>
+<li><a name='void set_number_native(INTERP, PMC* self, FLOATVAL value)'></a>void set_number_native(INTERP, PMC* self, FLOATVAL value)</li>
+<p>Sets the PMC to the floating-point value passed.</p>
+<li><a name='void set_number_same(INTERP, PMC* self, PMC* value)'></a>void set_number_same(INTERP, PMC* self, PMC* value)</li>
+<p>Sets the PMC to the floating-point value of the PMC in <b>value</b>.
+In this case, <b>value</b> is guaranteed to be of the same type
+as <b>self</b> so optimizations may be made.</p>
+<li><a name='void set_number_keyed(INTERP, PMC* self, PMC* key, FLOATVAL value)'></a>void set_number_keyed(INTERP, PMC* self, PMC* key, FLOATVAL value)</li>
+<li><a name='void set_number_keyed_int(INTERP, PMC* self, INTVAL key, FLOATVAL value)'></a>void set_number_keyed_int(INTERP, PMC* self, INTVAL key, FLOATVAL value)</li>
+<li><a name='void set_number_keyed_str(INTERP, PMC* self, STRING* key, FLOATVAL value)'></a>void set_number_keyed_str(INTERP, PMC* self, STRING* key, FLOATVAL value)</li>
+<p>Sets the PMC indexed by <b>key</b> to the floating-point value passed in <b>value</b>.
+The <b>key</b> parameter is guaranteed not to be NULL for this method.</p>
+<li><a name='void set_bignum_native(INTERP, PMC* self, BIGNUM* value)'></a>void set_bignum_native(INTERP, PMC* self, BIGNUM* value)</li>
+<p>Sets the PMC to the passed in bignum value.</p>
+<li><a name='void set_bignum_same(INTERP, PMC* self, PMC* value)'></a>void set_bignum_same(INTERP, PMC* self, PMC* value)</li>
+<p>Sets the PMC to the bignum value of <b>value</b>.
+In this case, <b>value</b> is guaranteed to be of the same type
+as <b>self</b> so optimizations may be made.</p>
+<li><a name='void set_bignum_keyed(INTERP, PMC* self, PMC* key, BIGNUM* value)'></a>void set_bignum_keyed(INTERP, PMC* self, PMC* key, BIGNUM* value)</li>
+<li><a name='void set_bignum_keyed_int(INTERP, PMC* self, INTVAL key, BIGNUM* value)'></a>void set_bignum_keyed_int(INTERP, PMC* self, INTVAL key, BIGNUM* value)</li>
+<li><a name='void set_bignum_keyed_str(INTERP, PMC* self, STRING* key, BIGNUM* value)'></a>void set_bignum_keyed_str(INTERP, PMC* self, STRING* key, BIGNUM* value)</li>
+<p>Sets the PMC indexed by <b>key</b> to the bignum value passed in <b>value</b>.
+The <b>key</b> parameter is guaranteed not to be NULL for this method.</p>
+<li><a name='void set_string_native(INTERP, PMC* self, STRING* value)'></a>void set_string_native(INTERP, PMC* self, STRING* value)</li>
+<p>Sets the PMC to the passed in string value.</p>
+<li><a name='void assign_string_native(INTERP, PMC* self, STRING* value)'></a>void assign_string_native(INTERP, PMC* self, STRING* value)</li>
+<p>Sets the PMC to the copied string value.</p>
+<li><a name='void set_string_same(INTERP, PMC* self, PMC* value)'></a>void set_string_same(INTERP, PMC* self, PMC* value)</li>
+<p>Sets the PMC to the string value of <b>value</b>.
+In this case, <b>value</b> is guaranteed to be of the same type
+as <b>self</b> so optimizations may be made.</p>
+<li><a name='void set_string_keyed(INTERP, PMC* self, PMC* key, STRING* value)'></a>void set_string_keyed(INTERP, PMC* self, PMC* key, STRING* value)</li>
+<li><a name='void set_string_keyed_int(INTERP, PMC* self, INTVAL key, STRING* value)'></a>void set_string_keyed_int(INTERP, PMC* self, INTVAL key, STRING* value)</li>
+<li><a name='void set_string_keyed_str(INTERP, PMC* self, STRING* key, STRING* value)'></a>void set_string_keyed_str(INTERP, PMC* self, STRING* key, STRING* value)</li>
+<p>Sets the PMC indexed by <b>key</b> to the string value passed in <b>value</b>.
+The <b>key</b> parameter is guaranteed not to be NULL for this method.</p>
+<li><a name='void set_bool(INTERP, PMC* self, INTVAL value)'></a>void set_bool(INTERP, PMC* self, INTVAL value)</li>
+<p>Sets the boolean state of the PMC to TRUE if <b>value</b> is TRUE, or FALSE if
+<b>value</b> is FALSE.</p>
+<p>Note that this is currently unimplemented for any PMC, and it is not clear
+how it will work in practice.</p>
+<li><a name='void set_bool_keyed(INTERP, PMC* self, PMC* key, INTVAL value)'></a>void set_bool_keyed(INTERP, PMC* self, PMC* key, INTVAL value)</li>
+<li><a name='void set_bool_keyed_int(INTERP, PMC* self, INTVAL key, INTVAL value)'></a>void set_bool_keyed_int(INTERP, PMC* self, INTVAL key, INTVAL value)</li>
+<li><a name='void set_bool_keyed_str(INTERP, PMC* self, STRING* key, INTVAL value)'></a>void set_bool_keyed_str(INTERP, PMC* self, STRING* key, INTVAL value)</li>
+<p>Keyed versions of set_bool. The <b>key</b> parameter is guaranteed not to be
+NULL for this method.</p>
+<li><a name='void set_pmc(INTERP, PMC* self, PMC* value)'></a>void set_pmc(INTERP, PMC* self, PMC* value)</li>
+<p>Sets the value of the PMC in <b>self</b> to the value of the PMC in <b>value</b>.</p>
+<li><a name='void assign_pmc(INTERP, PMC* self, PMC* value)'></a>void assign_pmc(INTERP, PMC* self, PMC* value)</li>
+<p>Sets the value of the PMC in <b>self</b> to the value of the PMC in <b>value</b> by
+copying the value.</p>
+<li><a name='void set_pmc_keyed(INTERP, PMC* self, PMC* key, PMC* value)'></a>void set_pmc_keyed(INTERP, PMC* self, PMC* key, PMC* value)</li>
+<li><a name='void set_pmc_keyed_int(INTERP, PMC* self, INTVAL key, PMC* value)'></a>void set_pmc_keyed_int(INTERP, PMC* self, INTVAL key, PMC* value)</li>
+<li><a name='void set_pmc_keyed_str(INTERP, PMC* self, STRING* key, PMC* value)'></a>void set_pmc_keyed_str(INTERP, PMC* self, STRING* key, PMC* value)</li>
+<p>Sets the value of the PMC keyed by <b>key</b> to the value of the PMC
+in <b>value</b>.</p>
+<li><a name='void set_pointer(INTERP, PMC* self, void* value)'></a>void set_pointer(INTERP, PMC* self, void* value)</li>
+<li><a name='void set_pointer_keyed(INTERP, PMC* self, PMC* key, void* value)'></a>void set_pointer_keyed(INTERP, PMC* self, PMC* key, void* value)</li>
+<li><a name='void set_pointer_keyed_int(INTERP, PMC* self, INTVAL key, void* value)'></a>void set_pointer_keyed_int(INTERP, PMC* self, INTVAL key, void* value)</li>
+<li><a name='void set_pointer_keyed_str(INTERP, PMC* self, STRING* key, void* value)'></a>void set_pointer_keyed_str(INTERP, PMC* self, STRING* key, void* value)</li>
+<p>Sets a pointer inside the PMC. The details depend on the PMC.</p>
+<li><a name='INTVAL elements(INTERP, PMC* self)'></a>INTVAL elements(INTERP, PMC* self)</li>
+<p>Return the number of elements in the PMC.</p>
+<li><a name='INTVAL pop_integer(INTERP, PMC* self)'></a>INTVAL pop_integer(INTERP, PMC* self)</li>
+<p>Return the integer value of the last item on the list, removing that item.</p>
+<li><a name='FLOATVAL pop_float(INTERP, PMC* self)'></a>FLOATVAL pop_float(INTERP, PMC* self)</li>
+<p>Return the floating-point value of the last item on the list,
+removing that item.</p>
+<li><a name='BIGNUM* pop_bignum(INTERP, PMC* self)'></a>BIGNUM* pop_bignum(INTERP, PMC* self)</li>
+<p>Return the bignum value of the last item on the list,
+removing that item.</p>
+<li><a name='STRING* pop_string(INTERP, PMC* self)'></a>STRING* pop_string(INTERP, PMC* self)</li>
+<p>Return the string value of the last item on the list,
+removing that item.</p>
+<li><a name='PMC* pop_pmc(INTERP, PMC* self)'></a>PMC* pop_pmc(INTERP, PMC* self)</li>
+<p>Return the PMC value of the last item on the list,
+removing that item.</p>
+<li><a name='void push_integer(INTERP, PMC* self, INTVAL value)'></a>void push_integer(INTERP, PMC* self, INTVAL value)</li>
+<p>Add the passed in integer value to the end of the list.</p>
+<li><a name='void push_float(INTERP, PMC* self, FLOATVAL value)'></a>void push_float(INTERP, PMC* self, FLOATVAL value)</li>
+<p>Add the passed in floating-point number to the end of the list.</p>
+<li><a name='void push_bignum(INTERP, PMC* self, BIGNUM* value)'></a>void push_bignum(INTERP, PMC* self, BIGNUM* value)</li>
+<p>Add the passed in bignum to the end of the list.</p>
+<li><a name='void push_string(INTERP, PMC* self, STRING* value)'></a>void push_string(INTERP, PMC* self, STRING* value)</li>
+<p>Add the passed in string to the end of the list.</p>
+<li><a name='void push_pmc(INTERP, PMC* self, PMC* value)'></a>void push_pmc(INTERP, PMC* self, PMC* value)</li>
+<p>Add the passed in PMC to the end of the list.</p>
+<li><a name='INTVAL shift_integer(INTERP, PMC* self)'></a>INTVAL shift_integer(INTERP, PMC* self)</li>
+<p>Return the integer value of the first item on the list, removing that item.</p>
+<li><a name='FLOATVAL shift_float(INTERP, PMC* self)'></a>FLOATVAL shift_float(INTERP, PMC* self)</li>
+<p>Return the floating-point value of the first item on the list,
+removing that item.</p>
+<li><a name='BIGNUM* shift_bignum(INTERP, PMC* self)'></a>BIGNUM* shift_bignum(INTERP, PMC* self)</li>
+<p>Return the bignum value of the first item on the list,
+removing that item.</p>
+<li><a name='STRING* shift_string(INTERP, PMC* self)'></a>STRING* shift_string(INTERP, PMC* self)</li>
+<p>Return the string value of the first item on the list,
+removing that item.</p>
+<li><a name='PMC* shift_pmc(INTERP, PMC* self)'></a>PMC* shift_pmc(INTERP, PMC* self)</li>
+<p>Return the PMC value of the first item on the list,
+removing that item.</p>
+<li><a name='void unshift_integer(INTERP, PMC* self, INTVAL value)'></a>void unshift_integer(INTERP, PMC* self, INTVAL value)</li>
+<p>Add the passed in integer value to the beginning of the list.</p>
+<li><a name='void unshift_float(INTERP, PMC* self, FLOATVAL value)'></a>void unshift_float(INTERP, PMC* self, FLOATVAL value)</li>
+<p>Add the passed in floating-point number to the beginning of the list.</p>
+<li><a name='void unshift_bignum(INTERP, PMC* self, BIGNUM* value)'></a>void unshift_bignum(INTERP, PMC* self, BIGNUM* value)</li>
+<p>Add the passed in bignum to the beginning of the list.</p>
+<li><a name='void unshift_string(INTERP, PMC* self, STRING* value)'></a>void unshift_string(INTERP, PMC* self, STRING* value)</li>
+<p>Add the passed in string to the beginning of the list.</p>
+<li><a name='void splice(INTERP, PMC* self, PMC* value, INTVAL offset, INTVAL count)'></a>void splice(INTERP, PMC* self, PMC* value, INTVAL offset, INTVAL count)</li>
+<p>Replace the <b>count</b> PMCs at offset <b>offset</b> from the beginning of
+<b>self</b> with the PMCs in the aggregate <b>value</b>.</p>
+<li><a name='void add(INTERP, PMC* self, PMC* value, PMC* dest)'></a>void add(INTERP, PMC* self, PMC* value, PMC* dest)</li>
+<li><a name='void add_int(INTERP, PMC* self, INTVAL value, PMC* dest)'></a>void add_int(INTERP, PMC* self, INTVAL value, PMC* dest)</li>
+<li><a name='void add_bignum(INTERP, PMC* self, BIGNUM* value, PMC* dest)'></a>void add_bignum(INTERP, PMC* self, BIGNUM* value, PMC* dest)</li>
+<li><a name='void add_float(INTERP, PMC* self, FLOATVAL value, PMC* dest)'></a>void add_float(INTERP, PMC* self, FLOATVAL value, PMC* dest)</li>
+<p>Add <b>self</b> to <b>value</b> and store the result in <b>dest</b>.  Note that
+<b>dest</b> may be equal to <b>self</b>; in that case optimizations <i>may</i> be
+made.</p>
+<li><a name='void subtract(INTERP, PMC* self, PMC* value, PMC* dest)'></a>void subtract(INTERP, PMC* self, PMC* value, PMC* dest)</li>
+<li><a name='void subtract_int(INTERP, PMC* self, INTVAL value, PMC* dest)'></a>void subtract_int(INTERP, PMC* self, INTVAL value, PMC* dest)</li>
+<li><a name='void subtract_bignum(INTERP, PMC* self, BIGNUM* value, PMC* dest)'></a>void subtract_bignum(INTERP, PMC* self, BIGNUM* value, PMC* dest)</li>
+<li><a name='void subtract_float(INTERP, PMC* self, FLOATVAL value, PMC* dest)'></a>void subtract_float(INTERP, PMC* self, FLOATVAL value, PMC* dest)</li>
+<p>Subtract <b>value</b> from <b>self</b> and store the result in <b>dest</b>.  Note that
+<b>dest</b> may be equal to <b>self</b>; in that case optimizations <i>may</i> be made.</p>
+<li><a name='void multiply(INTERP, PMC* self, PMC* value, PMC* dest)'></a>void multiply(INTERP, PMC* self, PMC* value, PMC* dest)</li>
+<li><a name='void multiply_int(INTERP, PMC* self, INTVAL value, PMC* dest)'></a>void multiply_int(INTERP, PMC* self, INTVAL value, PMC* dest)</li>
+<li><a name='void multiply_bignum(INTERP, PMC* self, BIGNUM* value, PMC* dest)'></a>void multiply_bignum(INTERP, PMC* self, BIGNUM* value, PMC* dest)</li>
+<li><a name='void multiply_float(INTERP, PMC* self, FLOATVAL value, PMC* dest)'></a>void multiply_float(INTERP, PMC* self, FLOATVAL value, PMC* dest)</li>
+<p>Multiply <b>value</b> by <b>self</b> and store the result in <b>dest</b>.  Note that
+<b>dest</b> may be equal to <b>self</b>; in that case optimizations <i>may</i> be
+made.</p>
+<li><a name='void divide(INTERP, PMC* self, PMC* value, PMC* dest)'></a>void divide(INTERP, PMC* self, PMC* value, PMC* dest)</li>
+<li><a name='void divide_int(INTERP, PMC* self, INTVAL value, PMC* dest)'></a>void divide_int(INTERP, PMC* self, INTVAL value, PMC* dest)</li>
+<li><a name='void divide_bignum(INTERP, PMC* self, BIGNUM* value, PMC* dest)'></a>void divide_bignum(INTERP, PMC* self, BIGNUM* value, PMC* dest)</li>
+<li><a name='void divide_float(INTERP, PMC* self, FLOATVAL value, PMC* dest)'></a>void divide_float(INTERP, PMC* self, FLOATVAL value, PMC* dest)</li>
+<p>Divide <b>self</b> by <b>value</b> and store the result in <b>dest</b>.  Note that
+<b>dest</b> may be equal to <b>self</b>; in that case optimizations <i>may</i> be
+made.</p>
+<li><a name='void modulus(INTERP, PMC* self, PMC* value, PMC* dest)'></a>void modulus(INTERP, PMC* self, PMC* value, PMC* dest)</li>
+<li><a name='void modulus_int(INTERP, PMC* self, INTVAL value, PMC* dest)'></a>void modulus_int(INTERP, PMC* self, INTVAL value, PMC* dest)</li>
+<li><a name='void modulus_bignum(INTERP, PMC* self, BIGNUM* value, PMC* dest)'></a>void modulus_bignum(INTERP, PMC* self, BIGNUM* value, PMC* dest)</li>
+<li><a name='void modulus_float(INTERP, PMC* self, FLOATVAL value, PMC* dest)'></a>void modulus_float(INTERP, PMC* self, FLOATVAL value, PMC* dest)</li>
+<p>Divide <b>self</b> by <b>value</b> and store the remainder in <b>dest</b>.  Note that
+<b>dest</b> may be equal to <b>self</b>; in that case optimizations <i>may</i> be
+made.</p>
+<li><a name='void cmodulus(INTERP, PMC* self, PMC* value, PMC* dest)'></a>void cmodulus(INTERP, PMC* self, PMC* value, PMC* dest)</li>
+<li><a name='void cmodulus_int(INTERP, PMC* self, INTVAL value, PMC* dest)'></a>void cmodulus_int(INTERP, PMC* self, INTVAL value, PMC* dest)</li>
+<li><a name='void cmodulus_bignum(INTERP, PMC* self, BIGNUM* value, PMC* dest)'></a>void cmodulus_bignum(INTERP, PMC* self, BIGNUM* value, PMC* dest)</li>
+<li><a name='void cmodulus_float(INTERP, PMC* self, FLOATVAL value, PMC* dest)'></a>void cmodulus_float(INTERP, PMC* self, FLOATVAL value, PMC* dest)</li>
+<p>Divide <b>self</b> by <b>value</b> and store the remainder in <b>dest</b>.  Note that
+<b>dest</b> may be equal to <b>self</b>; in that case optimizations <i>may</i> be made.</p>
+<p><b>Note</b>: <code>modulus</code> uses the Knuth's &quot;corrected mod&quot; algorithm, as
+implemented in <b><i>src/utils.c</i></b>, while <code>cmodulus</code> uses the C-style fmod
+function.</p>
+<li><a name='void neg(INTERP, PMC* self, PMC* dest)'></a>void neg(INTERP, PMC* self, PMC* dest)</li>
+<p>Negate the sign of <b>self</b> and store the result in <b>dest</b>.  Note that
+<b>self</b> and <b>dest</b> may refer to the same PMC, in which case
+optimizations <i>may</i> be made.</p>
+<li><a name='void bitwise_or(INTERP, PMC* self, PMC* value, PMC* dest)'></a>void bitwise_or(INTERP, PMC* self, PMC* value, PMC* dest)</li>
+<li><a name='void bitwise_or_int(INTERP, PMC* self, INTVAL value, PMC* dest)'></a>void bitwise_or_int(INTERP, PMC* self, INTVAL value, PMC* dest)</li>
+<p>Calculate the bitwise-OR of <b>self</b> and <b>value</b> and store the result
+in <b>dest</b>.   Note that <b>dest</b> may be equal to <b>self</b>; in that case
+optimizations <i>may</i> be made.</p>
+<li><a name='void bitwise_and(INTERP, PMC* self, PMC* value, PMC* dest)'></a>void bitwise_and(INTERP, PMC* self, PMC* value, PMC* dest)</li>
+<li><a name='void bitwise_and_int(INTERP, PMC* self, INTVAL value, PMC* dest)'></a>void bitwise_and_int(INTERP, PMC* self, INTVAL value, PMC* dest)</li>
+<p>Calculate the bitwise-AND of <b>self</b> and <b>value</b> and store the result
+in <b>dest</b>.   Note that <b>dest</b> may be equal to <b>self</b>; in that case
+optimizations <i>may</i> be made.</p>
+<li><a name='void bitwise_xor(INTERP, PMC* self, PMC* value, PMC* dest)'></a>void bitwise_xor(INTERP, PMC* self, PMC* value, PMC* dest)</li>
+<li><a name='void bitwise_xor_int(INTERP, PMC* self, INTVAL value, PMC* dest)'></a>void bitwise_xor_int(INTERP, PMC* self, INTVAL value, PMC* dest)</li>
+<p>Calculate the bitwise-XOR of <b>self</b> and <b>value</b> and store the result
+in <b>dest</b>.   Note that <b>dest</b> may be equal to <b>self</b>; in that case
+optimizations <i>may</i> be made.</p>
+<li><a name='void bitwise_ors(INTERP, PMC* self, PMC* value, PMC* dest)'></a>void bitwise_ors(INTERP, PMC* self, PMC* value, PMC* dest)</li>
+<li><a name='void bitwise_ors_str(INTERP, PMC* self, STRING* value, PMC* dest)'></a>void bitwise_ors_str(INTERP, PMC* self, STRING* value, PMC* dest)</li>
+<p>Calculate the bitwise-OR of the strings in <b>self</b> and <b>value</b> and store
+the result in <b>dest</b>. Note that <b>dest</b> may be equal to <b>self</b>; in that
+case optimizations <i>may</i> be made.</p>
+<li><a name='void bitwise_ands(INTERP, PMC* self, PMC* value, PMC* dest)'></a>void bitwise_ands(INTERP, PMC* self, PMC* value, PMC* dest)</li>
+<li><a name='void bitwise_ands_str(INTERP, PMC* self, STRING* value, PMC* dest)'></a>void bitwise_ands_str(INTERP, PMC* self, STRING* value, PMC* dest)</li>
+<p>Calculate the bitwise-AND of the strings in <b>self</b> and <b>value</b> and store
+the result in <b>dest</b>. Note that <b>dest</b> may be equal to <b>self</b>; in that
+case optimizations <i>may</i> be made.</p>
+<li><a name='void bitwise_xors(INTERP, PMC* self, PMC* value, PMC* dest)'></a>void bitwise_xors(INTERP, PMC* self, PMC* value, PMC* dest)</li>
+<li><a name='void bitwise_xors_str(INTERP, PMC* self, STRING* value, PMC* dest)'></a>void bitwise_xors_str(INTERP, PMC* self, STRING* value, PMC* dest)</li>
+<p>Calculate the bitwise-XOR of the strings in <b>self</b> and <b>value</b> and store
+the result in <b>dest</b>. Note that <b>dest</b> may be equal to <b>self</b>; in that
+case optimizations <i>may</i> be made.</p>
+<li><a name='void bitwise_not(INTERP, PMC* self, PMC* dest)'></a>void bitwise_not(INTERP, PMC* self, PMC* dest)</li>
+<p>Apply a bitwise negation to <b>self</b> and store the result in <b>dest</b>.
+Note that <b>self</b> and <b>dest</b> may refer to the same PMC; in that case
+optimizations <i>may</i> be made.</p>
+<li><a name='void bitwise_shl(INTERP, PMC* self, PMC* value, PMC* dest)'></a>void bitwise_shl(INTERP, PMC* self, PMC* value, PMC* dest)</li>
+<li><a name='void bitwise_shl_int(INTERP, PMC* self, INTVAL value, PMC* dest)'></a>void bitwise_shl_int(INTERP, PMC* self, INTVAL value, PMC* dest)</li>
+<p>Apply a leftward shift of <b>value</b> bits to the number stored in <b>self</b>,
+and place the resulting value in <b>dest</b>. Note that <b>self</b> and <b>dest</b> may
+refer to the same PMC; in that case optimizations <i>may</i> be made.</p>
+<li><a name='void bitwise_shr(INTERP, PMC* self, PMC* value, PMC* dest)'></a>void bitwise_shr(INTERP, PMC* self, PMC* value, PMC* dest)</li>
+<li><a name='void bitwise_shr_int(INTERP, PMC* self, INTVAL value, PMC* dest)'></a>void bitwise_shr_int(INTERP, PMC* self, INTVAL value, PMC* dest)</li>
+<p>Applies a rightward shift of <b>value</b> bits to the number stored in <b>self</b>,
+and places the resulting value in <b>dest</b>. Note that <b>self</b> and <b>dest</b> may
+refer to the same PMC; in that case optimizations <i>may</i> be made.</p>
+<li><a name='void concatenate(INTERP, PMC* self, PMC* value, PMC* dest)'></a>void concatenate(INTERP, PMC* self, PMC* value, PMC* dest)</li>
+<li><a name='void concatenate_str(INTERP, PMC* self, STRING* value, PMC* dest)'></a>void concatenate_str(INTERP, PMC* self, STRING* value, PMC* dest)</li>
+<p>Concatenate the strings in <b>self</b> and <b>value</b> and store the result
+in <b>dest</b>.
+Note that <b>self</b> and <b>dest</b> may refer to the same PMC; in that case
+optimizations <i>may</i> be made.</p>
+<li><a name='INTVAL is_equal(INTERP, PMC* self, PMC* value)'></a>INTVAL is_equal(INTERP, PMC* self, PMC* value)</li>
+<p>Return TRUE if the two PMCs are generically equivalent, or
+FALSE if they aren't.</p>
+<li><a name='INTVAL is_same(INTERP, PMC* self, PMC* value)'></a>INTVAL is_same(INTERP, PMC* self, PMC* value)</li>
+<p>Return TRUE if the PMCs are the same, and FALSE if
+they're not. In this case, &quot;the same&quot; means identical at a low
+level. For plain equality, use the is_equal method.</p>
+<li><a name='INTVAL cmp(INTERP, PMC* self, PMC* value)'></a>INTVAL cmp(INTERP, PMC* self, PMC* value)</li>
+<p>Compare the two PMCs as PMCs (whatever that means for the class).
+Return -1 if <b>self</b> is smaller, 0 if the two are equal, and 1
+if <b>value</b> is smaller.</p>
+<li><a name='INTVAL cmp_num(INTERP, PMC* self, PMC* value)'></a>INTVAL cmp_num(INTERP, PMC* self, PMC* value)</li>
+<p>Compare the two PMCs numerically.
+Return -1 if <b>self</b> is smaller, 0 if the two are equal, and 1
+if <b>value</b> is smaller.</p>
+<li><a name='INTVAL cmp_string(INTERP, PMC* self, PMC* value)'></a>INTVAL cmp_string(INTERP, PMC* self, PMC* value)</li>
+<p>Compare the two PMCs as strings.
+Return -1 if <b>self</b> is smaller, 0 if the two are equal, and 1
+if <b>value</b> is smaller.</p>
+<li><a name='void logical_or(INTERP, PMC* self, PMC* value, PMC* dest)'></a>void logical_or(INTERP, PMC* self, PMC* value, PMC* dest)</li>
+<p>Do a short-circuiting logical-OR of <b>self</b> and <b>value</b>, storing
+the winner in <b>dest</b>.</p>
+<li><a name='void logical_and(INTERP, PMC* self, PMC* value, PMC* dest)'></a>void logical_and(INTERP, PMC* self, PMC* value, PMC* dest)</li>
+<p>Do a short-circuiting logical-AND of <b>self</b> and <b>value</b>, storing
+the winner in dest.</p>
+<li><a name='void logical_xor(INTERP, PMC* self, PMC* value, PMC* dest)'></a>void logical_xor(INTERP, PMC* self, PMC* value, PMC* dest)</li>
+<p>If exactly one of <b>self</b> or <b>value</b> is true, store it in <b>dest</b>.  Else
+set <b>dest</b> to be false.</p>
+<li><a name='void logical_not(INTERP, PMC* self, PMC* dest)'></a>void logical_not(INTERP, PMC* self, PMC* dest)</li>
+<p>Do a logical-NOT on <b>self</b> and stores the result in <b>dest</b>.</p>
+<li><a name='void repeat(INTERP, PMC* self, PMC* value, PMC* dest)'></a>void repeat(INTERP, PMC* self, PMC* value, PMC* dest)</li>
+<li><a name='void repeat_int(INTERP, PMC* self, INTVAL value, PMC* dest)'></a>void repeat_int(INTERP, PMC* self, INTVAL value, PMC* dest)</li>
+<p>Repeat the string value of <b>self</b> <b>value</b> times and store the
+resultant string in <b>dest</b>.</p>
+<li><a name='void increment(INTERP, PMC* self)'></a>void increment(INTERP, PMC* self)</li>
+<p>Auto-increment the PMC.</p>
+<li><a name='void decrement(INTERP, PMC* self)'></a>void decrement(INTERP, PMC* self)</li>
+<p>Auto-decrement the PMC.</p>
+<li><a name='void abs(INTERP, PMC* self, PMC* dest)'></a>void abs(INTERP, PMC* self, PMC* dest)</li>
+<p>Set <code>dest</code> to the absolute value of <code>SELF</code>. Note: <code>dest</code> may be
+<code>SELF</code>.</p>
+<li><a name='INTVAL exists_keyed(INTERP, PMC* self, PMC* key)'></a>INTVAL exists_keyed(INTERP, PMC* self, PMC* key)</li>
+<li><a name='INTVAL exists_keyed_int(INTERP, PMC* self, INTVAL key)'></a>INTVAL exists_keyed_int(INTERP, PMC* self, INTVAL key)</li>
+<li><a name='INTVAL exists_keyed_str(INTERP, PMC* self, STRING* key)'></a>INTVAL exists_keyed_str(INTERP, PMC* self, STRING* key)</li>
+<p>Only valid for keyed access.</p>
+<p>Returns TRUE if the key exists in the aggregate being queried; otherwise,
+return FALSE.</p>
+<p>The key is guaranteed to be non-NULL.</p>
+<li><a name='INTVAL defined(INTERP, PMC* self)'></a>INTVAL defined(INTERP, PMC* self)</li>
+<p>Check to see if the PMC is defined. Return TRUE if it is; otherwise,
+return FALSE.</p>
+<li><a name='INTVAL defined_keyed(INTERP, PMC* self, PMC* key)'></a>INTVAL defined_keyed(INTERP, PMC* self, PMC* key)</li>
+<li><a name='INTVAL defined_keyed_int(INTERP, PMC* self, INTVAL key)'></a>INTVAL defined_keyed_int(INTERP, PMC* self, INTVAL key)</li>
+<li><a name='INTVAL defined_keyed_str(INTERP, PMC* self, STRING* key)'></a>INTVAL defined_keyed_str(INTERP, PMC* self, STRING* key)</li>
+<p>Return TRUE if the value of <b>self</b> keyed by <b>key</b> is defined;
+otherwise, return FALSE.</p>
+<p>The key is guaranteed to be non-NULL.</p>
+<li><a name='void delete_keyed(INTERP, PMC* self, PMC* key)'></a>void delete_keyed(INTERP, PMC* self, PMC* key)</li>
+<li><a name='void delete_keyed_int(INTERP, PMC* self, INTVAL key)'></a>void delete_keyed_int(INTERP, PMC* self, INTVAL key)</li>
+<li><a name='void delete_keyed_str(INTERP, PMC* self, STRING* key)'></a>void delete_keyed_str(INTERP, PMC* self, STRING* key)</li>
+<p>Delete the specified entry from the aggregate.</p>
+<p>The key is guaranteed to be non-NULL.</p>
+<li><a name='PMC* nextkey_keyed(INTERP, PMC* self, PMC* key)'></a>PMC* nextkey_keyed(INTERP, PMC* self, PMC* key)</li>
+<li><a name='PMC* nextkey_keyed_int(INTERP, PMC* self, INTVAL key)'></a>PMC* nextkey_keyed_int(INTERP, PMC* self, INTVAL key)</li>
+<li><a name='PMC* nextkey_keyed_str(INTERP, PMC* self, STRING* key, INTVAL what)'></a>PMC* nextkey_keyed_str(INTERP, PMC* self, STRING* key, INTVAL what)</li>
+<p>Given the passed in key for the PMC, return the next key.</p>
+<p>The key is guaranteed to be non-NULL.</p>
+<li><a name='PMC* get_iter(INTERP, PMC* self)'></a>PMC* get_iter(INTERP, PMC* self)</li>
+<p>Return a new iterator for this aggregate. The iterator should be
+initialized so that iterations starts at the first element of the
+aggregate. If the aggregate is empty, set PMC_int_val() of the
+iterator key to -1.</p>
+<li><a name='PMC* slice(INTERP, PMC* self, PMC* key)'></a>PMC* slice(INTERP, PMC* self, PMC* key)</li>
+<p>Return a new iterator for this aggregate and the given Slice key.</p>
+<li><a name='void substr(INTERP, PMC* self, INTVAL offset, INTVAL length, PMC* dest)'></a>void substr(INTERP, PMC* self, INTVAL offset, INTVAL length, PMC* dest)</li>
+<p>Place the value of the substring of <b>self</b> at offset <b>offset</b> and with
+length <b>length</b> into <b>dest</b>.</p>
+<li><a name='STRING* substr_str(INTERP, PMC* self, INTVAL offset, INTVAL length)'></a>STRING* substr_str(INTERP, PMC* self, INTVAL offset, INTVAL length)</li>
+<p>Return the substring of <b>self</b> at offset <b>offset</b> and with length <b>length</b>.</p>
+<li><a name='void* invoke(INTERP, PMC* self, void* next)'></a>void* invoke(INTERP, PMC* self, void* next)</li>
+<p>Invoke the subroutine/method in the given PMC.</p>
+<p>It should set up the environment for the sub, and should return the
+location at which operation flow should continue after the subroutine
+returns. (Note that this will generally be the address of the next
+instruction).</p>
+<p>It is <b>NOT</b> responsible for preserving any of the current context;
+the caller should have preserved anything that they want preserved
+before calling this method.</p>
+<p>See <b><i>pdd03_calling_conventions.pod</i></b> for more details.</p>
+<p><b>next*</b> is passed in from the run loop and is the program counter of the
+next instruction.</p>
+<li><a name='INTVAL can(INTERP, PMC* self, STRING* method)'></a>INTVAL can(INTERP, PMC* self, STRING* method)</li>
+<p>Determine whether the PMC can perform the method specified by name in
+<b>method</b>. Returns TRUE if it can; otherwise, returns FALSE.</p>
+<li><a name='INTVAL does(INTERP, PMC* self, STRING* method)'></a>INTVAL does(INTERP, PMC* self, STRING* method)</li>
+<p>Determine whether the PMC implements the interface specified by name in
+<b>method</b>. Returns TRUE if it can; otherwise, returns FALSE.</p>
+<li><a name='INTVAL isa(INTERP, PMC* self, STRING* _class)'></a>INTVAL isa(INTERP, PMC* self, STRING* _class)</li>
+<p>Is the PMC a member of <b>_class</b> or one of its subclasses.</p>
+<p>See also <b><i>pdd15_objects.pod</i></b>.</p>
+<li><a name='PMC* subclass(STRING* name)'></a>PMC* subclass(STRING* name)</li>
+<p>Creates a subclass, optionally with a given <b>name</b>.</p>
+<li><a name='void freeze(INTERP, PMC* self, visit_info* info)'></a>void freeze(INTERP, PMC* self, visit_info* info)</li>
+<li><a name='void thaw(INTERP, PMC* self, visit_info* info)'></a>void thaw(INTERP, PMC* self, visit_info* info)</li>
+<li><a name='void thawfinish(INTERP, PMC* self, visit_info* info)'></a>void thawfinish(INTERP, PMC* self, visit_info* info)</li>
+<li><a name='void visit(INTERP, PMC* self, visit_info* info)'></a>void visit(INTERP, PMC* self, visit_info* info)</li>
+<p>Serialization functions.</p>
+<p>XXX: these need documenting by somebody who understands them.</p>
+<li><a name='void share(INTERP, PMC* self)'></a>void share(INTERP, PMC* self)</li>
+<p>XXX: needs documenting</p>
+</ul>
+<a name='VERSION'></a><h1>VERSION</h1>
+<a name='CURRENT'></a><h2>CURRENT</h2>
+<pre>   Maintainer: Dan Sugalski &lt;<a href='mailto:dan@sidhe.org'>dan@sidhe.org</a>&gt;
+   Class: Internals
+   PDD Number: 2
+   Version: 1.5
+   Status: Developing
+   Last Modified: 27 July 2003
+   PDD Format: 1
+   Language: English</pre>
+<a name='HISTORY'></a><h2>HISTORY</h2>
+<ul>
+<li><a name='1.5'></a>1.5</li>
+<p>18 May 2004</p>
+<li><a name='1.4'></a>1.4</li>
+<p>1 Nov 2003</p>
+<li><a name='1.3'></a>1.3</li>
+<p>27 July 2003</p>
+<li><a name='1.2'></a>1.2</li>
+<p>22 June 2002</p>
+<li><a name='1.1'></a>1.1</li>
+<p>13 May 2002</p>
+<li><a name='1.0'></a>1.0</li>
+<p>None. First version</p>
+</ul>
+<a name='CHANGES'></a><h1>CHANGES</h1>
+<ul>
+<li><a name='1.5'></a>1.5</li>
+<pre> * Remove obsolete _keyed vtables.
+ * s/concat_native/concat_str/</pre>
+<li><a name='1.4'></a>1.4</li>
+<pre> * Add set/get_pointer vtables.
+ * Change s/KEY/PMC/ and s/INTVAL* key/INTVAL key/</pre>
+<li><a name='1.3'></a>1.3</li>
+<p>Added a number of missing method definitions. Many other minor cleanups.</p>
+<li><a name='1.2'></a>1.2</li>
+<p>Many cleanups and clarifications.  Much detail added.  Many missing
+methods added.</p>
+<li><a name='1.1'></a>1.1</li>
+<p>Cleaned up the definition. It was a mess.</p>
+<li><a name='1.0'></a>1.0</li>
+<p>None. First version</p>
+</ul>
+</div>

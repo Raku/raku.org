@@ -1,0 +1,45 @@
+[% setvar title Proposal to rename C<import> and C<unimport> %]
+<h3>This file is part of the Perl 6 Archive</h3>
+    <p>To see what is currently happening visit <a href="http://www.perl6.org/">http://www.perl6.org/</a></p>
+<div class='pod'>
+<a name='TITLE'></a><h1>TITLE</h1>
+<p>Proposal to rename <code>import</code> and <code>unimport</code></p>
+<a name='VERSION'></a><h1>VERSION</h1>
+<pre>  Maintainer: Jonathan Scott Duff &lt;<a href='mailto:duff@pobox.com'>duff@pobox.com</a>&gt;
+  Date: 8 Aug 2000
+  Last Modified: 1 Sep 2000
+  Mailing List: <a href='mailto:perl6-language@perl.org'>perl6-language@perl.org</a>
+  Number: 74
+  Version: 3
+  Status: Developing</pre>
+<a name='ABSTRACT'></a><h1>ABSTRACT</h1>
+<p><code>import()</code> and <code>unimport</code> should be <code>IMPORT</code> and <code>UNIMPORT</code>
+respectively, in keeping with all of the other special-to-Perl names.</p>
+<a name='DESCRIPTION'></a><h1>DESCRIPTION</h1>
+<p>The Perl documentation says that</p>
+<pre>	use Module LIST;</pre>
+<p>is equivalent to</p>
+<pre>	BEGIN { require Module; import Module LIST; }</pre>
+<p>so that <code>use Module LIST</code> automatically calls the <code>import</code> routine
+for that module if it exists.  Thus <code>import</code> is a routine that has
+special meaning to Perl.  This RFC proposes that <code>import</code> and <code>unimport</code>
+be renamed to <code>IMPORT</code> and <code>UNIMPORT</code> respectively.  This would be
+consistent with the naming of all other subroutines that are special
+to Perl.</p>
+<p>Nathan Wiger &lt;<a href='mailto:nate@wiger.org'>nate@wiger.org</a>&gt; suggests that we create an <code>import</code>
+keyword (and I assume an <code>unimport</code> keyword as well) that calls
+<code>import Module LIST</code>.  The author of this RFC would rather not add
+new keywords.  However, I see no reason why the <b>module</b> author
+should not provide an <code>import()</code> routine that is simply an alias for
+<code>IMPORT()</code>.</p>
+<a name='IMPLEMENTATION'></a><h1>IMPLEMENTATION</h1>
+<p>Just change the names!</p>
+<a name='MIGRATION'></a><h1>MIGRATION</h1>
+<p>The Perl5 -&gt; Perl6 translator should provide a <code>import</code> alias for the
+<code>IMPORT</code> routine to ease migration.  Likewise for <code>unimport</code>.</p>
+<a name='REFERENCES'></a><h1>REFERENCES</h1>
+<p>Perl 5.6.0 documentation</p>
+<p>RFC 59: Proposal to utilize <code>*</code> as the prefix to magic subroutines</p>
+<p>Email from Nathan Wiger &lt;<a href='mailto:nate@wiger.org'>nate@wiger.org</a>&gt; that went to perl6-language
+but I can't find at www.mail-archive.com  :-(</p>
+</div>

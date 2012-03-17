@@ -1,0 +1,41 @@
+[% setvar title unified container theory %]
+<h3>This file is part of the Perl 6 Archive</h3>
+    <p>To see what is currently happening visit <a href="http://www.perl6.org/">http://www.perl6.org/</a></p>
+<div class='pod'>
+<a name='TITLE'></a><h1>TITLE</h1>
+<p>unified container theory</p>
+<a name='VERSION'></a><h1>VERSION</h1>
+<pre>  Maintainer: David Nicol &lt;<a href='mailto:perl6rfc@davidnicol.com'>perl6rfc@davidnicol.com</a>&gt;
+  Date: 28 Sep 2000
+  Mailing List: <a href='mailto:perl6-language-data@perl.org'>perl6-language-data@perl.org</a>
+  Number: 341
+  Version: 1
+  Status: Developing</pre>
+<a name='ABSTRACT'></a><h1>ABSTRACT</h1>
+<p>Viewing Hash and Array as instances of &quot;Container&quot; leads
+to easy implementation of &quot;Sparse Array&quot; and &quot;Sorted Hash&quot;
+and &quot;Real Array&quot;</p>
+<a name='DESCRIPTION'></a><h1>DESCRIPTION</h1>
+<p>There are two big differences between Hash and Array.</p>
+<ul>
+<li><a name='Hash keys are string, and Array keys are Integer'></a>Hash keys are string, and Array keys are Integer</li>
+<p>Hash keys are string, and Array keys are Integer</p>
+<li><a name='Array semantics include listing keys which have not been assigned to yet.'></a>Array semantics include listing keys which have not been assigned to yet.</li>
+<p>Array semantics include listing keys which have not been assigned to yet.
+This is really an issue for the accessing functions, not the underlying data.</p>
+<li><a name='Curly braces mean look up by string, and square brackets mean look up by integer.'></a>Curly braces mean look up by string, and square brackets mean look up by integer.</li>
+<p>maybe square brackets as the <code>qr</code> delimiter would be a good way to
+indicate RFC197 regex semantics.  Wouldn't that make for an easy way to take
+a slice from a collection of data points?</p>
+</ul>
+<a name='IMPLEMENTATION'></a><h1>IMPLEMENTATION</h1>
+<p>With this in mind, it becomes possible to consider implementing both container
+types as sorted trees, possibly transparently switching to block offset arrays
+when Array is sufficiently dense.</p>
+<p>The one tree framework could be used for both types of trees, by switching
+the comparison function.</p>
+<p>Tree search may be faster than
+hash function calculation for easily compared data.</p>
+<a name='REFERENCES'></a><h1>REFERENCES</h1>
+<p>The above is written from memory of conversation in August on perl6-internals.</p>
+</div>

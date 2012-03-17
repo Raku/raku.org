@@ -1,0 +1,80 @@
+[% setvar title Numeric Value Ranges In Regular Expressions %]
+<h3>This file is part of the Perl 6 Archive</h3>
+    <p>To see what is currently happening visit <a href="http://www.perl6.org/">http://www.perl6.org/</a></p>
+<div class='pod'>
+<a name='TITLE'></a><h1>TITLE</h1>
+<p>Numeric Value Ranges In Regular Expressions</p>
+<a name='VERSION'></a><h1>VERSION</h1>
+<pre>  Maintainer: David Nicol &lt;<a href='mailto:perl6rfc@davidnicol.com'>perl6rfc@davidnicol.com</a>&gt;
+  Date: 5 Sep 2000
+  Last Modified: 22 Sep 2000
+  Mailing List: <a href='mailto:perl6-language-regex@perl.org'>perl6-language-regex@perl.org</a>
+  Number: 197
+  Version: 2
+  Status: Frozen</pre>
+<a name='CHANGES'></a><h1>CHANGES</h1>
+<p>s/numberic/numeric in title (oops)</p>
+<p>expansion of implemention/optimization section</p>
+<a name='ABSTRACT'></a><h1>ABSTRACT</h1>
+<p>round and square bratches mated around two optional comma separated numbers
+match iff a gobbled number is within the described range.</p>
+<a name='DESCRIPTION'></a><h1>DESCRIPTION</h1>
+<a name='the syntax of the numeric range regex element'></a><h2>the syntax of the numeric range regex element</h2>
+<p>Given a passage of regex text matching</p>
+<pre>	($B1,$N1,$N2,$B2) = /(\[|\()(\-?\d*\.?\d*),(\-?\d*\.?\d*)(\]|\))/
+	and ($N1 &lt;= $N2 or $N1 eq '' or $N2 eq '')</pre>
+<p>we've got something we hereinafter call a &quot;range.&quot;</p>
+<a name='what the range matches'></a><h2>what the range matches</h2>
+<p>A range matches, in the target string, a passage <code>(\-?\d*\.?\d*)</code>
+also known as a
+&quot;number&quot; if and only if the number is within the range.  In the normal agebraic sense.</p>
+<a name='&quot;within the range&quot;'></a><h2>&quot;within the range&quot;</h2>
+<p>Square bracket means, that end of the range may include the range specifying
+number, and round parenthesis means, that end of the range includes numbers ov value up to (or down to) the number but not equal to it.</p>
+<a name='infinity'></a><h2>infinity</h2>
+<p>in the event that one or the other of the range specifying numbers
+is the empty string, that end of the range is unbounded.  In the further event
+that we have defined infinity and negative infinity on our numbers, the
+square/round distinction will come into play.</p>
+<p>The range end indicators are literal numbers, although they may be optimized
+immensely.  No expression evaluation occurs w/in the range specifier, beyond
+the normal rules of double-quote interpolation.</p>
+<a name='COMPATIBILITY'></a><h1>COMPATIBILITY</h1>
+<p>To disambiguate ranges from character sets including
+digits, commas, and parentheses, either put a backslash on the right
+parentheses, or the comma, or
+arrange things so the left hand side of the comma is greater than the
+right hand side, that way this special case will not apply:</p>
+<pre>	/(37.3,200)/;	# matches any number x, 37.3 &lt; x &lt; 200
+	/((37.3,200))/;	# matches any number x, 37.3 &lt; x &lt; 200 and saves it
+	/([37,))/;	# matches and saves any number &gt;= 37.
+	/(37.3\,200)/;	# matches and saves the literal text '37.3,200'
+	/[-35,9)]/;	# matches any number x, -35 &lt;= x &lt; 9; followed by a ]
+	/[3-5,9)]/;	# matches a string containing any of 3,4,5,,,9 or )
+	/[$low,$high]/;	# matches a number $low &lt;= $_ &lt;= $high, provided
+			# low and high are both numerics.
+	/[$low,${\highf(@data)}/;	# complex interpolation tricks</pre>
+<p>Tieing variables to be interpolated into range matches to types which
+always produce numbers is reccommended.</p>
+<a name='IMPLEMENTATION'></a><h1>IMPLEMENTATION</h1>
+<p>Yet more special cases for interpretation of ([)] in regular expressions.</p>
+<p>We match regular expressions against</p>
+<pre>	($B1,$N1,$N2,$B2) = /(\[|\()(\-?\d*\.?\d*),(\-?\d*\.?\d*)(\]|\))/
+	and ($N1 &lt;= $N2 or $N1 eq '' or $N2 eq '')</pre>
+<p>and mark matching passages as ranges.</p>
+<p>When applying regular expressions to numeric
+data, ranges may optimize away all of the digit lookahead we must currently
+indulge in to implement them in perl5. IOW, if we know a string literal containing
+interpolated numeric scalars is going
+to get matched by an expression containing ranges, we may be able to skip both the
+interpolation and the deinterpolation and go straight to multi-way numeric comparison.</p>
+<p>If we have infinity defined, we'll have to look for its string representation.</p>
+<p>And if a &quot;simple, fast regex match mode&quot; is defined, this pass could
+be switched in or out: maybe we want fast range matching.</p>
+<a name='BUT WAIT THERE'S MORE'></a><h1>BUT WAIT THERE'S MORE</h1>
+<p>It is possible that the syntax described
+in this document may help slice multidimensional
+containers. (RFC 191)</p>
+<a name='REFERENCES'></a><h1>REFERENCES</h1>
+<p>None.</p>
+</div>

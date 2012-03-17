@@ -1,0 +1,199 @@
+[% setvar title Yet another lexical variable proposal: lexical variables made defaultwithout requiring strict 'vars' %]
+<h3>This file is part of the Perl 6 Archive</h3>
+    <p>To see what is currently happening visit <a href="http://www.perl6.org/">http://www.perl6.org/</a></p>
+<div class='pod'>
+<a name='TITLE'></a><h1>TITLE</h1>
+<p>Yet another lexical variable proposal: lexical variables made default
+without requiring strict 'vars'</p>
+<a name='VERSION'></a><h1>VERSION</h1>
+<pre>  Maintainer: J. David Blackstone &lt;<a href='mailto:jdavidb@dfw.net'>jdavidb@dfw.net</a>&gt;
+  Date: 15 Aug 2000
+  Last Modified: 26 Sep 2000
+  Mailing List: <a href='mailto:perl6-language-strict@perl.org'>perl6-language-strict@perl.org</a>
+  Number: 106
+  Version: 2
+  Status: Frozen</pre>
+<a name='ABSTRACT'></a><h1>ABSTRACT</h1>
+<p>Perl was originally designed around dynamically-scoped variables.
+Many users would like to see this design flaw fixed, but are disagreed
+about how to go about it.  This proposal suggests making undeclared
+variables be lexical by default in Perl6 and deals with the possible
+ambiguities this could bring about.  An optional suggestion is made as
+to how one might go even further and eliminate dynamic variables
+entirely from the language.</p>
+<a name='CHANGES'></a><h1>CHANGES</h1>
+<p>Undeclared variables can be considered a part of the smallest
+enclosing scope under the &quot;liberal&quot; approach to resolving the
+&quot;ambiguity&quot; mentioned in the suggestion, but they could also be
+considered a part of the largest enclosing scope.</p>
+<a name='DESCRIPTION'></a><h1>DESCRIPTION</h1>
+<p>Lexically-scoped variables are easy to use and intuitive, in that any
+lexical variable refers to a variable declared within the current
+scope or the enclosing scope.  The variable can be located by
+lexically scanning the source code.  Dynamic variables, on the other
+hand, refer to a variable from within the current scope or from within
+the current subroutines _caller_, which could be anywhere!  It is
+impossible to tell exactly what else might be happening to a dynamic
+variable, resulting in various action at a distance problems, variable
+suicide problems, and other difficulties.</p>
+<p>Under this proposal, lexical variables are considered to be the norm
+for Perl6.  Any undeclared variable is considered to be a lexical
+variable.</p>
+<a name='Scopes'></a><h2>Scopes</h2>
+<p>An undeclared variable is lexical and visible only within the scope
+where it is first used and any scopes contained within that one.  The
+notion of &quot;scope&quot; is the same as Perl has had almost since the
+beginning: a block (including a subroutine block) begins a new scope;
+a file is also a scope.</p>
+<p>Thus, in the following code segment,</p>
+<pre>	$x = 15;
+	$y = $x;
+	while ($y) {
+	$z = $y;
+	...
+	$x += $z;
+	}</pre>
+<p>$x and $y are lexicals contained in the outermost scope (probably a
+file), while $z is a lexical available only in the while loop.  When
+used within the while loop, $x and $y refer to the same scalars
+referred to outside of the while loop.</p>
+<a name='Use of my'></a><h2>Use of <code>my</code></h2>
+<p>In all cases, the <code>my</code> operator behaves as it does in Perl5, allowing
+local variables that will not interfere with other variables, etc.</p>
+<a name='Dynamic Assignment'></a><h2>Dynamic Assignment</h2>
+<p>Dynamic assignment is the technical term given to the action performed
+by <code>local</code> in Perl5 and earlier versions.  The value of a variable is
+saved upon execution of the operator and restored when the current
+scope ends.</p>
+<p>There is no actual reason why dynamic assignment needs to be limited
+to dynamic variables.  This RFC strongly suggests that dynamic
+assignment be enabled for lexical variables, as well.  Programming
+with all lexicals and occasional use of dynamic assignment can cover
+many of the cases where dynamically-scoped variables are useful.</p>
+<p>Note that <code>local</code> will probably be renamed in Perl6.</p>
+<p>Tom Christiansen has mentioned once or twice that Chip Salzenburg
+seemed to be interested in this idea.  It occurs in his (TC's)
+perl6storm document.  It is a shame no one has undertaken to RFC it
+separately.  (Hint, hint. :)</p>
+<a name='Ambiguity'></a><h2>Ambiguity</h2>
+<p>Several people have raised issues about possible ambiguities with this
+idea, but they have all been instances of the same problem: the case
+where an undeclared variable is used first within a block, then within
+that block's containing scope.  For example,</p>
+<p>$cond = ...;
+if ($cond) {
+...
+$color = &quot;blue&quot;;
+...
+}
+print &quot;The color is $color\n&quot;;</p>
+<p>The programmer expects the value of $color to be &quot;blue&quot; for the print
+statement, but in fact $color is a brand-new, undefined, lexical
+variable.</p>
+<p>Translating this block from Perl5 to get the same behavior in Perl6 if
+this RFC is adopted is straightforward and discussed in the
+IMPLEMENTATION section.</p>
+<p>There are two options for dealing with this construct in new Perl6
+code:</p>
+<ul>
+<li><a name='1'></a>1</li>
+<p>Dubbed the &quot;conservative&quot; approach by Mark-Jason Dominus, this option
+requires that the programmer disambiguate the situation by declaring
+the variable with <code>my</code>.  Perl would produce a warning in this case to
+the effect that, &quot;A variable used within a block was used after that
+block, but never declared or used before it.  The enclosing scope
+cannot see the same variable that exists within the enclosed block.&quot;</p>
+<p>Alternatively, if this RFC is adopted, but nothing is done to alert
+new Perl6 programmers about these possibly ambiguous cases, the
+programmer would receive a &quot;Use of undefined value&quot; warning which
+might suffice.</p>
+<li><a name='2'></a>2</li>
+<p>In the &quot;liberal&quot; approach, perl can do what amounts to &quot;inferring
+declarations.&quot;  To actually refer to it this way would be a
+contradiction in terms, since a declaration is explicit, not inferred.</p>
+<p>To implement the liberal approach, perl would detect all of the
+undeclared variables used within a scope when it compiles that scope.
+These variables would become available for use from the minute that
+scope is entered.  Thus, in the example above, $color is detected as
+being a part of the enclosing scope before the interpreter ever enters
+the if statement, and $color therefore refers to the same scalar in
+both places.</p>
+<p>It was observed that this approach could also be implemented by
+inferring a variable to be declared at the top-level, the largest
+enclosing scope.  It does not appear that there would be any
+language-visible differences in this implementation, although it would
+certainly be different to the implementors.</p>
+</ul>
+<a name='Variable declarations'></a><h2>Variable declarations</h2>
+<p>This proposal does not require variable declarations, like the strict
+'vars' pragma does, except if the conservative approach is taken to
+resolving the ambiguity noted above.  Even then, declarations are only
+required in a very few cases.</p>
+<p>Some programmers will want a mechanism to require declarations,
+similar to Perl5's strict 'vars' pragma.  The suggestion of this RFC
+is a pragma called <code>strict 'decs'</code>.</p>
+<a name='Possible elimination of dynamic variables'></a><h2>Possible elimination of dynamic variables</h2>
+<p>This subsection suggests a radical change for Perl6.  Everything else
+in this RFC can be implemented without implementing this idea, if
+desired.  This subsection should be considered &quot;optional.&quot;</p>
+<p>In most languages, dynamic scoping of variables offers no advantages
+over lexical scoping, other than dynamic assignment.  As noted above,
+dynamic assignment can be accomplished with the <code>local</code> operator,
+which can be extended to operate on lexical variables as well as (or
+even instead of) dynamic variables.</p>
+<p>The chief instance where Perl5 requires dynamic variables is in the
+case of package globals.  The package command was created in order to
+allow for different namespaces that would not conflict, when lexical
+variables were not available at all in Perl.  Now it has been extended
+for O-O classes.</p>
+<p>The following changes could be made involving lexical variables and
+packages in order to eliminate dynamic variables from the language
+entirely:</p>
+<ul>
+<li><a name='Dynamic variables are removed from the language.'></a>Dynamic variables are removed from the language.</li>
+<li><a name='Lexical variables can only be accessed from within the same scope or a lower scope. This means lexicals declared in the same file can be accessed even if they are declared in a different package, but lexicals declared in another file cannot be accessed directly.'></a>Lexical variables can only be accessed from within the same scope or a
+lower scope.  This means lexicals declared in the same file can be
+accessed even if they are declared in a different package, but
+lexicals
+declared in another file cannot be accessed directly.</li>
+<li><a name='The functionality of a package (dynamic) variable that is intended for access from a different scope/file can be provided by a lexical variable defined in a .pm file along with a class accessor method (standard get/set functionality). This should provide the ability to automate the translation of Perl5 code into Perl6, should this RFC and this optional subsection be adopted.'></a>The functionality of a package (dynamic) variable
+that is intended for access from a different scope/file can be
+provided by a lexical variable defined in a .pm file along with a
+class accessor method (standard get/set functionality).  This should
+provide the ability to automate the translation of Perl5 code into
+Perl6, should this RFC and this optional subsection be adopted.</li>
+<li><a name='Packages still continue to function in the same way to define classes.'></a>Packages still continue to function in the same way to define classes.</li>
+<li><a name='Packages still continue to provide a separate namespace for non-O-O subroutines.'></a>Packages still continue to provide a separate namespace for non-O-O
+subroutines.</li>
+</ul>
+<p>Under the proposal of this optional subsection, it might be desired to
+implement a pragma to allow the use of dynamic variables.</p>
+<p>Also, if this proposal is really a good idea, and if it isn't put into
+Perl 6 by default (and I would presume it won't), it could at least be
+made available as a <code>strict</code> pragma to help out the programmers who
+want to code this way but are too Lazy to depend on their own human
+nature to not overlook mistakes.</p>
+<a name='IMPLEMENTATION'></a><h1>IMPLEMENTATION</h1>
+<p>Very little will have to be done to translate Perl5 to Perl6 under
+this proposal.  The ambiguous case mentioned above where a variable is
+used after a block, but not before it, can be disambiguated in all
+cases with a declaration before the block (100% translation).  This
+works whether the &quot;conservative&quot; or &quot;liberal&quot; approach is adopted.</p>
+<p>If you take nothing away from this RFC that you like, please consider
+carefully the following two paragraphs.</p>
+<p>It is suggested that Perl6 be designed with lexicals in mind first,
+followed by dynamic variables, if appropriate.</p>
+<p>If the optional subsection on eliminating dynamic variables entirely
+is adopted, Perl will completely shed the heritage of dynamic
+variables.  Whatever the case, the language should be designed and
+implemented in such a way that lexical variables are in the design
+with dynamic assignment/dynamic variables added in later, rather than
+the other way around.</p>
+<a name='REFERENCES'></a><h1>REFERENCES</h1>
+<p>There have been many alternative and conflicting proposals.  This RFC
+does not necessarily attempt to be consistent with any of them, but
+they are listed here for convenience.</p>
+<p>RFC 6: Lexical variables made default</p>
+<p>RFC 16: Keep default Perl free of constraints such as warnings and strict</p>
+<p>RFC 64: New pragma 'scope' to change Perl's default scoping</p>
+</div>

@@ -1,0 +1,36 @@
+[% setvar title Fuller integer support in Perl. %]
+<h3>This file is part of the Perl 6 Archive</h3>
+    <p>To see what is currently happening visit <a href="http://www.perl6.org/">http://www.perl6.org/</a></p>
+<div class='pod'>
+<a name='TITLE'></a><h1>TITLE</h1>
+<p>Fuller integer support in Perl.</p>
+<a name='VERSION'></a><h1>VERSION</h1>
+<pre>  Maintainer: Shane Kerr &lt;<a href='mailto:shane@time-travellers.org'>shane@time-travellers.org</a>&gt;
+  Date: 11 Sep 2000
+  Mailing List: <a href='mailto:perl6-language@perl.org'>perl6-language@perl.org</a>
+  Number: 209
+  Version: 1
+  Status: Developing</pre>
+<a name='ABSTRACT'></a><h1>ABSTRACT</h1>
+<p>Perl currently allows blocks of code to use integer math for both
+increased performance and integer semantics.  This should be extended
+to allow programs to specify both the size and signedness of integers.</p>
+<a name='DESCRIPTION'></a><h1>DESCRIPTION</h1>
+<p>Programs sometimes need to operate on values that map in a natural
+fashion to integers of specific size.  For example, IPv4 addresses
+may most naturally be represented as unsigned 32-bit integers.  By
+default, Perl uses floating point numbers, but precision is lost in
+the 32-bit integer range.</p>
+<p>Currently the only safe alternative is to use strings for this range,
+e.g. 0-padded hexidecimal numbers.  In order to both save memory and
+allow more rapid processing, Perl should support the ability to specify
+both the size and signedness of numbers for a given block.</p>
+<a name='IMPLEMENTATION'></a><h1>IMPLEMENTATION</h1>
+<p>Programs will specify arithmetic processing in typical Perl fashion:</p>
+<pre>  use integer qw(32bit unsigned);
+
+  use integer qw(64bit);</pre>
+<p>Perl semantics will reflect this value until the end of current block.</p>
+<a name='REFERENCES'></a><h1>REFERENCES</h1>
+<p>perldoc integer for discussion of current integer support</p>
+</div>

@@ -1,0 +1,138 @@
+[% setvar title The Perl 6 Summary for the week ending 20040208 %]
+<h3>This file is part of the Perl 6 Archive</h3>
+    <p>To see what is currently happening visit <a href="http://www.perl6.org/">http://www.perl6.org/</a></p>
+<div class='pod'>
+<a name='The Perl 6 Summary for the week ending 20040208'></a><h1>The Perl 6 Summary for the week ending 20040208</h1>
+<p>Another Monday evening. Another day of displacement activity out of the
+way. There's a huge lump of belly pork braising slowly in a mixture of stock,
+rice wine &amp; soy sauce, and nothing on the telly. It must be time to
+write the Perl 6 summary. As usual, I'm going to deal with
+perl6-internals first.</p>
+<a name='RT Cleanup'></a><h2>RT Cleanup</h2>
+<p>The cleanup of the RT bugs database continued apace. Stephane Peiry
+posted a list of old RT entries and their authors and asked them to
+supply updates ore they'd be flagged as obsolete in the queue. In the
+ensuing discussion, Steve Fink pointed out something that I'd missed:
+as of this week, all the perl6 tests (including the regular expression
+tests) are passing. He pointed out that the suite is <i>far</i> from
+comprehensive, but I still think this is pretty spiffy.</p>
+<p><a href='http://groups.google.com/groups?selm=1075590954.6331.17.camel@pittypanda' target='_blank'>groups.google.com</a></p>
+<a name='DOD, mutation, and generational collectors'></a><h2>DOD, mutation, and generational collectors</h2>
+<p>Dan had posted some thoughts on the way that many of the things that
+cause problems for threads also cause problems for generational garbage
+collectors and gave a list of 'mutating activities' that might need to
+be trapped by both threads and GC. Gorgon Henriksen asked Dan for more
+elaboration on what he meant by generational GC because, as Gordon
+understood it, it came with a whole load of baggage that was
+inappropriate for Parrot. This week, Dan gave his answer and pointed out
+that various other improved GC schemes (incremental, concurrent)
+required the same level of support as a generational scheme so it made
+sense to provide such support now. Leo T&ouml;tsch had a few comments
+to make about the different possible schemes and discussion moved on to
+the nastiness of doing GC in a multithreaded environment.</p>
+<p><a href='http://groups.google.com/groups?selm=a06010200bc3eb3ef7c96@' target='_blank'>groups.google.com</a>[192.168.1.28] -- Thread root</p>
+<a name='SDL Bindings'></a><h2>SDL Bindings</h2>
+<p>The SDL bindings that chromatic's been working on continue to
+develop. (Bah! People who insist on weird capitalization of their names
+and thus force me into the passive voice are jolly annoying, even if
+personally very pleasant).</p>
+<p><a href='http://groups.google.com/groups?selm=200402021557.i12FvQl03090@thu8.leo.home' target='_blank'>groups.google.com</a></p>
+<a name='Python PMCs?'></a><h2>Python PMCs?</h2>
+<p>Michal Wallace wondered what Dan's plan was for getting python objects
+working for the pie-thon. Michal has made a small start on wrapping
+PythonObjects as PMCs which seemed to work and was apparently easier
+than trying to recode them as PMCs. He pointed everyone at his current
+implementation. So far his post has been Warnocked.</p>
+<p><a href='http://groups.google.com/groups?selm=Pine.LNX.4.58.0402021830390.12849@hydrogen.sabren.com' target='_blank'>groups.google.com</a></p>
+<p><a href='http://pirate.versionhost.com/pirate/python/pmc/piobject.pmc' target='_blank'>pirate.versionhost.com</a> -- The
+wrapper implementation</p>
+<a name='Docs and releases'></a><h2>Docs and releases</h2>
+<p>Tim Bunce wondered whether Parrot's documentation was in sync with
+current implementation reality, and when we'd see a clean way to make
+method calls. In a post dated the 3rd of February, Leo confessed that
+there is still a lot of outdated or unimplemented stuff in the assembly
+related docs and noted that Dan had said that the low-level object
+design would be done by the 30th of January.</p>
+<p><a href='http://groups.google.com/groups?selm=20040202215426.GW6628@dansat.data-plan.com' target='_blank'>groups.google.com</a></p>
+<a name='Backward branch, Warnocked'></a><h2>Backward branch, Warnocked</h2>
+<p>Pete Lomax drew everyone's attention to a problem he'd found back at
+the beginning of December which Leo had said was a problem with a
+backward branch. He wondered when/if the problem might be fixed.</p>
+<p>Sadly the answer was &quot;We're not sure when it'll be fixed, it's really
+hard to fix the current version of IMCC, but it should be easier to
+sort out in IMCCv2. For now, don't do that.&quot; Meanwhile, Harry Jackson
+tried to track the bug down to the appropriate bit of IMCC; his
+experiments with code variants seem to imply that the problem is with
+IMCC not recognizing that <code>ret</code> is a branch.</p>
+<p><a href='http://groups.google.com/groups?selm=69rt105khibjtb5iitapsjiev46ottrljp@4ax.com' target='_blank'>groups.google.com</a></p>
+<a name='Alignment issues with *ManagedStruct'></a><h2>Alignment issues with *ManagedStruct</h2>
+<p>The redoubtable chromatic came across some issues with the alignment of
+members within a struct and wondered if there might be a better way of
+sorting out alignment issues than his current trick of explicitly
+padding things out (which he feels probably isn't portable). Leo
+pointed out that there was already support for offsetting struct
+members when setting up a *Struct PMC by using the third initializer
+parameter.</p>
+<p>As discussion of the best way forward continued, it emerged that Jens
+Rieks is in the process of writing a simple C-parser in IMC which should
+be able to parse header files and create ManagedStructs
+automagically. Go Jens. Tim Bunce suggested that Jens take a look at
+ExtUtils::XSBuilder for hints. Meanwhile Uri was looking at
+Convert::Binary::C which is apparently far more robust.</p>
+<p>Leo ended up listing a set of requirements for a script to parse C
+headers and generate the appropriate PIR code to set up various *Struct PMCs.</p>
+<p><a href='http://groups.google.com/groups?selm=1075792412.21791.36.camel@localhost' target='_blank'>groups.google.com</a></p>
+<p><a href='http://groups.google.com/groups?selm=200402051104.40882.parrot@jensbeimsurfen.de' target='_blank'>groups.google.com</a> -- Jens talks about his
+C parser</p>
+<p><a href='http://groups.google.com/groups?selm=200402061458.i16EwXI03277@thu8.leo.home' target='_blank'>groups.google.com</a> -- Leo's requirements</p>
+<a name='Baby, baby, where did my patch go?'></a><h2>Baby, baby, where did my patch go?</h2>
+<p>Gordon Henriksen wondered what had happened to a patch that he'd
+submitted to bugs-parrot. Robert Spier wasn't sure, but noted that the
+MyDoom virus was busy causing the perl.org servers a hard time (more
+than a gigabyte in 19 hours; Robert sounded a little fraught). As it
+happened, the patch had actually bounced from the list because it was
+huge. Everything got sorted out in the end though.</p>
+<p><a href='http://groups.google.com/groups?selm=013601c3ec04$a719dc20$d454e8c7@domain.ma.iclub.com' target='_blank'>groups.google.com</a></p>
+<a name='Documentation tools'></a><h2>Documentation tools</h2>
+<p>Michael Scott continued his sterling work on Parrot's documentation by
+adding the Perl tools he used to generated the HTML docs to the tree at
+<b><i>tools/docs/write_docs.pl</i></b>, he also announced that he'd finished the
+examples and the various <b><i>*.c</i></b> file directories and will be looking at
+classes next. I wonder how long it'll be before someone reimplements
+them in in PIR...</p>
+<p><a href='http://groups.google.com/groups?selm=DF04B5B2-577A-11D8-858E-000A95C50226@mac.com' target='_blank'>groups.google.com</a></p>
+<a name='Approaching PDD16 callbacks'></a><h2>Approaching PDD16 callbacks</h2>
+<p>Leo announced that he's implemented a first hacky way to run PASM
+callbacks from C NCI functions; it's not a full implementation, but
+it's a start. As usual, he solicited comments. And so far he's not had
+any.</p>
+<p><a href='http://groups.google.com/groups?selm=4024E112.5030809@toetsch.at' target='_blank'>groups.google.com</a></p>
+<a name='Meanwhile, in perl6-language'></a><h1>Meanwhile, in perl6-language</h1>
+<a name='The Unicode argument again'></a><h2>The Unicode argument again</h2>
+<p>Andy Wardley strongly advocated not making Unicode operators <code>«</code>, <code>»</code>
+etc part of the core language. Larry disagreed, but proposed that any
+Unicode declarations should also have an <code>is ASCII('!@#$')</code> trait to
+specify the ASCII equivalent.</p>
+<p><a href='http://groups.google.com/groups?selm=20040202083526.GF31998@cat.ourshack.com' target='_blank'>groups.google.com</a></p>
+<a name='Compiler writing tools'></a><h2>Compiler writing tools</h2>
+<p>Luke Palmer has been writing 'a lot of compiler' recently and posted
+some of his positive and negative experiences with YACC as possible
+pointers to the sort of things Perl 6's grammars might need. In his
+response, Larry once again demonstrated the truth of the proposition
+that &quot;Everyone writes a templating module at least once in their life&quot;
+when he confessed that &quot;the first production language I ever wrote was
+an inside-out language where control commands were embedded in text that
+was to be output by default.&quot;</p>
+<p><a href='http://groups.google.com/groups?selm=20040202090933.GA22343@babylonia.flatirons.org' target='_blank'>groups.google.com</a></p>
+<a name='Acknowledgements, Apologies, Announcements'></a><h1>Acknowledgements, Apologies, Announcements</h1>
+<p>Oops, reading back over last week's summary I realise that, when I meant
+to talk of going to see Eliza Carthy performing live, I actually wrote
+that we'd gone to see her perform life. Sorry about that.</p>
+<p>If you find these summaries useful or enjoyable, please consider
+contributing to the Perl Foundation to help support the development of
+Perl. You might also like to send me feedback at
+mailto:<a href='mailto:p6summarizer@bofh.org.uk'>p6summarizer@bofh.org.uk</a>, or drop by my website.</p>
+<p><a href='http://donate.perl-foundation.org/' target='_blank'>donate.perl-foundation.org</a> -- The Perl Foundation</p>
+<p><a href='http://dev.perl.org/perl6/' target='_blank'>dev.perl.org</a> -- Perl 6 Development site</p>
+<p><a href='http://www.bofh.org.uk/' target='_blank'>www.bofh.org.uk</a> -- My website, &quot;Just a Summary&quot;</p>
+</div>

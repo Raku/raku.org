@@ -1,0 +1,70 @@
+[% setvar title Add new C<empty> keyword to DWIM for clearing values %]
+<h3>This file is part of the Perl 6 Archive</h3>
+    <p>To see what is currently happening visit <a href="http://www.perl6.org/">http://www.perl6.org/</a></p>
+<div class='pod'>
+<a name='TITLE'></a><h1>TITLE</h1>
+<p>Add new <code>empty</code> keyword to DWIM for clearing values</p>
+<a name='VERSION'></a><h1>VERSION</h1>
+<pre>  Maintainer: Nathan Wiger &lt;<a href='mailto:nate@wiger.org'>nate@wiger.org</a>&gt;
+  Date: 16 Sep 2000
+  Last-Modified: 29 Sep 2000
+  Mailing List: <a href='mailto:perl6-language@perl.org'>perl6-language@perl.org</a>
+  Number: 245
+  Version: 2
+  Status: Retracted</pre>
+<a name='ABSTRACT'></a><h1>ABSTRACT</h1>
+<p>Most beginners and even intermediate users expect this:</p>
+<pre>   my @array = undef;
+   undef @array;</pre>
+<p>To initialize an empty array. It doesn't, and shouldn't. This RFC
+proposes a new keyword, <code>empty</code>, which does the &quot;right thing&quot;, and can
+be used as both a noun and verb:</p>
+<pre>   my @array = empty;
+   empty @array;</pre>
+<p>The idea is to make this process more intuitive. It also makes a few
+things easier.</p>
+<a name='NOTES ON RETRACTION'></a><h1>NOTES ON RETRACTION</h1>
+<p>Hey, they're not all gonna be winners, people! ;-)</p>
+<a name='DESCRIPTION'></a><h1>DESCRIPTION</h1>
+<p>Currently, initializing values so that warnings are spewed out or
+confusion doesn't arise is not as easy as it could be. These:</p>
+<pre>   my $name = undef;
+   my($a, $b, $c, $d, $e, $f) = undef;
+   my(@name, $age, %attrs) = undef;</pre>
+<p>Don't do what many (most?) people expect them to. Getting the
+corresponding effects that most people want can be cumbersome and not
+always intuitive:</p>
+<pre>   my $name = '';
+   my($a, $b, $c, $d, $e, $f) = ( '' x 6 );
+   my @name = (); my $age = ''; my %attrs = (); </pre>
+<p>With the new <code>empty</code> keyword, this becomes easier and more readable,
+with a nice parallel to <code>undef</code>:</p>
+<pre>   my $name = empty;
+   my($a, $b, $c, $d, $e, $f) = empty;
+   my(@name, $age, %attrs) = empty;</pre>
+<p>Like <code>undef</code>, it also has the benefit of being usable on values
+themselves as a verb:</p>
+<pre>   empty @array;          # @array = ();
+   empty %hash;           # %hash = ();
+   empty @array, $name;   # @array = (); $name = '';</pre>
+<p>And its purpose is intuitive: It causes a value to become <code>empty</code>,
+without being undefined. Note that it can also shorten code in some
+situations.</p>
+<a name='NOTES'></a><h1>NOTES</h1>
+<p>I'm throwing this out there. It seems to me to make easy things easier,
+and seems to potentially make the teaching of undef easier as well,
+since the usage of <code>undef</code> and <code>empty</code> are parallel. The point of
+debate I'm sure will be whether or not it hides implicit contexts, but
+it doesn't seem that it would have to assuming that it was properly
+integrated into the undef/context part of a course.</p>
+<p>Nonetheless, feel free to point out why this is a bad idea and I'll
+gladly retract it.</p>
+<a name='IMPLEMENTATION'></a><h1>IMPLEMENTATION</h1>
+<p>See here in v2, assuming this doesn't get ripped apart.</p>
+<a name='MIGRATION'></a><h1>MIGRATION</h1>
+<p>None. New functionality.</p>
+<a name='REFERENCES'></a><h1>REFERENCES</h1>
+<p><a href='http://www.mail-archive.com/perl6-language@perl.org/msg03703.html' target='_blank'>www.mail-archive.com</a></p>
+<p>And a previous, humorous yet poignant one from Tom C which appears to
+have vanished</p>
+</div>

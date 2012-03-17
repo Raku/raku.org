@@ -1,0 +1,35 @@
+[% setvar title Perl modules should be built with a Perl make program %]
+<h3>This file is part of the Perl 6 Archive</h3>
+    <p>To see what is currently happening visit <a href="http://www.perl6.org/">http://www.perl6.org/</a></p>
+<div class='pod'>
+<a name='TITLE'></a><h1>TITLE</h1>
+<p>Perl modules should be built with a Perl make program</p>
+<a name='VERSION'></a><h1>VERSION</h1>
+<pre>  Maintainer: Mark Leighton Fisher &lt;<a href='mailto:fisherm@tce.com'>fisherm@tce.com</a>&gt;
+  Date: 29 Sept 2000
+  Mailing List: <a href='mailto:perl6-stdlib@perl.org'>perl6-stdlib@perl.org</a>
+  Number: 349
+  Version: 1
+  Status: Developing</pre>
+<a name='ABSTRACT'></a><h1>ABSTRACT</h1>
+<p>Everything but the 'perl' binary should be built with a make
+program written in Perl.</p>
+<a name='DESCRIPTION'></a><h1>DESCRIPTION</h1>
+<p>There are inconsistencies between the versions of 'make'.
+We already have (from what I've gathered) quite reasonable
+make-like programs in Perl (pmake and cons).  Using one
+tool written in Perl would make the build process both
+more reliable and more consistent by reducing the number
+of system-dependent entities in the build process.</p>
+<p>If a cons-like tool is chosen there is also the advantage
+of using a tool better able to handle complex builds.</p>
+<a name='IMPLEMENTATION'></a><h1>IMPLEMENTATION</h1>
+<p>Probably either pmake or cons should be chosen rather than
+writing a tool from scratch, although virtual targets (targets
+like 'install' or 'all') should be added to cons before it
+is used in the Perl module build process.</p>
+<p>There should be a module corresponding to ExtUtils::MakeMaker
+that generates makefiles for the new Perl make-like program.</p>
+<a name='REFERENCES'></a><h1>REFERENCES</h1>
+<p>ExtUtils::MakeMaker</p>
+</div>

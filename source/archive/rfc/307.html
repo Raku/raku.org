@@ -1,0 +1,52 @@
+[% setvar title PRAYER - what gets said when you C<bless> something %]
+<h3>This file is part of the Perl 6 Archive</h3>
+    <p>To see what is currently happening visit <a href="http://www.perl6.org/">http://www.perl6.org/</a></p>
+<div class='pod'>
+<a name='TITLE'></a><h1>TITLE</h1>
+<p>PRAYER - what gets said when you <code>bless</code> something</p>
+<a name='VERSION'></a><h1>VERSION</h1>
+<pre>  Maintainer: Simon Cozens &lt;<a href='mailto:simon@brecon.co.uk'>simon@brecon.co.uk</a>&gt;
+  Date: 25 Sep 2000
+  Last Modified: 25 Sep 2000
+  Mailing List: <a href='mailto:perl6-language-objects@perl.org'>perl6-language-objects@perl.org</a>
+  Number: 307
+  Version: 2
+  Status: Withdrawn</pre>
+<a name='NOTES ON WITHDRAWL'></a><h1>NOTES ON WITHDRAWL</h1>
+<p>Damian Conway noted:</p>
+<pre>	RFC 189 covers this.</pre>
+<a name='ABSTRACT'></a><h1>ABSTRACT</h1>
+<p>This RFC proposes a special sub, <code>PRAYER</code>, which is automatically called
+on <code>bless</code>ing.</p>
+<a name='DESCRIPTION'></a><h1>DESCRIPTION</h1>
+<p>The abstract more or less says it all, but this is more than just a
+joke. Suppose, for instance, your class needs to do some initialisation
+whenever a new object is created; <code>PRAYER</code> would be where the class
+initialisation takes place.</p>
+<p>There's also the more interesting and (IMHO) important issue of
+reblessing; that is, changing the class of an object. There are times
+when you want to do this, but it's hairy because you have to know the
+workings of both classes. However, if you have <code>PRAYER</code> called
+automatically on <code>bless</code>ing, you can automagically &quot;cast&quot; objects
+between classes. For instance, an object in class X would get changed to
+an object in class Y with</p>
+<pre>    bless $obj, &quot;Y&quot;;</pre>
+<p>Perl would then perform the reblessing and call:</p>
+<pre>    package Y;
+    sub PRAYER ($object, $oldclass) {
+        if ($oldclass eq &quot;X&quot;) {
+            ...
+        } else {
+            die &quot;Can't cast an $oldclass to a Y&quot;;
+        }
+    }</pre>
+<p>You may also use this method as a form of &quot;pre-constructor&quot;, or even, on
+simple enough classes, a constructor proper.</p>
+<p>Maybe subs to cast between classes should somehow be shared between the
+two classes; the special sub <code>INTERCESSION</code> would be the obvious place
+for that.</p>
+<a name='IMPLEMENTATION'></a><h1>IMPLEMENTATION</h1>
+<p>Adding a method call to the end of <code>bless</code> should not be tricky.</p>
+<a name='REFERENCES'></a><h1>REFERENCES</h1>
+<p>None.</p>
+</div>

@@ -1,0 +1,140 @@
+[% setvar title Perl 6 Summary for 2005-09-26 through 2005-10-02 %]
+<h3>This file is part of the Perl 6 Archive</h3>
+    <p>To see what is currently happening visit <a href="http://www.perl6.org/">http://www.perl6.org/</a></p>
+<div class='pod'>
+<a name='Perl 6 Summary for 2005-09-26 through 2005-10-02'></a><h1>Perl 6 Summary for 2005-09-26 through 2005-10-02</h1>
+<p>All~</p>
+<p>Welcome to another summary, this time a day late because I was in Philly for Serenity.  If you haven't seen Serenity yet you should stop reading this summary and go see it.  The summary will be here when you get back.  I promise.</p>
+<a name='Perl 6 Compiler'></a><h2>Perl 6 Compiler</h2>
+<p>No postings this week.  I blame Piers for scaring them off last week.</p>
+<a name='Parrot'></a><h2>Parrot</h2>
+<a name='Summary Links'></a><h3>Summary Links</h3>
+<p>Last weeks load lib thread morphed into a conversation about the life span of the shortened links that appear in summaries.  Piers pointed out that, although the short links expire, the long links are archived at perl.org.</p>
+<p><a href='http://groups.google.com/group/perl.perl6.internals/browse_frm/thread/9eb767af79d0161e/58ba11c0868644c0' target='_blank'>groups.google.com</a>#58ba11c0868644c0</p>
+<a name='RT Cleanup'></a><h3>RT Cleanup</h3>
+<p>Joshua Hoblitt has been continuing his massive clean up of RT.  It makes me glad of two things:  that someone is doing it and that I am not doing it.  I won't post all of the links for these messages, but much work is getting done.</p>
+<a name='debug segments'></a><h3>debug segments</h3>
+<p>Jonathan Worthington posted an RFC of his design for debug and source segments in Parrot's packfiles.  People seem to like it generally.  Hopefully the design will be implemented soon.</p>
+<p><a href='http://groups.google.com/group/perl.perl6.internals/browse_frm/thread/2b4be17e2aea0acc/1236b93ca7e9ca6e' target='_blank'>groups.google.com</a>#1236b93ca7e9ca6e</p>
+<a name='Leo's Context Branch Hits the Mainline'></a><h3>Leo's Context Branch Hits the Mainline</h3>
+<p>After a few more reviews from Chip, Leo's context branch has been dubbed ready and has been moved to the mainline.  This marks the culmination of quite a bit of hard work from many people (especially Leo).  Nice work all.</p>
+<p><a href='http://groups.google.com/group/perl.perl6.internals/browse_frm/thread/ef44dd464ae971dd/4e48a3cb1e0823ad' target='_blank'>groups.google.com</a>#4e48a3cb1e0823ad -- bit of review</p>
+<p><a href='http://groups.google.com/group/perl.perl6.internals/browse_frm/thread/2459e642f1b1afd9/02126e9825ca5acb' target='_blank'>groups.google.com</a>#02126e9825ca5acb -- merge</p>
+<a name='Amber PMCs'></a><h3>Amber PMCs</h3>
+<p>Roger Browne wondered how he should include Amber PMCs.  Leo and Will suggested he put the pmcs into the languages directory similar to the way Tcl does it.</p>
+<p><a href='http://groups.google.com/group/perl.perl6.internals/browse_frm/thread/3757ffa94ae34bb2/d41996870e700539' target='_blank'>groups.google.com</a>#d41996870e700539</p>
+<a name='Data::Escape Needs Tests'></a><h3>Data::Escape Needs Tests</h3>
+<p>Jerry Gay added a TODO for tests for Data::Escape.  This would be a great thing for an eager lurker to cut his or her teeth on.</p>
+<p><a href='http://groups.google.com/group/perl.perl6.internals/browse_frm/thread/2ffcc72de7209d17/29431cfd0a679f83' target='_blank'>groups.google.com</a>#29431cfd0a679f83</p>
+<a name='Magic Numbers Bad, Magic Strings Good'></a><h3>Magic Numbers Bad, Magic Strings Good</h3>
+<p>Last weeks magic thread ended down with the conclusion that Parrot would use a magic string instead of a magic number.</p>
+<p><a href='http://groups.google.com/group/perl.perl6.internals/browse_frm/thread/1f1af615edec7449/de571bc033626f4c' target='_blank'>groups.google.com</a>#de571bc033626f4c</p>
+<a name='Tests fail on win32'></a><h3>Tests fail on win32</h3>
+<p>Jerry Gay opened a new RT ticket for some failing tests on Windows.</p>
+<p><a href='http://groups.google.com/group/perl.perl6.internals/browse_frm/thread/1288f6f917159cc0/d7ab7772c656d6b0' target='_blank'>groups.google.com</a>#d7ab7772c656d6b0</p>
+<a name='Here Doc in PIR'></a><h3>Here Doc in PIR</h3>
+<p>Will Coleda revived a thread from February about PIR here doc syntax.  Looks like the syntax is ok.</p>
+<p><a href='http://groups.google.com/group/perl.perl6.internals/browse_frm/thread/a25f9e51f5e893d5/74ac0efba45bf279' target='_blank'>groups.google.com</a>#74ac0efba45bf279</p>
+<a name='Win32 PCRE'></a><h3>Win32 PCRE</h3>
+<p>François Perrad enabled PCRE on Win32.  Jerry Gay applied the patch.</p>
+<p><a href='http://groups.google.com/group/perl.perl6.internals/browse_frm/thread/0b31082fc51fb84f/25edfe4870252196' target='_blank'>groups.google.com</a>#25edfe4870252196</p>
+<a name='PLATFORMS and MinGW'></a><h3>PLATFORMS and MinGW</h3>
+<p>François Perrad updated the PLATFORMS file for MinGW.</p>
+<p><a href='http://groups.google.com/group/perl.perl6.internals/browse_frm/thread/59a7203e5e67c61d/5824e7f69dd21491' target='_blank'>groups.google.com</a>#5824e7f69dd21491</p>
+<a name='parrot_config dependency'></a><h3>parrot_config dependency</h3>
+<p>Nick Glencross provided a patch (for comment only) that eases the dependency on parrot_config.  I am not sure that he got many comments.</p>
+<p><a href='http://groups.google.com/group/perl.perl6.internals/browse_frm/thread/2139481b10c1da78/d03ca108fe792cfc' target='_blank'>groups.google.com</a>#d03ca108fe792cfc</p>
+<a name='Data::Escape::String Dislikes Unicode'></a><h3>Data::Escape::String Dislikes Unicode</h3>
+<p>Will noticed that Data::Escape::String doesn't work on Unicode strings.</p>
+<p><a href='http://groups.google.com/group/perl.perl6.internals/browse_frm/thread/fb4c7a14bb342026/f5aa55cbd26a071e' target='_blank'>groups.google.com</a>#f5aa55cbd26a071e</p>
+<a name='Make Cleanup'></a><h3>Make Cleanup</h3>
+<p>Joshua Hoblitt started RT tickets for several things that are part of a general make system clean up.</p>
+<p><a href='http://groups.google.com/group/perl.perl6.internals/browse_frm/thread/b0a80ccfbf2e4091/d4413941ff60343e' target='_blank'>groups.google.com</a>#d4413941ff60343e</p>
+<p><a href='http://groups.google.com/group/perl.perl6.internals/browse_frm/thread/52e5a23c05c3eb33/faf43239def4bfc8' target='_blank'>groups.google.com</a>#faf43239def4bfc8</p>
+<p><a href='http://groups.google.com/group/perl.perl6.internals/browse_frm/thread/ab7660806ca6b225/d05de8464f737d2f' target='_blank'>groups.google.com</a>#d05de8464f737d2f</p>
+<a name='Parrot Leaves Crumbs'></a><h3>Parrot Leaves Crumbs</h3>
+<p>Nick Glencross rediscovered the core files that parrot leaves around.  This is a known problem.</p>
+<p><a href='http://groups.google.com/group/perl.perl6.internals/browse_frm/thread/32767eed21eb0d89/32145134c8fa2426' target='_blank'>groups.google.com</a>#32145134c8fa2426</p>
+<a name='Parrot Threads'></a><h3>Parrot Threads</h3>
+<p>Dave Frost wondered what the plan for Parrot Threading was going to be.  The answer (provided by Leo with more details from Jonathan Worthington) was OS threads.</p>
+<p><a href='http://groups.google.com/group/perl.perl6.internals/browse_frm/thread/40b50e3aa9255f8e/036a87b5d2b5ed2c' target='_blank'>groups.google.com</a>#036a87b5d2b5ed2c</p>
+<a name='Once deprecation's lost its fun...'></a><h3>Once deprecation's lost its fun...</h3>
+<p>Leo went on a bit of fall cleaning adding things to the deprecated list.  He even threatened to resolve some of them soon.</p>
+<p><a href='http://groups.google.com/group/perl.perl6.internals/browse_frm/thread/53589e76465ea13e/976a6b0677a645ea' target='_blank'>groups.google.com</a>#976a6b0677a645ea</p>
+<p><a href='http://groups.google.com/group/perl.perl6.internals/browse_frm/thread/470a94a28996f61b/d86f2f941072c86a' target='_blank'>groups.google.com</a>#d86f2f941072c86a</p>
+<p><a href='http://groups.google.com/group/perl.perl6.internals/browse_frm/thread/2c396981ee7c8a47/0ac7a3ed8443f8ee' target='_blank'>groups.google.com</a>#0ac7a3ed8443f8ee</p>
+<p><a href='http://groups.google.com/group/perl.perl6.internals/browse_frm/thread/e8c099e20bf17cfd/e2cdd462e17ed413' target='_blank'>groups.google.com</a>#e2cdd462e17ed413</p>
+<a name='Lexical and Variable Sized Register Frames'></a><h3>Lexical and Variable Sized Register Frames</h3>
+<p>With the calling conventions having been redone, Leo has plans to move to system of dynamically sized registers frames with static lexicals stored directly in them.  Chip should produce details soon.</p>
+<p><a href='http://groups.google.com/group/perl.perl6.internals/browse_frm/thread/1498cf99b35ade32/50cedfe5ebc4c576' target='_blank'>groups.google.com</a>#50cedfe5ebc4c576</p>
+<a name='Exception Handling Bug'></a><h3>Exception Handling Bug</h3>
+<p>Roger Browne found a bug with exception handlers in the new scheme.  Leo fixed it.  I wonder if anyone made a test out of it...</p>
+<p><a href='http://groups.google.com/group/perl.perl6.internals/browse_frm/thread/4762ca5b69bec1cd/eb5282688fa5b51e' target='_blank'>groups.google.com</a>#eb5282688fa5b51e</p>
+<a name='Config missing output'></a><h3>Config missing output</h3>
+<p>Will Coleda noticed that Configure.pl was not outputting a response to a step on his platform.</p>
+<p><a href='http://groups.google.com/group/perl.perl6.internals/browse_frm/thread/1f92f784c06f54e6/bfaacb177ae934be' target='_blank'>groups.google.com</a>#bfaacb177ae934be</p>
+<a name='Parrot 0.3.0 TODO'></a><h3>Parrot 0.3.0 TODO</h3>
+<p>Robert J Eaglestone wondered what would be a good way of chipping in.  Will Coleda, predictably, tried to turn him towards working for the good of Tcl.</p>
+<p><a href='http://groups.google.com/group/perl.perl6.internals/browse_frm/thread/c398f1fa80ceb832/d950fd2568182fde' target='_blank'>groups.google.com</a>#d950fd2568182fde</p>
+<a name='Tru64 Issues'></a><h3>Tru64 Issues</h3>
+<p>Jarkko Hietaniemi appears to have recently come into some time with a Tru64 machine.  He found lots of problems, which he added to RT, so I won't link them here.</p>
+<a name='src/extends.c'></a><h3>src/extends.c</h3>
+<p>chromatic made good on a promise to auto generate src/extends.c automatically.  Leo quibbled over pod, but thought it was good.</p>
+<p><a href='http://groups.google.com/group/perl.perl6.internals/browse_frm/thread/4a01b85f95975be2/14889d7380836170' target='_blank'>groups.google.com</a>#14889d7380836170</p>
+<a name='Calling Vtable Functions from PIR'></a><h3>Calling Vtable Functions from PIR</h3>
+<p>Roger Browne found he can no longer call vtable functions from PIR directly.  Leo felt that it was no longer necessary,</p>
+<p><a href='http://groups.google.com/group/perl.perl6.internals/browse_frm/thread/1d01490c52201223/62cd64deaa7f1d2e' target='_blank'>groups.google.com</a>#62cd64deaa7f1d2e</p>
+<a name='registers don't start zeroed.'></a><h3>registers don't start zeroed.</h3>
+<p>Jerry Gay found a test that was failing.  Leo pointed out that I and N register no longer start zeroed, so the test should manually NULL them first.</p>
+<p><a href='http://groups.google.com/group/perl.perl6.internals/browse_frm/thread/133bd3bbca2ceb02/87fa61cf21499592' target='_blank'>groups.google.com</a>#87fa61cf21499592</p>
+<a name='Tcl Compiling'></a><h3>Tcl Compiling</h3>
+<p>Will Coleda has not beaten his Tcl interpreter into the starts of a compiler.  It looks quite cool and progress is on going.</p>
+<p><a href='http://groups.google.com/group/perl.perl6.internals/browse_frm/thread/83a54f0c130ada5a/898b5a02d6773cc0' target='_blank'>groups.google.com</a>#898b5a02d6773cc0</p>
+<a name='BROKEN.pod'></a><h3>BROKEN.pod</h3>
+<p>chromatic has plans to add a broken.pod file to the root of parrot detailing things that need love.  Joshua Hoblitt thought that it should be split up into RT tickets.  Leo suggested one be auto generated from the other.  I like that idea.</p>
+<p><a href='http://groups.google.com/group/perl.perl6.internals/browse_frm/thread/ba0a7b27d79371e8/cfbd149e4efb8d82' target='_blank'>groups.google.com</a>#cfbd149e4efb8d82</p>
+<a name='Parrot gobbles up memory'></a><h3>Parrot gobbles up memory</h3>
+<p>Andy Dougherty noticed that parrot was eating up memory.  He managed to trace the problem to a pointer aliasing issue.  Leo suggested that this was probably cause by a casting macro that needed some loving.</p>
+<p><a href='http://groups.google.com/group/perl.perl6.internals/browse_frm/thread/20f215cd0850d787/169cb22c7d5aec12' target='_blank'>groups.google.com</a>#169cb22c7d5aec12</p>
+<a name='Software Architecture of Parrot'></a><h3>Software Architecture of Parrot</h3>
+<p>Klaas-Jan Stol announced his intent to write a paper on the current architecture of Parrot for a CS course.  He also asked for help with editing to eliminate inaccuracies.</p>
+<p><a href='http://groups.google.com/group/perl.perl6.internals/browse_frm/thread/38ee7ed24ce7d0bc/3a0774b78492f48a' target='_blank'>groups.google.com</a>#3a0774b78492f48a</p>
+<a name='Perl 6 Language'></a><h2>Perl 6 Language</h2>
+<a name='stringimification'></a><h3>stringimification</h3>
+<p>Last weeks stringimification thread wound down early this week with the [second hand] declaration from Larry that things would stringimify the same as they interpolate.</p>
+<p><a href='http://groups.google.com/group/perl.perl6.language/browse_frm/thread/981082958397104b/85e3bfb37b62da55' target='_blank'>groups.google.com</a>#85e3bfb37b62da55</p>
+<p><a href='http://groups.google.com/group/perl.perl6.language/browse_frm/thread/e0e44be94bd31792/0d7dcd239960b625' target='_blank'>groups.google.com</a>#0d7dcd239960b625</p>
+<p>Stringification, numification, and booleanification of pairs</p>
+<a name='.thingies in different context'></a><h3>.thingies in different context</h3>
+<p>Juerd posted a fairly thorough explanation of how .thingies (like .chars and .elems) can be made to DWIM most of the time.  Warnock applies.</p>
+<p><a href='http://groups.google.com/group/perl.perl6.language/browse_frm/thread/b76274813d2b73a8/b45cd46724aa7871' target='_blank'>groups.google.com</a>#b45cd46724aa7871</p>
+<a name='&quot;Do It Once&quot; Feature'></a><h3>&quot;Do It Once&quot; Feature</h3>
+<p>Last week's thread about a &quot;Do it once&quot; feature morphed turned to flip flop operators for a way to implement it.</p>
+<p><a href='http://groups.google.com/group/perl.perl6.language/browse_frm/thread/3abc87b32176ceb5/cb1f49bbb5aa22e0' target='_blank'>groups.google.com</a>#cb1f49bbb5aa22e0</p>
+<a name='Perl 6 Polyglot'></a><h3>Perl 6 Polyglot</h3>
+<p>Geoffrey Broadwell posted a link to his O'Reilly blog article &quot;Perl 6 Polyglot&quot;.</p>
+<p><a href='http://www.oreillynet.com/pub/wlg/7928' target='_blank'>www.oreillynet.com</a>
+<a href='http://groups.google.com/group/perl.perl6.language/browse_frm/thread/787d4757583194b2/d6f3e217e772de7f' target='_blank'>groups.google.com</a>#d6f3e217e772de7f</p>
+<a name='\&amp;'></a><h3><code>\&amp;</code></h3>
+<p>Ruud H.G. van Tol wondered about using \&amp; (which means the whole match in sed) in Perl 6.  Larry announced that $&lt;&gt; would serve this purpose.</p>
+<p><a href='http://groups.google.com/group/perl.perl6.language/browse_frm/thread/f60d2627bde1305b/bfc5139fef883c91' target='_blank'>groups.google.com</a>#bfc5139fef883c91</p>
+<a name='Look ahead/behind for loops'></a><h3>Look ahead/behind for loops</h3>
+<p>Dave Whipp wondered about having for loops with look ahead and look behind arguments.  The idea has mixed review with Damian being fairly vocally opposed.</p>
+<p><a href='http://groups.google.com/group/perl.perl6.language/browse_frm/thread/04af8225e99c2708/fd10db55fe09bbd3' target='_blank'>groups.google.com</a>#fd10db55fe09bbd3</p>
+<p><a href='http://groups.google.com/group/perl.perl6.language/browse_frm/thread/cf77aed3607ec510/032c9aafafe02291' target='_blank'>groups.google.com</a>#032c9aafafe02291</p>
+<a name='Exceptuations'></a><h3>Exceptuations</h3>
+<p>As Piers predicted Exceptuations are still Exceptuating.</p>
+<p><a href='http://groups.google.com/group/perl.perl6.language/browse_frm/thread/6ed55c84a8fb49dc/4bc6b65e6ac638eb' target='_blank'>groups.google.com</a>#4bc6b65e6ac638eb</p>
+<p><a href='http://groups.google.com/group/perl.perl6.language/browse_frm/thread/ca566be1a639308d/cf4dc8324435823b' target='_blank'>groups.google.com</a>#cf4dc8324435823b</p>
+<a name='Seeing the Light'></a><h3>Seeing the Light</h3>
+<p>David Storrs sees the light at the end of the tunnel for Perl 6.  Hopefully that doesn't mean it is dead.</p>
+<p><a href='http://groups.google.com/group/perl.perl6.language/browse_frm/thread/b6bad3bde9c203fe/df80856fc3a05617' target='_blank'>groups.google.com</a>#df80856fc3a05617</p>
+<a name='When to Stop Zipping'></a><h3>When to Stop Zipping</h3>
+<p>Juerd wondered exactly when zip stops when given lists of differing length.  No official answer yet.</p>
+<p><a href='http://groups.google.com/group/perl.perl6.language/browse_frm/thread/15b4ba52a3979edf/c6bcf72e1e43df67' target='_blank'>groups.google.com</a>#c6bcf72e1e43df67</p>
+<a name='The usual footer'></a><h2>The usual footer</h2>
+<p>To post to any of these mailing lists please subscribe by sending email to &lt;<a href='mailto:perl6-internals-subscribe@perl.org'>perl6-internals-subscribe@perl.org</a>&gt;, &lt;<a href='mailto:perl6-language-subscribe@perl.org'>perl6-language-subscribe@perl.org</a>&gt;,  or &lt;<a href='mailto:perl6-compiler-subscribe@perl.org'>perl6-compiler-subscribe@perl.org</a>&gt;.  If you find these summaries useful or enjoyable, please consider contributing to the Perl Foundation to help support the development of Perl. You might also like to send feedback to <a href='mailto:ubermatt@gmail.com'>ubermatt@gmail.com</a></p>
+<p><a href='http://donate.perl-foundation.org/' target='_blank'>donate.perl-foundation.org</a> -- The Perl Foundation
+<a href='http://dev.perl.org/perl6/' target='_blank'>dev.perl.org</a> -- Perl 6 Development site
+<a href='http://planet.parrotcode.org/' target='_blank'>planet.parrotcode.org</a> -- Parrot Blog aggregator</p>
+</div>

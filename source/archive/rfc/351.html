@@ -1,0 +1,86 @@
+[% setvar title Beyond the amnesic eval %]
+<h3>This file is part of the Perl 6 Archive</h3>
+    <p>To see what is currently happening visit <a href="http://www.perl6.org/">http://www.perl6.org/</a></p>
+<div class='pod'>
+<a name='TITLE'></a><h1>TITLE</h1>
+<p>Beyond the amnesic eval</p>
+<a name='VERSION'></a><h1>VERSION</h1>
+<pre>  Maintainer: Stéphane Payrard &lt;<a href='mailto:stef@francenet.fr'>stef@francenet.fr</a>&gt;
+  Date: 29 Sep 2000
+  Mailing List: <a href='mailto:perl6-language@perl.org'>perl6-language@perl.org</a>
+  Number: 351
+  Version: 1
+  Status: Developing</pre>
+<a name='ABSTRACT'></a><h1>ABSTRACT</h1>
+<p>An unscoped eval is needed. It is part of the necessary steps to
+make Perl palatable as an interactive shell.</p>
+<pre>=head DESCRIPTION</pre>
+<p>A perl shell, beyond its intrinsic utility, will be a great
+interactive learning tool.  The absence of unscoped eval makes perl
+based shells unattractive because they must be implemented as a scoped
+eval around each command line. As a result most of the interesting
+context is lost.</p>
+<p>In command line mode, an interpretor reads a line typed by the user
+then evaluates it. And so for the next lines, ad nauseam.  It is only
+natural to propagate the context from one line to another. This is
+what make possible inteesting interactive uses.</p>
+<p>This is not what happens in perl5 because <code>eval</code> is always scoped.
+The lost context is: the current package, special variables sets by
+regexp ($1...), scoped variables (lexical and local).</p>
+<p>A basic CLI can be built as a oneliner in classic Perl, the perl
+debugger invoked by <code>perl -de 0</code> is a glorified but specialized
+command line. But without unscoped eval. It does not cut it.</p>
+<p>An example of a frustrating session where a naive user expect a
+unscoped eval:</p>
+<pre>    DB&lt;1&gt; package FOO
+
+    DB&lt;2&gt; print __PACKAGE__
+  main
+    DB&lt;3&gt; $_='foo'
+
+    DB&lt;4&gt; print m/(foo)/
+  foo
+    DB&lt;5&gt; print $1
+
+    DB&lt;6&gt; my $foo = 'bar'
+
+    DB&lt;7&gt; print $foo
+
+    DB&lt;8&gt; local $foo = 'bar'
+
+    DB&lt;9&gt; print $foo</pre>
+<p>Certainly, one can get away by cramming a lot of stuff in one line.
+But the idea of granular interactivity is lost:</p>
+<pre>
+    DB&lt;13&gt; package FOO;  print __PACKAGE__
+  FOO
+    DB&lt;14&gt;  $_='foo'; print m/(foo)/
+  foo
+    DB&lt;15&gt; local $foo = 'bar'; print $foo
+  bar
+    DB&lt;16&gt; my  $foo = 'bar'; print $foo
+  bar</pre>
+<a name='Syntax'></a><h2>Syntax</h2>
+<p>I propose the unary + as a marker that differentiates unscoped eval
+from classic (scoped) eval. Or one may consider a explicit keyword.
+I can't find a satisfactory one.</p>
+<p>Classic eval:</p>
+<pre> eval {}
+ eval &quot;&quot;</pre>
+<p>Unscoped eval</p>
+<pre> +eval {}
+ +eval &quot;&quot;</pre>
+<a name='IMPLEMENTATION'></a><h1>IMPLEMENTATION</h1>
+<a name='REFERENCES'></a><h1>REFERENCES</h1>
+<p>Refeences to forthcoming RFCs.</p>
+<p>There are other features needed to make perl6 a good shell.  They can
+be mode-dependant so as not to interfere with perl as a programming
+language.</p>
+<p>Command line languages make heavy usage of litterals. In perl6 command
+line mode, the default should be to interpret most strings as
+litteral. For example <code>/etc/</code> should be a string that will
+interpreted as a filename.  &quot;Taking things litterally&quot; will describe
+what change of syntax this implies.</p>
+<p>&quot;User defined microsyntax&quot; goes one step further and will propose user
+defined litterals to avoid writing complex constructors.</p>
+</div>

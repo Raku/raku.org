@@ -1,0 +1,154 @@
+[% setvar title Builtins : Make use of hashref context for garrulous builtins %]
+<h3>This file is part of the Perl 6 Archive</h3>
+    <p>To see what is currently happening visit <a href="http://www.perl6.org/">http://www.perl6.org/</a></p>
+<div class='pod'>
+<a name='TITLE'></a><h1>TITLE</h1>
+<p>Builtins : Make use of hashref context for garrulous builtins</p>
+<a name='VERSION'></a><h1>VERSION</h1>
+<pre>  Maintainer: Damian Conway &lt;<a href='mailto:damian@conway.org'>damian@conway.org</a>&gt;
+  Date: 19 Sep 2000
+  Last Modified: 29 Sep 2000
+  Mailing List: <a href='mailto:perl6-language@perl.org'>perl6-language@perl.org</a>
+  Number: 259
+  Version: 4
+  Status: Frozen
+  Frozen since: v3</pre>
+<a name='ABSTRACT'></a><h1>ABSTRACT</h1>
+<p>This RFC proposes the builtin functions that return a large number of
+values in an array context should also detect hashref contexts (see RFC
+21) and return their data in a kinder, gentler format.</p>
+<a name='DESCRIPTION'></a><h1>DESCRIPTION</h1>
+<p>It's hard to remember the sequence of values that the following
+builtins return:</p>
+<pre>        stat/lstat
+        caller
+        localtime/gmtime
+        get*</pre>
+<p>and though it's easy to look them up, it's a pain to look them up
+Every Single Time.</p>
+<p>Moreover, code like this is far from self-documenting:</p>
+<pre>        if ((stat $filename)[7] &gt; 1000) {...}
+
+        if ((lstat $filename)[10] &gt; time()-1000) {...}
+
+        if ((localtime(time))[3] &gt; 5) {...}
+
+        if ($usage &gt; (getpwent)[4]) {...}
+
+        @host{qw(name aliases addrtype length addrs)} = gethostbyname $name;
+
+        warn &quot;Problem at &quot; . join(&quot;:&quot;, @{[caller(0)]}[3,1,2]) . &quot;\n&quot;;</pre>
+<p>It is proposed that, when one of these subroutines is called in the new
+HASHREF context (RFC 21), it should return a reference to a hash of values,
+with standardized keys. For example:</p>
+<pre>        if (stat($filename)-&gt;{size} &gt; 1000) {...}
+
+        if (lstat($filename)-&gt;{ctime} &gt; time()-1000) {...}
+
+        if (localtime(time)-&gt;{mday} &gt; 5) {...}
+
+        if ($usage &gt; getpwent()-&gt;{quota}) {...}
+
+        %host = %{gethostbyname($name)};
+
+        warn &quot;Problem at &quot; . join(&quot;:&quot;, @{caller(0)}{qw(sub file line)} . &quot;\n&quot;;</pre>
+<a name='Standardized keys'></a><h2>Standardized keys</h2>
+<p>The standardized keys for these functions would be:</p>
+<ul>
+<li><a name='stat/lstat'></a><code>stat</code>/<code>lstat</code></li>
+<pre>                'dev'           Device number of filesystem
+                'ino'           Inode number
+                'mode'          File mode  (type and permissions)
+                'nlink'         Number of (hard) links to the file
+                'uid'           Numeric user ID of file's owner
+                'gid'           Numeric group ID of file's owner
+                'rdev'          The device identifier (special files only)
+                'size'          Total size of file, in bytes
+                'atime'         Last access time in seconds since the epoch
+                'mtime'         Last modify time in seconds since the epoch
+                'ctime'         Inode change time in seconds since the epoch
+                'blksize'       Preferred block size for file system I/O
+                'blocks'        Actual number of blocks allocated</pre>
+<li><a name='localtime/gmtime'></a><code>localtime</code>/<code>gmtime</code></li>
+<pre>                'sec'           Second
+                'min'           Minute
+                'hour'          Hour
+                'mon'           Month
+                'year'          Year
+                'mday'          Day of the month
+                'wday'          Day of the week
+                'yday'          Day of the year
+                'isdst'         Is daylight savings time in effect
+                                (localtime only)</pre>
+<li><a name='caller'></a><code>caller</code></li>
+<pre>                'package'       Name of the package from which sub was called
+                'file'          Name of the file from which sub was called
+                'line'          Line in the file from which sub was called
+                'sub'           Name by which sub was called
+                'args'          Was sub called with args?
+                'want'          Hash of values returned by want()
+                'eval'          Text of EXPR within eval EXPR
+                'req'           Was sub called from a C&lt;require&gt; (or C&lt;use&gt;)?
+                'hints'         Pragmatic hints with which sub was compiled
+                'bitmask'       Bitmask with which sub was compiled</pre>
+<li><a name='getpw*'></a><code>getpw*</code></li>
+<pre>                'name'          Username
+                'passwd'        Crypted password
+                'uid'           User ID
+                'gid'           Group ID
+                'quota'         Disk quota
+                'comment'       Administrative comments
+                'gcos'          User information
+                'dir'           Home directory
+                'shell'         Native shell
+                'expire'        Expiry date of account of password</pre>
+<li><a name='getgr*'></a><code>getgr*</code></li>
+<pre>                'name'          Group name
+                'passwd'        Group password
+                'gid'           Group id
+                'members'       Group members</pre>
+<li><a name='gethost*'></a><code>gethost*</code></li>
+<pre>                'name'          Official host name
+                'aliases'       Other host names
+                'addrtype'      Host address type
+                'length'        Length of address
+                'addrs'         Anonymous array of raw addresses in 'C4' format</pre>
+<li><a name='getnet*'></a><code>getnet*</code></li>
+<pre>                'name'          Official name of netwwork
+                'aliases'       Other names for network
+                'addrtype'      Type of network number
+                'net'           Network number</pre>
+<li><a name='getproto*'></a><code>getproto*</code></li>
+<pre>                'name'          Official name of protocol
+                'aliases'       Other names for protocol
+                'proto'         Protocol number</pre>
+<li><a name='getserv*'></a><code>getserv*</code></li>
+<pre>                'name'          Official name of service
+                'aliases'       Other names for service
+                'port'          Port at which service resides
+                'proto'         Protocol to be used</pre>
+</ul>
+<a name='MIGRATION ISSUES'></a><h1>MIGRATION ISSUES</h1>
+<p>None.</p>
+<a name='REFERENCES'></a><h1>REFERENCES</h1>
+<p>This RFC explains the mechanism by which HASHREF context would be detected:</p>
+<p>RFC 21: Subroutines: Replace <code>wantarray</code> with a generic <code>want</code> function</p>
+<p>These RFCs propose (partial) alternative solutions to this problem:</p>
+<p>RFC 37: Positional Return Lists Considered Harmful</p>
+<p>RFC 127: Sane resolution to large function returns</p>
+<p>RFC 48: Replace localtime() and gmtime() with date() and utcdate()</p>
+<p>These existing standard modules provide alternatives to various bits of
+the proposed mechanism. The hash keys suggested in this proposal are
+identical to the corresponding attribute names in these modules, except
+that the unnecessary prefixes have been eliminated. The length and diversity
+of this list might be seen as an argument for a single integrated mechanism.</p>
+<pre>        File::stat
+        Net::hostent
+        Net::netent
+        Net::protoent
+        Net::servent
+        Time::gmtime
+        Time::localtime
+        User::grent
+        User::pwent     </pre>
+</div>

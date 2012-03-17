@@ -1,0 +1,36 @@
+[% setvar title Undef values ne value %]
+<h3>This file is part of the Perl 6 Archive</h3>
+    <p>To see what is currently happening visit <a href="http://www.perl6.org/">http://www.perl6.org/</a></p>
+<div class='pod'>
+<a name='TITLE'></a><h1>TITLE</h1>
+<p>Undef values ne value</p>
+<a name='VERSION'></a><h1>VERSION</h1>
+<pre>  Maintainer: Richard Proctor &lt;<a href='mailto:richard@waveney.org'>richard@waveney.org</a>&gt;
+  Date: 4 Sep 2000
+  Mailing List: <a href='mailto:perl6-language@perl.org'>perl6-language@perl.org</a>
+  Number: 192
+  Version: 1
+  Status: Developing</pre>
+<a name='ABSTRACT'></a><h1>ABSTRACT</h1>
+<p>If you compare a variable that is undefined with something, perl winges.
+An undefined value is not equal to a string, it should do the right thing.</p>
+<a name='DESCRIPTION'></a><h1>DESCRIPTION</h1>
+<p>Perl winges if you compare an undefined value.  This is silly and one often
+has to test for the undefined case (and the empty case for == and !=), then
+the equality that the programs logic calls for.  If you leave warnings off
+perl does the right thing anyway.</p>
+<p>Thus:</p>
+<pre>  $foo = undef;
+
+  if ($foo ==  1) # should fail the test but not complain
+  if ($foo !=  1) # should pass the test, and not complain
+  if ($foo eq &quot;bar&quot;) # should fail the test but not complain
+  if ($foo ne &quot;bar&quot;) # should pass the test, and not complain</pre>
+<p>lt,&lt;,le,&lt;=,gt,&gt;,ge,&gt;= should behave as now, as it is resonable to object
+in these cases as the inequality is not well founded.</p>
+<p>A comparison between two undefs should (probably) remain an error.</p>
+<a name='IMPLENTATION'></a><h1>IMPLENTATION</h1>
+<p>No idea</p>
+<a name='REFERENCES'></a><h1>REFERENCES</h1>
+<p>None yet</p>
+</div>

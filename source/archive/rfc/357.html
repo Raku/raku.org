@@ -1,0 +1,158 @@
+[% setvar title Perl should use XML for documentation instead of POD %]
+<h3>This file is part of the Perl 6 Archive</h3>
+    <p>To see what is currently happening visit <a href="http://www.perl6.org/">http://www.perl6.org/</a></p>
+<div class='pod'>
+<a name='TITLE'></a><h1>TITLE</h1>
+<p>Perl should use XML for documentation instead of POD</p>
+<a name='VERSION'></a><h1>VERSION</h1>
+<pre>  Maintainer: Frank Tobin &lt;<a href='mailto:ftobin@uiuc.edu'>ftobin@uiuc.edu</a>&gt;
+  Date: 30 Sep 2000
+  Last Modified: 3 Oct 2000
+  Mailing List: <a href='mailto:perl6-language@perl.org'>perl6-language@perl.org</a>
+  Number: 357
+  Version: 2
+  Status: Frozen</pre>
+<a name='ABSTRACT'></a><h1>ABSTRACT</h1>
+<p>Perl documentation should move to using XML as the formatting language,
+instead of using POD.  XML has many advantages over POD, and would
+address several problems POD is reaching as it expands beyond its
+original designs.</p>
+<a name='CHANGE/FREEZE NOTES'></a><h1>CHANGE/FREEZE NOTES</h1>
+<p>A lot of good, heated discussion was generated on the mailing lists. The
+majority seems against using XML-DTD documentation, but granted there are
+deficiencies in POD.  Translating between XML and POD seemed popular.
+Elsewise, no really new topics were covered that the RFC doesn't address,
+just refined and re-hashed and such, so I'll let this RFC stand as-is.</p>
+<a name='DESCRIPTION'></a><h1>DESCRIPTION</h1>
+<p>POD, described in <i><a href='http://search.cpan.org/perldoc?perlpod'>perlpod</a></i>, is currently the de-facto language
+for Perl-related documentation.  It is a simple language, with simple tags.
+According to <i><a href='http://search.cpan.org/perldoc?perlpod#The Intent'>&quot;The Intent&quot; in perlpod</a></i>, simplicity was
+behind the intended design of POD.  There exist several tools to convert
+POD into HTML, manpages, text, and other languages.</p>
+<p>However, POD can be confusing to learn, and has many limitations.
+XML, on the other hand, is a document language that is designed
+for high extensibility, and little ambiguity.  XML is flexible,
+relying on Document Type Definitions, DTD's,
+(recently, also XML Schemas), which define
+the document structure being used by the author.
+For example, a copy of the DTD for XHTML may be found at
+<code><a href='http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd' target='_blank'>www.w3.org</a></code>.
+Knowledge of how to write or work with DTD's is not necessary for
+an XML-author; the author need only know the effect of the
+DTD or XML Schema.</p>
+<p>In the following few sections I will try to compare various
+aspects of POD versus XML.</p>
+<a name='Syntax'></a><h2>Syntax</h2>
+<p>POD's in-line tags use the general form <code>tag&lt;body&gt;</code>, while
+Primarily, XML uses balanced tags, e.g.,
+<code>&lt;tag&gt;body&lt;/tag&gt;</code>.  POD's in-line tags tend to
+be single-letters, and this can be thought of an argument
+for the readability of POD in it's un-rendered form, but
+an XML DTD for Perl documentation could also define
+single-letter tags to minimize this.</p>
+<p>POD's tagging, althrough simple, can produce confusing code.
+For example, to render the following (<code>tag&lt;body&gt;</code>)
+I need to have (C&lt;tagE&lt;lt&gt;bodyE&lt;gt&gt;&gt;),
+which is horrendous in its own (look at the source to this document).
+It is especially hard to understand, since one would expect
+<code>bodyE</code> to be an inseparable string; yet, reading, one needs
+to use look-ahead to see what is following the E.</p>
+<p>XML, on the other hand, uses &amp; as the escaping mechanism, helping
+a reader sort-out deeply-nested escapings.</p>
+<a name='Use of Tags and Rendering'></a><h2>Use of Tags and Rendering</h2>
+<p>Several of POD's tags do not necessarily relate to the meaning
+of the text, but how the text is rendered.  For instance,
+<code>I&lt;text&gt;</code> is used to italicize text, not give meaning,
+although <i><a href='http://search.cpan.org/perldoc?perlpod'>perlpod</a></i> mentions that this should be used for emphasis
+or variables.</p>
+<p>This sort of style in having tags say how something
+should be rendered is something XHTML and friends have tried
+to get away from, instead having the presentation of the document
+separate from the structuring/tagging of it.
+XHTML and XML user-agents use stylesheets to render documents separately
+from the document itself; this allows the developer to merely
+give <i>meaning</i> to the document, instead of deciding how it will
+be rendered; the choice of how to render is left to the user, with
+the use of a stylesheet.</p>
+<p>The use of using tags solely to give meaning also helps accessibility
+problems for the visually-impaired; for example, having
+bold text (e.g., B&lt;foobar&gt;) is not quite as meaningful
+as strongly-emphasized text (e.g, &lt;strong&gt;Using meaning
+makes things accessible!&lt;/strong&gt;).</p>
+<p>The use of stylesheets along with XML allows
+documents to be rendered very well in a variety of
+circumstances, such as manpages, a continuous-display browser
+(e.g., web-browser), and in printed form.</p>
+<a name='Whitespace'></a><h2>Whitespace</h2>
+<p>This can be confusing for many, as whitespace in most languages
+does not have functionality.  However, in POD, lines beginning
+with a whitespace character are treated as pre-formatted text.
+This has already caused an RFC to take effect, RFC 216.</p>
+<p>XML, on the other hand, uses properties to determine the
+whitespace handling between different types of tags; for example,
+a tag in a Perl XML DTD tag such as &lt;perl&gt; could be used to
+surround pre-formatted Perl code.</p>
+<a name='Learning Curve'></a><h2>Learning Curve</h2>
+<p>Who knows what languages people will base their knowledge off
+of in 2 years?  Noone really does, but HTML-style, balanced-tag
+languages are a good guess though, given the web's popularity, and
+easy-to-grasp notion of having balanced-tags.  On the other hand,
+POD will be Yet Another Language to learn, distinct from other typing systems
+the user will know.  While this may not seem
+like a problem since POD is designed to just be a simple
+language, will likely become more complicated in the future
+(see <i><a href='#Extensibility'>&quot;Extensibility&quot;</a></i>).</p>
+<a name='Author Effort'></a><h2>Author Effort</h2>
+<p>POD has the advantage in that it has syntax that is quick and easy
+to type, such as C&lt;$var++&gt; instead of an XML/XHTML
+&lt;code&gt;var++&lt;code&gt;.</p>
+<p>However, author effort pays off immensely on the reader's end.
+By using a structured, widely-supported language such as XML,
+the reader is able to render the document using a rich set
+of tools such as Style Sheets.  Just as producing quality
+code generally requires effort, for different reasons,
+producing quality, valuable documentation also requires effort.</p>
+<a name='Support'></a><h2>Support</h2>
+<p>There exist many tools to handle XML documents, and
+given the popularity of XML, there will likely
+be many useful applications which handle XML in new and innovative
+means in the future, furthering the usefulness of any XML documentation.
+On the other hand, POD appears bound to Perl, and while
+translators exist, the documentation is not nearly as
+powerful as it could be if were XML.</p>
+<a name='Extensibility'></a><h2>Extensibility</h2>
+<p>POD has grown over the years, supporting more and more features.
+This has caused strange syntaxes to develop, such as
+&lt;foo/bar&gt; differing from &lt;foo/&quot;bar&quot;&gt;.</p>
+<p>XML designed specifically for extensibility; in fact, XHTML by
+itself largely surpasses POD in terms of functionality.
+One can expect more problems to arise as more features
+are added to POD, likening it possibly to the beginnings of
+HTML, which in time has turned into XHTML, an XML DTD.</p>
+<p>XML also supports many features such as embedded elements,
+which are not well-defined in POD, and may wish to become more prominent
+in documentation in the future.</p>
+<a name='IMPLEMENTATION'></a><h1>IMPLEMENTATION</h1>
+<p>POD has a good advantage in that it's design allows for it to
+embed well into code.  If documentation is to be alongside
+code, a direction to consider is to have the Perl
+program be an XML document itself, with the code inside of it,
+between designated tags.  This would allow for the entire
+Perl program/document to be rendered in a unified manner, using
+one tool, and conforming to one meta-language, XML.</p>
+<a name='CONCLUSION'></a><h1>CONCLUSION</h1>
+<p>POD has been fine up to now, as it is a quick-and-dirty
+documentation system.  However, as Perl matures, its
+documentation system needs to also, as it is outgrowing
+it's original design.</p>
+<p>XML is mature in the sense that it is the culmination of years
+of experience of what to do and not do with documentation systems
+(e.g., older versions of HTML (presentation-oriented), and SGML
+(too complicated)).  Using XML will solve a lot of future problems,
+and make documentation much more valuable.</p>
+<a name='REFERENCES'></a><h1>REFERENCES</h1>
+<p><i><a href='http://search.cpan.org/perldoc?perlpod'>perlpod</a></i></p>
+<p>RFC 216: POD should tolerate white space.</p>
+<p>RFC 280: Teak POD's C&lt;&gt;</p>
+<p>RFC 306: User-definable POD handling</p>
+</div>

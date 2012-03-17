@@ -1,0 +1,100 @@
+[% setvar title my() syntax extensions and attribute declarations %]
+<h3>This file is part of the Perl 6 Archive</h3>
+    <p>To see what is currently happening visit <a href="http://www.perl6.org/">http://www.perl6.org/</a></p>
+<div class='pod'>
+<a name='TITLE'></a><h1>TITLE</h1>
+<p>my() syntax extensions and attribute declarations</p>
+<a name='VERSION'></a><h1>VERSION</h1>
+<pre>  Maintainer: Nathan Wiger &lt;<a href='mailto:nate@wiger.org'>nate@wiger.org</a>&gt;
+  Date: 24 Sep 2000
+  Last Modified: 30 Sep 2000
+  Mailing List: <a href='mailto:perl6-language@perl.org'>perl6-language@perl.org</a>
+  Number: 279
+  Version: 2
+  Status: Frozen</pre>
+<a name='ABSTRACT'></a><h1>ABSTRACT</h1>
+<p>This RFC fleshes out variable declarations with <code>my</code>, and also proposes
+a way to assign attributes without the need for a <code>my</code> anywhere. Much
+of this stuff has been hinted at, so this is just a formalization.</p>
+<p>Please note this entire document is <b>optional</b>, intended for those that
+need this type of control. Perl is not a B&amp;D language (by default, at
+least :).</p>
+<a name='DESCRIPTION'></a><h1>DESCRIPTION</h1>
+<p>Camel-3 shows some interesting hints of what's been proposed for <code>my</code>
+declarations:</p>
+<pre>   my type $var :attr1 :attr2 = $value;</pre>
+<p>And we all know that you can use <code>my</code> to declare a group of variables:</p>
+<pre>   my($x, $y, $z);</pre>
+<p>Here's the issues:</p>
+<pre>   1. How do the two jive together?
+  
+   2. Should it be possible to assign attributes to individual elements
+      of hashes/arrays? (yes)</pre>
+<a name='Cohesive my syntax'></a><h2>Cohesive <code>my</code> syntax</h2>
+<p>This RFC proposes that you be able to group multiple variables of the
+same type within parens:</p>
+<pre>   my int ($x, $y, $z);
+   my int ($x :64bit, $y :32bit, $z);</pre>
+<p>It seems most logical that:</p>
+<pre>   1. The type will be the same across variables; this is common
+      usage in other languages because it makes sense.
+
+   2. The attributes will be different for different variables.</pre>
+<p>As such, multiple attributes can be assigned and grouped flexibly:</p>
+<pre>   my int ($x, $y, $z) :64bit;           # all are 64-bit
+   my int ($x, $y, $z :unsigned) :64bit; # plus $z is unsigned</pre>
+<p>Note that multiple types cannot be specified on the same line. To
+declare variables of multiple types, you must use separate statements:</p>
+<pre>   my int ($x, $y, $z) :64bit;
+   my string ($firstname, $lastname :long);</pre>
+<p>This is consistent with other languages and also makes parsing
+realistic.</p>
+<a name='Assigning attributes to individual elements of hashes/arrays'></a><h2>Assigning attributes to individual elements of hashes/arrays</h2>
+<p>This is potentially very useful. &quot;:laccess&quot;, &quot;:raccess&quot;, &quot;:public&quot;,
+&quot;:private&quot;, and others spring to mind as potential candidates for this.
+This RFC proposes that in addition to attributes being assigned to a
+whole entity on declaration:</p>
+<pre>   my int @a :64bit;       # makes each element a 64-bit int
+   my string %h :long;     # each key/val is long string</pre>
+<p>They can also be declared on individual elements, without the need for
+<code>my</code> or <code>our</code>:</p>
+<pre>   $a[0] :32bit = get_val;           # 32-bit
+   $r-&gt;{name} :private = &quot;Nate&quot;;     # privatize single value
+   $s-&gt;{VAL} :laccess('data') = &quot;&quot;;  # lvalue autoaccessor</pre>
+<p>Assigning attributes to individual elements has the advantage over
+keywords of allowing them to be grouped:</p>
+<pre>   $self-&gt;{name} :public :roaccess('getname') = &quot;Nathan Wiger&quot;;</pre>
+<p>However, a problem arises in how to assign types to singular elements,
+since this requires a <code>my</code>:</p>
+<pre>   my int $a[0] :64bit;     # just makes that single element
+                            # a lexically-scoped 64-bit int?
+
+   my string $h{name} = &quot;&quot;; # cast $h{name} to string, rescope %h?</pre>
+<p>Currently, lexical scope has no meaning for individual elements of
+hashes and arrays. However, assigning attributes and even types to
+individual elements seems useful. There's two ways around this that I
+see:</p>
+<pre>   1. On my'ing of an individual hash/array element, the
+      entire hash/array is rescoped to the nearest block.
+
+   2. Only the individual element is rescoped, similar
+      to what happens when you do this:
+
+          my $x = 5;
+          {
+             my $x = 10;
+          }</pre>
+<p>Either of these solutions is acceptable, and they both have their pluses
+and minuses. The second one seems more consistent, but is potentially
+extremely difficult to implement.</p>
+<a name='IMPLEMENTATION'></a><h1>IMPLEMENTATION</h1>
+<p>Hold on.</p>
+<a name='MIGRATION'></a><h1>MIGRATION</h1>
+<p>None. This introduces a more flexible syntax but does not break old
+ones.</p>
+<a name='REFERENCES'></a><h1>REFERENCES</h1>
+<p>RFC 337: Common attribute system to allow user-defined, extensible attributes</p>
+<p>RFC 319: Transparently integrate <code>tie</code></p>
+<p>Camel for the <code>my</code> syntax.</p>
+<p><code>attributes</code> man page for details on attributes.</p>
+</div>

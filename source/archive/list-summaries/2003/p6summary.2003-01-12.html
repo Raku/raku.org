@@ -1,0 +1,255 @@
+[% setvar title The Perl 6 Summary for the week ending 20030112 %]
+<h3>This file is part of the Perl 6 Archive</h3>
+    <p>To see what is currently happening visit <a href="http://www.perl6.org/">http://www.perl6.org/</a></p>
+<div class='pod'>
+<a name='The Perl 6 Summary for the week ending 20030112'></a><h1>The Perl 6 Summary for the week ending 20030112</h1>
+<p>... and we're back. Yup, it's summary time again. We'll dive straight
+in with perl6-internals (as if you expected anything else).</p>
+<a name='More thoughts on DOD'></a><h2>More thoughts on DOD</h2>
+<p>Leopold T&ouml;tsch posted a test program showing the effects of PMC
+size and timing of garbage collection and allocation and suggested
+ways of improving the GC system based on the conclusions he drew from
+its results. Leo, Dan and Mitchell N Charity discussed this further
+and tried a few different approaches to try and improve performance
+(though Mitchell did worry about premature optimization). Work in this
+area is ongoing.</p>
+<p><a href='http://groups.google.com/groups?threadm=3E1976F7.1060106@toetsch.at' target='_blank'>groups.google.com</a></p>
+<a name='The Perl 6 Parser'></a><h2>The Perl 6 Parser</h2>
+<p>Dan asked about the current state of the Perl 6 parser, wanting to
+know what was and wasn't implemented and wondered about adding the
+Perl 6 tests into the standard parrot test suite. Sean O'Rourke and
+Joseph F. Ryan both gave a summaries of where things stood. Joseph
+also suggested a few refactorings of the parser to deal with the
+fluidity of the current spec (almost all the operators have changed
+symbols since the parser was first written for instance).</p>
+<p><a href='http://groups.google.com/groups?threadm=a05200f15ba425a3d908d@' target='_blank'>groups.google.com</a>[192.168.2.1]</p>
+<a name='LXR - Source code indexing'></a><h2>LXR - Source code indexing</h2>
+<p>Last week I said that Robert Spier had 'started work on getting a
+browseable, cross referenced version of the Parrot source up on
+perl.org'. What actually happened was that Robert asked Zach Lipton to
+do the work. This week Zach delivered the goods which, I must say,
+look fabulous.</p>
+<p>I'm sure that if someone were to extend LXR so it had a better
+understanding of .pasm, .pmc, .ops and other special Parrot source
+types then the community would be very grateful indeed. I know I would.</p>
+<p><a href='http://groups.google.com/groups?threadm=BA41F83F.8F2D' target='_blank'>groups.google.com</a>%zach@zachlipton.com -- Announcement</p>
+<p><a href='http://tinderbox.perl.org/lxr/parrot/source' target='_blank'>tinderbox.perl.org</a></p>
+<a name='Thoughts on infant mortality'></a><h2>Thoughts on infant mortality</h2>
+<p>Piers Cawley offered what he thought might be a new approach to
+dealing with the infant mortality problem which got efficiently shot
+down by Leo T&ouml;tsch. Which led to further discussion of possible
+answers, and it looks like Leo's proposed solution involving a small
+amount of code reordering and early anchoring will be the one that's
+tried next. All being well it won't require walking the C stack and
+hardware register set, which can only be a good thing.</p>
+<p>Later on, Leo asked if it'd be okay to check in his work so far on
+redoing the GC because he was up to 15 affected files and was starting
+to worry about integration hell. Steve Fink wasn't sure about one of
+his changes, so Leo checked everything else in.</p>
+<p><a href='http://groups.google.com/groups?threadm=m27kdere5g.fsf@TiBook.bofh.org.uk' target='_blank'>groups.google.com</a></p>
+<p><a href='http://groups.google.com/groups?threadm=3E1D47B6.20301@toetsch.at' target='_blank'>groups.google.com</a></p>
+<a name='Objects, finally (try 1)'></a><h2>Objects, finally (try 1)</h2>
+<p>Last week I mentioned that Leon Brocard's wishlist for the next Parrot
+iteration included Objects. This week Dan posted his first draft of
+what Parrot Objects would and wouldn't be able to do. The eleventh
+entry on Dan's list (Objects are all orange) seemed to be custom made
+to please Leon. There was a fair amount of discussion (of course), but
+the consensus was positive.</p>
+<p><a href='http://groups.google.com/groups?threadm=a05200f06ba439cb1436b@' target='_blank'>groups.google.com</a>[192.168.2.1]</p>
+<a name='The benchmarking problem'></a><h2>The benchmarking problem</h2>
+<p>Nicholas Clark crossposted to p5p and perl6-internals to discuss the
+problems of benchmarking parrot against perl 5. One of parrot's aims
+is, of course, to go faster than perl 5. The problem is, how do you
+measure 'faster'? Nicholas has been working on making perl 5 go faster
+and was distressed to find out that using 'perlbench' a patch of his
+went 5% faster, 1% slower, 0% and 1% faster, depending on what
+machine/compiler combination he ran the benchmark on. Leo T&ouml;tsch
+commented that he'd found performance varying by over 50% in a JIT
+test, depending on the position of a loop in memory. Andreas Koenig
+commented that he'd come to the conclusion that bugs in glibc meant
+that there was little point in benchmarking Perl at all if it was
+built with a glibc older than version 2.3 (apparently malloc/free
+proved to be gloriously erratic...) I'm afraid not much was actually
+resolved though.</p>
+<p><a href='http://groups.google.com/groups?threadm=20030111190521.GK283@Bagpuss.unfortu.net' target='_blank'>groups.google.com</a></p>
+<a name='Meanwhile, in perl6-language'></a><h1>Meanwhile, in perl6-language</h1>
+<p>The discussion of Variable types vs Value types continued from the
+previous week. Dan opined that Arrays weren't necessarily objects,
+which brought forth squawks from Piers Cawley who pointed out that
+being able to do:</p>
+<pre>   class PersistentList is Array { 
+       method FETCH ($index) { 
+           ...
+       }
+       ...
+   }</pre>
+<p>would be much nicer than tying a value in the Perl 5ish fashion. Dan
+reckoned that delegation would probably be enough which, IMHO seemed
+to miss the point. Various other people chimed in to, essentially,
+tell Dan that he was wrong, but I'm  not sure Dan agreed with them.</p>
+<p>Meanwhile, in a subthread sprouting lower on the thread tree, Damian
+pointed out that there were two types associated with any Perl
+variable, the 'storage type' and the 'implementation type' (see his
+post for details, but essentially the storage type is the type
+associated with the contents of a variable and the implementation type
+is the type of the 'thing' that does the storing (usually one of
+SCALAR, HASH or ARRAY -- ie, related to the variable's sigil)
+specifying a different implementation type will probably be how Perl 6
+does tying.)</p>
+<p><a href='http://groups.google.com/groups?threadm=a05200f07ba3e5ebbf80c@' target='_blank'>groups.google.com</a>[192.168.3.1]</p>
+<p><a href='http://groups.google.com/groups?threadm=3E1BF672.2020606@conway.org' target='_blank'>groups.google.com</a></p>
+<a name='Array Questions'></a><h2>Array Questions</h2>
+<p>In a thread that spilt over from the previous discussion about
+whether arrays were objects or not, Michael Lazzaro put up a list of
+example usages that seem to imply rather strongly that arrays are
+either objects or indistinguishable from them and there was general
+muttering that being able to overload tied Perl containers in this way
+was a neat way of implementing tie semantics. Mr Nobody attempted to
+restart the left to right versus right to left argument all over
+again. There was also some discussion of the sickness of <code>my Foo
+@foo is Foo</code> (which, in Perl 5ish parlance creates a tied array
+(using Foo as the tying class) which can only contain objects in class
+Foo.) Damian agreed that this was definitely sick, and that he for one
+would be making use of it.</p>
+<p><a href='http://groups.google.com/groups?threadm=6B9F6C55-226A-11D7-81AD-00050245244A@cognitivity.com' target='_blank'>groups.google.com</a></p>
+<a name='L2R/R2L syntax'></a><h2>L2R/R2L syntax</h2>
+<p>Argh! No! It's back and this time it means business. The dreaded
+left-&gt;right versus right-&gt;left thing came back, and this time it was
+Damian applying the electrodes to the corpse. Of course, it being
+Damian he was instantly forgiven as he came up with the very cool,
+very low precedence <code>~&gt;</code> and <code>&lt;~</code> operators, allowing you to
+write</p>
+<pre>   @out = @a ~&gt; grep {...} ~&gt; map {...} ~&gt; sort;</pre>
+<p>Which is, to these eyes at least, lovely. See Damian's post for the
+full details. The general response to this was definitely on the
+'lovely' side of the balance, though one detractor did induce a sense
+of humour failure on Damian's part. There was also a certain amount of
+discussion about whether this was exactly the right syntax to go with
+the semantics, but where would perl6-language be without a great deal
+of syntactic quibbling? (A good deal easier to summarize). The most
+popular alternatives were <code>|&gt;</code> and <code>&lt;|</code>. There was also a
+certain amount of discussion of what I can only describe as 'evil'
+uses of the syntax, involving arrows going in different directions in
+one statement. Rafael Garcia-Suarez earned at least one giggle when he
+suggested that we just needed <code>v~</code> <code>^~</code> and we had our own
+flavour of Befunge.</p>
+<p>There was a fair amount more discussion, mostly thrashing out details
+and edge cases.</p>
+<p><a href='http://groups.google.com/groups?threadm=3E1BA592.6050902@conway.org' target='_blank'>groups.google.com</a></p>
+<a name='&quot;Disappearing&quot; code'></a><h2>&quot;Disappearing&quot; code</h2>
+<p>John Siracusa wondered if there would be a perl6ish way of creating
+code that was 'the spiritual equivalent of #ifdef, only Perlish'. To
+which the answer is, of course, 'yes'. Damian showed off a neat trick
+(modulo a couple of pretty typos) with an immediate function that
+demonstrated using Perl 6 as its own macro language.</p>
+<p><a href='http://groups.google.com/groups?threadm=BA438428.E548' target='_blank'>groups.google.com</a>%siracusa@mindspring.com</p>
+<p><a href='http://groups.google.com/groups?threadm=BA447213.2B258' target='_blank'>groups.google.com</a>%siracusa@mindspring.com -- Damian's neat trick</p>
+<a name='In Brief'></a><h1>In Brief</h1>
+<p>Jim Radford fixed some typos in the <b><i>rx.ops</i></b> documentation.</p>
+<a name='Who's Who in Perl 6'></a><h1>Who's Who in Perl 6</h1>
+<ul>
+<li><a name='Who are you?'></a>Who are you?</li>
+<p>Steve Fink. Some guy who writes code.</p>
+<li><a name='What do you do for/with Perl 6?'></a>What do you do for/with Perl 6?</li>
+<p>The only thing I set out to do was implement a regular expression
+compiler. Along the way, I seem to have implemented hashtables,
+patched the configuration system, messed with memory management,
+implemented some stuff for IMCC, beefed up the PMC file parser, fixed
+some problems with the JIT, and a few other things. Then I got a job
+and ran out of time to work on parrot, so they made me pumpking. And I
+still haven't made it that far with the regex compiler.</p>
+<li><a name='Where are you coming from?'></a>Where are you coming from?</li>
+<p>Computer games, originally. First language BASIC, second language 6502
+assembly. Then a failed attempt at C, then more successful encounters
+with Pascal and 68000 assembly, and then C++. Next, a few more
+assembly languages together with SML, NESL, Lisp, Scheme, COBOL, Tcl,
+Prolog, and a few others. And at last Perl4 and then Perl5. Oh, and
+Java, fairly recently. My day job is now in a combination of Perl5 and
+C++, as well as C when nobody's looking.</p>
+<li><a name='When do you think Perl 6 will be released?'></a>When do you think Perl 6 will be released?</li>
+<p>Probably smoothing the path for other developers and keeping them
+motivated. My highest priority is applying (and testing) other
+people's patches, since the mostly likely reason for someone to lose
+interest is to not have their hard work make it into the distribution.
+I would also like to somehow make people's contributions more visible
+-- anyone who has contributed anything significant should at least be
+able to point to something and say &quot;Look! I did that! See my name?!&quot;</p>
+<li><a name='I said, when do you think Perl 6 will be released?'></a>I said, when do you think Perl 6 will be released?</li>
+<p>Obviously Leopold T&ouml;tsch. Anyone paying an iota of attention
+would know that. Particularly someone who's been writing the
+summaries, unless you're stupid or something. Leo's amazing; I don't
+know how he finds the time. To accomplish that much, I'd need to be
+working full-time about 26 hours a day.</p>
+<li><a name='No, really. When do you think Perl 6 will be released?'></a>No, really. When do you think Perl 6 will be released?</li>
+<p>No, not really. I was originally thinking of Perl6 when I got
+involved, but since then the Parrot VM itself has become more
+interesting to me. Although I still wish Perl6 development would pick up --
+there's a lot that can be done even with the limited amount of the
+language that's been defined. Sean O'Rourke did an excellent job in a
+short amount of time, but it looks like Real Life has drawn him back
+into its fold, and nobody seems to have picked up the slack.</p>
+<li><a name='Why are you doing this?'></a>Why are you doing this?</li>
+<p>Heh. That is the question, isn't it? Making a release is probably the
+most concrete measure of how I'm doing as a pumpking, and by that
+standard I'm a dismal failure. As soon as we reclaim the tinderbox
+(and without dropping any machines off it in order to do so!)
+Everything else I wanted to get in is already there.</p>
+<li><a name='You have five words. Describe yourself.'></a>You have five words. Describe yourself.</li>
+<p>No, I don't think so. Maybe I'm wrong, but I know that I personally
+had to put aside a lot of the actual coding I was working on in order
+to concentrate on making sure everyone else's changes were being given
+proper consideration. I'd much rather relieve him of that burden, and
+let him continue to exercise his demonstrated talent at churning out
+quality code.</p>
+<li><a name='Do you have anything to declare?'></a>Do you have anything to declare?</li>
+<p>No. It kind of makes sense, but I remember how I first started by
+rewriting a bunch of Dan Sugalski's code, and then seeing most of my
+code get rewritten. I used to be disturbed by that, but now I think of
+it more as a badge of honor -- it proves that what I wrote was worth
+rewriting. Much more so in Dan's case, I suppose, since he stated
+up-front that he was merely doing a reference implementation of a
+design. Dan's done an amazing job of laying out a design that hasn't
+needed to change at its core, and so has been a very dependable guide
+to the implementation of the backbone. But even in my case, I can see
+a number of ideas that were carried through in the reimplementation,
+even if no actual code survived. (Interestingly, my tests did. Which
+kind of makes sense if you think about it.)</p>
+<li><a name='Are you finished yet?'></a>Are you finished yet?</li>
+<p>Why yes, thank you.</p>
+</ul>
+<p>Ahem. Thanks Steve. Really.</p>
+<a name='Acknowledgements'></a><h1>Acknowledgements</h1>
+<p>Another Monday evening, another summary running over into Tuesday
+morning. Ah well. Distractions were provided by the usual suspects
+(Mike and Sully, our ginger kittens), supplemented this week by a
+horrible cold (the compulsion to find a tissue does tend to derail the
+train of thought).</p>
+<p>Proofreading was once more handled by Aspell and me. This week we even
+made sure that the Who's Who section contains the name of the person
+answering the questions rather than making you wait 'til the
+acknowledgements section.</p>
+<p>Speaking of which, many thanks to Steve Fink for his answers to the
+questionnaire (well, to the questions he wanted to answer anyway). The
+questionnaire queue is now quite empty so, unless a few more folks in
+the Perl 6 community send me some answers soon then the Who's Who
+section may be going on hiatus. Send your answers (or request the
+'correct' question list from) <i><a href='http://search.cpan.org/perldoc?<a href='mailto:5Ws@bofh.org.uk'>5Ws@bofh.org.uk</a>'>5<a href='mailto:Ws@bofh.org.uk'>Ws@bofh.org.uk</a></a></i>.</p>
+<p>If you didn't like this summary, how did you get this far? If you did
+like it, please consider one or more of the following options:</p>
+<ul>
+<li><a name='Send money to the Perl Foundation at donate.perl-foundation.org/ and help support the ongoing development of Perl 6.'></a>Send money to the Perl Foundation at
+<a href='http://donate.perl-foundation.org/' target='_blank'>donate.perl-foundation.org</a> and help support the ongoing
+development of Perl 6.</li>
+<li><a name='Get involve in the Perl 6 process. The mailing lists are open to all. dev.perl.org/perl6/ and www.parrotcode.org/ are good starting points with links to the appropriate mailing lists.'></a>Get involve in the Perl 6 process. The mailing lists are open to
+all. <a href='http://dev.perl.org/perl6/' target='_blank'>dev.perl.org</a> and <a href='http://www.parrotcode.org/' target='_blank'>www.parrotcode.org</a>
+are good starting points with links to the appropriate mailing lists.</li>
+<li><a name='Send feedback, flames, money and or a couple of first class flights to from London to Portland for this year's OSCON to mailto:<a href='mailto:p6summarizer@bofh.org.uk'>p6summarizer@bofh.org.uk</a> (&quot;Aim high!&quot; they told me.)'></a>Send feedback, flames, money and or a couple of first class flights to
+from London to Portland for this year's OSCON to
+mailto:<a href='mailto:p6summarizer@bofh.org.uk'>p6summarizer@bofh.org.uk</a> (&quot;Aim high!&quot; they told me.)</li>
+</ul>
+<p>The fee paid for the publication of these summarise on perl.com is
+paid directly to the Perl Foundation.</p>
+<p>The Perl 6 Summarizer disclaims any and all responsibility for the
+sanity of his readers; he's having enough trouble hanging onto his
+own.</p>
+</div>

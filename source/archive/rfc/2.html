@@ -1,0 +1,80 @@
+[% setvar title Request For New Pragma: Implicit %]
+<h3>This file is part of the Perl 6 Archive</h3>
+    <p>To see what is currently happening visit <a href="http://www.perl6.org/">http://www.perl6.org/</a></p>
+<div class='pod'>
+<a name='TITLE'></a><h1>TITLE</h1>
+<p>Request For New Pragma: Implicit</p>
+<a name='VERSION'></a><h1>VERSION</h1>
+<pre>  Maintainer: Bryan C. Warnock &lt;<a href='mailto:bwarnock@gtemail.net'>bwarnock@gtemail.net</a>&gt;
+  Date: 5 Aug 2000
+  Last Modified: 28 Aug 2000
+  Mailing List: <a href='mailto:perl6-language@perl.org'>perl6-language@perl.org</a>
+  Number: 2
+  Version: 3
+  Status: Frozen</pre>
+<a name='ABSTRACT'></a><h1>ABSTRACT</h1>
+<p>Perl 6 should add a new pragma called <code>implicit</code>.</p>
+<a name='DESCRIPTION'></a><h1>DESCRIPTION</h1>
+<p>I am lazy.  I am spoiled by the implicit $_.  I like the implicit
+$_.  Implicit $_ good.  Ugh.  (Conversely, some people abhor the
+implicit $_ while in a strict programming environment, as it tends to
+add confusion.)</p>
+<p>I came to the sysadm / programming world in a long, circuitous
+route.  I never programmed with toggle switches.  I've never seen a
+punch card.  My first programming was in Commodore 64 Basic.</p>
+<p>C64 Basic.  No safe-signals there, either.  ;)</p>
+<p>It did have one good thing, though.  One very useful thing, for lazy
+people like me.  <code>print</code> could be written like <code>?</code>.  It just
+rolled off the fingers.  <code>10 ?&quot;Port Perl for the 64!&quot;</code>.</p>
+<p>Of course, those days have gone.  I've seen the light.  I'm a *nix
+head and JAPH.  But how I still hate typing out print.  Particularly
+because I do it so much.  Oh, sure, I could play games with HERE docs
+and the ilk, but I'm too lazy.  (Like I posted in a response, I wrangled
+an input filter to allow me to write <code>? &quot;Print me.!&quot;</code>.</p>
+<p>But I digress.</p>
+<p>There should be an <code>implicit</code> pragma that gives new life and meaning to
+void context constructs.  In my case, I want it to print to the default
+filehandle, (which is also implicit, I might add.)</p>
+<p>Scoping needs to be tightly controlled, of course.  Don't want someone
+else's void context to show up on your display, now do you?  And, of course,
+it would be defaulted to off.  It could continue to ignore constant 0s and
+1s.  (But those pre-pod embedded comment strings just <b>have</b> to go.)</p>
+<p>Ideally, I'd like to use it for printing, but I suppose some other lazy
+person may want to use it for something else.</p>
+<p>Or, from reading the traffic, to prevent laziness.  One of the suggestions
+was to disallow implicit $_ for functions.  That could fit right in with
+this pragma.  It would be on be default, but you could turn it off.</p>
+<a name='MOTIVATORS'></a><h1>MOTIVATORS</h1>
+<p>Laziness, pure and simple.</p>
+<a name='IMPLEMENTATION'></a><h1>IMPLEMENTATION</h1>
+<p>The front-end would have to detect void usage and either arrange to have
+the results passed to a callback, (in which case, would you know what
+wantarray() wants to know?) or inject the appropriate term in the optree.</p>
+<p>In the case of <code>no implicit arg</code>, the front-end would have to not assume
+the implicit $_ as an argument.</p>
+<a name='SUMMARY OF IMPLEMENTATION'></a><h2>SUMMARY OF IMPLEMENTATION</h2>
+<p>I've no real concrete ideas on this, sorry.</p>
+<a name='IMPACT'></a><h2>IMPACT</h2>
+<ul>
+<li><a name='Impact on Perl 5. Mutual compatibility between Perl 5 and Perl 6, with the exception of use implicit and the sematics it would add. (Obviously, other changes to the language notwithstanding.)'></a>Impact on Perl 5.  Mutual compatibility between Perl 5 and Perl 6, with the
+exception of <code>use implicit</code> and the sematics it would add.  (Obviously,
+other changes to the language notwithstanding.)</li>
+</ul>
+<a name='UNKNOWNS'></a><h2>UNKNOWNS</h2>
+<ul>
+<li><a name='What about subs? Backticks? Things that return meaningless printable information, like system()?'></a>What about subs?  Backticks?  Things that return meaningless printable
+information, like system()?</li>
+<p><code>no implicit</code> would put it on the user.  After all, he doesn't have to
+use it.</p>
+<li><a name='Would ; print the contents of $_ to the default filehandle? ;-)'></a>Would <code>;</code> print the contents of $_ to the default filehandle?  ;-)</li>
+</ul>
+<a name='REFERENCES'></a><h1>REFERENCES</h1>
+<p>RFC 40: Module Scope Control.</p>
+<a name='STATUS'></a><h1>STATUS</h1>
+<p>Frozen as is.  Most people don't like it.  <i>I</i> don't like it.
+Not really.  I hate to think that Perl will have more pragmas than
+functions at the current pace.</p>
+<p>But I like the idea behind it.  I think a smarter solution would be
+found in something akin to <i><a href='http://search.cpan.org/perldoc?RFC40'>&quot;RFC 40&quot;</a></i>.  In which case, I would
+gladly withdraw it.</p>
+</div>

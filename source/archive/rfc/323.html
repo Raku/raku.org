@@ -1,0 +1,70 @@
+[% setvar title Perl's embedding API should be simple %]
+<h3>This file is part of the Perl 6 Archive</h3>
+    <p>To see what is currently happening visit <a href="http://www.perl6.org/">http://www.perl6.org/</a></p>
+<div class='pod'>
+<a name='TITLE'></a><h1>TITLE</h1>
+<p>Perl's embedding API should be simple</p>
+<a name='VERSION'></a><h1>VERSION</h1>
+<pre>  Maintainer: Simon Cozens &lt;<a href='mailto:simon@brecon.co.uk'>simon@brecon.co.uk</a>&gt;
+  Date: 26 Sep 2000
+  Mailing List: <a href='mailto:perl6-internals@perl.org'>perl6-internals@perl.org</a>
+  Number: 323
+  Version: 1
+  Status: Developing</pre>
+<a name='ABSTRACT'></a><h1>ABSTRACT</h1>
+<p>Perl should be embeddable, and we should make it easy for people to
+embed it by making the API as simple as possible.</p>
+<a name='DESCRIPTION'></a><h1>DESCRIPTION</h1>
+<p>Perl 5's embedding capabilities are neat, but a little unwieldy. We can
+make things easier by providing an embedding library which has the
+following functions: (A [probably very buggy] Perl 5 implementation is
+also shown)</p>
+<pre>    PerlInterpreter Perl_init() {
+        PerlInterpreter my_perl;
+        char *embedding[] = { &quot;&quot;, &quot;-e&quot;, &quot;0&quot; };
+
+        if(!my_perl = perl_alloc())
+            return NULL;
+        
+        if (!perl_construct( my_perl ))
+            return NULL;
+
+        perl_parse(my_perl, NULL, 3, embedding, NULL);
+        perl_run(my_perl);
+        return my_perl;
+    }
+
+    void Perl_shutdown(PerlInterpreter my_perl) {
+        perl_destruct(my_perl);
+        perl_free(my_perl);
+    }
+                           
+    I32 Perl_eval(char* string) {
+        (void)eval_pv(string, 0);       
+        return (SvTRUE(ERRSV));
+    }
+
+    U8*  Perl_string_get(char* variable, STRLEN* len) {
+        return SvPV(get_sv(variable, FALSE, len);
+    }
+    void Perl_string_set(char* variable, U8* replacement, STRLEN len) {
+        Perl_sv_setpvn(get_sv(variable, TRUE), replacement, len);
+    }
+
+    I32  Perl_int_get(char* variable) {
+        return SvIV(get_sv(variable, FALSE)); 
+    }
+    void Perl_int_set(char* variable, I32 x) { 
+        sv_setiv(get_sv(variable,TRUE), x); 
+    }
+
+    /* Perl_float_get and _set are left to the imagination */
+
+    /* match(), substitute() and matches() from perlembed.pod */</pre>
+<p>[ This RFC should probably be extended to stipulate XS callbacks, but we
+don't know what XS looks like right now ]</p>
+<a name='IMPLEMENTATION'></a><h1>IMPLEMENTATION</h1>
+<p>As above.</p>
+<a name='REFERENCES'></a><h1>REFERENCES</h1>
+<p>perlembed.pod</p>
+</div>

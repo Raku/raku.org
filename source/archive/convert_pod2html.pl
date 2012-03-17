@@ -77,6 +77,9 @@ foreach my $file (@files) {
     }
 
     my $html = "[% setvar title $title %]\n";
+    $html .= '<h3>This file is part of the Perl 6 Archive</h3>
+    <p>To see what is currently happening visit <a href="http://www.perl6.org/">http://www.perl6.org/</a></p>
+';
     $html .= $podhtml->pod2html( $file, %pod_opts );
 
     write_file( $html_file, $html );

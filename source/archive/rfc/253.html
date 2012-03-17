@@ -1,0 +1,100 @@
+[% setvar title UNIVERSAL::require() %]
+<h3>This file is part of the Perl 6 Archive</h3>
+    <p>To see what is currently happening visit <a href="http://www.perl6.org/">http://www.perl6.org/</a></p>
+<div class='pod'>
+<a name='TITLE'></a><h1>TITLE</h1>
+<p>UNIVERSAL::require()</p>
+<a name='VERSION'></a><h1>VERSION</h1>
+<pre>  Maintainer: Michael G Schwern &lt;<a href='mailto:schwern@pobox.com'>schwern@pobox.com</a>&gt;
+  Date: 17 Sep 2000
+  Mailing List: <a href='mailto:perl6-language@perl.org'>perl6-language@perl.org</a>
+  Number: 253
+  Version: 1
+  Status: Developing</pre>
+<a name='ABSTRACT'></a><h1>ABSTRACT</h1>
+<p>UNIVERSAL::require() allows modules to be loaded from variables with
+$module-&gt;require rather than the current eval &quot;require $module&quot;;</p>
+<a name='DESCRIPTION'></a><h1>DESCRIPTION</h1>
+<p>Currently, to load a module one uses either require() or use() with a bareword
+expression.  <code>require $variable</code> is reserved for loading and evaling files.
+It is not obvious how one loads a module from the value of a variable.
+Currently, its done like this:</p>
+<pre>    $module = &quot;Some::Module&quot;;
+    eval &quot;require $module&quot;;</pre>
+<p>This has two problems.  First, its unintuitive.  Secondly, $@ is often
+accidentally not checked, so if the module load fails the error will not be
+noticed.</p>
+<p>As a solution, a UNIVERSAL:::require() method can be added with the following
+syntax:</p>
+<pre>    $module = &quot;Some::Module&quot;;
+    $module-&gt;require;</pre>
+<p>This is neatly analagous with $module-&gt;import and causes a run-time error
+should the module fail to load.</p>
+<a name='What about use()?'></a><h2>What about use()?</h2>
+<p>UNIVERSAL::use() and thus <code>$module-</code>use&gt; would be an obvious analogy, but
+unfortunately use() is a compile-time beastie.  Variables and methods are
+run-time.  It would be confusing for use() to be compile-time and
+UNIVERSAL::use() to be run-time, so UNIVERSAL::use() should not be.</p>
+<p>Instead, this code suffices:</p>
+<pre>    BEGIN {
+        $module-&gt;require;
+        $module-&gt;import;
+    }</pre>
+<p>We see here how neatly the UNIVERSAL::require() syntax lines up with
+Exporter::import().</p>
+<p>Of course, if you really want a run-time use() method you can easily write
+one.</p>
+<a name='Version checking'></a><h2>Version checking</h2>
+<p>The lack of a UNIVERSAL::use() leaves out module version checking (ie. <code>use
+Some::Module 0.23</code>).  UNIVERSAL::require() can take on this feature by taking
+a version as an argument.</p>
+<pre>    $module-&gt;require(0.23);</pre>
+<a name='UNIVERSAL::require() is only a class method.'></a><h2>UNIVERSAL::require() is only a class method.</h2>
+<p>What should happen if UNIVERSAL::require() is called as an object method?
+Should it <code>eval &quot;require &quot;.ref $obj</code> or should it be an error?  Because the
+situation is very rare when you will have an object from a class which has not
+yet been required, UNIVERSAL::require() should only work as a class method.
+<code>$obj-</code>require&gt; should be an explicit run-time error.</p>
+<p>If require() is desired as an object method, it can easily be overridden with:</p>
+<pre>    sub require {
+        my $proto = shift;
+        my $class = ref $proto || $proto;
+        return $class-&gt;SUPER::require;
+    }</pre>
+<p>Ta da.</p>
+<a name='IMPLEMENTATION'></a><h1>IMPLEMENTATION</h1>
+<p>A complete Perl 5 implementation follows:</p>
+<pre>    package UNIVERSAL;   
+
+    sub require {     
+        my($class, $want_version) = @_;
+     
+        die(&quot;UNIVERSAL::require() can only be run as a class method&quot;)  
+          if ref $class; 
+     
+        die(&quot;UNIVERSAL::require() takes no or one arguments&quot;) if @_ &gt; 2; 
+        
+        # Load the module.
+        my $return = eval &quot;CORE::require $class&quot;;
+        
+        # Check for module load failure.
+        if( $@ ) {
+            $@ =~ s/ at .*?\n$//;
+            die sprintf &quot;$@ at %s line %d.\n&quot;, (caller)[1,2];
+        }
+        
+        # Module version check.
+        my $have_version = ${$class.'::VERSION'};
+        if( @_ == 2 and $have_version &lt; $want_version ) {
+            die sprintf &quot;%s version %s required--this is only version %s &quot;.
+                        &quot;at %s line %d\n&quot;, $class, $want_version, 
+                                           $have_version, (caller)[1,2];
+        }
+
+        return $return;   
+    } </pre>
+<p>this could be added to UNIVERSAL.pm and eventually implemented in universal.c.
+It could even be safely added to Perl 5.</p>
+<a name='REFERENCES'></a><h1>REFERENCES</h1>
+<p>RFC 103 laments that <code>require $class</code> does not DWIM.</p>
+</div>

@@ -1,0 +1,142 @@
+[% setvar title The Perl 6 Summary for the fortnight ending 2004-06-06 %]
+<h3>This file is part of the Perl 6 Archive</h3>
+    <p>To see what is currently happening visit <a href="http://www.perl6.org/">http://www.perl6.org/</a></p>
+<div class='pod'>
+<a name='The Perl 6 Summary for the fortnight ending 2004-06-06'></a><h1>The Perl 6 Summary for the fortnight ending 2004-06-06</h1>
+<p>Whee! There's a new graphics card in the G5, which means I can type this
+at the big screen again, which makes me happy. Well, it would make me
+far happier if the new card didn't leave horrible artifacts all over
+the screen like some kind of incontinent puppy attempting to fulfil
+OpenGL draw instructions. Maybe next week will see a third card in the
+box.</p>
+<p>Dang! It looks like the G5 will be off receiving some TLC from an Apple
+service centre while I'm on holiday next week. Which means that the
+'weekly' summaries will continue on their fortnightly summer holiday
+schedule for at least one more summary. But then the lists themselves
+appear to be on summer footing anyway.</p>
+<p>Ahem.</p>
+<p>As you will probably have worked out by now, we start with
+perl6-internals.</p>
+<a name='Library loading'></a><h2>Library loading</h2>
+<p>Jens Rieks is working on library loading code that does all the nice
+things we've come to expect from other languages. The plan being that
+you'll be able to write (say)</p>
+<pre>    use('some_library')</pre>
+<p>and Parrot will go off and search it's include paths for
+<b><i>some_library.(pbc|imc|pasm|whatever)</i></b> and load it. As he noted, if
+you're going to implement that kind of code in parrot assembler (or
+PIR, or whatever), you need some way of loading the loading code. It's
+also a good idea to have a working <code>stat</code>. Jens added a
+<code>Parrot_load_bytecode_direct</code> function to the parrot core to support
+the first part. His please for a functional (if not complete) <code>stat</code>
+were answered by Dan who set about implementing the <code>stat</code> API he
+outlined a few weeks ago.</p>
+<p><a href='http://groups.google.com/groups?selm=200405211333.22233.parrot@jensbeimsurfen.de' target='_blank'>groups.google.com</a></p>
+<a name='Embedding Parrot'></a><h2>Embedding Parrot</h2>
+<p>Leo Tötsch and chromatic answered Paul Querna's questions from last
+week about embedding Parrot.</p>
+<p><a href='http://groups.google.com/groups?selm=200405241043.i4OAh7a01618@thu8.leo.home' target='_blank'>groups.google.com</a></p>
+<a name='Using PMCs as PerlHash keys'></a><h2>Using PMCs as PerlHash keys</h2>
+<p>TOGoS wanted to know how he could use a PMC as a key in a
+PerlHash. Leo replied that it was as simple as doing</p>
+<pre>    $P2 = new Key
+    $P2 = &quot;key_string&quot;
+    $P0 = $P1[$P2]</pre>
+<p>Piers Cawley did some naive translation into PASM and got himself
+horribly confused. Leo and TOGoS corrected him.</p>
+<p><a href='http://groups.google.com/groups?selm=20040520190352.46387.qmail@web41410.mail.yahoo.com' target='_blank'>groups.google.com</a></p>
+<a name='First draft of IO and event design'></a><h2>First draft of IO and event design</h2>
+<p>Remarking that events and IO are &quot;(kinda, sorta)&quot; the same thing, Dan
+posted his first draft of a unified IO and events design and asked for
+comments. This being p6i, he got several (though not as many as usual,
+maybe everyone likes it).</p>
+<p><a href='http://groups.google.com/groups?selm=a0611040abcd7faf9492e@' target='_blank'>groups.google.com</a>[10.0.1.3]</p>
+<a name='Freeze, objects, crash, boom'></a><h2>Freeze, objects, crash, boom</h2>
+<p>Will Coleda tried to get freezing and objects to play well together and
+failed. So he asked a bunch of questions. Leo didn't solve the problem,
+but he did have some pointers to where it was coming from.</p>
+<p><a href='http://groups.google.com/groups?selm=40B4D76B.5060306@coleda.com' target='_blank'>groups.google.com</a></p>
+<a name='MMD table setup semantics'></a><h2>MMD table setup semantics</h2>
+<p>Possibly winning an award for the oldest rejuvenated thread, Nicholas
+Clark had some questions about a post Dan made about MMD at the end of
+April. He made a suggesting about how to calculate 'distance' for multi
+dispatch. Dan pointed out that Larry had decreed that the 'distance'
+would be the 'Manhattan Distance'. (Google has several definitions).</p>
+<p><a href='http://groups.google.com/groups?selm=20040527143518.GD1129@plum.flirble.org' target='_blank'>groups.google.com</a></p>
+<a name='Compiler FAQ entry'></a><h2>Compiler FAQ entry</h2>
+<p>Will Coleda posted a possible set of entries for the compiler writers'
+FAQ. Leo had a few quibbles. Sterling Hughes suggested that having
+small, runnable source code examples would be really helpful.</p>
+<p><a href='http://groups.google.com/groups?selm=40B7ECCF.6030205@coleda.com' target='_blank'>groups.google.com</a></p>
+<a name='Layering PMCs'></a><h2>Layering PMCs</h2>
+<p>Dan kicked off a discussion on how to go about layering PMCs. The usual
+suspects offered suggestions. The aim is to be able to layer behaviours
+on top of PMCs without massive overhead or combinatorial explosion
+problems. As usual with these things, there's several possible ways of
+doing it, the debate is about choosing the best one.</p>
+<p><a href='http://groups.google.com/groups?selm=a06110404bcde7bf18ebd@' target='_blank'>groups.google.com</a>[172.24.18.98]</p>
+<a name='IO Layers'></a><h2>IO Layers</h2>
+<p>Leo had some questions about the (not fully implemented)
+ParrotIOLayerAPI. He laid out a proposal for implementing
+things. Uri Guttman and Dan joined in a discussion of the
+issues. (Simple summary of the issues: Asynchronous IO is
+hard. Possibly more accurate summary of the issues: Asynchronous IO
+is *not* synchronous)</p>
+<p><a href='http://groups.google.com/groups?selm=40B71F53.8000001@toetsch.at' target='_blank'>groups.google.com</a></p>
+<a name='PIO_unix_pipe()'></a><h2><code>PIO_unix_pipe()</code></h2>
+<p>Leo's implemented a <code>PIO_unix_pipe()</code> method which allows you to run an
+external program and capture the results with a Parrot IO handle. He
+doctored the <code>open</code> opcode to use it</p>
+<pre>    pipe = open &quot;/bin/ls -l&quot;, &quot;-|&quot; </pre>
+<p>Dan liked it, but proposed also adding a <code>backtick</code> operator.</p>
+<p><a href='http://groups.google.com/groups?selm=40C1C64D.5080105@toetsch.at' target='_blank'>groups.google.com</a></p>
+<a name='Register spilling'></a><h2>Register spilling</h2>
+<p>Dan noted that it's possible to get the register allocator caught up in
+an infinite loop (or as near infinite as makes no difference) as it
+tries to work out a register spilling strategy. He proposed there be a
+'slow but working' fallback method to use if the normal method goes
+through too many iterations. Leo suggested an delightfully brute force
+approach with some possible elaborations that Dan didn't think would be
+that useful in the cases he was seeing.</p>
+<p><a href='http://groups.google.com/groups?selm=rt-3.0.9-29837-88076.5.39698439413385@perl.org' target='_blank'>groups.google.com</a></p>
+<a name='Stat'></a><h2>Stat</h2>
+<p>Dan implemented a simple <code>stat</code> function that should be enough for
+Jens Rieks to get a library path based loading system to work. Leo
+patched his first attempt and most things in the garden were lovely
+(with a couple of rather less pretty spots that are being worked on as
+I type).</p>
+<p><a href='http://groups.google.com/groups?selm=a06110401bcd836c94dd7@' target='_blank'>groups.google.com</a>[172.24.18.98]</p>
+<a name='Bit ops on strings'></a><h2>Bit ops on strings</h2>
+<p>Argh! The character encoding discussion! Run away!</p>
+<p>Nicholas Clark and Dan discussed Parrots Unicode handling.</p>
+<p><a href='http://groups.google.com/groups?selm=20040525113008.GC1129@plum.flirble.org' target='_blank'>groups.google.com</a></p>
+<a name='Standard Library behaviour'></a><h2>Standard Library behaviour</h2>
+<p>Dan commented that now Jens was working the architecture of the
+standard library, the time had come to discuss how things should
+work. He outlined the options, asked for comments, and got promptly
+Warnocked.</p>
+<p><a href='http://groups.google.com/groups?selm=a06110407bcd924533939@' target='_blank'>groups.google.com</a>[10.0.1.3]</p>
+<a name='Meanwhile, in perl6-language'></a><h1>Meanwhile, in perl6-language</h1>
+<a name='The Periodic Table of the Operators'></a><h2>The Periodic Table of the Operators</h2>
+<p>Mark Lentczner announced that he'd put together a periodic table of
+Perl 6 operators. Everyone liked it, though several amendments were
+proposed and made. Check it out, it's very lovely (and anyone who
+references the great Edward Tufte in his explanation of the design is
+likely to be all right in my book).</p>
+<p>There will be T-shirts.</p>
+<p><a href='http://groups.google.com/groups?selm=486B658A-AF64-11D8-8F60-000393A56BB6@glyphic.com' target='_blank'>groups.google.com</a></p>
+<p><a href='http://www.ozonehouse.com/mark/blog/code/PeriodicTable.html' target='_blank'>www.ozonehouse.com</a></p>
+<a name='Announcements, Apologies, Acknowledgements'></a><h2>Announcements, Apologies, Acknowledgements</h2>
+<p>Ah well, if you can't beat the system, roll with it and pretend it's
+deliberate. Next week's summary definitely won't be next week, but there will
+be another fortnightly summary covering the fortnight ending
+2004-06-20. And the next summary will almost certainly be on a
+fortnightly schedule too, unless BT work some miracle and sort out my
+ADSL transfer promptly.</p>
+<p>If you find these summaries useful or enjoyable, please consider
+contributing to the Perl Foundation to help support the development of
+Perl. You might also like to send me feedback at
+mailto:<a href='mailto:pdcawley@bofh.org.uk'>pdcawley@bofh.org.uk</a></p>
+<p><a href='http://donate.perl-foundation.org/' target='_blank'>donate.perl-foundation.org</a> -- The Perl Foundation</p>
+<p><a href='http://dev.perl.org/perl6/' target='_blank'>dev.perl.org</a> -- Perl 6 Development site</p>
+</div>

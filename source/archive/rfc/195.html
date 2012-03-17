@@ -1,0 +1,52 @@
+[% setvar title Retire chop(). %]
+<h3>This file is part of the Perl 6 Archive</h3>
+    <p>To see what is currently happening visit <a href="http://www.perl6.org/">http://www.perl6.org/</a></p>
+<div class='pod'>
+<a name='TITLE'></a><h1>TITLE</h1>
+<p>Retire chop().</p>
+<a name='VERSION'></a><h1>VERSION</h1>
+<pre>  Maintainer: Nathan Torkington &lt;<a href='mailto:gnat@frii.com'>gnat@frii.com</a>&gt;
+  Date: 5 Sep 2000
+  Last Modified: 18 Sep 2000
+  Mailing List: <a href='mailto:perl6-language@perl.org'>perl6-language@perl.org</a>
+  Number: 195
+  Version: 3
+  Status: Frozen
+  Frozen since: v2</pre>
+<a name='ABSTRACT'></a><h1>ABSTRACT</h1>
+<p>Remove chop() from the core.  Its purpose is better served by chomp(),
+so its remaining applications are few and limited.</p>
+<a name='CHANGES'></a><h1>CHANGES</h1>
+<pre> * fixed perl526 translation. (v3)
+
+ * Added mention of how per-filehandle autochomping would affect this
+   RFC. (v2)</pre>
+<a name='DESCRIPTION'></a><h1>DESCRIPTION</h1>
+<p>chop()'s original purpose was to remove trailing line terminators.
+However, chop() is dangerous: it always removes the last character,
+and it doesn't care whether the last character is a line terminator
+or not.</p>
+<p>So chomp() was introduced.  This only removes the value of $/, and if
+there's no $/ at the end of the string then it doesn't remove
+anything.  This makes it safer: if you don't know whether your string
+is chomp()ed or not, you can chomp() it anyway.  With chop() you had
+to have a separate explicit test.  chop() also doesn't know about $/
+and the different values it might have.</p>
+<p>chop() is still occasionally used, but very rarely.  Not enough, in
+my opinion, for chop() to stay in the core.  Its functionality might
+be available in a library.</p>
+<p>If filehandles gain the ability to automatically remove their record
+separators, then chomp() will still be needed.</p>
+<a name='IMPLEMENTATION'></a><h1>IMPLEMENTATION</h1>
+<p>The perl526 translator can simply use</p>
+<pre>  do { my ($foo) = s/(.)\z//s; $foo }</pre>
+<p>for a chop() action.  If there were a chop() in a standard library
+then the conversion would simply be a matter of putting:</p>
+<pre>  use String::Chop;	# or whatever</pre>
+<p>at the top of any converted program that uses chop().</p>
+<p>Implementation in perl6 is very straightforward: don't implement
+chop().</p>
+<a name='REFERENCES'></a><h1>REFERENCES</h1>
+<p>RFC 58: <code>chomp()</code> changes.</p>
+<p>perlfunc manpage for discussion of chomp() and chop()</p>
+</div>

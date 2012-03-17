@@ -1,0 +1,49 @@
+[% setvar title Integrate BigInts (and BigRats) Support Tightly With The Basic Scalars %]
+<h3>This file is part of the Perl 6 Archive</h3>
+    <p>To see what is currently happening visit <a href="http://www.perl6.org/">http://www.perl6.org/</a></p>
+<div class='pod'>
+<a name='TITLE'></a><h1>TITLE</h1>
+<p>Integrate BigInts (and BigRats) Support Tightly With The Basic Scalars</p>
+<a name='VERSION'></a><h1>VERSION</h1>
+<pre>  Maintainer: Jarkko Hietaniemi &lt;<a href='mailto:jhi@iki.fi'>jhi@iki.fi</a>&gt;
+  Date: 5 Aug 2000
+  Mailing List: <a href='mailto:perl6-internals@perl.org'>perl6-internals@perl.org</a>
+  Number: 43
+  Version: 1
+  Status: Developing</pre>
+<a name='ABSTRACT'></a><h1>ABSTRACT</h1>
+<p>Currently Perl 'transparently' starts using double floating point
+numbers when the numeric values grow too large for the native integer
+types (int, long, quad) can no more hold quantities that large.
+Because double floats are at their heart a lie, they cannot truly
+represent large numbers accurately.  Therefore sometimes when the
+application would prefer to stay accurate, the use of 'bigints' (and
+for division, 'bigrats') would be preferable.  Classes of applications
+that would prefer keeping true: cryptography, financial, statistics
+(combinatorics).</p>
+<a name='DESCRIPTION'></a><h1>DESCRIPTION</h1>
+<p>When the following pragma is in effect all numeric SVs (or, rather,
+the numeric ops) would try to keep their results as big integers.
+&quot;Try to&quot; because some math simply doesn't play along: sin(), ln(),
+etc.</p>
+<pre>	use bigint;
+	
+	my $thats_big_baby = 5**5**5;
+	</pre>
+<p>With only &quot;use bigint&quot; in scope 2/3 would fall back to .6666...7, but
+with the following pragma, it would be truly 2/3:</p>
+<pre>	use bigrat;
+	</pre>
+<p>If one wants to limit the bigintism or -ratism to just a few select
+scalars, one could use 'strong typing':</p>
+<pre>	my bigint $i;
+	my bigrat $r;</pre>
+<a name='IMPLEMENTATION'></a><h1>IMPLEMENTATION</h1>
+<p>Either include (if there is a bigint library with the appropriate
+features and licensing) a bigint library or implement one.</p>
+<p>For performance reasons the bigint library needs to operate using the
+native integer types.  We don't want 1+1 engaging the whole bigint
+machinery.</p>
+<a name='REFERENCES'></a><h1>REFERENCES</h1>
+<pre>	RFC 38 [Standardise Handling Of Abnormal Numbers Like Infinities And NaNs]</pre>
+</div>

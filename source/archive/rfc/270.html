@@ -1,0 +1,108 @@
+[% setvar title Replace XS with the C<Inline> module as the standard way to extend Perl. %]
+<h3>This file is part of the Perl 6 Archive</h3>
+    <p>To see what is currently happening visit <a href="http://www.perl6.org/">http://www.perl6.org/</a></p>
+<div class='pod'>
+<a name='TITLE'></a><h1>TITLE</h1>
+<p>Replace XS with the <code>Inline</code> module as the standard way to extend Perl.</p>
+<a name='VERSION'></a><h1>VERSION</h1>
+<pre>  Maintainer: Brian Ingerson &lt;<a href='mailto:brian@ingerson.com'>brian@ingerson.com</a>&gt;
+  Date: 21 Sep 2000
+  Mailing List: <a href='mailto:perl6-language@perl.org'>perl6-language@perl.org</a>
+  Number: 270
+  Version: 1
+  Status: Developing</pre>
+<a name='REPLACES'></a><h1>REPLACES</h1>
+<p>RFC 61 - Interfaces for linking C objects into perlsubs</p>
+<a name='ABSTRACT'></a><h1>ABSTRACT</h1>
+<p>Extending Perl with XS is too hard. First, there is a hefty learning
+curve for even simple extensions. Also, the resulting code gets spread
+out over several files, making it hard to maintain.</p>
+<p>In the spirit of Perl itself, <code>Inline.pm</code> makes extending Perl easy for
+easy things, and possible for harder things. A Perl programmer can write
+their first <code>Inline</code> extension in minutes. They can learn more
+difficult maneuvers as needed. All of the extension code can be in the
+same file as the Perl script or module.</p>
+<p>This one-liner is a complete perl extension:</p>
+<pre>    perl -e 'print add(2,2);use Inline C=&gt;&quot;int add(int x,int y){return x+y;}&quot;'</pre>
+<p>The first time you run it, you'll notice a pause (compiling). Subsequent
+runs are lightning fast, as long as the C component isn't modified.</p>
+<a name='DESCRIPTION'></a><h1>DESCRIPTION</h1>
+<p><code>Inline.pm</code> is basically a user friendly abstraction over XS. You feed
+it a snippet of (C) source and it performs the following steps:</p>
+<pre>    1) Determine if the code snippet has already be compiled. 
+       If so, goto 5.
+    2) Parse function definitions to determine how code should bind to Perl.
+    3) Generate XS glue code.
+    4) Build the extension and install it in some known place.
+    5) DynaLoader the extension.</pre>
+<p>If the extension is a user script or one-liner, the extension will get
+built and installed in a place that the user has access to. <code>Inline</code>
+chooses a reasonable default. The default can easily be over-ridden.</p>
+<p>If the extension is part of a distributed (ie CPAN) module, the code
+gets compiled during &quot;make test&quot; and permanently installed in the
+&quot;installsitearch&quot; during &quot;make install&quot;.</p>
+<p><code>Inline</code> is intended to replace 80-90% of the current functionality of
+XS. Although it does not need to be built over XS, doing so makes
+<code>Inline</code> more robust, helps towards backwards compatability, and
+provides an easy &quot;out&quot; if a project grows to exceed <code>Inline's</code>
+capabilities.</p>
+<p>In perl6, something like XS should still exist, but just as a foundation
+for <code>Inline</code>. Savvy hackers could defeat <code>Inline</code> and write glue code
+themselves, but this would not be the standard.</p>
+<a name='IMPLEMENTATION'></a><h1>IMPLEMENTATION</h1>
+<p>All of this is currently functional in <code>Inline</code> v0.25 (on CPAN now).
+<code>Inline</code> seems to work on any machine that has access to the same
+environment that was used to build Perl itself. Success has been
+achieved on platforms including MSWin32 and most *nixes.</p>
+<p>Version 0.25 provides bindings to the following types: <code>int</code>, <code>long</code>,
+<code>double</code>, <code>char *</code>, <code>SV *</code>. (For anything else the user must pass the
+argument as a <code>SV *</code> and do their own type conversion.) There is also
+support for passing and returning lists.</p>
+<p>Version 0.30 (not yet released) has no default types. It gets all of its
+types from XS <code>typemap</code> files. These files are parsed for their types,
+which are dumped into the grammar to parse C. Since Perl comes with a
+generic <code>typemap</code> file, this is used as the default. It contains all
+the types listed above and more.</p>
+<p>This allows XS programmers to use their old typemaps when switching to
+<code>Inline</code>. It also allows other modules (like Event.pm) which have an XS
+API, to publish that API to <code>Inline</code> seamlessly, using a syntax like
+&quot;use Inline with =&gt; 'Event';&quot;</p>
+<p>Version 0.30 will also support the following syntax:</p>
+<pre>    use Inline;
+    print add(2, 4);
+    __END__
+
+    =pod
+
+    blah blah blah
+
+    =cut
+
+    __C__
+    int add(int x, int y) {
+      return x + y;
+    }</pre>
+<p>If so desired, perl6 might be able to simply recognize the <code>__C__</code>
+marker, and not require the <code>use Inline;</code> at all. The code would look
+like:</p>
+<pre>    print add(2, 4);
+
+    __C__
+    int add(int x, int y) {
+      return x + y;
+    }
+
+    __END__
+
+    =pod
+
+    blah blah blah
+
+    =cut</pre>
+<a name='REFERENCES'></a><h1>REFERENCES</h1>
+<p>RFC 61: Interfaces for linking C objects into perlsubs</p>
+<p>Inline.pm documentation and tutorial:</p>
+<p><a href='http://search.cpan.org/doc/INGY/Inline-0.25/lib/Inline.pod' target='_blank'>search.cpan.org</a></p>
+<p><a href='http://search.cpan.org/doc/INGY/Inline-0.25/lib/Inline/Config.pod' target='_blank'>search.cpan.org</a></p>
+<p><a href='http://search.cpan.org/doc/INGY/Inline-0.25/lib/Inline/C/Tutorial.pod' target='_blank'>search.cpan.org</a></p>
+</div>

@@ -1,0 +1,301 @@
+[% setvar title The Perl 6 Summary for the week ending 20021208 %]
+<h3>This file is part of the Perl 6 Archive</h3>
+    <p>To see what is currently happening visit <a href="http://www.perl6.org/">http://www.perl6.org/</a></p>
+<div class='pod'>
+<a name='The Perl 6 Summary for the week ending 20021208'></a><h1>The Perl 6 Summary for the week ending 20021208</h1>
+<p>Another Monday evening. Another summary to write.</p>
+<p>Starting, as is becoming tediously predictable, with perl6-internals.</p>
+<a name='Another JIT discussion'></a><h2>Another JIT discussion</h2>
+<p>Toward the end of the previous week, Leopold T&ouml;tsch posted
+something about the latest round of changes to the JIT core. Daniel
+Grunblatt was concerned that the current JIT wasn't doing the right
+thing when it came hardware register allocation and wanted to remove a
+some conditional logic. Leo didn't agree at first, but became
+convinced and Daniel's requested change was applied.</p>
+<p><a href='http://groups.google.com/groups?threadm=200212011301.08982.daniel@grunblatt.com.ar' target='_blank'>groups.google.com</a></p>
+<a name='Fun with IMCC'></a><h2>Fun with IMCC</h2>
+<p>Lots of things happened with IMCC this week:</p>
+<ul>
+<li><a name='David Robins posted a list of minor niggles (For instance, it turns out you can't ret early from a .sub) and suggested some remedies. Leo T&ouml;tsch mentioned that the IMCC Cabal (which would consist of Melvin Smith, Sean O'Rourke, Angel Faus and Leo if there were a Cabal. But, as everyone knows, There Is No Cabal) have been discussing several of these issues.'></a>David Robins posted a list of minor niggles (For instance, it turns
+out you can't <code>ret</code> early from a <code>.sub</code>) and suggested some
+remedies. Leo T&ouml;tsch mentioned that the IMCC Cabal (which
+would consist of Melvin Smith, Sean O'Rourke, Angel Faus and Leo if
+there were a Cabal. But, as everyone knows, There Is No Cabal) have
+been discussing several of these issues.</li>
+<p><a href='http://groups.google.com/groups?threadm=Pine.LNX.4.44.0212021417160.14941-100000@davidrobins.net' target='_blank'>groups.google.com</a></p>
+<p><a href='http://groups.google.com/groups?threadm=3DEC68A8.6070900@toetsch.at' target='_blank'>groups.google.com</a></p>
+<li><a name='Art Haas had problems building IMCC, apparently bison didn't like the imcc.y file. Leo tracked down the problem (at the second time of asking, I think he might be slipping) and checked in a working fix.'></a>Art Haas had problems building IMCC, apparently bison didn't like the
+<b><i>imcc.y</i></b> file. Leo tracked down the problem (at the second time of
+asking, I think he might be slipping) and checked in a working fix.</li>
+<li><a name='Leo T&ouml;tsch made a pile of changes to IMCC to eliminate clashes between Parrot's PASM language and IMCC's PIR syntax, which had made it hard to mix the two. Full details of the changes are in his post.'></a>Leo T&ouml;tsch made a pile of changes to IMCC to eliminate clashes
+between Parrot's PASM language and IMCC's PIR syntax, which had made
+it hard to mix the two. Full details of the changes are in his post.</li>
+<p>Gopal V wondered if there was any way of feeding code to IMCC beyond
+simply writing to a file and running IMCC. He'd had to make a bunch of
+changes to the IMCC files that he used, and wondered if there was a
+Better Way. Actually he didn't so much wonder as propose the
+aforementioned Better Way, lifting ideas from DotGNU's <b><i>treecc</i></b>. He
+and Leo discussed things, worked out an interface and Gopal went off
+to implement something (Yay Gopal!)</p>
+<p><a href='http://groups.google.com/groups?threadm=3DECC08A.8090208@toetsch.at' target='_blank'>groups.google.com</a></p>
+<p><a href='http://groups.google.com/groups?threadm=20021204004556.A3407@md3.vsnl.net.in' target='_blank'>groups.google.com</a></p>
+<li><a name='Steve Fink posted a patch implementing a first cut at namespace support in IMCC. He wasn't at all sure that what he'd implemented was the Right Thing, but it supplied what he needed for the time being (if that makes sense) in the regex engine. Leo reckoned that it looked okay, and promised to apply it if nobody hollered. He also pointed out some problems with the current regex implementation to do with reentrancy and memory leakage. It turns out that Steve was working on languages/regex rather than the rx_* ops, which are the ones that have the problems.'></a>Steve Fink posted a patch implementing a first cut at namespace
+support in IMCC. He wasn't at all sure that what he'd implemented was
+the Right Thing, but it supplied what he needed for the time being (if
+that makes sense) in the regex engine. Leo reckoned that it looked
+okay, and promised to apply it if nobody hollered. He also pointed out
+some problems with the current regex implementation to do with
+reentrancy and memory leakage. It turns out that Steve was working on
+<b><i>languages/regex</i></b> rather than the <code>rx_*</code> ops, which are the ones
+that have the problems.</li>
+<p><a href='http://groups.google.com/groups?threadm=rt-18856-43866.10.1988319398784@bugs6.perl.org' target='_blank'>groups.google.com</a></p>
+<li><a name='Gregor N. Purdy had some problems with IMCC's syntax, a fragment of code that he thought should work fell over in a heap. Both Mr. Nobody and Leo pointed out that IMCC expects subroutines, and you should wrap your code in a .sub/.end pair.'></a>Gregor N. Purdy had some problems with IMCC's syntax, a fragment of
+code that he thought should work fell over in a heap.  Both Mr. Nobody
+and Leo pointed out that IMCC expects subroutines, and you should wrap
+your code in a <code>.sub</code>/<code>.end</code> pair.</li>
+<p>Once Gregor had that straight he posted a Jako program and the IMCC
+code he thought the Jako compiler should generate from it and asked
+for any feedback before he went to change the compiler. Leo
+T&ouml;tsch provided some (I assume) useful feedback.</p>
+<p>A little later Gregor posted again, he was still having problems with
+IMCC not quite behaving as he wanted for the Jako compiler. He and Leo
+thrashed it out over a few messages and, to cut a long story short,
+IMCC looks like it won't be changing. I'm not sure whether Gregor is
+happy about this...</p>
+<p><a href='http://groups.google.com/groups?threadm=OF62DC53C8.485EA6B9-ON85256C85.00523820-85256C85.0052B894@kennedytech.com' target='_blank'>groups.google.com</a></p>
+<p><a href='http://groups.google.com/groups?threadm=OFEBCC7A80.077BD3AB-ON85256C85.0058AE9F-85256C85.0059727D@kennedytech.com' target='_blank'>groups.google.com</a></p>
+<li><a name='Mr Nobody posted a patch to get IMCC to compile under windows. Apparently the OUT label clashes with something in the windows header files. The patch got applied.'></a>Mr Nobody posted a patch to get IMCC to compile under
+windows. Apparently the <code>OUT</code> label clashes with something in the
+windows header files. The patch got applied.</li>
+<li><a name='Gregor N. Purdy got a little confused by how IMCC generates PASM code, and posted some sample code, interspersed with questions. Which Leo answered. It's worth looking at this; it shows off the kind of optimization that IMCC gets up to.'></a>Gregor N. Purdy got a little confused by how IMCC generates PASM code,
+and posted some sample code, interspersed with questions. Which Leo
+answered. It's worth looking at this; it shows off the kind of
+optimization that IMCC gets up to.</li>
+<p><a href='http://groups.google.com/groups?threadm=OF48E63324.EF9A6AE6-ON85256C87.00541440-85256C87.005616B1@kennedytech.com' target='_blank'>groups.google.com</a></p>
+<p><a href='http://groups.google.com/groups?threadm=3DF0CFF8.7010009@toetsch.at' target='_blank'>groups.google.com</a></p>
+</ul>
+<a name='PMCs are the thing'></a><h2>PMCs are the thing</h2>
+<p>Dan announced that he's finally stopped waffling and frozen the PMC
+structures `modulo the odd twiddling to it.' He's added a <b><i>pmc.ops</i></b>
+file, and has started adding in ops to manipulate PMC internals. Leo
+asked for some clarifications, got some, and then wondered what the
+final 'Parrot Object' will look like.</p>
+<p><a href='http://groups.google.com/groups?threadm=a05200f07ba12bc13c829@' target='_blank'>groups.google.com</a>[63.120.19.221]</p>
+<a name='logical_not issue'></a><h2><code>logical_not</code> issue</h2>
+<p>David Robins is having fun with <code>logical_not</code> and Ruby. The issue is
+that <i>all</i> integers in Ruby are true, whether or not they are zero
+but that with some of the assumptions in other PMCs. Robin offered 3
+suggestions for how to fix it. Dan noted that it's an issue for Perl 6
+too, since the truth or otherwise of a value can be modified by a
+property of that value, coming up with a fix is on his todo
+list. David wondered if this had been discussed before and offered
+another possible way forward. Dan half liked the idea but noted that
+the approach didn't work for <code>and</code>, <code>or</code> and <code>xor</code>, at least where
+Perl is concerned.</p>
+<p><a href='http://groups.google.com/groups?threadm=Pine.LNX.4.44.0212031513290.16321-100000@davidrobins.net' target='_blank'>groups.google.com</a></p>
+<a name='The language that dare not speak its name.'></a><h2>The language that dare not speak its name.</h2>
+<p>After a fortnight during which nobody made any comment on Leon
+Brocard's patch adding a <b><i>brainfuck</i></b> subdirectory to the <b><i>languages</i></b>
+directory, Nicholas Clark committed it in CVS.</p>
+<p>At which point Andy Dougherty spoke up to say he wasn't happy about
+it, saying that he didn't wish to be associated with needlessly crude
+and offensive language. After some further debate the subdirectory was
+renamed to <b><i>bf</i></b> in such a way that, if you ask CVS it will tell you
+that the <b><i>brainfuck</i></b> subdirectory does not exist now and never has
+existed. Which seems strangely appropriate somehow. Fnord.</p>
+<p><a href='http://groups.google.com/groups?threadm=a05200f05ba13e8521fa2@' target='_blank'>groups.google.com</a>[63.120.19.221]</p>
+<p><a href='http://groups.google.com/groups?threadm=a05200f05ba13e8521fa2@' target='_blank'>groups.google.com</a>[63.120.19.221]</p>
+<a name='Parrot Organization'></a><h2>Parrot Organization</h2>
+<p>Michael Collins asked about the structure of the Parrot development
+organization, and Dan provided some answers. My favourite Q&amp;A:</p>
+<p>Q. Is there any formal structure to this organization.</p>
+<p>A. I [Dan] delude myself into thinking I'm more or less in charge....</p>
+<p><a href='http://groups.google.com/groups?threadm=a05200f0dba12da9ef0f1@' target='_blank'>groups.google.com</a>[63.120.19.221]</p>
+<p><a href='http://groups.google.com/groups?threadm=a05200f0dba12da9ef0f1@' target='_blank'>groups.google.com</a>[63.120.19.221]</p>
+<a name='Just when you thought it was safe'></a><h2>Just when you thought it was safe</h2>
+<p>to start using long file names with impunity, Mr Nobody pointed out
+that a bunch of the files in the parrot repository didn't play well
+with the MS-DOS 'filesystem's 8.3 naming rules. &quot;So what?&quot; asked Aldo
+Calpini. Mr Nobody asked if DOS was an intended compilation
+target. Answer: &quot;No&quot;. The consensus appears to be &quot;Ha! We laugh at
+your crappy filename restrictions and will not be jumping through any
+hoops to deal with a faintly silly hypothetical target.&quot; Or maybe
+that's just my opinion dressed up as consensus. Ah well, if I'm wrong
+I'm sure someone will tell me.</p>
+<p><a href='http://groups.google.com/groups?threadm=20021204145835.68294.qmail@web20801.mail.yahoo.com' target='_blank'>groups.google.com</a></p>
+<a name='Meanwhile, over in perl6-language'></a><h1>Meanwhile, over in perl6-language</h1>
+<p>The perl6-documentation team have been discussing String literals and
+their discussion spilled over into perl6-language as there are
+several things about them that are undefined and needed discussing by
+the language crowd. It's all to do with how octal numbers and octal
+string escapes are specified. Essentially, people don't like the
+current Perl5/C style <code>0101</code> (octal number) and <code>\101</code> (octal string
+escape), so James supplied a list of the other possibilities. (The
+current Numeric literals doc say that <code>0c101</code> designates an octal
+numeric literal, but then the consistent extension to string literals
+(<code>\c101</code> clashes with the current method of specifying a
+control-char). After a certain amount of debate Larry pulled one of
+his gloriously clear posts out of the bag, sketching the issues and
+coming up with a straightforward and obvious (but only with hindsight)
+way forward. It's good to be reminded why we trust Larry. Anyway, it
+turns out that an octal number will be specified using <code>0o101</code> and an
+octal character escape will probably be one of <code>\0o[101]</code> or
+<code>\c[0o101]</code> (I like the second better...)</p>
+<p><a href='http://groups.google.com/groups?threadm=3DED40AF.8010909@mastros.biz' target='_blank'>groups.google.com</a></p>
+<p><a href='http://groups.google.com/groups?threadm=20021204202101.GA7347@wall.org' target='_blank'>groups.google.com</a></p>
+<a name='Thinking about \c[...]'></a><h2>Thinking about <code>\c[...]</code></h2>
+<p>Once Larry had pulled <code>\c[0o101]</code> out of the bag, it fell to David
+Whipp to wonder what you could get up to with it. For instance, could
+you do: <code>print &quot;\c[71, 101, 108, 108, 111]&quot;</code> and have that print
+&quot;Hello&quot;? Damian pointed out that Larry had already discussed some of
+this in Apocalypse 5, but that the separator character would probably
+be the semicolon. Then Nicholas Clark got evil, and wondered about
+<code>&quot;\c[$(call_a_func())]&quot;</code>, but Damian seemed to think that wouldn't be
+such a good idea.</p>
+<p><a href='http://groups.google.com/groups?threadm=F0DF160193C9D511B7110050DA8B7C24572B69@msexchange.intranet.fast-chip.com' target='_blank'>groups.google.com</a></p>
+<a name='Purge: opposite of grep'></a><h2>Purge: opposite of grep</h2>
+<p>Miko O'Sullivan suggested a <code>purge</code> command which would be to <code>grep</code>
+as <code>unless</code> is to <code>if</code>. Nobody seemed to like the name that much,
+though most seemed to think the idea was sound. Michael Lazzaro
+suggested <code>divvy</code> which would be used to break a list into multiple
+lists (he initially proposed just breaking the list into two lists,
+but others extended the idea to more). Damian didn't like the name,
+and initially proposed <code>classify</code>, which would return a list of array
+references. Discussion continued for a while until Ralph Mellor
+suggested <code>part</code> as the name for this putative function, which Damian
+leapt on with a glad cry.</p>
+<p>This went on for a while, with extra features being proposed and other
+explorations of the possibilities including some rather nifty proposed
+shorthand/DWIMmery.</p>
+<p>Meanwhile Ken Fox wondered why we couldn't just implement
+classify/part/divvy as a normal sub and wondered why everything had to
+be built into the first version of Perl 6. So Damian implemented it,
+but commented that &quot;then the thousands of people who are apparently
+clamouring for this functionality and who would have no hope of
+getting the above correct, would have to pull in some module every
+time they wanted to partition an array.&quot; Ken was impressed, and asked
+for some commentary on how it all worked, which Damian provided. BTW,
+this code is <i>really</i> worth looking at for an example of the kind of
+power that Perl 6 will provide.</p>
+<p>David Wheeler wasn't over keen on calling the function 'part' because
+part has so many different possible interpretations. It turns out that
+that's why Damian likes the name so much.</p>
+<p><a href='http://groups.google.com/groups?threadm=Pine.NEB.4.44.0212042056050.16496-100000@canolog.ninthwonder.com' target='_blank'>groups.google.com</a></p>
+<p><a href='http://groups.google.com/groups?threadm=3DF01FA4.3090109@conway.org' target='_blank'>groups.google.com</a> -- <code>classify</code></p>
+<p><a href='http://groups.google.com/groups?threadm=3DF26E5F.1030304@vulpes.com' target='_blank'>groups.google.com</a></p>
+<p><a href='http://groups.google.com/groups?threadm=3DF29228.9070605@conway.org' target='_blank'>groups.google.com</a> -- Damian implements <code>part</code></p>
+<p><a href='http://groups.google.com/groups?threadm=3DF294F8.6070606@conway.org' target='_blank'>groups.google.com</a> -- Damian implements <code>part</code> with sane
+formatting</p>
+<p><a href='http://groups.google.com/groups?threadm=3DF3D3B0.4090306@conway.org' target='_blank'>groups.google.com</a> -- Damian explains it all</p>
+<a name='In defence of zero-indexed arrays'></a><h2>In defence of zero-indexed arrays</h2>
+<p>Michael G Schwern asked people to `Explain how having indexes in Perl
+6 start at zero will benefit most users. Do not invoke
+legacy.'. Answers ranged from the silly to the sincere. The best
+answer was &quot;Because I [Larry] like it&quot; which, I think, trumps
+everyone.</p>
+<p><a href='http://groups.google.com/groups?threadm=20021205104539.GT11947@blackrider.schwern.org' target='_blank'>groups.google.com</a></p>
+<p><a href='http://groups.google.com/groups?threadm=20021207015933.GA25887@wall.org' target='_blank'>groups.google.com</a></p>
+<a name='Stringification of references'></a><h2>Stringification of references</h2>
+<p>Joseph F. Ryan kicked off a discussion of the stringification of
+objects and references and offered his suggestions. Joseph leans
+towards having the default stringifications of objects and references
+provide information useful to the programmer. I agree with him (so, if
+you spot any bias in the upcoming summary that'd be because I'm
+biased). Michael Lazzaro explicitly brought up the distinction between
+&quot;stringification for output&quot; and &quot;stringification for debugging&quot;, and
+came down in favour of stringification for output (heck, he even
+wanted references to be invisible to stringification). Piers Cawley
+told him he was very wrong and appealed to the authority of Kent Beck
+(a Smalltalk and Java programmer, possibly not the <i>best</i> authority
+to choose). Michael then proposed a scheme involving subclasses of
+String, to provide cues for different stringifications, which John
+Siracusa thought was going rather a long way too far, coming down in
+favour of the &quot;stringify for debugging&quot; position. I'm not sure
+anything has actually been <i>decided</i> yet though. Tune in next week.</p>
+<p><a href='http://groups.google.com/groups?threadm=3DEFE311.2020004@osu.edu' target='_blank'>groups.google.com</a></p>
+<a name='Outline of class definitions in Perl 6'></a><h2>Outline of class definitions in Perl 6</h2>
+<p>Simon Cozens asked for a translation of some Perl 5 style OO code into
+Perl 6, and Luke Palmer had a go at the task, then Larry came through
+with something a little more definitive (but not <i>actually</i>
+definitive just yet, I get the feeling that a few things are still in
+flux...)</p>
+<p><a href='http://groups.google.com/groups?threadm=87fztbi4ek.fsf@simoncozens-2.dsl.easynet.co.uk' target='_blank'>groups.google.com</a></p>
+<p><a href='http://groups.google.com/groups?threadm=20021206191520.GC23288@wall.org' target='_blank'>groups.google.com</a></p>
+<a name='Perl 6 and Set Theory'></a><h2>Perl 6 and Set Theory</h2>
+<p>Luke Palmer posted a fascinating document presenting a &quot;new way of
+thinking about some constructs.&quot; and proposed some changes to help
+with consistency. The document covered junctions and classes,
+recasting them as representations of finite and infinite sets. Only
+Damian responded with a few corrections and clarifications noting
+that one of Luke's proposed changes was rather fundamental, and that
+he wasn't sure he wanted to make that change without some deep
+reflection (from someone) on how that would affect the junction types
+that Luke hadn't considered. Discussion continues.</p>
+<p><a href='http://groups.google.com/groups?threadm=20021206210300.DE96032A@babylonia.flatirons.org' target='_blank'>groups.google.com</a></p>
+<a name='In Brief'></a><h1>In Brief</h1>
+<p>Steve Fink is toying with adding OpenGL ops to Parrot.</p>
+<p>Leon Brocard has used the native call interface features to add curses
+support to Parrot and offered a version of <b><i>life.pasm</i></b> that makes use
+of it.</p>
+<p>The perl6-language crowd are currently working on string literals and
+stringification.</p>
+<a name='Who's Who in Perl 6?'></a><h1>Who's Who in Perl 6?</h1>
+<p>I'm bumping this one up the questionnaire queue slightly. I felt the
+need for some controversy.</p>
+<ul>
+<li><a name='Who are you?'></a>Who are you?</li>
+<p>Abigail</p>
+<li><a name='What do you do for/with Perl 6?'></a>What do you do for/with Perl 6?</li>
+<p>Nothing, except for disliking languages that are white space
+sensitive.</p>
+<li><a name='Where are you coming from?'></a>Where are you coming from?</li>
+<p>I've been coding Perl since 1995. Joined p5p in 1996 or so.</p>
+<li><a name='When do you think Perl 6 will be released?'></a>When do you think Perl 6 will be released?</li>
+<p>A usable release? Given the current rate in which apocalypses are
+produced, I'd say 2008. Give or take a few years.</p>
+<li><a name='Why are you doing this?'></a>Why are you doing this?</li>
+<p>I adore Perl. Perl5 that is. Programming in Perl5 is like exploring a
+large medieval castle, surrounded by a dark, mysterious forest, with
+something new and unexpected around each corner. There are dragons to
+be conquered, maidens to be rescued, and holy grails to be quested
+for. Lots of fun. Perl6 looks like a Louis-XVI castle and garden to
+me. Straight, symmetric, and bright. There are wigs to be powdered,
+minuets to be danced, all quite boring. I haven't been impressed by
+new features yet, but I'm disappointed by what will be lost.</p>
+<li><a name='You have 5 words. Describe yourself.'></a>You have 5 words. Describe yourself.</li>
+<p>My mind is twisted. Backwards.</p>
+<li><a name='Do you have anything to declare?'></a>Do you have anything to declare?</li>
+<p>One of the great things about Perl5 is that I don't have to declare
+anything I don't want to.</p>
+</ul>
+<a name='Acknowledgements'></a><h1>Acknowledgements</h1>
+<p>Another week of writing on the train and, for a change of scenery, at
+my parents' house, fuelled, as usual by large amounts of tea.</p>
+<p>Proofreading was once again down to Aspell and me. Any errors this
+week are probably my fault, it's about time I started accepting my
+responsibilities.</p>
+<p>Thanks to everyone who has sent me questionnaire answers, I've got a
+queue of about four left so, if you work with Perl 6 (or, like Abigail,
+hate it) please answer the same set of questions Abigail just answered
+and send them to me at mailto:<a href='mailto:5Ws@bofh.org.uk.'>5Ws@bofh.org.uk.</a> Thanks.</p>
+<p>I got some mail last week from someone praising me for the summaries
+(thanks), but wanting to know how he could contribute his time and
+energy, so this week the chorus has a few extra lines in it:</p>
+<p>If you didn't like the summary, what are you doing still reading it?
+If you did like it, please consider one or more of the following
+options:</p>
+<ul>
+<li><a name='Send money to the Perl Foundation at donate/perl-foundation.org/ and help support the ongoing development of Perl 6.'></a>Send money to the Perl Foundation at
+<a href='http://donate/perl-foundation.org/' target='_blank'>donate</a> and help support the ongoing
+development of Perl 6.</li>
+<li><a name='Get involved with the Perl 6 process. The mailing lists are open to everyone, dev.perl.org/perl6 and dev.perl.org/parrot are good starting points with links to the appropriate mailing lists.'></a>Get involved with the Perl 6 process. The mailing lists are open to
+everyone, <a href='http://dev.perl.org/perl6' target='_blank'>dev.perl.org</a> and
+<a href='http://dev.perl.org/parrot' target='_blank'>dev.perl.org</a> are good starting points with links to
+the appropriate mailing lists.</li>
+<li><a name='Send feedback, flames, money and or lucrative employment in the Doncaster area to mailto:<a href='mailto:p6summarizer@bofh.org.uk'>p6summarizer@bofh.org.uk</a> (No, I'm not unemployed at the moment, I just want to work nearer to home...)'></a>Send feedback, flames, money and or lucrative employment in the
+Doncaster area to mailto:<a href='mailto:p6summarizer@bofh.org.uk'>p6summarizer@bofh.org.uk</a> (No, I'm not
+unemployed at the moment, I just want to work nearer to home...)</li>
+</ul>
+<p>The fee paid for publication of these summaries on perl.com is paid
+directly to the Perl Foundation.</p>
+</div>

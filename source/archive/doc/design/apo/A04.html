@@ -1,0 +1,2054 @@
+[% setvar title Apocalypse 4: Syntax %]
+<h3>This file is part of the Perl 6 Archive</h3>
+    <p>To see what is currently happening visit <a href="http://www.perl6.org/">http://www.perl6.org/</a></p>
+<div class='pod'>
+<pre>=encoding utf-8</pre>
+<a name='TITLE'></a><h1>TITLE</h1>
+<p>Apocalypse 4: Syntax</p>
+<a name='AUTHOR'></a><h1>AUTHOR</h1>
+<p>Larry Wall &lt;<a href='mailto:larry@wall.org'>larry@wall.org</a>&gt;</p>
+<a name='VERSION'></a><h1>VERSION</h1>
+<pre>  Maintainer: Larry Wall &lt;<a href='mailto:larry@wall.org'>larry@wall.org</a>&gt;
+  Date: 18 Jan 2002
+  Last Modified: 18 May 2006
+  Number: 4
+  Version: 6</pre>
+<p>This Apocalypse is all about syntax in the large. The corresponding
+chapter in the Camel book is entitled &quot;Statements and Declarations&quot;,
+but it could just as easily have been entitled, &quot;All About Blocks&quot;. The
+basic underlying question is &quot;What exactly do those curlies mean?&quot;</p>
+<p>For Perl 5 and earlier, the answer to that question was, &quot;Too many
+things&quot;. Or rather, too many things with inconsistent rules. We'll
+continue to use curlies for much of what we've used them for up till
+now, but by making a few critical simplifications, the rules will be
+much more consistent. In particular, built-ins will parse with the same
+rules as user-defined constructs. It should be possible to make
+user-extensible syntax look just like built-in syntax. Perl 5 started
+down this road, but didn't get all the way there. In Perl 6, all blocks
+operate under the same rules. Effectively, every block is a kind of
+closure that can be run by user-defined constructs as well as
+built-ins.</p>
+<p>Associated with block structure are the various constructs that make
+use of block structure. Compound constructs like loops and conditionals
+use blocks explicitly, whereas declarations refer to their enclosing
+block implicitly. This latter feature was also inconsistently applied
+in Perl 5. In Perl 6, the rule is simple: A lexically scoped
+declaration is in effect from the declaration to the end of its
+enclosing block. Since blocks are delimited <i>only</i> by curlies or by
+the ends of the current compilation unit (file or string), that implies
+that we can't allow multi-block constructs in which lexically scoped
+variables &quot;leak&quot; or &quot;tunnel&quot; from the end of one block to the beginning
+of the next. A right curly (without an intervening left curly)
+absolutely stops the current lexical scope. This has direct bearing on
+some of these RFCs. For instance, RFC 88 proposes to let lexical scope
+leak from a <code>try</code> block into its corresponding <code>finally</code> block. This
+will not be allowed. (We'll find a different way to solve that
+particular issue.)</p>
+<p>While lexical declarations may not leak out of a block, control flow
+must be able to leak out of blocks in a controlled fashion. Obviously,
+falling off the end of a block is the most &quot;normal&quot; way, but we need to
+exit blocks in other &quot;abnormal&quot; ways as well. Perl 5 has several
+different ways of exiting a block: <code>return</code>, <code>next</code>, <code>last</code>,
+<code>redo</code>, and <code>die</code>, for instance. The problem is that these various
+keywords are hard-wired to transfer control outward to a particular
+built-in construct, such as a subroutine definition, a loop, or an
+<code>eval</code>. That works against our unifying concept that every block is a
+closure. In Perl 6, all these abnormal means of block exit are unified
+under the concept of exceptions. A <code>return</code> is a funny kind of
+exception that is trapped by a <code>sub</code> block. A <code>next</code> is an exception
+that is trapped by a loop block. And of course <code>die</code> creates a
+&quot;normal&quot; exception that is trapped by any block that chooses to trap
+such exceptions. Perl 6 does not require that this block be an <code>eval</code>
+or <code>try</code> block.</p>
+<p>You may think that this generalization implies excessive overhead,
+since generally exception handling must work its way up the call stack
+looking for an appropriate handler. But any control flow exception can
+be optimized away to a &quot;goto&quot; internally when its target is obvious and
+there are no user-defined blocks to be exited in between. Most
+subroutine return and loop control operators will know which subroutine
+or loop they're exiting from because it'll be obvious from the
+surrounding lexical scope. However, if the current subroutine contains
+closures that are being interpreted elsewhere in user-defined
+functions, it's good to have the general exception mechanism so that
+all needed cleanup can be automatically accomplished and consistent
+semantics maintained. That is, we want user-defined closure handlers to
+stay out of the user's face in the same way that built-ins do. Control
+flow should pretend to work like the user expects, even when it
+doesn't.</p>
+<p>Here are the RFCs covered in this Apocalypse. PSA stands for &quot;problem,
+solution, acceptance&quot;, my private rating of how this RFC will fit into
+Perl 6. Interestingly, this time I've rejected more RFCs than I
+accepted. I must be getting cruel and callous in my old age. <code>:-)</code></p>
+<pre>    RFC   PSA    Title
+    ---   ---    -----
+    006   acc    Lexical variables made default
+    019   baa    Rename the C&lt;local&gt; operator
+    022   abc    Control flow: Builtin switch statement
+    063   rr     Exception handling syntax
+    064   bdc    New pragma 'scope' to change Perl's default scoping
+    083   aab    Make constants look like variables
+    088   bbc    Omnibus Structured Exception/Error Handling Mechanism
+    089   cdr    Controllable Data Typing
+    106   dbr    Yet another lexical variable proposal: lexical variables made default
+    113   rr     Better constants and constant folding
+    119   bcr    Object neutral error handling via exceptions
+    120   bcr    Implicit counter in for statements, possibly $#   
+    167   bcr    Simplify do BLOCK Syntax
+    173   bcc    Allow multiple loop variables in foreach statements
+    199   abb    Short-circuiting built-in functions and user-defined subroutines
+    209   cdr    Fuller integer support in Perl   
+    262   cdr    Index Attribute
+    279   cdr    my() syntax extensions and attribute declarations
+    297   dcr    Attributes for compiler hints
+    309   adr    Allow keywords in sub prototypes
+    330   acc    Global dynamic variables should remain the default
+    337   bcc    Common attribute system to allow user-defined, extensible attributes
+    340   dcr    with takes a context
+    342   bcr    Pascal-like &quot;with&quot;</pre>
+<a name='Accepted RFCs'></a><h1>Accepted RFCs</h1>
+<p>Note that, although these RFCs are in the &quot;accepted&quot; category, most are
+accepted with major caveats (a &quot;<code>c</code>&quot; acceptance rating), or at least
+some &quot;buts&quot; (a &quot;<code>b</code>&quot; rating). I'll try to list all those caveats here,
+but where there are systematic changes, I may indicate these generally
+in this document without attempting to rewrite the RFC in every detail.
+Those who implement these features must be sensitive to these
+systematic changes and not just uncritically implement everything the
+RFC says.</p>
+<p>I'd like to talk about exceptions first, but before that I have to deal
+with the switch statement, because I think it's silly not to unify
+exception handlers with switch statements.</p>
+<a name='RFC 022: Control flow: Builtin switch statement'></a><h2>RFC 022: Control flow: Builtin switch statement</h2>
+<p>Some OO purists say that any time you want to use a switch statement,
+you ought to make the discriminant of the switch statement into a type,
+and use method dispatch instead. Fortunately, we are not OO purists
+here, so forget that argument.</p>
+<p>Another argument against having a switch statement in Perl 6 is that we
+never had it in the first five versions of Perl. But it would be
+incorrect to say that we didn't miss it. What actually happened was
+that every time we started discussing how to add a switch statement, it
+wasn't obvious how far to go. A switch statement in Perl ought to do
+more than a switch statement in C (or in most any other language, for
+that matter). So the fact that we haven't added a switch statement so
+far says more about how hard it is to design a good one than about how
+much we wanted a lousy one. Eventually the ever inventive Damian Conway
+came up with his famous design, with a Perl 5 module as proof of
+concept, and pretty much everyone agreed that he was on the right
+track, for some definition of &quot;right&quot; (and &quot;track&quot;). This RFC is
+essentially that design (not surprisingly, since Damian wrote it), so
+it will be accepted, albeit with several tweaks.</p>
+<p>In the first place, as a quasi-linguist, I loathe the keywords
+<code>switch</code> and <code>case</code>. I would prefer keywords that read better in
+English. Much as I love verbing nouns, they don't work as well as real
+verbs or real prepositions when topicalizers are called for. After
+thrashing over several options with Damian and other folks, we've
+settled on using <code>given</code> instead of <code>switch</code>, and <code>when</code> instead of
+<code>case</code>:</p>
+<pre>    given EXPR {
+        when EXPR { ... }
+        when EXPR { ... }
+        ...
+    }</pre>
+<p>The other great advantage of using different words is that people won't
+expect it to work exactly like any other switch statement they may be
+familiar with.</p>
+<p>That being said, I should point out that it is still called &quot;the switch
+statement&quot;, and the individual components are still &quot;cases&quot;. But you
+don't have to put &quot;switch&quot; or &quot;case&quot; into constant-width font, because
+they're not keywords.</p>
+<p>Because curlies are so extremely overloaded in Perl 5, I was at first
+convinced that we would need a separator of some sort between the
+expression and the block, maybe a <code>:</code> or <code>=&gt;</code> or some such.
+Otherwise it would be too ambigous to come upon a left curly when
+expecting an operator--it would be interpreted as a hash subscript
+instead. Damian's RFC proposes to require parentheses in certain
+situations to disambiguate the expression.</p>
+<p>But I've come to the conclusion that I'd rather screw around (a little)
+with the &quot;insignificant whitespace&quot; rule than to require an extra
+unnatural delimiter. If we observe current practice, we note that 99%
+of the time, when people write a hash subscript they do so without any
+whitespace before it. And 99% of the time, when they write a block,
+they do put some whitespace in front of it. So we'll just dwim it using
+the whitespace. (No, we're not going all the way to whole-hog
+whitespace dwimmery--Python will remain the best/worst example of that
+approach.)</p>
+<p>Subscripts are the only valid use of curlies when an operator is
+expected. (That is, subscripts are essentially postfix operators.) In
+contrast, hash composers and blocks are terms, not operators.
+Therefore, we will make the rule that a left curly that has whitespace
+in front of it will never be interpreted as a subscript in Perl 6. (If
+you think this is totally bizarre thing to do, consider that this new
+approach is actually consistent with how Perl 5 already parses
+variables within interpolated strings.) If there is any space before
+the curly, we force it to start a term, not an operator, which means
+that the curlies in question must delimit either a hash composer or a
+block. And it's a hash composer only if it contains a <code>=&gt;</code> pair
+constructor at the top level (or an explicit <code>hash</code> keyword on the
+front.) Therefore it's possible to unambiguously terminate an
+expression by following it with a block, as in the constructs above.</p>
+<p>Interestingly, this one tweak to the whitespace rule also means that
+we'll be able to simplify the parentheses out of other similar built-in
+constructs:</p>
+<pre>    if $foo { ... }
+    elsif $bar { ... }
+    else { ... }
+    while $more { ... }
+    for 1..10 { ... }</pre>
+<p>I think throwing out two required punctuation characters for one
+required whitespace is an excellent trade in terms of readability,
+particularly when it already matches common practice. (You can still
+put in the parens if you want them, of course, just for old times'
+sake.) This tweak also allows greater flexibility in how user-defined
+constructs are parsed. If you want to define your own constructs, they
+should be able to follow the same syntax rules as built-ins.</p>
+<p>By a similar chain of logic (or illogic), I also want to tweak the
+whitespace rules for the trailing curly. There are severe problems in
+any C-derived language that allows user-defined constructs containing
+curlies (as Perl does). Even C doesn't entirely escape the
+head-scratching puzzle of &quot;When do I put a semicolon after a curly?&quot; A
+<code>struct</code> definition requires a terminating semicolon, for instance,
+while an <code>if</code> or a <code>while</code> doesn't.</p>
+<p>In Perl, this problem comes up most often when people say &quot;Why do I
+have to put a semicolon after <code>do {}</code> or <code>eval {}</code> when it looks like
+a complete statement?&quot;</p>
+<p>Well, in Perl 6, you don't, if the final curly is on a line by itself.
+That is, if you use an expression block as if it were a statement
+block, it behaves as one. The win is that these rules are consistent
+across all expression blocks, whether user-defined or built-in. Any
+expression block construct can be treated as either a statement or a
+component of an expression. Here's a block that is being treated as a
+term in an expression:</p>
+<pre>    $x = do {
+        ...
+    } + 1;</pre>
+<p>However, if you write</p>
+<pre>    $x = do {
+        ...
+    }
+    + 1;</pre>
+<p>then the + will be taken erroneously as the start of a new statement.
+(So don't do that.)</p>
+<p>Note that this special rule only applies to constructs that take a
+block (that is, a closure) as their last (or only) argument. Operators
+like <code>sort</code> and <code>map</code> are unaffected. However, certain constructs
+that used to be in the statement class may become expression constructs
+in Perl 6. For instance, if we change <code>BEGIN</code> to an expression
+construct we can now use a <code>BEGIN</code> block inside an expression to force
+compile-time evaluation of a non-static expression:</p>
+<pre>    $value = BEGIN { call_me_once() } + call_me_again();</pre>
+<p>On the other hand, a one-line <code>BEGIN</code> would then have to have a
+semicolon.</p>
+<p>[Update: We ended up solving this by distinguishing statement <code>BEGIN</code>
+from term <code>BEGIN</code>.  Also, we can't really syntactically distinguish
+the closures for constructs like <code>sort</code> or <code>map</code> if they are subject
+to multiple dispatch, since we wouldn't know the signature.  However,
+you never have to end such a block on a line by itself, since you can
+always put a comma, or even feed the list to the operator
+using the <code>&lt;==</code> pipe operator.]</p>
+<p>Anyway, back to switch statements. Damian's RFC proposes various
+specific kinds of dwimmery, and while some of those dwims are spot on,
+others may need adjustment. In particular, there is an assumption that
+the programmer will know when they're dealing with an object reference
+and when they're not. But everything will be an object reference in
+Perl 6, at some level or other. The underlying characteristics of any
+object are most generally determined by the answer to the question,
+&quot;What methods does this object respond to?&quot;</p>
+<p>Unfortunately, that's a run-time question in general. But in specific,
+we'd like to be able to optimize many of these switch statements at
+compile time. So it may be necessary to supply typological hints in
+some cases to do the dwimmery efficiently. Fortunately, most cases are
+still fairly straightforward. A <code>1</code> is obviously a number, and a
+<code>&quot;foo&quot;</code> is obviously a string. But unary <code>+</code> can force anything to a
+number, and unary <code>_</code> can force anything to a string. Unary <code>?</code> can
+force a boolean, and unary <code>.</code> can force a method call. More
+complicated thoughts can be represented with closure blocks.</p>
+<p>[Update: String context is now forced by unary <code>~</code>.]</p>
+<p>Another thing that needs adjustment is that the concept of &quot;isa&quot;
+matching seems to be missing, or at least difficult to express. We need
+good &quot;isa&quot; matching to implement good exception handling in terms of
+the switch mechanism. This means that we need to be able to say
+something like:</p>
+<pre>    given $! {
+        when Error::Overflow { ... }
+        when Error::Type { ... }
+        when Error::ENOTTY { ... }
+        when /divide by 0/ { ... }
+        ...
+    }</pre>
+<p>and expect it to check <code>$!.isa(Error::Overflow)</code> and such, along with
+more normal pattern matching. In the case of the actual exception
+mechanism, we won't use the keyword <code>given</code>, but rather <code>CATCH</code>:</p>
+<pre>    CATCH {
+        when Error::Overflow { ... }
+        when Error::Type { ... }
+        when Error::ENOTTY { ... }
+        when /divide by 0/ { ... }
+        ...
+    }</pre>
+<p><code>CATCH</code> is a <code>BEGIN</code>-like block that can turn any block into a &quot;try&quot;
+block from the inside out. But the insides of the <code>CATCH</code> are an
+ordinary switch statement, where the discriminant is simply the current
+exception object, <code>$!</code>. More on that later--see RFC 88 below.</p>
+<p>Some of you may recall that I've stated that Perl 6 will have no
+barewords. That's still the case. A token like <code>Error::Overflow</code> is
+not a bareword because it's a declared class. Perl 6 recognizes package
+names as symbolic tokens. So when you call a class method as
+<code>Class::Name.method()</code>, the <code>Class::Name</code> is actually a class object
+(that just happens to stringify to &quot;<code>Class::Name</code>&quot;). But the class
+method can be called without a symbolic lookup on the package name at
+run time, unlike in Perl 5.</p>
+<p>Since <code>Error::Overflow</code> is just such a class object, it can be
+distinguished from other kinds of objects in a switch statement, and an
+&quot;isa&quot; can be inferred. It would be nice if we could go as far as to say
+that any object can be called with any class name as a method name to
+determine whether it &quot;isa&quot; member of that class, but that could
+interfere with use of class name methods to implement casting or
+construction. So instead, since switch statements are into heavy
+dwimmery anyway, I think the switch statement will have to recognize
+any <code>Class::Name</code> known at compile time, and force it to call
+<code>$!.isa(Class::Name)</code>.</p>
+<p>[Update: Actually, it just follows from how smart matching works.  But
+in fact, smart match calls the <code>.does</code> method, which is more
+general than the <code>.isa</code> method, insofar as <code>.does</code> can check both
+roles and inheritance.  See A12 for more.]</p>
+<p>Another possible adjustment will involve the use of switch statements
+as a means of parallelizing regular expression evaluation.
+Specifically, we want to be able to write parsers easily in Perl, which
+means that we need some way of matching a token stream against
+something like a set of regular expressions. You can think of a token
+stream as a funny kind of string. So if the &quot;given&quot; of a switch
+statement is a token stream, the regular expressions matched against it
+may have special abilities relating to the current parse's data
+structure. All the regular expressions of such a switch statement will
+likely be implicitly anchored to the current parse location, for
+instance. There may be special tokens referring to terminals and
+non-terminals. Basically, think of something like a yacc grammar, where
+alternative pattern/action grammar rules are most naturally expressed
+via switch statement cases. More on that in the next Apocalypse.</p>
+<p>[Update: Parsing rules tend to use the <code>:p</code> modifier, which anchors the
+next token automatically to the start of the rule.  That's all that
+needs to be user visible.  Everything else is the domain of the optimizer.]</p>
+<p>Another possible adjustment is that the proposed <code>else</code> block could be
+considered unnecessary. The code following the final <code>when</code> is
+automatically an &quot;else&quot;. Here's a duodecimal digit converter:</p>
+<pre>    $result = given $digit {
+        when &quot;T&quot; { 10 }
+        when &quot;E&quot; { 11 }
+        $digit;
+    }</pre>
+<p>Nevertheless, it's probably good documentation to line up all the
+blocks, which means it would be good to have a keyword. However, for
+reasons that will become clearer when we talk about exception handlers,
+I don't want to use <code>else</code>. Also, because of the identification of
+<code>when</code> and <code>if</code>, it would not be clear whether an <code>else</code> should
+automatically supply a <code>break</code> at the end of its block as the ordinary
+<code>when</code> case does.</p>
+<p>So instead of <code>else</code>, I'd like to borrow a bit more from C and use
+<code>default</code>:</p>
+<pre>    $result = given $digit {
+        when &quot;T&quot; { 10 }
+        when &quot;E&quot; { 11 }
+        default  { $digit }
+    }</pre>
+<p>Unlike in C, the <code>default</code> case must come last, since Perl's cases are
+evaluated (or at least pretend to be evaluated) in order. The optimizer
+can often determine which cases can be jumped to directly, but in cases
+where that can't be determined, the cases are evaluated in order much
+like cascaded <code>if</code>/<code>elsif</code>/<code>else</code> conditions. Also, it's allowed to
+intersperse ordinary code between the cases, in which case the code
+must be executed only if the cases above it fail to match. For example,
+this should work as indicated by the print statements:</p>
+<pre>    given $given {
+        print &quot;about to check $first&quot;;
+        when $first { ... }
+        print &quot;didn't match $first; let's try $next&quot;;
+        when $next { ... }
+        print &quot;giving up&quot;;
+        default { ... }
+        die &quot;panic: shouldn't see this&quot;;
+    }</pre>
+<p>We can still define <code>when</code> as a variant of <code>if</code>, which makes it
+possible to intermix the two constructs when (or if) that is desirable.
+So we'll leave that identity in--it always helps people think about it
+when you can define a less familiar construct in terms of a more
+familiar one. However, the <code>default</code> isn't quite the same as an
+<code>else</code>, since <code>else</code> can't stand on its own. A <code>default</code> is more
+like an <code>if</code> that's always true. So the above code is equivalent to:</p>
+<pre>    given $given {
+        print &quot;about to check $first&quot;;
+        if $given =~ $first { ...; break }
+        print &quot;didn't match $first; let's try $next&quot;;
+        if $given =~ $next { ...; break }
+        print &quot;giving up&quot;;
+        if 1 { ...; break; }
+        die &quot;panic: shouldn't see this&quot;;
+    }</pre>
+<p>We do need to rewrite the relationship table in the RFC to handle some
+of the tweaks and simplifications we've mentioned. The comparison of
+bare refs goes away. It wasn't terribly useful in the first place,
+since it only worked for scalar refs. (To match identities we'll need
+an explicit <code>.id</code> method in any event. We won't be relying on the
+default numify or stringify methods to produce unique representations.)</p>
+<p>[Update: Instead of an <code>.id</code> method, which would be unclear how to compare,
+there's a <code>=:=</code> operator for comparing identities.  Though you can always
+compare two id's with the <code>===</code> operator.]</p>
+<p>I've rearranged the table to be applied in order, so that default
+interpretations come later. Also, the &quot;Matching Code&quot; column in the RFC
+gave alternatives that aren't resolved. In these cases I've chosen the
+&quot;true&quot; definition rather than the &quot;exists&quot; or &quot;defined&quot; definition.
+(Except for certain set manipulations with hashes, people really
+shouldn't be using the defined/undefined distinction to represent true
+and false, since both true and false are considered defined concepts in
+Perl.)</p>
+<p>Some of the table entries distinguish an array from a list. Arrays look
+like this:</p>
+<pre>    when [1, 3, 5, 7, 9] { &quot;odd digit intersection&quot; }
+    when @array          { &quot;array intersection&quot; }</pre>
+<p>while a list looks like this:</p>
+<pre>    when 1, 3, 5, 7, 9    { &quot;odd digit&quot; }
+    when @foo, @bar, @baz { &quot;intersection with at least one array&quot; }</pre>
+<p>Ordinarily lists and arrays would mean the same thing in scalar
+context, but <code>when</code> is special in differentiating explicit arrays from
+lists. Within a <code>when</code>, a list is a recursive disjunction. That is,
+the comma-separated values are treated as individual cases OR-ed
+together. We could use some other explicit notation for disjunction
+such as:</p>
+<pre>    when any(1, 3, 5, 7, 9) { &quot;odd&quot; }</pre>
+<p>But that seems a lot of trouble for a very common case of case, as it
+were. We could use vertical bars as some languages do, but I think the
+comma reads better.</p>
+<p>[Update: since we ended up adding junctions, you do use vertical bars now.
+If you like commas you can always use <code>any()</code>.]</p>
+<p>Anyway, here's another simplification. The following table will <i>also</i>
+define how the Perl 6 <code>=~</code> operator works! That allows us to use a
+recursive definition to handle matching against a disjunctive list of
+cases. (See the first entry in the table below.) Of course, for
+precedence reasons, to match a list of things using <code>=~</code> you'll have
+to use parens:</p>
+<pre>    $digit =~ (1, 3, 5, 7, 9) and print &quot;That's odd!&quot;;</pre>
+<p>Alternatively, you can look at this table as the definition of the
+<code>=~</code> operator, and then say that the switch statement is defined in
+terms of <code>=~</code>. That is, for any switch statement of the form</p>
+<pre>    given EXPR1 {
+        when EXPR2 { ... }
+    }</pre>
+<p>it's equivalent to saying this:</p>
+<pre>    for (scalar(EXPR1)) {
+        if ($_ =~ (EXPR2)) { ... }
+    }</pre>
+<p>[Update: the <code>=~</code> operator has been renamed <code>~~</code>.]</p>
+<a name='Table 1: Matching a switch value against a case value'></a><h3>Table 1: Matching a switch value against a case value</h3>
+<pre>    $a      $b        Type of Match Implied    Matching Code
+    ======  =====     =====================    =============
+    expr    list      recursive disjunction    match if $a =~ any($b)
+    list    list      recursive disjunction*   match if any($a) =~ any($b)
+    hash    sub(%)    hash sub truth           match if $b(%$a)
+    array   sub(@)    array sub truth          match if $b(@$a)
+    expr    sub($)    scalar sub truth         match if $b($a)
+    expr    sub()     simple closure truth*    match if $b()
+    hash    hash      hash key intersection*   match if grep exists $a{$_}, $b.keys
+    hash    array     hash value slice truth   match if grep {$a{$_}} @$b
+    hash    regex     hash key grep            match if grep /$b/, keys %$a
+    hash    scalar    hash entry truth         match if $a{$b}
+    array   array     array intersection*      match if any(@$a) =~ any(@$b)
+    array   regex     array grep               match if grep /$b/, @$a
+    array   number    array entry truth        match if $a[$b]
+    array   expr      array as list            match if any($a) =~ $b
+    object  class     class membership         match if $a.isa($b)
+    object  method    method truth             match if $a.$b()
+    expr    regex     pattern match            match if $a =~ /$b/
+    expr    subst     substitution match       match if $a =~ subst
+    expr    number    numeric equality         match if $a == $b
+    expr    string    string equality          match if $a eq $b
+    expr    boolean   simple expression truth* match if $b
+    expr    undef     undefined                match unless defined $a
+    expr    expr      run-time guessing        match if ($a =~ $b) at runtime</pre>
+<p>[Update: This is inaccurate in several ways; see the most recent
+table in S03.]</p>
+<p>In order to facilitate optimizations, these distinctions are made
+syntactically at compile time whenever possible. For each comparison,
+the reverse comparison is also implied, so <code>$a</code>/<code>$b</code> can be thought
+of as either given/when or when/given. (We don't reverse the matches
+marked with * are because it doesn't make sense in those casees.)</p>
+<p>If type of match cannot be determined at compile time, the default is
+to try to apply the very same rules in the very same order at run time,
+using the actual types of the arguments, not their compile-time type
+appearance. Note that there are no run-time types corresponding to
+&quot;method&quot; or &quot;boolean&quot;. Either of those notions can be expressed at
+runtime as a closure, of course.</p>
+<p>In fact, whenever the default behavior is not what you intend, there
+are ways to force the arguments to be treated as you intend:</p>
+<pre>    Intent      Natural           Forced
+    ======      =======           ======
+    array       @foo              [list] or @{expr}
+    hash        %bar              {pairlist} or %{expr}
+    sub(%)      { %^foo.aaa }     sub (%foo) { ... }
+    sub(@)      { @^bar.bbb }     sub (@bar) { ... }
+    sub($)      { $^baz.ccc }     sub ($baz) { ... }
+    number      numeric literal   +expr int(expr) num(expr)
+    string      string literal    _expr str(expr)
+    regex       //, m//, qr//     /$(expr)/
+    method      .foo(args)        { $_.$method(args) }
+    boolean     $a == $b          ?expr or true expr or { expr }</pre>
+<p>[Update: <code>qr//</code> is now spelled <code>rx//</code>.  String context is forced <code>~</code>.
+A regex is &quot;interpolated&quot; with <code>/&lt;$expr</code>/&gt;, but it's not interpolated
+as a separate pass as in Perl 5.]</p>
+<p>A method must be written with a unary dot to distinguish it from other
+forms. The method may have arguments. In essence, when you write</p>
+<pre>    .foo(1,2,3)</pre>
+<p>it is treated as if you wrote</p>
+<pre>    { $_.foo(1,2,3) }</pre>
+<p>and then the closure is evaluated for its truth.</p>
+<p>A class match works only if the class name is known at compile time.
+Use <code>.isa(&quot;Class&quot;)</code> for more complicated situations.</p>
+<p>[Update: You can specify a run-time class name via <code>::($expr)</code> without
+explicitly using <code>.does</code> (or <code>.isa</code>, for that matter).]</p>
+<p>Boolean expressions are recognized at compile time by the presence of a
+top-level operator that is a comparison or logical operator. As the
+table shows, an argumentless closure (a <code>sub ()</code>, that is) also
+functions as a boolean. However, it's probably better documentation to
+use the <code>true</code> function, which does the opposite of <code>not</code>. (Or the
+unary <code>?</code> operator, which does the opposite of unary <code>!</code>.)</p>
+<p>It might be argued that boolean expressions have no place here at all,
+and that you should use <code>if</code> if that's what you mean. (Or use a
+<code>sub()</code> closure to force it to ignore the given.) However, the &quot;comb&quot;
+structure of a switch is an extremely readable way to write even
+ordinary boolean expressions, and rather than forcing people to write:</p>
+<pre>    anyblock {
+        when { $a == 1 } { ... }
+        when { $b == 2 } { ... }
+        when { $c == 3 } { ... }
+        default          { ... }
+    }</pre>
+<p>I'd rather they be able to write:</p>
+<pre>    anyblock {
+        when $a == 1 { ... }
+        when $b == 2 { ... }
+        when $c == 3 { ... }
+        default      { ... }
+    }</pre>
+<p>This also fits better into the use of &quot;when&quot; within <code>CATCH</code> blocks:</p>
+<pre>    CATCH {
+        when $!.tag eq &quot;foo&quot; { ... }
+        when $!.tag eq &quot;bar&quot; { ... }
+        default              { die }
+    }</pre>
+<p>To force all the <code>when</code> clauses to be interpreted as booleans without
+using a boolean operator on every case, simply provide an empty given,
+to be read as &quot;given nothing...&quot;:</p>
+<pre>    given () {
+        when $a.isa(Ant) { ... }
+        when $b.isa(Bat) { ... }
+        when $c.isa(Cat) { ... }
+        default          { ... }
+    }</pre>
+<p>[Update: you can just say <code>given {.true}</code> to get the same effect without
+a special case.]</p>
+<p>A <code>when</code> can be used by other topicalizers than just <code>given</code>. Just as
+<code>CATCH</code> will imply a given of <code>$!</code>, a <code>for</code> loop (the <code>foreach</code>
+variety) will also imply a given of the loop variable:</p>
+<pre>    for @foo {
+        when 1   { ... }
+        when 2   { ... }
+        when &quot;x&quot; { ... }
+        default  { ... }
+    }</pre>
+<p>By symmetry, a <code>given</code> will by default alias <code>$_</code> to the &quot;given&quot;.
+Basically, the only difference between a <code>given</code> and a <code>for</code> is that
+a <code>given</code> takes a scalar expression, while a <code>for</code> takes a
+pre-flattened list and iterates over it.</p>
+<p>[Update: <code>for</code> takes a lazily flattened list, not a pre-flattened list.
+Use the <code>eager</code> listop to pre-flatten a list.]</p>
+<p>Suppose you want to preserve <code>$_</code> and alias <code>$g</code> to the value
+instead. You can say that like this:</p>
+<pre>    given $value -&gt; $g {
+        when 1 { /foo/ }
+        when 2 { /bar/ }
+        when 3 { /baz/ }
+    }</pre>
+<p>In the same way, a loop's values can be aliased to one or more loop
+variables.</p>
+<pre>    for @foo -&gt; $a, $b {  # two at a time
+        ...
+    }</pre>
+<p>That works a lot like the definition of a subroutine call with two
+formal parameters, <code>$a</code> and <code>$b</code>. (In fact, that's precisely what it
+is.) You can use modifiers on the formal paramaters just as you would
+in a subroutine type signature. This implies that the aliases are
+automatically declared as <code>my</code> variables. It also implies that you can
+modify the formal parameter with an <code>rw</code> property, which allows you to
+modify the original elements of the array through the variable. The
+default loop:</p>
+<pre>    for @foo { ... }</pre>
+<p>is really compiled down to this:</p>
+<pre>    for @foo -&gt; $_ is rw { ... }</pre>
+<p>Since <code>for</code> and <code>given</code> work by passing arguments to a closure, it's
+a small step to generalize that in the other direction. Any method
+definition is a topicalizer within the body of the method, and will
+assume a &quot;given&quot; of its <code>$self</code> object (or whatever you have named
+it). Bare closures topicalize their first argument, implicitly aliasing
+it to <code>$_</code> unless <code>$^a</code> or some such is used. That is, if you say
+this:</p>
+<pre>    grep { $_ eq 3 } @list</pre>
+<p>it's equivalent to this more explicit use of a curried function:</p>
+<pre>    grep { $^a eq 3 } @list</pre>
+<p>But even a <code>grep</code> can use the aliasing syntax above:</p>
+<pre>    grep -&gt; $x { $x eq 3 } @list</pre>
+<p>Outside the scope of any topicalizer, a <code>when</code> will assume that its
+given was stored in <code>$_</code> and will test implicitly against that
+variable. This allows you to use <code>when</code> in your main loop, for
+instance, even if that main loop was supplied by Perl's <code>-n</code> or <code>-p</code>
+switch. Whenever a loop is functioning as a switch, the break implied
+by finishing a case functions as a <code>next</code>, not a <code>last</code>. Use <code>last</code>
+if that's what you mean.</p>
+<p>A <code>when</code> is the only defaulting construct that pays attention to the
+current topicalizer regardless of which variable it is associated with.
+All other defaulting constructs pay attention to a fixed variable,
+typically <code>$_</code>. So be careful what you're matching against if the
+given is aliased to something other than <code>$_</code>:</p>
+<pre>    $_ = &quot;foo&quot;;
+    given &quot;bar&quot; -&gt; $f {
+        if /foo/   { ... } # true, matches against $_
+        when /bar/ { ... } # true, matches against $f
+    }</pre>
+<p>[Update: The first argument is always aliased to <code>$_</code> now.]</p>
+<p>Oh, one other tweak. The RFC proposes to overload <code>next</code> to mean &quot;fall
+through to the next case&quot;. I don't think this is wise, since we'll
+often want to use loop controls within a switch statement. Instead, I
+think we should use <code>skip</code> to do that. (To be read as &quot;Skip to the
+next statement.&quot;)</p>
+<p>[Update: That's now spelled <code>continue</code>.]</p>
+<p>Similarly, if we make a word to mean to explicitly break out of a
+topicalizer, it should not be <code>last</code>. I'd suggest <code>break</code>! It will,
+of course, be unnecessary to break out of the end of a <code>when</code> case
+because the <code>break</code> is implied. However, there are times when you
+might want to break out of a <code>when</code> block early. Also, since we're
+allowing <code>when</code> modifiers that do not implicitly break, we could use
+an explicit break for that situation. You might see cases like this:</p>
+<pre>    given $x {
+        warn(&quot;Odd value&quot;)        when !/xxx/;
+        warn(&quot;No value&quot;), break  when undef;
+        when /aaa/ { break when 1; ... }
+        when /bbb/ { break when 2; ... }
+        when /ccc/ { break when 3; ... }
+    }</pre>
+<p>So it looks to me like we need a break.</p>
+<a name='RFC 088: Omnibus Structured Exception/Error Handling Mechanism'></a><h2>RFC 088: Omnibus Structured Exception/Error Handling Mechanism</h2>
+<p>This RFC posits some requirements for exception handling (all of which
+I agree with), but I do have some additional requirements of my own:</p>
+<ul>
+<li><a name='The exception-catching syntax must be considered a form of switch statement.'></a>The exception-catching syntax must be considered a form of
+switch statement.</li>
+<li><a name='It should be easy to turn any kind of block into a &quot;try&quot; block, especially a subroutine.'></a>It should be easy to turn any kind of block into a &quot;try&quot; block,
+especially a subroutine.</li>
+<li><a name='Even try-less try blocks must also be able to specify mandatory cleanup on exit.'></a>Even <code>try</code>-less try blocks must also be able to specify
+mandatory cleanup on exit.</li>
+<li><a name='It should be relatively easy to determine how much cleanup is necessary regardless of how a block was exited.'></a>It should be relatively easy to determine how much cleanup is
+necessary regardless of how a block was exited.</li>
+<li><a name='It must be possible to base the operation of return, next, and last on exception handling.'></a>It must be possible to base the operation of <code>return</code>,
+<code>next</code>, and <code>last</code> on exception handling.</li>
+<li><a name='The cleanup mechanism should mesh nicely with the notions of post condition processing under design-by-contract.'></a>The cleanup mechanism should mesh nicely with the notions of
+post condition processing under design-by-contract.</li>
+<li><a name='The exception-trapping syntax must not violate encapsulation of lexical scopes.'></a>The exception-trapping syntax must not violate encapsulation of
+lexical scopes.</li>
+<li><a name='At the same time, the exception-trapping syntax should not force declarations out of their natural scope.'></a>At the same time, the exception-trapping syntax should not
+force declarations out of their natural scope.</li>
+<li><a name='Non-linear control flow must stand out visually, making good use of block structure, indentation and even keyword case. BEGIN and END blocks are to be considered prior art.'></a>Non-linear control flow must stand out visually, making good
+use of block structure, indentation and even keyword case. <code>BEGIN</code> and
+<code>END</code> blocks are to be considered prior art.</li>
+<li><a name='Non-yet-thrown exceptions must be a useful concept.'></a>Non-yet-thrown exceptions must be a useful concept.</li>
+<li><a name='Compatibility with the syntax of any other language is specifically NOT a goal.'></a>Compatibility with the syntax of any other language is
+specifically NOT a goal.</li>
+</ul>
+<p>RFC 88 is massive, weighing in at more than 2400 lines. Annotating the
+entire RFC would make this Apocalypse far too big. (&quot;Too late!&quot; says
+Damian.) Nonetheless, I will take the approach of quoting various bits
+of the RFC and recasting those bits to work with my additional
+requirements. Hopefully this will convey my tweaks most succinctly.</p>
+<p>Here's what the RFC gives as its first example:</p>
+<pre>    exception 'Alarm';
+    try {
+        throw Alarm &quot;a message&quot;, tag =&gt; &quot;ABC.1234&quot;, ... ;
+        }
+
+    catch Alarm =&gt; { ... }
+
+    catch Error::DB, Error::IO =&gt; { ... }
+
+    catch $@ =~ /divide by 0/ =&gt; { ... }
+
+    catch { ... }
+
+    finally { ... }</pre>
+<p>Here's how I see that being written in Perl 6:</p>
+<pre>    my class X::Alarm is Exception { }     # inner class syntax?
+    try {
+        throw X::Alarm &quot;a message&quot;, tag =&gt; &quot;ABC.1234&quot;, ... ;
+        CATCH {
+            when X::Alarm             { ... }
+            when Error::DB, Error::IO { ... }
+            when /divide by 0/        { ... }
+            default                   { ... }
+        }
+        POST { ... }
+    }</pre>
+<p>[Update: the comma in the second case should be a <code>|</code>.]</p>
+<p>The outer block does not have to be a <code>try</code> block. It could be a
+subroutine, a loop, or any other kind of block, including an <code>eval</code>
+string or an entire file. We will call such an outer block a try block,
+whether or not there is an explicit <code>try</code> keyword.</p>
+<p>The biggest change is that the various handlers are moved inside of the
+try block. In fact, the <code>try</code> keyword itself is mere documentation in
+our example, since the presence of a <code>CATCH</code> or <code>POST</code> block is
+sufficient to signal the need for trapping. Note that the <code>POST</code> block
+is completely independent of the <code>CATCH</code> block. (The <code>POST</code> block has
+a corresponding <code>PRE</code> block for design-by-contract programmers.) Any
+of these blocks may be placed anywhere in the surrounding block--they
+are independent of the surrounding control flow. (They do have to
+follow any declarations they refer to, of course.) Only one <code>CATCH</code> is
+allowed, but any number of <code>PRE</code> and <code>POST</code> blocks. (In fact, we may
+well encourage ourselves to place <code>POST</code> blocks near the constructors
+to be cleaned up after.) <code>PRE</code> blocks within a particular try block
+are evaluated in order before anything else in the block. <code>POST</code>
+blocks will be evaluated in reverse order, though order dependencies
+between <code>POST</code> blocks are discouraged. <code>POST</code> blocks are evaluated
+after everything else in the block, including any <code>CATCH</code>.</p>
+<p>[Update: <code>PRE</code> and <code>POST</code> are now spelled <code>ENTER</code> and <code>LEAVE</code>.
+(<code>PRE</code> and <code>POST</code> are reserved for Design By Contract assertions).]</p>
+<p>A <code>try {}</code> without a <code>CATCH</code> is equivalent to Perl 5's <code>eval {}</code>.
+(In fact, <code>eval</code> will go back to evaluating only strings in Perl 6,
+and <code>try</code> will evaluate only blocks.)</p>
+<p>The <code>CATCH</code> and <code>POST</code> blocks are naturally in the lexical scope of
+the try block. They may safely refer to lexically scoped variables
+declared earlier in the try block, even if the exception is thrown
+during the elaboration sequence. (The run-time system will guarantee
+that individual variables test as undefined (and hence false) before
+they are elaborated.)</p>
+<p>The inside of the <code>CATCH</code> block is precisely the syntax of a switch
+statement. The discriminant of the switch statement is the exception
+object, <code>$!</code>. Since the exception object stringifies to the error
+message, the <code>when /divide by 0/</code> case need not be explicitly compared
+against <code>$!</code>. Likewise, explicit mention of a declared class implies
+an &quot;isa&quot; lookup, another built-in feature of the new switch statement.</p>
+<p>In fact, a <code>CATCH</code> of the form:</p>
+<pre>    CATCH { 
+        when xxx { ... }          # 1st case
+        when yyy { ... }          # 2nd case
+        ...                       # other cases, maybe a default
+    }</pre>
+<p>means something vaguely like:</p>
+<pre>    BEGIN {
+        %MY.catcher = {
+            given current_exception() -&gt; $! {
+                when xxx { ... }          # 1st case from above
+                when yyy { ... }          # 2nd case from above
+                ...                       # other cases, maybe a default
+                die;            # rethrow $! as implicit default
+            }
+            $!.markclean;       # handled cleanly, in theory
+        }
+    }</pre>
+<p>The unified &quot;current exception&quot; is <code>$!</code>. Everywhere this RFC uses
+<code>$@</code>, it should be read as <code>$!</code> instead. (And the too-precious <code>@@</code>
+goes away entirely in favor of an array stored internally to the <code>$!</code>
+object that can be accessed as <code>@$!</code> or <code>$![-1]</code>.) (For the legacy
+Perl 5 parser, <code>$@</code> and <code>$?</code> will be emulated, but that will not be
+available to the Perl 6 parser.)</p>
+<p>Also note that the <code>CATCH</code> block implicitly supplies a rethrow (the
+<code>die</code> above) after the cases of the switch statement. This will not be
+reached if the user has supplied an explicit <code>default</code> case, since the
+<code>break</code> of that default case will always bypass the implicit <code>die</code>.
+And if the switch rethrows the exception (either explicitly or
+implicitly), <code>$!</code> is not marked as clean, since the <code>die</code> will bypass
+the code that marks the exception as &quot;cleanly caught&quot;. It should be
+considered an invariant that any <code>$!</code> in the normal control flow
+outside of a <code>CATCH</code> is considered &quot;cleanly caught&quot;, according to the
+definition in the RFC. Unclean exceptions should only be seen inside
+<code>CATCH</code> blocks, or inside any <code>POST</code> blocks that have to execute
+while an exception is propagating to an outer block because the current
+try block didn't handle it. (If the current try block does successfully
+handle the exception in its <code>CATCH</code>, any <code>POST</code> blocks at the same
+level see a <code>$!</code> that is already marked clean.)</p>
+<p>RFC:</p>
+<ul>
+<li><a name='eval {die &quot;Can't foo.&quot;}; print $@; continues to work as before.'></a><code>eval {die &quot;Can't foo.&quot;}; print $@;</code> <i>continues to work as
+before.</i></li>
+</ul>
+<p>That will instead look like</p>
+<pre>    try { die &quot;Can't foo&quot; }; print $!;</pre>
+<p>in Perl 6. A <code>try</code> with no <code>CATCH</code>:</p>
+<pre>    try { ... }</pre>
+<p>is equivalent to:</p>
+<pre>    try { ... CATCH { default { } } }</pre>
+<p>(And that's another reason I didn't want to use <code>else</code> for the default
+case of a switch statement--an <code>else</code> without an <code>if</code> looks really
+bizarre...)</p>
+<p>Just as an aside, what I'm trying to do here is untangle the exception
+trapping semantics of <code>eval</code> from its code parsing and running
+semantics. In Perl 6, there is no <code>eval {}</code>. And <code>eval $string</code>
+really means something like this:</p>
+<pre>    try { $string.parse.run }</pre>
+<p>RFC:</p>
+<ul>
+<li><a name='This RFC does not require core Perl functions to use exceptions for signalling errors.'></a><i>This RFC does not require core Perl functions to use exceptions
+for signalling errors.</i></li>
+</ul>
+<p>However, Perl core functions will by default signal failure using
+unthrown proto-exceptions (that is, interesting values of undef) that
+can easily be turned into thrown exceptions via <code>die</code>. By &quot;interesting
+values of undef&quot;, I don't mean undef with properties. I mean
+full-fledged exception objects that just happen to return false from
+their <code>.defined</code> and <code>.true</code> methods. However, the <code>.str</code> method
+successfully returns the error message, and the <code>.int</code> method returns
+the error code (if any). That is, they do stringify and numify like
+<code>$!</code> ought to. An exception becomes defined and true when it is
+thrown. (Control exceptions become false when cleanly caught, to avoid
+spoofing old-style exception handlers.)</p>
+<p>RFC:</p>
+<ul>
+<li><a name='This means that all exceptions propagate unless they are cleanly caught, just as in Perl 5. To prevent this, use:'></a><i>This means that all exceptions propagate unless they are
+cleanly caught, just as in Perl 5. To prevent this, use:</i></li>
+<pre>    try { fragile(); } catch { } # Go on no matter what.</pre>
+</ul>
+<p>This will simply be:</p>
+<pre>    try { fragile; }</pre>
+<p>But it means the same thing, and it's still the case that all
+exceptions propagate unless they are cleanly caught. In this case, the
+caught exception lives on in <code>$!</code> as a new proto-exception that could
+be rethrown by a new <code>die</code>, much as we used to use <code>$@</code>. Whether an
+exception is currently considered &quot;cleanly caught&quot; can be reflected in
+the state of the <code>$!</code> object itself. When <code>$!</code> passes through the end
+of a <code>CATCH</code>, it is marked as clean, so that subsequent attempts to
+establish a new <code>$!</code> know that they can clear out the old <code>@$!</code>
+stack. (If the current <code>$!</code> is not clean, it should just add its
+information without deleting the old information--otherwise an error in
+a <code>CATCH</code> could delete the exception information you will soon be
+wanting to print out.)</p>
+<p>RFC:</p>
+<pre>    try { ... } catch &lt;test&gt; =&gt; { ... } finally { ... }</pre>
+<p>Now:</p>
+<pre>    { ... CATCH { when &lt;test&gt; { ... } } POST { ... } }</pre>
+<p>(The angle brackets aren't really there--I'm just copying the RFC's
+metasyntax here.)</p>
+<p>Note that we're assuming a test that matches the &quot;boolean&quot; entry from
+the switch dwimmery matrix. If not, you can always wrap closure curlies
+around the test:</p>
+<pre>    { ... CATCH { when { &lt;test&gt; } { ... } } POST { ... } }</pre>
+<p>That will force the test to be called as a subroutine that ignores its
+argument, which happens to be <code>$!</code>, the exception object. (Recall that
+the implied &quot;given&quot; of a <code>CATCH</code> statement sets <code>$!</code> as the given
+value. That given value is automatically passed to any &quot;when&quot; cases
+that look like subroutines or closures, which are free either to ignore
+the passed value, or access it as <code>$_</code> or <code>$^a</code>.)</p>
+<p>Or you might just prefer to use the unary <code>true</code> operator:</p>
+<pre>    { ... CATCH { when true &lt;test&gt; { ... } } POST { ... } }</pre>
+<p>I personally find that more readable than the closure.</p>
+<p>[Update: POST is now LEAVE.]</p>
+<p>RFC:</p>
+<ul>
+<li><a name='The test argument of the catch clause is optional, and is described below.'></a><i>The test argument of the catch clause is optional, and is
+described below.</i></li>
+</ul>
+<p>The test argument of a <code>when</code> clause is NOT optional, since it would
+be impossible to distinguish a conditional closure from the following
+block. Use <code>default</code> for the default case.</p>
+<p>RFC:</p>
+<ul>
+<li><a name='try, catch, and finally blocks should share the same lexical scope, in the way that while and continue do.'></a><i><code>try</code>, <code>catch</code>, and <code>finally</code> blocks should share the same
+lexical scope, in the way that <code>while</code> and <code>continue</code> do.</i></li>
+</ul>
+<p>Actually, this is not so--the <code>while</code> and <code>continue</code> blocks don't
+share the same lexical scope even in Perl 5. But we'll solve this issue
+without &quot;tunneling&quot; in any case. (And we'll change the <code>continue</code>
+block into a <code>NEXT</code> block that goes inside, so we can refer to lexical
+variables from within it.)</p>
+<p>RFC:</p>
+<ul>
+<li><a name='Note that try is a keyword, not a function. This is so that a ; is not needed at the end of the last block. This is because a try/catch/finally now looks more like an if/elsif/else, which does not require such a ;, than like an eval, which does).'></a><i>Note that <code>try</code> is a keyword, not a function. This is so that
+a <code>;</code> is not needed at the end of the last block. This is because a
+<code>try</code>/<code>catch</code>/<code>finally</code> now looks more like an
+<code>if</code>/<code>elsif</code>/<code>else</code>, which does not require such a <code>;</code>, than like
+an eval, which does).</i></li>
+</ul>
+<p>Again, this entire distinction goes away in Perl 6. Any expression
+block that terminates with a right curly on its own line will be
+interpreted as a statement block. And <code>try</code> is such an expression
+block.</p>
+<p>RFC:</p>
+<ul>
+<li><a name='$@ contains the current exception, and @@ contains the current exception stack, as defined above under die. The unshift rule guarantees that $@ == $@[0].'></a><i><code>$@</code> contains the current exception, and <code>@@</code> contains the
+current exception stack, as defined above under <code>die</code>. The <code>unshift</code>
+rule guarantees that <code>$@ == $@[0]</code>.</i></li>
+</ul>
+<p>Why an <code>unshift?</code> A stack is most naturally represented in the other
+direction, and I can easily imagine some kinds of handlers that might
+well treat it like a stack, stripping off some entries and pushing
+others.</p>
+<p>Also, <code>@@</code> is a non-starter because everything about the current
+exception should all be in a single data structure. Keeping the info
+all in one place makes it easy to rethrow an exception without losing
+data, even if the exception was marked as cleanly caught. Furthermore I
+don't think that the exception stack needs to be Huffman coded that
+badly.</p>
+<p>So <code>$!</code> contains the current exception, and <code>$!.stack</code> accesses the
+current exception stack. Through the magic of overloading, the <code>$!</code>
+object can likely be used as an array even though it isn't one, in
+which case <code>@$!</code> refers to that stack member. The <code>push</code> rule
+guarantees that <code>$!.id == $![-1].id</code>.</p>
+<p>RFC (speaking of the <code>exception</code> declaration):</p>
+<ul>
+<li><a name='If the given name matches /::/, something like this happens:'></a><i>If the given name matches <code>/::/</code>, something like this
+happens:</i></li>
+<pre>    @MyError::App::DB::Foo::ISA = 'MyError::App::DB';</pre>
+<p><i>and all non-existent parent classes are automatically created as
+inheriting from their parent, or <code>Exception</code> in the tail case. If a
+parent class is found to exist and not inherit from <code>Exception</code>, a
+run-time error exception is raised.</i></p>
+</ul>
+<p>If I understand this, I think I disagree. A package ought to able to
+contain exceptions without being an exception class itself. There
+certainly ought to be a shorthand for exceptions within the current
+package. I suspect they're inner classes of some sort, or inner classes
+of an inner package, or some such.</p>
+<p>RFC:</p>
+<ul>
+<li><a name='If the given name does not match /::/ (say it's just Alarm), this happens instead:'></a><i>If the given name does not match <code>/::/</code> (say it's just
+<code>Alarm</code>), this happens instead:</i></li>
+<pre>    @Alarm::ISA = 'Exception';</pre>
+<p><i>This means that every exception class isa <code>Exception</code>, even if
+<code>Exception::</code> is not used at the beginning of the class name.</i></p>
+</ul>
+<p>Ack! This could be really bad. What if two different modules declare an
+<code>Alarm</code> exception with different derivations?</p>
+<p>I think we need to say that unqualified exceptions are created within
+the current package, or maybe within the X subpackage of the current
+package. If we have inner classes, they could even be lexically scoped
+(and hence anonymous exceptions outside the current module). That might
+or might not be a feature.</p>
+<p>I also happen to think that <code>Exception</code> is too long a name to prefix
+most common exceptions, even though they're derived from that class. I
+think exceptions will be better accepted if they have pithier names
+like X::Errno that are derived from <code>Exception</code>:</p>
+<pre>    our class X::Control is Exception;
+    our class X::Errno is Exception;
+    our class X::NumericError is Exception;
+    our class C::NEXT is X::Control;
+    our class E::NOSPC is X::Errno;
+    our class X::FloatingUnderflow is X::NumericError;</pre>
+<p>Or maybe those could be:</p>
+<pre>    c::NEXT
+    e::NOSPC
+    x::FloatingUnderflow</pre>
+<p>if we decide uppercase names are too much like user-defined package
+names. But that looks strange. Maybe we just reserve single letter
+top-level package names for Perl. Heck, let's just reserve all
+top-level package names for Perl. Er, no, wait... <code>:-)</code></p>
+<p>RFC 80 suggests that exception objects numerify to the system's
+<i>errno</i> number when those are available. That's a possibility, though
+by the current switch rules we might have to write</p>
+<pre>    CATCH {
+        when +$ENOSPC { ... }
+    }</pre>
+<p>to force <code>$ENOSPC</code> to do a numeric comparison. It may well be better
+to go ahead and make the errno numbers into exception classes, even if
+we have to write something like this:</p>
+<pre>    CATCH {
+        when X::ENOSPC { ... }
+    }</pre>
+<p>That's longer, but I think it's clearer. Possibly that's <code>E::NOSPC</code>
+instead. But in any event, I can't imagine getting people to prefix
+every exception with &quot;<code>Exception::</code>&quot;. That's just gonna discourage
+people from using exceptions. I'm quite willing to at least reserve the
+<code>X</code> top-level class for exceptions. I think <code>X::</code> is quite
+sufficiently distinctive.</p>
+<p>RFC:</p>
+<pre>    try { my $f = open &quot;foo&quot;; ... } finally { $f and close $f; }</pre>
+<p>Now:</p>
+<pre>    {
+        my $f = open &quot;foo&quot;; ...
+        POST { $f and close $f }
+    }</pre>
+<p>Note that <code>$f</code> is naturally in scope and guaranteed to have a boolean
+value, even if the exception is thrown before the declaration statement
+is elaborated! (An implementation need not allocate an actual variable
+before the <code>my</code>. The code of the <code>POST</code> block could always be
+compiled to know that <code>$f</code> is to be assumed undefined if the
+allocating code has not yet been reached.)</p>
+<p>We could go as far as to make</p>
+<pre>        POST { close $f }</pre>
+<p>do something reasonable even without the guard. Maybe an undefined
+object could &quot;emulate&quot; any method for you within a <code>POST</code>. Maybe
+<code>try</code> is really a unary operator:</p>
+<pre>        POST { try close $f }</pre>
+<p>Or some such. I dunno. This needs more thought along transactional
+lines...</p>
+<p>Time passes...</p>
+<p>Actually, now that I've thought on it, it would be pretty easy to put
+wrappers around <code>POST</code> blocks that could do commit or rollback
+depending on whether the block exits normally. I'd like to call them
+<code>KEEP</code> and <code>UNDO</code>. <code>KEEP</code> blocks would only be executed if the block
+succeeded. <code>UNDO</code> blocks would only be executed if the block failed.
+One could even envision a syntax that ties the block to particular
+variable:</p>
+<pre>    UNDO $f { close $f }</pre>
+<p>After all, like the <code>CATCH</code> block, all of these blocks are just fancy
+<code>BEGIN</code> blocks that attach some meaning to some predefined property of
+the block.</p>
+<p>It's tempting to make the execution of <code>UNDO</code> contingent upon whether
+the block itself was passed during execution, but I'm afraid that might
+leave a window in which a variable could already be set, but subsequent
+processing might raise an exception before enabling the rollback in
+question. So it's probably better to tie it to a particular variable's
+state more directly than just by placing the block at some point after
+the declaration. In fact, it could be associated directly with the
+variable in question at declaration time via a property:</p>
+<pre>    my $f is undo { close $f } = open $file or die;</pre>
+<p>[Update: All of these should use <code>will</code> rather than <code>is</code>, or the
+closure has to be an explicit argument to <code>undo</code> with no intervening
+space.]</p>
+<p>Note that the block is truly a closure because it relies on the lexical
+scoping of <code>$f</code>. (This form of lexical scoping works in Perl 6 because
+the name <code>$f</code> is introduced immediately within the statement. This
+differs from the Perl 5 approach where the name is not introduced till
+the end of the current statement.)</p>
+<p>Actually, if the <code>close</code> function defaults to <code>$_</code>, we can say</p>
+<pre>    my $f is undo { close } = open $file;</pre>
+<p>presuming the managing code is smart enough to pass <code>$f</code> as a
+parameter to the closure. Likewise one could attach a <code>POST</code> block to
+a variable with:</p>
+<pre>    my $f is post { close } = open $file;</pre>
+<p>Since properties can be combined, you can set multiple handlers on a
+variable:</p>
+<pre>    my $f is post { close } is undo { unlink $file } = open &quot;&gt;$file&quot; or die;</pre>
+<p>There is, however, no <code>catch</code> property to go with the <code>CATCH</code> block.</p>
+<p>I suppose we could allow a <code>pre</code> property to set a <code>PRE</code> block on a
+variable.</p>
+<p>RFC:</p>
+<pre>    sub attempt_closure_after_successful_candidate_file_open
+    {
+        my ($closure, @fileList) = @_; local (*F);
+        foreach my $file (@fileList) {
+            try { open F, $file; } catch { next; }
+            try { &amp;$closure(*F); } finally { close F; }
+            return;
+            }
+        throw Exception &quot;Can't open any file.&quot;,
+               debug =&gt; @fileList . &quot; tried.&quot;;
+        }</pre>
+<p>Now:</p>
+<pre>    sub attempt_closure_after_successful_candidate_file_open
+      (&amp;closure, @fileList)
+    {
+        foreach my $file (@fileList) {
+            my $f is post { close }
+                = try { open $file or die; CATCH { next } }
+            &amp;closure($f);
+            return;
+        }
+        throw Exception &quot;Can't open any file.&quot;,
+               debug =&gt; @fileList . &quot; tried.&quot;;
+    }</pre>
+<p>[Update: That &quot;foreach&quot; should now be <code>for @fileList -</code> $file&gt;.  And
+the <code>is post</code> should be <code>is leave</code>.  Also these days I'd leave the
+ampersand off the call to <code>closure()</code> (though it's still necessary
+in the declaration of the parameter).]</p>
+<p>Note that the <code>next</code> within the <code>CATCH</code> refers to the loop, not the
+<code>CATCH</code> block. It is legal to <code>next</code> out of <code>CATCH</code> blocks, since we
+won't use <code>next</code> to fall through switch cases.</p>
+<p>However, <code>X::Control</code> exceptions (such as <code>X::NEXT</code>) are a subset of
+<code>Exceptions</code>, so</p>
+<pre>    CATCH {
+        when Exception { ... }   # catch any exception
+    }</pre>
+<p>will stop returns and loop exits. This could be construed as a feature.
+When it's considered a bug, you could maybe say something like</p>
+<pre>    CATCH {
+        when X::Control { die }  # propagate control exceptions
+        when Exception  { ... }  # catch all others
+    }</pre>
+<p>to force such control exceptions to propagate outward. Actually, it
+would be nice to have a name for non-control exceptions. Then we could
+say (with a tip of the hat to Maxwell Smart):</p>
+<pre>    CATCH {
+        when X::Chaos   { ... }  # catch non-control exceptions
+    }</pre>
+<p>And any control exceptions will then pass unimpeded (since by default
+uncaught exceptions are rethrown implicitly by the <code>CATCH</code>).
+Fortunately or unfortunately, an explicit <code>default</code> case will not
+automatically rethrow control exceptions.</p>
+<p>[Update: We now distinguish a <code>CONTROL</code> block from a <code>CATCH</code> block.
+Control exceptions are invisible to the CATCH block.]</p>
+<p>Following are some more examples of how the expression evaluation of
+<code>when</code> can be used. The RFC versions sometimes look more concise, but
+recall that the &quot;try&quot; is any block in Perl 6, whereas in the RFC form
+there would have to be an extra, explicit <code>try</code> block inside many
+subroutines, for instance. I'd rather establish a culture in which it
+is expected that subroutines handle their own exceptions.</p>
+<p>RFC:</p>
+<pre>    try { ... } catch $@-&gt;{message} =~ /.../ =&gt; { ... }</pre>
+<p>Now:</p>
+<pre>    try {
+        ...
+        CATCH {
+            when $!.message =~ /.../ { ... }
+        }
+    }</pre>
+<p>This works because =~ is considered a boolean operator.</p>
+<p>[Update: The operator is <code>~~</code> now.]</p>
+<p>RFC:</p>
+<pre>    catch not &amp;TooSevere =&gt; { ... }</pre>
+<p>Now:</p>
+<pre>    when not &amp;TooSevere { ... }</pre>
+<p>The unary <code>not</code> is also a boolean operator.</p>
+<p>RFC:</p>
+<pre>    try { ... } catch ref $@ =~ /.../ =&gt; { ... }</pre>
+<p>Now:</p>
+<pre>    try { ... CATCH { when $!.ref =~ /.../ { ... } } }</pre>
+<p>RFC:</p>
+<pre>    try { ... } catch grep { $_-&gt;isa(&quot;Foo&quot;) } @@ =&gt; { ... }</pre>
+<p>Now:</p>
+<pre>    try {
+        ...
+        CATCH {
+            when grep { $_.isa(Foo) } @$! { ... }
+        }
+    }</pre>
+<p>I suppose we could also assume grep to be a boolean operator in a
+scalar context. But that's kind of klunky. If we accept Damian's
+superposition RFC, it could be written this way:</p>
+<pre>    try {
+        ...
+        CATCH {
+            when true any(@$!).isa(Foo) { ... }
+        }
+    }</pre>
+<p>Actually, by the &quot;any&quot; rules of the <code>=~</code> table, we can just say:</p>
+<pre>    try {
+        ...
+        CATCH {
+            when @$! =~ Foo { ... }
+        }
+    }</pre>
+<p>[Update: Lists must be explicitly made into junctions, so now we'd
+write that as <code>any($![]) ~~ Foo</code>.]</p>
+<p>The RFC proposes the following syntax for finalization:</p>
+<pre>    try { my $p = P-&gt;new; my $q = Q-&gt;new; ... }
+    finally { $p and $p-&gt;Done; }
+    finally { $q and $q-&gt;Done; }</pre>
+<p>A world of hurt is covered over by that &quot;<code>...</code>&quot;, which could move the
+<code>finally</code> clauses far, far away from what they're trying to clean up
+after. I think the intent is much clearer with <code>POST</code>. And note also
+that we avoid the &quot;lexical tunneling&quot; perpetrated by <code>finally</code>:</p>
+<pre>    {
+        my $p = P.new;   POST { $p and $p.Done; }
+        my $q = Q.new;   POST { $q and $q.Done; }
+        ...
+    }</pre>
+<p>More concisely, we can say:</p>
+<pre>    {
+        my $p is post { .Done } = P.new;
+        my $q is post { .Done } = Q.new;
+        ...
+    }</pre>
+<p>RFC:</p>
+<pre>    try     { TryToFoo; }
+    catch   { TryToHandle; }
+    finally { TryToCleanUp; }
+    catch   { throw Exception &quot;Can't cleanly Foo.&quot;; }</pre>
+<p>How I'd write that:</p>
+<pre>    try {
+        try {
+            TryToFoo;
+            POST    { TryToCleanUp; }
+            CATCH   { TryToHandle; }
+        }
+        CATCH   { throw Exception &quot;Can't cleanly Foo.&quot;; }
+    }</pre>
+<p>That also more clearly indicates to the reader that the final <code>CATCH</code>
+governs the inner try completely, rather than just relying on ordering.</p>
+<p>RFC:</p>
+<ul>
+<li><a name='Instances of the actual (non-subclassed) Exception class itself are used for simple exceptions, for those cases in which one more or less just wants to say throw Exception &quot;My message.&quot;, without a lot of extra tokens, and without getting into higher levels of the taxonomy of exceptions.'></a><i>Instances of the actual (non-subclassed) <code>Exception</code> class
+itself are used for simple exceptions, for those cases in which one
+more or less just wants to say <code>throw Exception &quot;My message.&quot;</code>,
+without a lot of extra tokens, and without getting into higher levels
+of the taxonomy of exceptions.</i></li>
+</ul>
+<p><code>die &quot;My message.&quot;</code> has much the same effect. I think <code>fail &quot;My
+message.&quot;</code> will also default similarly, though with return-or-throw
+semantics that depend on the caller's <code>use fatal</code> settings.</p>
+<p>RFC (regarding <code>on_raise</code>):</p>
+<ul>
+<li><a name='Derived classes may override this method to attempt to &quot;handle&quot; an exception or otherwise manipulate it, just before it is raised. If on_raise throws or returns true the exception is raised, otherwise it is not. An exception can be manipulated or replaced and then propagated in modified form simply by re-raising it in on_raise.'></a><i>Derived classes may override this method to attempt to &quot;handle&quot;
+an exception or otherwise manipulate it, just before it is raised. If
+<code>on_raise</code> throws or returns true the exception is raised, otherwise
+it is not. An exception can be manipulated or replaced and then
+propagated in modified form simply by re-raising it in <code>on_raise</code>.</i></li>
+</ul>
+<p>Offhand, I don't see this one. Not only does it seem to be making the
+<code>$SIG{__DIE__}</code> mistake all over again, it also makes little sense to
+me to use &quot;throw&quot; to do something that doesn't throw. A throw should
+guarantee termination of control, or you're just going to run user code
+that wasn't expected to be run. It'd be like <code>return</code> suddenly not
+returning! Let's please use a different method to generate an unthrown
+exception. I think a <code>fail</code> method is the right approach--it
+terminates the control flow one way or another, even if just returning
+the exception as a funny-looking undef.</p>
+<p>The <code>on_catch</code> might be a bit more useful.</p>
+<p>RFC:</p>
+<ul>
+<li><a name='...because the authors are of the opinion that overloading else and continue with unwind semantics not traditionally associated with else and continue can be confusing, especially when intermixed with local flow-control forms of else and continue (which may be present in any { ... } block), or when an else die $@ is forgotten on a switch that needs to re-throw.'></a><i>...because the authors are of the opinion that overloading
+<code>else</code> and <code>continue</code> with unwind semantics not traditionally
+associated with <code>else</code> and <code>continue</code> can be confusing, especially
+when intermixed with local flow-control forms of <code>else</code> and
+<code>continue</code> (which may be present in any <code>{ ... }</code> block), or when an
+<code>else die $@</code> is forgotten on a <code>switch</code> that needs to re-throw.</i></li>
+</ul>
+<p><code>CATCH</code> will rethrow by default (unless there is a user-specified
+default).</p>
+<p>RFC:</p>
+<ul>
+<li><a name='Some perl6-language-error discussions have suggested leaving out the try altogether, as in simply writing { } else { } to indicate non-local flow-control at work. Yikes!'></a><i>Some perl6-language-error discussions have suggested leaving
+out the try altogether, as in simply writing <code>{ } else { }</code> to
+indicate non-local flow-control at work. Yikes!</i></li>
+<p><i>The <code>try</code> is not for Perl's sake. It's for the developer's sake. It
+says, watch out, some sort of non-local flow control is going on here.
+It signals intent to deal with action at a distance (unwinding
+semantics). It satisfies the first requirement listed under
+MOTIVATION.</i></p>
+</ul>
+<p><code>try {}</code> is the new spelling of <code>eval {}</code>, so it can still be used
+when self-documentation is desired. It's often redundant, however,
+since I think the all-caps <code>CATCH</code> and <code>POST</code> also serve the purpose
+of telling the developer to &quot;watch out&quot;. I expect that developers will
+get used to the notion that many subroutines will end with a <code>CATCH</code>
+block. And I'm always in favor of reducing the bracket count of
+ordinary code where practical. (That's why the <code>package</code> declaration
+has always had a bracketless syntax. I hope to do the same for classes
+and modules in Perl 6.)</p>
+<p>RFC:</p>
+<ul>
+<li><a name='The comma or = in a conditional catch clause is required so the expression can be parsed from the block, in the fashion of Perl 5's parsing of: map &lt;expression&gt;, &lt;list&gt;; Without the comma, the form catch $foo { ... } could be a test for $foo or a test for $foo{...} (the hash element).'></a><i>The comma or <code>=</code> in a conditional catch clause is required so
+the expression can be parsed from the block, in the fashion of Perl
+5's parsing of: <code>map &lt;expression&gt;, &lt;list&gt;</code>; Without the comma,
+the form <code>catch $foo { ... }</code> could be a test for <code>$foo</code> or a test
+for <code>$foo{...}</code> (the hash element).</i></li>
+</ul>
+<p>We now require whitespace before a non-subscript block, so this is not
+much of a problem.</p>
+<p>RFC:</p>
+<ul>
+<li><a name='How can we subclass Exception and control the class namespace? For example, if the core can use any Exception::Foo, where does one connect non-core Exceptions into the taxonomy? Possibly the core exceptions can derive from Exception::CORE, and everyone else can use the Exception::MyPackage convention.'></a><i>How can we subclass <code>Exception</code> and control the class
+namespace? For example, if the core can use any <code>Exception::Foo</code>,
+where does one connect non-core <code>Exception</code>s into the taxonomy?
+Possibly the core exceptions can derive from <code>Exception::CORE</code>, and
+everyone else can use the <code>Exception::MyPackage</code> convention.</i></li>
+</ul>
+<p>I don't think defining things as core vs non-core is very
+useful--&quot;core&quot; is not a fundamental type of exception. I do think the
+standard exception taxonomy should be extensible, so that non-standard
+exceptions can migrate toward being standard over time. I also think
+that modules and classes should have their own subpackage in which to
+store exceptions.</p>
+<p>RFC:</p>
+<ul>
+<li><a name='How can we add new instance variables and methods to classes derived from Exception and control those namespaces? Perhaps this will be covered by some new Perl 6 object technology. Otherwise, we will need yet another naming scheme convention.'></a><i>How can we add new instance variables and methods to classes
+derived from <code>Exception</code> and control those namespaces? Perhaps this
+will be covered by some new Perl 6 object technology. Otherwise, we
+will need yet another naming scheme convention.</i></li>
+</ul>
+<p>Instance variables and methods in a derived class will not interfere
+with base classes (except by normal hiding of duplicate method names).</p>
+<p>RFC:</p>
+<ul>
+<li><a name='What should the default values be for Exception object instance variables not specified to the constructor? For example, tag could default to file + line number.'></a><i>What should the default values be for <code>Exception</code> object
+instance variables not specified to the constructor? For example,
+<code>tag</code> could default to file + line number.</i></li>
+</ul>
+<p>Depends on the constructor, I suspect.</p>
+<p>RFC:</p>
+<ul>
+<li><a name='What assertions should be placed on the instance variables, if any?'></a><i>What assertions should be placed on the instance variables, if
+any?</i></li>
+</ul>
+<p>Probably depends on the class.</p>
+<p>RFC:</p>
+<ul>
+<li><a name='What should stringification return?'></a><i>What should stringification return?</i></li>
+</ul>
+<p>I lean towards just the message, with a different method for more info.
+But this is somewhat dependent on which representational methods we
+define for all Objects. And that has not been entirely thunk through.</p>
+<p>RFC:</p>
+<ul>
+<li><a name='Mixed Flow Control'></a><b>Mixed Flow Control</b></li>
+<p><i>Some of the reference texts, when discussing exception handling,
+refer to the matter that it may be difficult to implement a <code>go to</code>
+across an unwinding semantics block, as in:</i></p>
+<pre>        try { open F, $f } catch { next; }</pre>
+<p><i>This matter will have to be referred to the internals experts. It's
+ok if this functionality is not possible, it can always be simulated
+with lexical state variables instead.</i></p>
+<p><i>However, the authors would very much prefer that <code>goto</code>s across
+unwinding boundaries would dwim. If that is not possible, hopefully
+some sort of compile-time warning could be produced.</i></p>
+</ul>
+<p>We can do this with special control exceptions that aren't caught until
+it makes sense to catch them. (Where exactly control exceptions fit in
+the class hierarchy is still open to debate.) In any event, there's no
+problem throwing a control exception from a <code>CATCH</code>, since any
+exception thrown in a <code>CATCH</code> or <code>POST</code> would propagate outside the
+current try block in any event.</p>
+<p>Ordinary <code>goto</code> should work as long as it's leaving the current try
+scope. Reentering the try somewhere in the middle via <code>goto</code> is likely
+not possible, or even desirable. A failed try should be re-entered from
+the top, once things have been cleared up. (If the try is a loop block,
+going to the next iteration out of its <code>CATCH</code> will probably be
+considered safe, just as if there had been an explicit <code>try</code> block
+within the loop. But I could be wrong on that.)</p>
+<p>RFC:</p>
+<ul>
+<li><a name='Use %@ for Errors from Builtins'></a><b>Use <code>%@</code> for Errors from Builtins</b></li>
+<p>RFC 151 proposes a mechanism for consolidating the information
+provided by of <code>$@</code>, <code>$!</code>, <code>$?</code>, and <code>$^E</code>. In the opinion of the
+author of RFC 88, merging <code>$@</code> and <code>$!</code> should not be undertaken,
+because <code>$@</code> should <i>only</i> be set if an exception is raised.</p>
+</ul>
+<p>The RFC appears to give no justification for this last assertion. If we
+unify the error variables, <code>die</code> with no arguments can simply raise
+the current value of <code>$!</code>, and we stay object oriented all the way
+down. Then <code>$!</code> indicates the current error whether or not it's being
+thrown. It keeps track of its own state, as to whether it is currently
+in an &quot;unclean&quot; state, and refuses to throw away information unless
+it's clean.</p>
+<ul>
+<li><a name='%@ should be used to hold this fault-hash, based on the following arguments for symmetry.'></a><code>%@</code> <i>should be used to hold this fault-hash, based on the
+following arguments for symmetry.</i></li>
+<pre>        $@    current exception
+        @@    current exception stack
+        %@    current core fault information
+        $@[0]        same as $@
+        $@{type}     &quot;IO::File::NotFound&quot;
+        $@{message}  &quot;can't find file&quot;
+        $@{param}    &quot;/foo/bar/baz.dat&quot;
+        $@{child}    $?
+        $@{errno}    $!
+        $@{os_err}   $^E
+        $@{chunk}    That chunk thingy in some msgs.
+        $@{file}     Source file name of caller.
+        $@{line}     Source line number of caller.</pre>
+<p><code>%@</code> <i>should not contain a severity or fatality classification.</i></p>
+<p><i>Every call to a core API function should clear <code>%@</code> if it returns
+successfully.</i></p>
+<p><i>Internally, Perl can use a simple structured data type to hold the
+whole canonical <code>%@</code>. The code that handles reading from <code>%@</code> will
+construct it out of the internal data on the fly.</i></p>
+<p><i>If <code>use fatal;</code> is in scope, then just before returning, each core
+API function should do something like: <code>%@ and internal_die %@;</code></i></p>
+<p><i>The <code>internal_die</code> becomes the one place where a canonical
+<code>Exception</code> can be generated to encapsulate <code>%@</code> just before raising
+an exception, whether or not the use of such canonical <code>Exception</code>s is
+controlled by a pragma such as</i> <code>use exceptions;</code>.</p>
+</ul>
+<p>This <code>%@</code> proposal just looks like a bunch of unnecessary complication
+to me. A proto-exception object with methods can be just as easily (and
+lazily) constructed, and will map straight into a real exception,
+unlike this hash. And an object can always be used as a hash to access
+parameterless methods such as instance variable accessors.</p>
+<p>RFC:</p>
+<ul>
+<li><a name='eval'></a><b>eval</b></li>
+<p><i>The semantics of <code>eval</code> are, &quot;clear <code>$@</code> and don't unwind unless
+the user re-dies after the <code>eval</code>&quot;. The semantics of <code>try</code> are
+&quot;unwind after <code>try</code>, unless any raised exception was cleanly and
+completely handled, in which case clear <code>$@</code>&quot;.</i></p>
+<p><i>In the author's opinion, both <code>eval</code> and <code>try</code> should exist in Perl
+6. This would also mean that the legacy of examples of how to use
+<code>eval</code> in Perl will still work.</i></p>
+<p><i>And, of course, we still need <code>eval $string</code>.</i></p>
+<p><i>Discussions on perl6-language-errors have shown that some would
+prefer the <code>eval { ... }</code> form to be removed from Perl 6, because
+having two exception handling methods in Perl could be confusing to
+developers. This would in fact be possible, since the same effect can
+be achieved with:</i></p>
+<pre>        try { } catch { } # Clears $@.
+        my $e;
+        try { ... } catch { $e = $@; }
+        # now process $e instead of $@</pre>
+<p><i>On the other hand, <code>eval</code> is a convenient synonym for all that,
+given that it already works that way.</i></p>
+</ul>
+<p>I don't think the exact semantics of <code>eval {...}</code> are worth
+preserving. I think having bare <code>try {...}</code> assume a <code>CATCH { default
+{} }</code> will be close enough. Very few Perl 5 programs actually care
+whether <code>$@</code> is set within the eval. Given that and the way we've
+defined <code>$!</code>, the translation from Perl 5 to Perl 6 involves simply
+changing <code>eval {...}</code> to <code>try {...}</code> and <code>$@</code> to <code>$!</code> (which lives
+on as a &quot;clean&quot; exception after being caught by the <code>try</code>). Perhaps
+some attempt can be made to pull an external handler into an internal
+<code>CATCH</code> block.</p>
+<p>RFC:</p>
+<ul>
+<li><a name='catch v/s else + switch'></a><b><code>catch v/s else + switch</code></b></li>
+<p><i>Some participants in discussions on perl6-language-errors have
+expressed the opinion that not only should <code>eval</code> be used instead of
+<code>try</code>, but <code>else</code> should be used instead of multiple <code>catch</code> blocks.
+They are of the opinion that an</i> <code>else { switch ... }</code> <i>should be
+used to handle multiple catch clauses, as in:</i></p>
+<pre>        eval { ... }
+        else {
+            switch ($@) {
+                case $@-&gt;isa(&quot;Exception::IO&quot;) { ... }
+                case $@-&gt;my_method { ... }
+                }
+            }</pre>
+<p><i>This problem with</i> <code>else { switch ... }</code> <i>is: how should the code
+implicitly rethrow uncaught exceptions? Many proponents of this model
+think that uncaught exceptions should not be implicitly rethrown; one
+suggests that the programmer should <code>undef $@</code> at the end of *every*
+successful case block, so that Perl re-raises any <code>$@</code> still extant at
+the end of the <code>else</code>.</i></p>
+<p><i>This RFC allows a <code>switch</code> to be used in a</i> <code>catch { ... }</code>
+<i>clause, for cases where that approach would minimize redundant code
+in</i> <code>catch &lt;expr&gt; { ... }</code> <i>clauses, but with the mechanism
+proposed in this RFC, the switch functionality shown above can be
+written like this, while still maintaining the automatic exception
+propagation when no cases match:</i></p>
+<pre>        try { ... }
+        catch Exception::IO =&gt; { ... }
+        catch $@-&gt;my_method =&gt; { ... }</pre>
+</ul>
+<p>The switch construct works fine, because the implied <code>break</code> of each
+handled case jumps over the default rethrow supplied by the <code>CATCH</code>.
+There's no reason to invent a parallel mechanism, and lots of reason
+not to.</p>
+<p>RFC:</p>
+<ul>
+<li><a name='Mechanism Hooks'></a><b>Mechanism Hooks</b></li>
+<p><i>In the name of extensibility and debugging, there should be hooks for
+callbacks to be invoked when a <code>try</code>, <code>catch</code>, or <code>finally</code> block is
+entered or exited, and when a conditional <code>catch</code> is evaluated. The
+callbacks would be passed information about what is happening in the
+context they are being called from.</i></p>
+<p><i>In order to scope the effect of the callbacks (rather than making
+them global), it is proposed that the callbacks be specified as options
+to the try statement, something like this:</i></p>
+<pre>    try on_catch_enter =&gt; sub { ... },
+        on_catch_exit  =&gt; sub { ... },
+    {
+        ...
+        }</pre>
+<p><i>The (dynamic, not lexical) scope of these callbacks is from their try
+down through all trys nested under it (until overridden at a lower
+level). Nested callbacks should have a way of chaining to callbacks
+that were in scope when they come into scope, perhaps by including a
+reference to the outer-scope callback as a parameter to the callback.
+Basically, they could be kept in &quot;global&quot; variables overridden with
+<code>local</code>.</i></p>
+</ul>
+<p>Yuck. I dislike cluttering up the <code>try</code> syntax with what are
+essentially <code>temp</code> assignments to dynamically scoped globals. It
+should be sufficient to say something like:</p>
+<pre>    {
+        temp &amp;*on_catch_enter = sub { ... };
+        temp &amp;*on_catch_exit  = sub { ... };
+        ...
+    }</pre>
+<p>provided, of course, the implementation is smart enough to look for
+those hooks when it needs them.</p>
+<p>RFC:</p>
+<ul>
+<li><a name='Mixed-Mode Modules'></a><b>Mixed-Mode Modules</b></li>
+<p><i>Authors of modules who wish to provide a public API that respects the
+current state of <code>use fatal;</code> if such a mechanism is available, can do
+so as follows.</i></p>
+<p><i>Internal to their modules, authors can use lexically scoped <code>use
+fatal;</code> to explicitly control whether or not they want builtins to
+raise exceptions to signal errors.</i></p>
+<p><i>Then, if and only if they want to support the other style, and only
+for public API subroutines, they do something like one of these:</i></p>
+<ul>
+<li><a name='Use return internally, now add support for throw at API:'></a><i>Use return internally, now add support for throw at API:</i></li>
+<pre>     sub Foo
+     {
+        my $err_code = ... ; # real code goes here
+        # Replace the old return $err_code with this:
+        return $err_code unless $FATAL_MODE &amp;&amp; $error_code != $ok;
+        throw Error::Code &quot;Couldn't Foo.&quot;, code =&gt; $err_code;
+        }</pre>
+<li><a name='Use throw internally, add support for return at API:'></a><i>Use throw internally, add support for return at API:</i></li>
+<pre>     sub Foo
+     {
+        try {
+            # real code goes here, may execute:
+            throw Exception &quot;Couldn't foo.&quot;, code =&gt; $err_code;
+            }
+        catch !$FATAL_MODE =&gt; { return $@-&gt;{code}; }
+        return $ok;
+        }</pre>
+</ul>
+</ul>
+<p>Yow. Too much mechanism. Why not just:</p>
+<pre>    return proto Exception &quot;Couldn't foo.&quot;, code =&gt; $err_code;</pre>
+<p>The <code>proto</code> method can implement the standard <code>use fatal</code> semantics
+when that is desired by the calling module, and otherwise set things up
+so that</p>
+<pre>    Foo() or die;</pre>
+<p>ends up throwing the proto-exception. (The current proto-exception can
+be kept in <code>$!</code> for use in messages, provided it's in thread-local
+storage.)</p>
+<p>Actually, this is really important to make simple. I'd be in favor of a
+built-in that clearly says what's going on, regardless of whether it
+ends in a throw or a return of undef:</p>
+<pre>    fail &quot;Couldn't foo&quot;, errno =&gt; 2;</pre>
+<p>Just as an aside, it could be argued that all such &quot;built-ins&quot; are
+really methods on an implicit class or object. In this case, the
+<code>Exception</code> class...</p>
+<p>RFC:</p>
+<ul>
+<li><a name='$SIG{__DIE__}'></a><b>$SIG{__DIE__}</b></li>
+<p><i>The try, catch, and finally clauses localize and undef
+<code>$SIG{__DIE__}</code> before entering their blocks. This behavior can be
+removed if <code>$SIG{__DIE__}</code> is removed.</i></p>
+</ul>
+<p><code>$SIG{__DIE__}</code> must die. At least, that name must die--we may install
+a similar global hook for debugging purposes.</p>
+<p>RFC:</p>
+<ul>
+<li><a name='Legacy'></a><b>Legacy</b></li>
+<p><i>The only changes in respect of Perl 5 behaviour implied by this RFC
+are that (1) <code>$@</code> is now always an <code>Exception</code> object (which
+stringifies reasonably), it is now read-only, and it can only be set
+via <code>die</code>, and (2) the <code>@@</code> array is now special, and it is now
+read-only too.</i></p>
+</ul>
+<p>Perhaps <code>$!</code> could be implicitly declared to have a type of
+<code>Exception</code>. But I see little reason to make <code>$!</code> readonly by
+default. All that does is prevent clever people from doing clever
+things that we haven't thought of yet. And it won't stop stupid people
+from doing stupid things. In any event, <code>$!</code> is just a reference to an
+object, and access to the object will controlled by the class, not by
+Perl.</p>
+<a name='RFC 199: Short-circuiting built-in functions and user-defined subroutines'></a><h2>RFC 199: Short-circuiting built-in functions and user-defined
+subroutines</h2>
+<p>First I should note in passing that it is likely that</p>
+<pre>    my ($found) = grep { $_ == 1 } (1..1_000_000);</pre>
+<p>will be smart enough to stop on the first one without additional hints,
+since the left side will only demand one value of the right side.</p>
+<p>However, we do need to unify the behaviors of built-ins with
+user-defined control structures. From an internal point of view, all of
+these various ways of exiting a block will be unified as exceptions.</p>
+<p>It will be easy enough for a user-defined subroutine to catch the
+appropriate exceptions and do the right thing. For instance, to
+implement a loop wrapper (ignoring parser issues), you might write
+something like this:</p>
+<pre>    sub mywhile ($keyword, &amp;condition, &amp;block) {
+        my $l = $keyword.label;
+        while (&amp;condition()) {
+            &amp;block();
+            CATCH {
+                my $t = $!.tag;
+                when X::Control::next { die if $t &amp;&amp; $t ne $l); next }
+                when X::Control::last { die if $t &amp;&amp; $t ne $l); last }
+                when X::Control::redo { die if $t &amp;&amp; $t ne $l); redo }
+            }
+        }
+    }</pre>
+<p>Remember that those <code>die</code> calls are just rethrows of the current
+exception to get past the current try scope (the <code>while</code> in this
+case).</p>
+<p>How a block gets a label in general is an interesting question. It's
+all very well to say that the keyword is the label, but that doesn't
+help if you have two nested constructs with the same name. In Perl 5,
+labels are restricted to being at the beginning of the statement, but
+then how do you label a <code>grep</code>? Should there be some way of specifying
+a label on a keyword rather than on a statement? We could end up with
+something like this:</p>
+<pre>    my $found = grep:NUM { $_ == 1 and last NUM: $_ } (1..1_000_000);</pre>
+<p>On the other hand, considering how often this feature is (not) going to
+used, I think we can stick with the tried-and-true statement label:</p>
+<pre>    my $found = do { NUM: grep { $_ == 1 and last NUM: $_ } (1..1_000_000) };</pre>
+<p>This has the advantage of matching the label syntax with a colon on the
+end in both places. I like that.</p>
+<p>I don't think every block should implicitly have a way to return, or
+we'll have difficulty optimizing away blocks that don't do anything
+blockish. That's because setting up a try environment is always a bit
+blockish, and does in fact impose some overhead that we'd just as soon
+avoid when it's unnecessary.</p>
+<p>However, it's probably okay if certain constructs that would know how
+to deal with a label are implicitly labelled by their keyword name when
+they don't happen to have an explicit label. So I think we can allow
+something like:</p>
+<pre>    last grep: $_</pre>
+<p>Despite its appearance, that is not a method call, because <code>grep</code> is
+not a predefined class. What we have is a unary operator <code>last</code> that
+is taking an adverbial modifier specifying what to return from the
+loop.</p>
+<p>[Update: there's now a general <code>leave</code> verb that can exit from an inner
+block.]</p>
+<p>The interesting policy question as we go on will be whether a given
+construct responds to a given exception or not. Some exceptions will
+have to be restricted in their use. For instance, we should probably
+say that only explicit <code>sub</code> declarations may respond to a <code>return</code>.
+People will expect <code>return</code> to exit the subroutine they think they're
+in, even if there are blocks floating around that are actually closures
+being interpreted elsewhere. It might be considered antisocial for
+closure interpreters like <code>grep</code> or <code>map</code> or <code>sort</code> to trap
+X::Control::return sooner than the user expects.</p>
+<p>As for using numbers instead of labels to indicate how many levels to
+break out of, that would be fine, except that I don't believe in
+breaking out by levels. If the problem is complex enough that you need
+to break out more than one level, you need a name, not a number. Then
+it doesn't matter if you refactor your code to have more block levels
+or less. I find I frequently have to refactor my code that way.</p>
+<p>It's possible to get carried away and retrofit <code>grep</code> and <code>map</code> with
+every conceivable variety of abort, retry, accept, reject, reduce,
+reuse, recycle, or whatever exception. I don't think that's necessary.
+There has to be some reason for writing your own code occasionally. If
+we get rid of all the reasons for writing user-defined subroutines, we
+might as well pack our bags and go home. But it's okay at minimum to
+treat a looping construct like a loop.</p>
+<a name='RFC 006: Lexical variables made default'></a><h2>RFC 006: Lexical variables made default</h2>
+<p>This RFC proposes that <code>strict vars</code> should be on by default. This is
+motivated by the desire that Perl better support (or cajole, in this
+case) the disciplines that enable successful programming in the large.
+This goal is laudable.</p>
+<p>However, the programming-in-the-small advocates also have a valid
+point: they don't want to have to go to all the trouble of turning off
+strictures merely to write a succinct one-liner, since keystrokes are
+at a premium in such programming, and in fact the very strictures that
+increase clarity in large programs tend to decrease clarity in small
+programs.</p>
+<p>So this is one of those areas where we desire to have it both ways, and
+in fact, we pretty much can. The only question is where to draw the
+line. Some discussion suggested that only programs specified on the
+command line via the <code>-e</code> switch should be exempt from stricture. But
+I don't want to force every little file-based script into the large
+model of programming. And we don't need to.</p>
+<p>Large programming requires the definition of modules and classes. The
+typical large program will (or should) consist mostly of modules and
+classes. So modules and classes will assume <code>strict vars</code>. Small
+programming does not generally require the definition of modules and
+classes, though it may depend on existing modules and classes. But even
+small programs that use a lot of external modules and classes may be
+considered throw-away code. The very fact that the main code of a
+program is not typically reused (in the sense that modules and classes
+are reused) means that there is where we should draw the line. So in
+Perl 6, the main program will not assume <code>strict vars</code>, unless you
+explicitly do something to turn it on, such as to declare &quot;class Main&quot;.</p>
+<a name='RFC 330: Global dynamic variables should remain the default'></a><h2>RFC 330: Global dynamic variables should remain the default</h2>
+<p>This is fine for the main program, but modules and classes should be
+held to the higher standard of <code>use strict</code>.</p>
+<a name='RFC 083: Make constants look like variables'></a><h2>RFC 083: Make constants look like variables</h2>
+<p>It's important to keep in mind the distinction between variables and
+values. In a pure OO environment, variables are merely references to
+values, and have no properties of their own--only the value itself
+would be able to say whether it is constant. Some values are naturally
+constant, such as a literal string, while other values could be marked
+constant, or created without methods that can modify the object, or
+some such mechanism. In such an environment, there is little use for
+properties on variables. Any time you put a property on a variable,
+it's potentially lying about its value.</p>
+<p>However, Perl does not aspire to be a pure OO environment. In
+Perl-think, a variable is not merely a container for a value. Rather, a
+variable provides a &quot;view&quot; of a value. Sometimes that view could even
+be construed as a lie. That's okay. Lying to yourself is a useful
+survival skill (except when it's not). We find it necessary to repeat
+&quot;I think I can&quot; to ourselves precisely when we think we can't.
+Conversely, it's often valuable psychologically to treat possible
+activities as forbidden. Abstinence is easier to practice if you don't
+have to decide anew every time there's a possible assignation, er, I
+mean, assignment.</p>
+<p>Constant declarations on variables fall into this category. The value
+itself may or may not naturally be constant, but we will pretend that
+it is. We could in theory go farther than that. We could check the
+associated object to make sure that it is constant, and blow up if it's
+not, but that's not necessary in this case for consistent semantics.
+Other properties may be stricter about this. If you have a variable
+property that asserts a particular shape of multidimensional array, for
+instance, the object in question had better be able to supply semantics
+consistent with that view, and it's probably a good idea to blow up
+sooner rather than later if it can't. This is something like strong
+typing, except that it's optional, because the variable property itself
+is optional.</p>
+<p>Nevertheless, the purpose of these variable properties is to allow the
+compiler to deduce things about the program that it could not otherwise
+deduce, and based on those deductions, produce both a more robust and
+more efficient compile-time interpretation of the semantics of the
+program. That is to say, you can do more optimizations without
+compromising safety. This is obviously true in the case of inlining
+constants, but the principle extends to other variable properties as
+well.</p>
+<p>The proposed syntax is fine, except that we'll be using <code>is</code> instead
+of <code>:</code> for properties, as discussed in Apocalypse 2. (And it's
+<code>constant</code>, not <code>const</code>.)</p>
+<p>[Update: compile-time properties are now called &quot;traits&quot;.]</p>
+<a name='RFC 337: Common attribute system to allow user-defined, extensible attributes'></a><h2>RFC 337: Common attribute system to allow user-defined,
+extensible attributes</h2>
+<p>As already revealed in Apocalypse 2, attributes will be known as
+&quot;properties&quot; in Perl 6, to avoid confusion with existing OO
+nomenclature for instance variables. Also, we'll use the <code>is</code> keyword
+instead of the colon.</p>
+<p>[Update: run-time properties are set with <code>but</code>, while traits
+are set with <code>is</code>.]</p>
+<p>Setting properties on array and hash elements bothers me, particularly
+when those properties have names like &quot;public&quot; and &quot;private&quot;. This
+seems to me to be an attempt to paper over the gap of some missing OO
+functionality. So instead, I'd rather keep arrays and hashes mostly for
+homogenous data structures, and encourage people to use objects to
+store data of differing types. Then public and private can be
+properties of object attributes, which will look more like real
+variables in how they are declared. And we won't have to worry about
+the meaning of <code>my @foo[2]</code>, because that still won't be allowed.</p>
+<p>Again, we need to be very clear that the object representing the
+variable is different than any objects contained by the variable. When
+we say</p>
+<pre>    my Dog @dogpound is loud;</pre>
+<p>we mean that the individual elements of <code>@dogpound</code> are of type
+<code>Dog</code>, not that the array variable is of type <code>Dog</code>. But the <code>loud</code>
+property applies to the array, not to the dogs in the array. If the
+array variable needs to have a type, it can be supplied as if it were a
+property:</p>
+<pre>    my Dog @dogpound is DogPound is loud;</pre>
+<p>That is, if a property is the name of a known package/class, it is
+taken to be a kind of <code>tie</code>. Given the declaration above, the
+following is always true:</p>
+<pre>    @dogpound.is.loud</pre>
+<p>[Update: The <code>.is</code> is no longer needed, since properties are really
+mixin methods now.]</p>
+<p>since the <code>loud</code> is a property of the array object, even if it
+contains no dogs. It turns out that</p>
+<pre>    @dogpound.is.DogPound</pre>
+<p>is also true. This does not do an isa lookup. For that, say:</p>
+<pre>    @dogpound.isa(Pound)</pre>
+<p>Note that you can use:</p>
+<pre>    @dogpound =~ Dog</pre>
+<p>to test the individual elements for Doghood.</p>
+<p>[Update: We use <code>~~</code> instead of <code>=~</code> now.  And <code>@dogpound.DogPound</code>
+throws an exception if <code>@dogpound</code> doesn't have a <code>DogPound</code> method.]</p>
+<a name='RFC 173: Allow multiple loop variables in foreach statements'></a><h2>RFC 173: Allow multiple loop variables in foreach statements</h2>
+<p>Unfortunately, the proposed syntax could also be interpreted as
+parallel traversal:</p>
+<pre>  foreach ($a, $b) (@a, @b)</pre>
+<p>Also the RFC assumes pairs will be passed as two elements, which is no
+longer necessarily the case. A hash by itself in list context will
+return a list of pair objects. We'll need to say something like:</p>
+<pre>    %hash.kv</pre>
+<p>to get a flattened list of keys alternating with values. (The same
+method on arrays produces alternating indices and values.)</p>
+<p>I like the idea of this RFC, but the proposed syntax is not what I'd
+like. There are various possible syntaxes that could also potentially
+fulfill the intent of RFC 120:</p>
+<pre>    for [$i =&gt; $elem] (@array) { }
+    for {$i =&gt; $elem} (@array) { }
+    for ($i, $elem) = (@array.kv) { }</pre>
+<p>But I like the idea of something that feels like repeated binding. We
+could use the <code>:=</code> binding operator, but since binding is actually the
+operation performed by formal parameters of subroutines, and since we'd
+like to keep the list near the <code>for</code> and the formals near the closure,
+we'll use a variant of subroutine declaration to declare <code>for</code> loops:</p>
+<pre>    for @list -&gt; $x { ... }         # one value at a time
+    for @list -&gt; $a, $b { ... }     # two values at a time</pre>
+<p>You can un-interleave an array by saying:</p>
+<pre>    for @xyxyxy -&gt; $x, $y { ... }</pre>
+<p>Iterating over multiple lists in parallel needs a syntax much like a
+multi-dimensional slice. That is, something like a comma that binds
+looser than a comma. Since we'll be using semicolon for that purpose to
+delimit the dimensions of multi-dimensional slices, we'll use similar
+semicolons to delimit a parallel traversal of multiple lists: So
+parallel arrays could be stepped through like this:</p>
+<pre>    for @xxx; @yyy; @zzz -&gt; $x; $y; $z { ... }</pre>
+<p>If there are semicolons on the right, there must be the same number as
+on the left.</p>
+<p>Each &quot;stream&quot; is considered separately, so you can traverse two arrays
+each two elements at a time like this:</p>
+<pre>    for @ababab; @cdcdcd -&gt; $a, $b; $c, $d { ... }</pre>
+<p>If there are no semicolons on the right, the values are taken
+sequentially across the streams. So you can say</p>
+<pre>    for @aaaa; @bbbb -&gt; $a, $b { ... }</pre>
+<p>and it ends up meaning the same thing as if the comma were a semicolon,
+but only because the number of variables on the right happens to be the
+same as the number of streams on the right. That doesn't have to be the
+case. To get values one at a time across three streams, you can say</p>
+<pre>    for @a; @b; @c -&gt; $x { ... }</pre>
+<p>Each semicolon delimited expression on the left is considered to be a
+list of generated values, so it's perfectly legal to use commas or
+&quot;infinite&quot; ranges on the left. The following prints &quot;a0&quot;, &quot;b2&quot;, &quot;c3&quot;,
+and so on forever (or at least for a very long time):</p>
+<pre>    for 0 .. Inf; &quot;a&quot; .. &quot;z&quot; x 1000 -&gt; $i; $a {
+        print &quot;$a$i&quot;;
+    }</pre>
+<p>[Update: This has been simplified.  The arguments to a closure are
+always separated by commas, and you can use the <code>each</code> function to
+interleave two or more arrays on the left.]</p>
+<a name='RFC 019: Rename the local operator'></a><h2>RFC 019: Rename the local operator</h2>
+<p>We'll go with <code>temp</code> for the temporizing operator.</p>
+<p>In addition, we're going to be storing more global state in objects
+(such as file objects). So it ought to be possible to temporize (that
+is, checkpoint/restore) an attribute of an object, or at least any
+attributes that can be treated as an lvalue.</p>
+<a name='RFC 064: New pragma 'scope' to change Perl's default scoping'></a><h2>RFC 064: New pragma 'scope' to change Perl's default scoping</h2>
+<p>I can't stop people from experimenting, but I'm not terribly interested
+in performing this experiment myself. I made <code>my</code> short for a reason.
+So I'm accepting this RFC in principle, but only in principle. Standard
+Perl declarations will be plainly marked with <code>my</code> or <code>our</code>.</p>
+<a name='Rejected RFCs'></a><h1>Rejected RFCs</h1>
+<p>Just because I've rejected these RFCs doesn't mean that they weren't
+addressing at a valid need. Usually an RFC gets rejected simply because
+I think there's a better way to do it. Often there's little difference
+between a rejected RFC that I've borrowed ideas from and an RFC
+accepted with major caveats.</p>
+<p>We're already running long, so these descriptions will be terse. Please
+read the RFC if you don't understand the commentary.</p>
+<a name='RFC 089: Controllable Data Typing'></a><h2>RFC 089: Controllable Data Typing</h2>
+<p>This is pretty close to what we've been planning for Perl for a long
+time. However, a number of the specifics are suboptimal.</p>
+<p>If you declare a constant, it's a constant. There's no point in
+allowing warnings on that by default. It should be fatal to modify a
+constant. Otherwise you lose all your optimization possibilities.</p>
+<p>For historical reasons, the assignment in</p>
+<pre>     my ($a, $b) = new Foo;</pre>
+<p>will not distribute automatically over <code>$a</code> and <code>$b</code>. If you want
+that, use the <code>^=</code> hyperassignment instead, maybe.</p>
+<p>Constraint lists are vaguely interesting, but seem to be too much
+mechanism for the possible benefits. If you really want a data type
+that can be polymorphic, why not just define a polymorphic type?</p>
+<p>In general, there seems to be a lot of confusion in this RFC between
+constraints on variables and constraints on values. For constraints to
+be useful to the compiler, they have to be on the variable, and you
+can't be &quot;pushing&quot; constraints at runtime.</p>
+<p>On aliasing via subroutine calls, note that declared parameters will be
+constant by default.</p>
+<p>So anyway, although I'm rejecting this RFC, we'll certainly have a
+declaration syntax resembling some of the tables in the RFC.</p>
+<a name='RFC 106: Yet another lexical variable proposal: lexical variables made default'></a><h2>RFC 106: Yet another lexical variable proposal: lexical
+variables made default</h2>
+<p>Yes, it's true that other widely-admired languages like Ruby do
+implicit declaration of lexicals, but I think it's a mistake, the
+results of which don't show up until things start getting complicated.
+(It's a sign of this weakness that in Ruby you see the workaround of
+faking up an assignment to force declaration of a variable.)</p>
+<p>I dislike the implicit declaration of lexicals because it tends to
+defeat the primary use of them, namely, catching typos. It's just too
+easy to declare additional variable names by accident. It's also too
+easy to broaden the scope of a variable by accident. You might have a
+bunch of separate subroutines each with their own lexical, and suddenly
+find that they're all the same variable because you accidentally used
+the same variable name in the module initialization code.</p>
+<p>When you think about it, requiring <code>my</code> on declaration is a form of
+orthogonality. Otherwise you find your default scoping rules
+arbitrarily tied to an inner scope, or an outer scope, or a subroutine
+scope. All of these are suboptimal choices. And I don't buy the notion
+of using <code>my</code> optionally to disambiguate when you feel like it. Perl
+gives you a lot of rope to hang yourself with, but this is the wrong
+kind of rope, because it obscures a needful visual distinction.
+Declarations should look like declarations, not just to the programmer,
+but also to whoever has to read the program after them, whether
+carbon-based or silicon-based.</p>
+<p>And when it comes down to it, I believe that declarations with <code>my</code>
+are properly Huffman encoded. Declaring a lexical ought to be harder
+than assigning to one. And declaring a global ought to be harder than
+declaring a lexical (at least within classes and modules).</p>
+<a name='RFC 119: Object neutral error handling via exceptions'></a><h2>RFC 119: Object neutral error handling via exceptions</h2>
+<p>Good goals, but I don't want yet another independent system of
+exception handling. Simplicity comes through unification. Also, the
+proposed syntax is all just a little too intertwingled for my tastes.
+Let's see, how can I explain what I mean?</p>
+<p>The out-of-band stuff doesn't stand out visually enough to me, and I
+don't like thinking about it as control flow. Nevertheless, I think
+that what we've ended up with solves a number of the problems pointed
+out in this RFC. The RFC essentially asks for the functionality of
+<code>POST</code>, <code>KEEP</code> and <code>UNDO</code> at a statement level. Although <code>POST</code>,
+<code>KEEP</code>, and <code>UNDO</code> blocks cannot be attached to any statement, I
+believe that allowing <code>post</code>, <code>keep</code>, and <code>undo</code> properties in
+scoped declarations is powerful enough, and gives the compiler
+something tangible to attach the actions to. There is a kind of
+precision in attaching these actions to a specific variable--the state
+is bound to the variable in a transactionally instantaneous way. I'm
+afraid if we attach transactional actions to statements as the RFC
+proposes, it won't be clear exactly when the statement's state change
+is to be considered successful, since the transaction can't &quot;know&quot;
+which operation is the crucial one.</p>
+<p>Nonetheless, some ideas from this RFC will live on in the <code>post</code>,
+<code>keep</code>, and <code>undo</code> property blocks.</p>
+<a name='RFC 120: Implicit counter in for statements, possibly $#.'></a><h2>RFC 120: Implicit counter in for statements, possibly $#.</h2>
+<p>I am prejudiced against this one, simply because I've been burned too
+many times by implicit variables that mandate implicit overhead. I
+think if you need an index, you should declare one, so that if you
+don't declare one, the compiler knows not to bother setting up for it.</p>
+<p>Another problem is that people will keep asking what</p>
+<pre>    for (@foo,@bar) { print $# }</pre>
+<p>is supposed to mean.</p>
+<p>I expect that we'll end up with something more like what we discussed
+earlier:</p>
+<pre>    for @array.kv -&gt; $i, $elem { ... }</pre>
+<a name='RFC 262: Index Attribute'></a><h2>RFC 262: Index Attribute</h2>
+<p>Everyone has a use for <code>:</code> these days...</p>
+<p>This one seems not to be of very high utility, suffering from similar
+problems as the RFC 120 proposal. I don't think it's possible to
+efficiently track the container of a value within each contained object
+unless we know at compile time what a looping construct is, which is
+problematic with user-defined control structures.</p>
+<p>And what if an item is a member of more than one list?</p>
+<p>Again, I'd rather have something declared so we know whether to take
+the overhead. Then we don't have to pessimize whenever we can't do a
+complete static analysis.</p>
+<a name='RFC 167: Simplify do BLOCK Syntax'></a><h2>RFC 167: Simplify do BLOCK Syntax</h2>
+<p>I think the &quot;do&quot; on a <code>do</code> block is useful to emphasize that the
+closure in the braces is to be executed immediately. Otherwise Perl (or
+the user (or both)) might be confused as to whether someone was trying
+to write a closure that is to be executed later, particularly if the
+block is the last item in a subroutine that might be wanting to return
+a closure. In fact, we'll probably outlaw bare blocks at the statement
+level as too ambiguous. Use <code>for 1 {}</code> or some such when you want a
+one-time loop, and use <code>return</code> or <code>sub</code> when you want to return a
+closure.</p>
+<p>We'll solve the <code>;</code> problem by jiggering the definition of <code>{...}</code>,
+not by fiddling with <code>do</code>.</p>
+<p>[Update: Bare blocks are still legal, and always execute immediately
+as expected.  To return a closure you should use an explicit <code>return</code>.]</p>
+<a name='RFC 209: Fuller integer support in Perl.'></a><h2>RFC 209: Fuller integer support in Perl.</h2>
+<p>The old <code>use integer</code> pragma was a hack. I think I'd rather use types
+and representation specs on individual declarations for compile-time
+selection, or alternate object constructors for run-time selection,
+particularly when infinite precision is desired. I'm not against using
+pragmas to alter the defaults, but I think it's generally better to be
+more specific when you have the capability. You can force your programs
+to be lexically scoped with pragmas, but data wants to flow wherever it
+likes to go, so your lexically scoped module had better be able to deal
+rationally with any data thrown at it, even if it isn't in the exact
+form that you prefer.</p>
+<p>By the way, the RFC is misleading when it asserts that 32-bit integer
+precision is lost when represented in floating point. That's only true
+if you use 32-bit floats. Perl has always used 64-bit doubles, which
+give approximately 15 digits of integer precision. (The issue does
+arise with 64-bit integers, of course.)</p>
+<p>All that being said, Perl 6 will certainly have better support for
+integer types of various sorts. I just don't think that a pragma
+redefining what an &quot;integer&quot; is will provide good documentation to
+whoever is trying to understand the program. Better to declare things
+of type MagicNum, or whatever.</p>
+<p>I could be wrong, of course. If so, write your pragma, and have the
+appropriate amount of fun.</p>
+<a name='RFC 279: my() syntax extensions and attribute declarations'></a><h2>RFC 279: <code>my()</code> syntax extensions and attribute declarations</h2>
+<p>We already treated this in Apocalypse 2.</p>
+<p>The RFC assumes that the type always distributes over a <code>my</code> list.
+This is not what is necessary for function signatures, which need
+individual types for each formal argument.</p>
+<p>And again, it doesn't make much sense to me to put properties on a
+variable at run-time.</p>
+<p>It makes even less sense to me to be able to declare the type of an
+array element lexically. This is the province of objects, not arrays
+pretending to be structs.</p>
+<a name='RFC 297: Attributes for compiler hints'></a><h2>RFC 297: Attributes for compiler hints</h2>
+<p>Sorry, we can't have the semantics suddenly varying drastically merely
+because the user decided to run the program through a different
+translator. I think there's a happy medium in there somewhere where we
+can have the same semantics for both interpreter and compiler.</p>
+<a name='RFC 309: Allow keywords in sub prototypes'></a><h2>RFC 309: Allow keywords in sub prototypes</h2>
+<p>This RFC is rejected only because it doesn't go far enough. What we'll
+eventually need is to allow a regex-ish syntax notation for parsing
+that may be separate from the argument declarations. (Then again, maybe
+not.) In any event, I think some kind of explicit regex notation is
+called for, not the promotion of identifiers to token matchers. We may
+want identifiers in signatures for something else later, so we'll hold
+them in reserve.</p>
+<p>[Update: This functionality is provided by macros using the <code>is parsed</code>
+trait.  See A06.]</p>
+<a name='RFC 340: with takes a context'></a><h2>RFC 340: with takes a context</h2>
+<p>This seems like a solution in search of a problem. Even if we end up
+with a context stack as explicit as Perl 5's, I don't think the amount
+we'll deal with it warrants a keyword. (And I dislike &quot;<code>return with;</code>&quot;
+as a needlessly opaque linguistic construct.)</p>
+<p>That being said, if someone implements (as user-defined code) the
+Pascalish <code>with</code> as proposed in RFC 342 (and rejected), and if the
+<code>caller</code> function (or something similar) returns sufficient
+information to build references to the lexical scope associated with
+the call frame in question, then something like this could also be
+implemented as user code. I can't decide whether it's not clear that
+this is a good idea, or it's clear that this is not a good idea. In any
+event, I would warn anyone doing this that it's likely to be extremely
+confusing, akin to goto-considered-harmful, and for similar reasons,
+though in this case by displacing scopes rather than control flow.</p>
+<p>Note that some mechanism resembling this will be necessary for modules
+to do exportation to a lexical scope (see <code>%MY</code> in Apocalypse 2).
+However, lexical scope modification will be allowed only during the
+compile time of the lexical scope in question, since we need to be
+careful to preserve the encapsulation that lexical scoping provides.
+Turning lexical variables back into dynamic variables will tend to
+destroy that security.</p>
+<p>So I think we'll stick with closures and continuations that don't
+transport lexical scopes at runtime.</p>
+<a name='RFC 342: Pascal-like &quot;with&quot;'></a><h2>RFC 342: Pascal-like &quot;with&quot;</h2>
+<p>I expect Perl's parsing to be powerful enough that you could write a
+&quot;with&quot; if you wanted one.</p>
+<a name='Withdrawn RFCs'></a><h1>Withdrawn RFCs</h1>
+<a name='RFC 063: Exception handling syntax'></a><h2>RFC 063: Exception handling syntax</h2>
+<a name='RFC 113: Better constants and constant folding'></a><h2>RFC 113: Better constants and constant folding</h2>
+<a name='Other decisions'></a><h1>Other decisions</h1>
+<a name='C-style for loop'></a><h2>C-style for loop</h2>
+<p>Due to syntactic ambiguities with the new <code>for</code> syntax of Perl 6, the
+generalized C-style <code>for</code> loop is going to get its keyword changed to
+<code>loop</code>. And <code>for</code> will now always mean &quot;foreach&quot;. The expression
+&quot;pill&quot; is now optional, so instead of writing an infinite loop like
+this:</p>
+<pre>    for (;;) {
+        ...
+    }</pre>
+<p>you can now write it like this:</p>
+<pre>    loop {
+        ...
+    }</pre>
+<a name='C-style do {} while EXPR no longer supported'></a><h2>C-style do {} while EXPR no longer supported</h2>
+<p>In Perl 5, when you used a <code>while</code> statement modifier on a statement
+consisting of nothing but a <code>do {}</code>, something magical happened, and
+the block would be evaluated once before the condition was evaluated.
+This special-cased construct, seldom used and often misunderstood, will
+no longer be in Perl 6, and in fact will produce a compile-time error
+to prevent people from trying to use it. Where Perl 5 code has this:</p>
+<pre>    do {
+        ...
+    } while CONDITION;</pre>
+<p>Perl 6 code will use a construct in which the control flow is more
+explicit:</p>
+<pre>    loop {
+        ...
+        last unless CONDITION;
+    }</pre>
+<p>[Update: We'll also allow the <code>&lt;loop {...} while CONDITION;</code>&gt; form to mean
+execute once first. Loop <code>until</code> also works, of course.]</p>
+<a name='Bare blocks'></a><h2>Bare blocks</h2>
+<p>In Perl 5, bare blocks (blocks used as statements) are once-through
+loops. In Perl 6, blocks are closures. It would be possible to
+automatically execute any closure in void context, but unfortunately,
+when a closure is used as the final statement in an outer block, it's
+ambiguous as to whether you wanted to return or execute the closure.
+Therefore the use of a closure at the statement level will be
+considered an error, whether or not it's in a void context. Use <code>do
+{}</code> for a &quot;once&quot; block, and an explicit <code>return</code> or <code>sub</code> when you
+want to return a reference to the closure.</p>
+<p>[Update: Bare blocks are legal again and work as expected.]</p>
+<a name='continue block'></a><h2>continue block</h2>
+<p>The <code>continue</code> block changes its name to <code>NEXT</code> and moves inside the
+block it modifies, to work like <code>POST</code> blocks. Among other things,
+this allows <code>NEXT</code> blocks to refer to lexical variables declared
+within the loop, provided the <code>NEXT</code> block is placed after them. The
+generalized loop:</p>
+<pre>    loop (EXPR1; EXPR2; EXPR3) { ... }</pre>
+<p>can now be defined as equivalent to:</p>
+<pre>    EXPR1;
+    while EXPR2 {
+        NEXT { EXPR3 }
+        ...
+    }</pre>
+<p>(except that any variable declared in <code>EXPR3</code> would have different
+lexical scope). The <code>NEXT</code> block is called only before attempting the
+next iteration of the loop. It is not called when the loop is done and
+about to exit. Use a <code>POST</code> for that.</p>
+<p>[Update: s/POST/LEAVE/]</p>
+<p>Well, that about wraps it up for now. You might be interesting to know
+that I'm posting this from the second sesquiannual Perl Whirl cruise,
+on board the Veendam, somewhere in the Carribean. If the ship
+disappears in the Bermuda Triangle, you won't have to worry about the
+upcoming Exegesis, since Damian is also on board. But for now, Perl 6 is
+cruising along, the weather's wonderful, wish you were here.</p>
+</div>

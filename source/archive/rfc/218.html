@@ -1,0 +1,114 @@
+[% setvar title C<my Dog $spot> is just an assertion %]
+<h3>This file is part of the Perl 6 Archive</h3>
+    <p>To see what is currently happening visit <a href="http://www.perl6.org/">http://www.perl6.org/</a></p>
+<div class='pod'>
+<a name='TITLE'></a><h1>TITLE</h1>
+<p><code>my Dog $spot</code> is just an assertion</p>
+<a name='VERSION'></a><h1>VERSION</h1>
+<pre>  Maintainer: Piers Cawley &lt;<a href='mailto:pdcawley@bofh.org.uk'>pdcawley@bofh.org.uk</a>&gt;
+  Date: 13 Sep 2000
+  Last Modified: 25 Sep 2000
+  Mailing List: <a href='mailto:perl6-language-objects@perl.org'>perl6-language-objects@perl.org</a>
+  Number: 218
+  Version: 2
+  Status: Frozen</pre>
+<a name='ABSTRACT'></a><h1>ABSTRACT</h1>
+<p>The behaviour of the &lt;my Dog $spot&gt; syntax should simply be an
+assertion of the invariant:</p>
+<pre>   (!defined($spot) || (ref($spot) &amp;&amp; $spot-&gt;isa('Dog)))</pre>
+<a name='NOTES ON THE FREEZE'></a><h1>NOTES ON THE FREEZE</h1>
+<p>The original version of this attracted very little comment and what
+there was was positive. Therefore I've frozen it as it stands.</p>
+<a name='DESCRIPTION'></a><h1>DESCRIPTION</h1>
+<p>The syntax</p>
+<pre>    my Dog $spot = Dog-&gt;new();</pre>
+<p>currently carries little weight with Perl, often failing to do what
+one expects:</p>
+<pre>    $ perl -wle 'my Dog::$spot; print &quot;ok&quot;' 
+    No such class Dog at -e line 1, near &quot;my Dog&quot;
+    Execution of -e aborted due to compilation errors.
+    $ perl -wle 'sub Dog::new; my Dog $spot; print &quot;ok&quot;'
+    ok
+    $ perl -wle 'sub Dog::new; my Dog $spot = 1'
+    ok</pre>
+<p>The first example is obvious, as is the second. The third one is
+<i>weird</i>.</p>
+<p>I therefore propose that <code>my Dog $spot</code> comes to mean that <code>$spot</code>
+is restricted to being either undefined or a reference to a <code>Dog</code>
+object (or any subclasses of Dog). Simply having this implicit
+assertion can be useful to the programmer, but I would argue that its
+main advantage is that the compiler knows the object's interface at
+compile time and can potentially use this fact to speed up method
+dispatch.</p>
+<a name='Examples'></a><h2>Examples</h2>
+<p>In class methods:</p>
+<pre>    package Dog;
+    sub speak {
+        my Dog $self = shift; # Sadly 'my __PACKAGE__ $self' doesn't work
+        print $self-&gt;name, &quot; barks!\n&quot;;
+    }</pre>
+<p>Admittedly, this makes little sense unless there is some optimization
+available, but it can still be useful as a notational convenience.</p>
+<p>Or, consider the case where you have an <code>AnimalShelter</code> object and
+you're looking to get a Dog from there.</p>
+<pre>    my AnimalShelter $shelter = RSPCA-&gt;find_nearest_shelter;
+    my Dog $stray;
+
+    try {
+        PET: while (!defined($stray)) {
+            $stray = $shelter-&gt;next_animal;
+        }
+    }
+    catch Exception::WrongClass {
+        next PET;
+    }
+    $stray-&gt;bark;</pre>
+<p>Admittedly this makes some assumptions about the possibility of loops
+within try blocks, but I think the point is still valid.</p>
+<p>My main concern with this proposal is to make it possible to use the
+<code>my Dog $spot</code> syntax along with it's associated (posited)
+optimizations and assertions wherever it's appropriate in user code.</p>
+<a name='IMPLEMENTATION'></a><h1>IMPLEMENTATION</h1>
+<p>I've not really looked into using source filters, but if
+<code>my Dog $spot</code> can be mapped to
+<code>tie my $spot, Tie::Invariant, 'Dog'</code> then Tie::Invariant can look
+something like:</p>
+<pre>    package Tie::Invariant;
+    use carp;
+    
+    sub TIESCALAR {
+        my $self = bless {value =&gt; undef}, shift;
+        $self-&gt;{class} = shift;
+        return $self;
+    }
+    
+    sub FETCH {
+        my $self = shift;
+        return $self-&gt;value;
+    }
+    
+    sub STORE {
+        my($self,$newval) = @_;
+    
+        if (!defined($newval) || (ref($newval)                         &amp;&amp;
+                                  UNIVERSAL::isa($newval, &quot;UNIVERSAL&quot;) &amp;&amp;
+                                  $newval-&gt;isa($self-&gt;{class}))) {
+            croak &quot;Value must be 'undef' or be a $self-&gt;{class}&quot;
+        }
+        $self-&gt;{value} = $newval;
+    }</pre>
+<p>Note that the above is merely a sample implementation written in
+Perl5. I would hope that the 'real' code would be within the perl5
+interpreter and compiler. And all the faster for that.</p>
+<a name='MIGRATION'></a><h1>MIGRATION</h1>
+<p>Migration issues should be minor, the only problem arising when people
+have assigned things that aren't objects of the appropriate type to
+typed variables, but they deserve to lose anyway.</p>
+<a name='REFERENCES'></a><h1>REFERENCES</h1>
+<p>RFC 171: my Dog $spot should call a constructor implicitly</p>
+<p>This RFC is a counter RFC to RFC 171. See my forthcoming
+'new pragma: use package' RFC for something that addresses one of the
+concerns of RFC 171.</p>
+<p>RFC 137: Overview: Perl OO should <i>not</i> be fundamentally changed</p>
+<p>My guiding principle.</p>
+</div>

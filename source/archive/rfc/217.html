@@ -1,0 +1,47 @@
+[% setvar title POD needs a reorder command. %]
+<h3>This file is part of the Perl 6 Archive</h3>
+    <p>To see what is currently happening visit <a href="http://www.perl6.org/">http://www.perl6.org/</a></p>
+<div class='pod'>
+<a name='TITLE'></a><h1>TITLE</h1>
+<p>POD needs a reorder command.</p>
+<a name='VERSION'></a><h1>VERSION</h1>
+<pre>  Maintainer: Kenneth C. Rich &lt;<a href='mailto:kenrich@mail.rochester.edu'>kenrich@mail.rochester.edu</a>&gt;
+  Date: 12 Sep 2000
+  Last Modified: 13 Sep 2000
+  Mailing List: <a href='mailto:perl6-language@perl.org'>perl6-language@perl.org</a>
+  Number: 217
+  Version: 2
+  Status: Developing</pre>
+<a name='ABSTRACT'></a><h1>ABSTRACT</h1>
+<p>It would be nice to have the order of output be able to
+differ from the order in the source.</p>
+<a name='DESCRIPTION'></a><h1>DESCRIPTION</h1>
+<a name='Syntax suggestions:'></a><h2>Syntax suggestions:</h2>
+<p><code>=clip</code> <i>optional-label</i></p>
+<p>...text...</p>
+<p><code>=cut</code></p>
+<p>...code...</p>
+<p><code>=print</code> <i>required-label-from-clip</i></p>
+<p><code>=cut</code></p>
+<p>The &quot;=clip&quot; could be &quot;=for&quot;, or &quot;=begin&quot; and &quot;=end&quot; with a
+non-text-processor label.</p>
+<a name='Motivations:'></a><h2>Motivations:</h2>
+<ul>
+<li><a name='Reorder the document'></a>Reorder the document</li>
+<p>Sometimes I want a chunk of documentation to hang out near a
+chunk of code, but the order of the code is not always a good order for
+a man page.</p>
+</ul>
+<p>I dislike overloading the &quot;=for&quot; label with &quot;=print&quot; label functionality.</p>
+<p>I'd probably require that &quot;=print&quot; may only occur after the
+matching &quot;=clip.&quot;  But I can imagine writing POD processors that deal
+with &quot;=print&quot; references preceding &quot;=clip&quot; assertions, so I retract that
+sentence.  The &quot;=print&quot; would evaluate into a plain paragraph, so mostly
+you'd want to use &quot;=print&quot; after another &quot;=command&quot; like &quot;=head1&quot;, and so
+on.  For flexibility, an &quot;=print&quot; starting a pod section should
+effectively evaluate into an &quot;=pod&quot; paragraph.</p>
+<a name='IMPLEMENTATION'></a><h1>IMPLEMENTATION</h1>
+<p>...</p>
+<a name='REFERENCES'></a><h1>REFERENCES</h1>
+<p>RFC 5: Multiline Comments for Perl</p>
+</div>

@@ -1,0 +1,69 @@
+[% setvar title A Natural Syntax Extension For Chained References(aka Multidimensional Arrays/Hashes) %]
+<h3>This file is part of the Perl 6 Archive</h3>
+    <p>To see what is currently happening visit <a href="http://www.perl6.org/">http://www.perl6.org/</a></p>
+<div class='pod'>
+<a name='TITLE'></a><h1>TITLE</h1>
+<p>A Natural Syntax Extension For Chained References
+(aka Multidimensional Arrays/Hashes)</p>
+<a name='VERSION'></a><h1>VERSION</h1>
+<pre>  Maintainer: Jarkko Hietaniemi &lt;<a href='mailto:jhi@iki.fi'>jhi@iki.fi</a>&gt;
+  Date: 29 Aug 2000
+  Mailing List: <a href='mailto:perl6-language@perl.org'>perl6-language@perl.org</a>
+  Number: 177
+  Version: 1
+  Status: Developing</pre>
+<a name='ABSTRACT'></a><h1>ABSTRACT</h1>
+<p>In this RFC an extension to existing Perl syntax is proposed.  The
+syntax doesn't conflict with anything existing (in fact it corrects a
+bug of sorts), it is natural (naturalness being naturally in the eye
+of the proposer), and it gives concise way to express a complex data
+structure access.</p>
+<a name='DESCRIPTION'></a><h1>DESCRIPTION</h1>
+<p>Snatch two syntax constructs away from the jaws of illegal syntax and
+an unfortunate syntax, and make them useful weapons of the Perl
+arsenal.  The constructs are:</p>
+<pre>	$ref-&gt;[[LIST]]
+	$ref-&gt;{{LIST}}
+	</pre>
+<p>The proposed respective meanings:</p>
+<pre>	$ref-&gt;[$elem[0]]-&gt;[$elem[1]]-&gt;[...]-&gt;[$elem[-1]]
+	$ref-&gt;{$elem[0]}-&gt;{$elem[1]}-&gt;{...}-&gt;{$elem[-1]}
+	</pre>
+<p>That is, the lists are being expanded as the indices for a chain of
+references, the arrays could be called index lists.  Having the
+indices in one place saves a lot of characters.  Compare</p>
+<pre>	$r-&gt;{{qw(a b c d e f g h)}}</pre>
+<p>versus</p>
+<pre>	$r-&gt;{a}-&gt;{b}-&gt;{c}-&gt;{d}-&gt;{e}-&gt;{f}-&gt;{g}-&gt;{h}
+	</pre>
+<p>An example using an array may be even more enticing</p>
+<pre>	$r-&gt;[[@a]]
+	</pre>
+<p>versus</p>
+<pre>	$r-&gt;[$a[0]]-&gt;[$a[1]]-&gt;...
+	</pre>
+<p>or even</p>
+<pre>	$r-&gt;[$a]-&gt;[$b]-&gt;...
+	</pre>
+<p>(assuming @a = ($a, $b, ...))</p>
+<p>As mentioned earlier, these syntaxes do not do anything useful at the moment.</p>
+<p>The first one, -&gt;[[]], is an intermittent cause of segmentation
+violations, core dumps, and bug reports because it already does have a
+meaning but a rather twisted and faulty one: &quot;access the array at the
+offset of stringifying this anonymous list&quot;.  This offset is usually a
+rather large one, resulting in unruly memory access attempts.  Reusing
+the syntax for something useful cannot be an evil thing.</p>
+<p>The second one, -&gt;{{}}, is currently a syntax error, and cannot
+therefore broke existin code.</p>
+<p>The degenerate case of the list being empty can be defined to be
+equivalent to $ref.</p>
+<a name='IMPLEMENTATION'></a><h1>IMPLEMENTATION</h1>
+<p>Since the exact meaning of the construct depends on the contents of
+the index list, the chasing the indices (autovivifying data structures
+as needed) cannot be determined in compile time and needs to be
+a run-time operation.</p>
+<a name='REFERENCES'></a><h1>REFERENCES</h1>
+<p>perlref</p>
+<p>perldsc</p>
+<p>perllol</p>
+</div>

@@ -1,0 +1,178 @@
+[% setvar title The Perl 6 Summary for the week ending 20030518 %]
+<h3>This file is part of the Perl 6 Archive</h3>
+    <p>To see what is currently happening visit <a href="http://www.perl6.org/">http://www.perl6.org/</a></p>
+<div class='pod'>
+<a name='The Perl 6 Summary for the week ending 20030518'></a><h1>The Perl 6 Summary for the week ending 20030518</h1>
+<p>Welcome back to another Perl 6 summary, this week without any 'comic'
+introductions.</p>
+<p>So, without further ado we press straight on to the happenings in
+perl6-internals.</p>
+<a name='Makefile issues'></a><h2>Makefile issues</h2>
+<p>Bruce Gray sent in a patch to tweak Parrot's Makefile to ensure that
+IMCC could be built before doing either <code>make test</code> or <code>make
+static</code>. The various executables in the Parrot distribution now link
+against <b><i>libparrot.a</i></b> instead of just linking a bunch of .o
+files. Steve Fink liked the idea, and made a few other suggestions
+(building IMCC by default, having make test run the IMCC
+tests...). The patch was later applied by Bruce after Steve Fink gave
+him committer superpowers.</p>
+<p><a href='http://groups.google.com/groups?threadm=rt-22175-57406.9.99998850728801@bugs6.perl.org' target='_blank'>groups.google.com</a></p>
+<a name='Even more on stack walking'></a><h2>Even more on stack walking</h2>
+<p>The discussion of garbage collection and timely destruction came up
+again. Essentially, we want to have our cake and eat it too.</p>
+<p>Here's some background. Consider the following piece of code:</p>
+<pre>    sub iterate_over_file {
+        my($filename, $code) = @_;
+        open my $fh, '&lt;', $filename or die;
+        &amp;$code($_) for &lt;$fh&gt;;
+    }</pre>
+<p>Unless I'm going mad, this should be legal code in both Perl 5 and
+Perl 6. Now, consider what what happens when execution leaves the
+<code>iterate_over_file</code> function. In Perl 5 the file handle in <code>$fh</code> has
+its reference count decremented and, because there are no remaining
+references, the file is closed and the filehandle is destroyed. In a
+Perl 6 with no 'special case' garbage collection added, nothing
+happens. <code>$fh</code> only gets closed when a Dead Object Detection (DOD)
+run is triggered, which need not happen for a while, potentially
+leading to resource leaks or locking issues or other unforseen
+consequences.</p>
+<p>One way around this is for classes whose objects need timely
+destruction to tell Perl that there are some of its objects floating
+about so that Perl can trigger a DOD run at the end of every scope
+until there are no more such objects floating around. But that could
+be expensive (as Luke Palmer demonstrated with a neat piece of
+pathological code). Luke suggested a scheme where variables would have
+a needsDOD property (or some such thing) and a DOD would be triggered
+at the end of any scope that contained such a variable. Benjamin
+Goldberg offered a suggestion for a hybrid reference counting/full GC
+scheme.</p>
+<p>Garrett Goebel pointed out that the details of how Perl 6 implements
+this are really irrelevant at the moment; Dan has said there will be a
+way to trigger a DOD run at any time, which means that Parrot should
+support whatever scheme the Perl 6 implementers come up with.</p>
+<p><a href='http://groups.google.com/groups?threadm=3EBEF3BD.3632A178@hotpop.com' target='_blank'>groups.google.com</a></p>
+<a name='BASIC gets fancy'></a><h2>BASIC gets fancy</h2>
+<p>Clinton A. Pierce announced that the compiled version of BASIC under
+<b><i>languages/BASIC/compiler</i></b> now supports the QuickBASIC style
+<code>COLOR</code>, <code>LOCATE</code> and <code>CLS</code> statements. These additions prompted
+Leon Brocard to post a colour version of <b><i>mandel.bas</i></b> which generates
+a colour representation of the Mandelbrot set.</p>
+<p><a href='http://groups.google.com/groups?threadm=5.1.0.14.2.20030512230521.01f84850@mail.geeksalad.org' target='_blank'>groups.google.com</a></p>
+<p><a href='http://groups.google.com/groups?threadm=rt-22208-57633.7.23205098397514@bugs6.perl.org' target='_blank'>groups.google.com</a></p>
+<a name='More sub/method call stuff'></a><h2>More sub/method call stuff</h2>
+<p>Dan announced that now we know what the calling conventions will be,
+we should look at how we should make calls to parrot functions. He
+outlined a continuation passing style approach which looks like it
+should have all the right magic.</p>
+<p>Hmm... I just tried to write a short description of continuation
+passing style and ended up duplicating most of Dan's post, but not so
+well written, you're better off reading that.</p>
+<p>The general response to this was positive (once people had got over
+boggling at the idea of data encapsulation in an 'assembler').</p>
+<p>There was also some discussion of how continuations, tied variables
+and hypotheticals would interact (answer: We don't know yet, but it
+looks interesting...)</p>
+<p><a href='http://groups.google.com/groups?threadm=a05210601bae57ebf12d3@' target='_blank'>groups.google.com</a>[63.120.19.221]</p>
+<a name='Indexing registers or something'></a><h2>Indexing registers or something</h2>
+<p>Klaas-Jan Stol wondered about adding some way of doing register based
+indirect addressing (as Dan called it), which would allow for
+iterating over a set of registers in a loop (amongst other
+things). Dan suggested a couple of ways of doing it, but wanted a
+usage case for compiler-generated code before he went implementing
+anything. Klaas-Jan suggested a Lua construct that's analogous to the
+Perlish <code>($a, $b, $c) = (f(), g(), h())</code> as an example of where such
+code would come in handy. Luke Palmer suggested a way of implementing
+that in code that wouldn't need the indirect register addressing, and
+noted that if indirect register addressing were implemented then IMCC
+would probably get very confused indeed.</p>
+<p><a href='http://groups.google.com/groups?threadm=BAY1-DAV25lMazUSxvj0000e636@hotmail.com' target='_blank'>groups.google.com</a></p>
+<a name='Socket IO'></a><h2>Socket IO</h2>
+<p>Andrew The has been working on getting Socket IO working in Parrot,
+implementing a thin layer over the BSD socket functions and he had a
+few questions about the official way to do some things. Leo
+T&ouml;tsch answered some questions, and suggested that Andrew liaise
+with J&uuml;rgen B&ouml;mmels, who is working on Parrot's IO layer.</p>
+<p><a href='http://groups.google.com/groups?threadm=1052872713.3ec19009892a1@webmail.burntash.com' target='_blank'>groups.google.com</a></p>
+<a name='Using vtable macros'></a><h2>Using vtable macros</h2>
+<p>Leo T&ouml;tsch offered a couple of scripts to convert a Parrot
+distribution to use the new <code>VTABLE_*</code> vtable macros (it's done as a
+script because some many people have their own collection of patches
+in place, so a simple CVS commit doesn't catch all the vtable
+accesses).</p>
+<p><a href='http://groups.google.com/groups?threadm=3EC352B0.8080006@toetsch.at' target='_blank'>groups.google.com</a></p>
+<a name='Disable unused vtable entries'></a><h2>Disable unused vtable entries</h2>
+<p>Leo T&ouml;tsch proposed disabling all vtable methods that are either
+unused or not covered by opcodes. He reckons that this should make
+changes to the class hierarchy and vtable layout much
+simpler. Warnock's Dilemma currently applies.</p>
+<p><a href='http://groups.google.com/groups?threadm=3EC39199.5070905@toetsch.at' target='_blank'>groups.google.com</a></p>
+<a name='String-&gt;number problems'></a><h2>String-&gt;number problems</h2>
+<p>Clint Pierce noticed that</p>
+<pre>    set S1, &quot;Not really a number 2&quot;
+    set N0, S1
+    print N0
+    end</pre>
+<p>gets its string to number conversion wrong and outputs 2.00000 rather
+than the expected 0.00000. Luke Palmer patched it, but Benjamin
+Goldberg pointed out a few problems to do with string encodings.</p>
+<p><a href='http://groups.google.com/groups?threadm=rt-22214-57652.13.0801104798861@bugs6.perl.org' target='_blank'>groups.google.com</a></p>
+<a name='Fixes to Parrot::Test'></a><h2>Fixes to Parrot::Test</h2>
+<p>Bruce Gray tracked down and fixed some problems with <code>make test</code>
+seeing fake test failures, which turned out to arise from two
+interacting bugs in Parrot::Test</p>
+<p><a href='http://groups.google.com/groups?threadm=rt-22225-57764.12.9895807940461@bugs6.perl.org' target='_blank'>groups.google.com</a></p>
+<a name='Switched run core'></a><h2>Switched run core</h2>
+<p>Leo T&ouml;tsch supplied a patch to add a switched prederefed run
+core to Parrot's menu of run core options. It's slightly faster than
+the plain prederefed run core, and Leo thinks it should be the default
+run core when the computed got and JIT cores are unavailable. Bruce
+Gray caught a problem with an embedded newline which broke a couple of
+the tinderboxes. As far as I know the patch has not yet been applied
+to the CVS distribution.</p>
+<p><a href='http://groups.google.com/groups?threadm=3EC759EF.7020006@toetsch.at' target='_blank'>groups.google.com</a></p>
+<a name='Meanwhile in perl6-language'></a><h2>Meanwhile in perl6-language</h2>
+<p>The language list was quiet this week, with a grand total of 20
+messages...</p>
+<a name='Contexts'></a><h2>Contexts</h2>
+<p>Steve Fink had some questions about function signatures and how they
+interacted with pairs. The upshot of his question was the reminder
+that if you want to pass a literal pair into a function you need to
+remember to put it in parentheses <code>func(1, (a =</code> 7))&gt; or it will be
+interpreted as a named parameter, which will throw an error if there
+isn't an appropriately named parameter or a slurpy hash param.</p>
+<p><a href='http://groups.google.com/groups?threadm=20030513162804.GN2717@foxglove' target='_blank'>groups.google.com</a></p>
+<a name='The object sigil'></a><h2>The object sigil</h2>
+<p>Luke Palmer wants a sigil to explicitly disambiguate between a
+container and the thing contained (short circuiting any language level
+delegation) and proposed <code>&amp;</code> as the appropriate sigil. I'm not
+entirely sure that you need anything more than <code>\</code> and some carefully
+deployed parentheses. I also appear to have missed something as there
+seemed to be an assumption that in code like this</p>
+<pre>    for 1..Inf -&gt; $x { ... }</pre>
+<p>then <code>$x</code> wouldn't be a simple scalar, but an iterator, allowing you
+to write <code>$x.next</code> in the body of the loop, which I have to confess
+is news to me.</p>
+<p><a href='http://groups.google.com/groups?threadm=87el2ylzig.fsf@simoncozens-2.dsl.easynet.co.uk' target='_blank'>groups.google.com</a></p>
+<a name='Acknowledgements, Announcements and Apologies'></a><h1>Acknowledgements, Announcements and Apologies</h1>
+<p>Thanks to everyone for everything. Particular thanks to whoever
+chose both my talks for YAPC this year; I really should get around to
+writing them soon. And fixing the massive bug in the module that one
+of the talks is all about...</p>
+<p>If you've appreciated this summary, please consider one or more of the
+following options:</p>
+<ul>
+<li><a name='Send money to the Perl Foundation at donate.perl-foundation.org/ and help support the ongoing development of Perl.'></a>Send money to the Perl Foundation at
+<a href='http://donate.perl-foundation.org/' target='_blank'>donate.perl-foundation.org</a> and help support the ongoing
+development of Perl.</li>
+<li><a name='Get involved in the Perl 6 process. The mailing lists are open to all. dev.perl.org/perl6/ and www.parrotcode.org/ are good starting points with links to the appropriate mailing lists.'></a>Get involved in the Perl 6 process. The mailing lists are open  to
+all. <a href='http://dev.perl.org/perl6/' target='_blank'>dev.perl.org</a> and <a href='http://www.parrotcode.org/' target='_blank'>www.parrotcode.org</a>
+are good starting points with links to the appropriate mailing lists.</li>
+<li><a name='Send feedback, flames, money, photographic and writing commissions, or a weekend for two at Le Manoir Aux Quat' Saisons to p<a href='mailto:6summarizer@bofh.org.uk'>6summarizer@bofh.org.uk</a>.'></a>Send feedback, flames, money, photographic and writing commissions, or
+a weekend for two at Le Manoir Aux Quat' Saisons to
+<i><a href='http://search.cpan.org/perldoc?<a href='mailto:p6summarizer@bofh.org.uk'>p6summarizer@bofh.org.uk</a>'>p<a href='mailto:6summarizer@bofh.org.uk'>6summarizer@bofh.org.uk</a></a></i>.</li>
+</ul>
+<p>--=-=-=</p>
+<p>--
+Piers</p>
+<p>--=-=-=--</p>
+</div>

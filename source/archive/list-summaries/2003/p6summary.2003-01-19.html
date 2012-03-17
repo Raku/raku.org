@@ -1,0 +1,201 @@
+[% setvar title The Perl 6 Summary for the week ending 20030119 %]
+<h3>This file is part of the Perl 6 Archive</h3>
+    <p>To see what is currently happening visit <a href="http://www.perl6.org/">http://www.perl6.org/</a></p>
+<div class='pod'>
+<a name='The Perl 6 Summary for the week ending 20030119'></a><h1>The Perl 6 Summary for the week ending 20030119</h1>
+<p>Summary time again, damn but those tuits are hard to round up. Guess,
+what? perl6-internals comes first. 141 messages this week versus the
+language list's 143.</p>
+<a name='Objects (again)'></a><h2>Objects (again)</h2>
+<p>Objects were still very much on everyone's mind as the discussions of
+Dan's initial thoughts about objects in Parrot continued. Jonathan
+Sillito put up a list of questions about Dan's original message which
+Dan answered promptly. Down the thread a little Dan mentioned that he
+hoped Parrot's objects would serve, reasonably unmodified for a bunch
+of languages (ie, he hoped that there wouldn't be a requirement for
+PythonRef/Attr/Class/Object etc), Chris Armstrong thought that, given
+what Dan had outlined so far, that wouldn't be straightforward. Dan
+thanked him for throwing a spanner in the works, asking for more
+details which Chris provided.</p>
+<p>Meanwhile Jonathan had some supplementary questions... Hmm... doing
+this blow by blow will take forever. Suffice to say that details are
+being thrashed out. At one point Dan's head started to spin as
+terminology mismatches started to bite, leading Nicholas Clark to
+suggest an entirely new set of terms involving houses and hotels (but
+with some serious underpinnings).</p>
+<p><a href='http://groups.google.com/groups?threadm=a05200f00ba44a84de6d8@' target='_blank'>groups.google.com</a>[63.120.19.221] -- thread root, from last week.</p>
+<p><a href='http://groups.google.com/groups?threadm=OFEPJACOCOPCBJCNJKDLGEGGCAAA.sillito@cs.ubc.ca' target='_blank'>groups.google.com</a> -- Jonathan's questions</p>
+<p><a href='http://groups.google.com/groups?threadm=20030115023751.GE31014@Radii' target='_blank'>groups.google.com</a> -- Chris Armstrong throws a spanner</p>
+<p><a href='http://groups.google.com/groups?threadm=20030115204030.GA276@Bagpuss.unfortu.net' target='_blank'>groups.google.com</a> -- Nicholas Clark tries
+for a monopoly on silliness</p>
+<a name='Optimizing and per file flags'></a><h2>Optimizing and per file flags</h2>
+<p>Nicholas Clark wrote about requiring the ability to adjust compiler
+optimization flags on a per file basis (brought up by Dan on IRC
+apparently) and proposed a scheme. Quote of the thread (and quite
+possibly the year so far): &quot;When unpack is going into an infinite loop
+on a Cray 6000 miles away that you don't have any access to, there
+isn't much more you can do.&quot; Thanks for that one Nick.</p>
+<p><a href='http://groups.google.com/groups?threadm=20030112154536.GI288@Bagpuss.unfortu.net' target='_blank'>groups.google.com</a></p>
+<a name='The draft todo/worklist'></a><h2>The draft todo/worklist</h2>
+<p>Dan posted his current todo/worklist, which he described as
+&quot;reasonably high level, and a bit terse&quot;. I particularly liked the
+last entry &quot;Working Perl 5 parser&quot;. Surprisingly, there was very
+little discussion, maybe everyone liked it.</p>
+<p><a href='http://groups.google.com/groups?threadm=a05200f04ba47d7050beb@' target='_blank'>groups.google.com</a>[63.120.19.221]</p>
+<a name='Parrot Examples'></a><h2>Parrot Examples</h2>
+<p>Joe Yates asked if we could add a <b><i>helloworld.pasm</i></b> to
+<b><i>parrot/examples/assembly</i></b>. Joseph Guhlin wondered what was so
+special about</p>
+<pre>    print &quot;Hello, world\n&quot;
+    end</pre>
+<p>that it would need a file of its own (though he did forget the <code>end</code>
+in his post, and segfaults are not really what you want in sample code).</p>
+<p><a href='http://groups.google.com/groups?threadm=5.1.1.6.0.20030112103417.0251d2e0@mbox.spacespa.it' target='_blank'>groups.google.com</a></p>
+<a name='Thoughts on infant mortality (continued)'></a><h2>Thoughts on infant mortality (continued)</h2>
+<p>Jason Gloudon posted a wonderfully clear exposition of the problems
+facing anyone trying to implement a portable, incremental garbage
+collector for Parrot which sparked a small amount of discussion and
+muttering from Dan about the temptation to program down to the metal.</p>
+<p><a href='http://groups.google.com/groups?threadm=20030113162121.GA978@gloudon.com' target='_blank'>groups.google.com</a></p>
+<a name='Operators neg and abs in core.ops'></a><h2>Operators neg and abs in core.ops</h2>
+<p>Bernhard Schmalhofer posted an enormous patch adding <code>neg</code> and <code>abs</code>
+operators to core.ops. There were a few issues with the patch so it
+hasn't gone in yet and an issue with what underlying C functions are
+available reared its head too.</p>
+<p><a href='http://groups.google.com/groups?threadm=rt-20298-48537.11.3214103549667@bugs6.perl.org' target='_blank'>groups.google.com</a></p>
+<a name='The eval patch'></a><h2>The <code>eval</code> patch</h2>
+<p>Leo T&ouml;tsch seems to have spent most of the week working on
+getting <code>eval</code> working and he opened a ticket on rt.perl.org to track
+what's happening with it. The response to this can be summarized as
+'Wow! Fabulous!'.</p>
+<p>Once more, for Googlism, Leopold Toetsch is my hero.</p>
+<p><a href='http://rt.perl.org/rt2/Ticket/Display.html?id=20315' target='_blank'>rt.perl.org</a></p>
+<a name='Pretty Pictures'></a><h2>Pretty Pictures</h2>
+<p>Mitchell N Charity posted some pretty pictures that he'd generated
+with doxygen and graphviz. Most of the responses to this suggested he
+use different tools. Ah well.</p>
+<p><a href='http://groups.google.com/groups?threadm=200301160129.h0G1TYu26543@vendian.org' target='_blank'>groups.google.com</a></p>
+<a name='Solaris tinderbox failures'></a><h2>Solaris tinderbox failures</h2>
+<p>Andy Dougherty created an RT ticket for the Solaris tinderbox, which
+have been failing with the delightfully useful 'PANIC: Unknown
+signature type&quot; and wondered if things could be fixed up to be a
+little more informative. Apparently it was as issue with Leo's
+recently checked in eval patch. So Leo fixed it.</p>
+<p><a href='http://rt.perl.org/rt2/Ticket/Display.html?id=20374' target='_blank'>rt.perl.org</a></p>
+<a name='Parrot compilers'></a><h2>Parrot compilers</h2>
+<p>Cory Spencer wondered about how the current compilers that target
+parrot work, noting that they seem to be duplicating a good deal of
+labour, and wondered if anyone had worked on a gcc like framework with
+a standardized Abstract Syntax Tree (AST). Everyone pointed him at
+IMCC. Gopal V also pointed out that, given the variety of
+implementation languages (C, Perl, Parrot...) sharing effort between
+the sample languages would be a little tricky, and mentioned his work
+on TreeCC (an AST manager).</p>
+<p><a href='http://groups.google.com/groups?threadm=Pine.LNX.4.44.0301171900500.8414-100000@okcomputer.antiflux.org' target='_blank'>groups.google.com</a></p>
+<a name='ook.pasm eval'></a><h2><b><i>ook.pasm</i></b> eval</h2>
+<p>Leon Brocard had problems getting the eval based Ook implementation
+working. It turned out to be a problem with Ook's <code>make test</code> using
+parrot instead of IMCC.</p>
+<p><a href='http://rt.perl.org/rt2/Ticket/Display.html?id=20400' target='_blank'>rt.perl.org</a></p>
+<a name='Meanwhile, in perl6-language'></a><h1>Meanwhile, in perl6-language</h1>
+<p>The language list was a little fractious this week; I get the feeling
+that we're spinning our wheels slightly at the moment</p>
+<a name='Array questions'></a><h2>Array questions</h2>
+<p>Piers Cawley thought that <code>my $b is $a</code> would be a compile
+error, but Michael Lazzaro pointed out that that would mean that
+<code>my %data is FileBasedHash($path)</code> would also be a error. Damian
+pointed out that they shouldn't be compile time errors, but there
+would be no compile time type checking.</p>
+<p><a href='http://groups.google.com/groups?threadm=m2k7h881wv.fsf@TiBook.bofh.org.uk' target='_blank'>groups.google.com</a></p>
+<a name='L2R/R2L syntax. Again.'></a><h2>L2R/R2L syntax. Again.</h2>
+<p>Okay, cards on the table here, I'm getting really, really fed up with
+this thread. This week it was the monster that ate perl6-language. And
+how.</p>
+<p>We revisited the Unicode argument (Larry has said that Perl 6
+<i>will</i> have Unicode operators, some people don't like it, others
+(including me) aren't keen. Nobody came up with any original arguments
+this week).</p>
+<p>Sarcasm was employed (and missed).</p>
+<p>Michael Lazzaro brought up Perl 5's special case syntax for functions
+prototyped with block arguments which sparked some slightly heated
+discussion. Damian had some words of wisdom on this subject.</p>
+<p><a href='http://groups.google.com/groups?threadm=CAFE3022-2A4D-11D7-B2B5-00050245244A@cognitivity.com' target='_blank'>groups.google.com</a> -- Michael
+Lazzaro on block syntax</p>
+<p><a href='http://groups.google.com/groups?threadm=3E28B608.3070700@conway.org' target='_blank'>groups.google.com</a> -- Damian talks sense</p>
+<p>Later in the thread, Damian clarified his explanation of how the
+proposed <code>~&gt;</code> and <code>&lt;~</code> operators would work in response to
+Buddha Buck's excellent summary of his understanding of them. If
+you're taking part in this monster thread I strongly suggest rereading
+both of these messages, they're excellent. The subthread from Damian's
+clarifications led on to a discussion of multimethods that's worth
+looking at too.</p>
+<p><a href='http://groups.google.com/groups?threadm=3E2853E1.2070102@14850.com' target='_blank'>groups.google.com</a> -- Buddha Buck's summary</p>
+<p><a href='http://groups.google.com/groups?threadm=3E288384.6000403@conway.org' target='_blank'>groups.google.com</a> -- Damian's clarifications</p>
+<a name='Larry's state of health and employment'></a><h2>Larry's state of health and employment</h2>
+<p>Damian mentioned that &quot;We should bear in mind that Larry has had some
+health issues.  And that he's currently unemployed with four children
+to support.  Other matters are taking precedence at the moment.&quot; Get
+well soon Larry.</p>
+<p>This led to a discussion of whether the Perl Foundation would be continuing its
+grant to Larry in 2003 (apparently not). (The <i><a href='http://search.cpan.org/perldoc?<a href='mailto:advocacy@perl.org'>advocacy@perl.org</a>'>a<a href='mailto:dvocacy@perl.org'>dvocacy@perl.org</a></a></i>
+list is supposedly the right place to discuss this further but I'm not
+yet a member.)</p>
+<p><a href='http://groups.google.com/groups?threadm=71BEC0D4E1DED3118F7A009027B12028034C8B79@EXCH_MISSION' target='_blank'>groups.google.com</a></p>
+<a name='Who's Who in Perl 6?'></a><h1>Who's Who in Perl 6?</h1>
+<ul>
+<li><a name='Who are you?'></a>Who are you?</li>
+<p>Melvin Smith. I work for IBM. Former Linux hacker.
+My education is Computer Science. I am happily married.</p>
+<li><a name='What do you do for/with Perl 6'></a>What do you do for/with Perl 6</li>
+<p>Wrote various pieces of Parrot, including continuations (woo woo!),
+IMCC, and Cola as well as heckle Dan on IRC any chance I get.  Sadly,
+my contributions are fragmented and sparse, until I no longer have to
+work for a living.</p>
+<li><a name='Where are you coming from?'></a>Where are you coming from?</li>
+<p>Country boy from Georgia. I have a 4x4 truck and a dog. Perl is my
+favorite language because it has made possible many days of finishing
+work early to play golf, and I love WOW-ing Java programmers.</p>
+<li><a name='When do you think Perl 6 will be released?'></a>When do you think Perl 6 will be released?</li>
+<p>In digestable form, December, 2003. However, if the Raelians can
+clone Leopold T&ouml;tsch by July, then August might be possible.</p>
+<li><a name='Why are you doing this?'></a>Why are you doing this?</li>
+<p>Solely to learn new things. There is no better way to learn how to
+write a compiler than to write one badly. If Perl6 never arrives,
+I'll be satisfied by what I accomplished.</p>
+<li><a name='You have 5 words. Describe yourself'></a>You have 5 words. Describe yourself</li>
+<p>Intense, stubborn, dedicated, happy and kind.</p>
+<li><a name='Do you have anything to declare?'></a>Do you have anything to declare?</li>
+<p>Yes. Treat people on the Net just like your friends and coworkers.
+They just might be, one day.</p>
+</ul>
+<a name='Acknowledgements'></a><h1>Acknowledgements</h1>
+<p>Well, this set of acknowledgements may look slightly different than
+usual. This morning we had one of <i>those</i> meetings... If you've ever
+worked for a dot com you know the type;  the whole company got called
+into a conference room that was two small at about two minutes notice
+and the boss spent 10 minutes umming and ahhing through a speech about
+retrenchment and cost cutting and... um... downsizing.</p>
+<p>So, it looks like I'm about to become a member of the Copious Free
+Time club. I would take this opportunity to beg for a job, but if you
+do have jobs to offer Perl programmers Larry and Dan may be more
+useful to you.</p>
+<p>Returning to your normally scheduled acknowledgements, many thanks to
+Melvin Smith for his answers to the Who's Who questionnaire. The
+answer queue is empty again so unless someone else sends some answers
+Who's Who will be on hiatus for a while. Send your answers to
+<i><a href='http://search.cpan.org/perldoc?<a href='mailto:5Ws@bofh.org.uk'>5Ws@bofh.org.uk</a>'>5<a href='mailto:Ws@bofh.org.uk'>Ws@bofh.org.uk</a></a></i></p>
+<p>If you appreciated this summary please consider one or more of the
+following options:</p>
+<li><a name='Send money to the Perl Foundation at donate.perl-foundation.org/ and help support the ongoing development of Perl.'></a>Send money to the Perl Foundation at
+<a href='http://donate.perl-foundation.org/' target='_blank'>donate.perl-foundation.org</a> and help support the ongoing
+development of Perl.</li>
+<li><a name='Get involved in the Perl 6 process. The mailing lists are open to all. dev.perl.org/perl6/ and www.parrotcode.org/ are good starting points with links to the appropriate mailing lists.'></a>Get involved in the Perl 6 process. The mailing lists are open to
+all. <a href='http://dev.perl.org/perl6/' target='_blank'>dev.perl.org</a> and <a href='http://www.parrotcode.org/' target='_blank'>www.parrotcode.org</a>
+are good starting points with links to the appropriate mailing lists.</li>
+<li><a name='Send feedback, flames, money and or the complete Tarbell Course in Magic to p<a href='mailto:6summarizer@bofh.org.uk'>6summarizer@bofh.org.uk</a>.'></a>Send feedback, flames, money and or the complete Tarbell Course in
+Magic to <i><a href='http://search.cpan.org/perldoc?<a href='mailto:p6summarizer@bofh.org.uk'>p6summarizer@bofh.org.uk</a>'>p<a href='mailto:6summarizer@bofh.org.uk'>6summarizer@bofh.org.uk</a></a></i>.</li>
+</ul>
+<p>The fee paid for the publication of these summaries on perl.com is
+paid directly to the Perl Foundation (but given my current
+situation I may be reconsidering that.)</p>
+</div>

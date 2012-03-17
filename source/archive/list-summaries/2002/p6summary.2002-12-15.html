@@ -1,0 +1,313 @@
+[% setvar title The Perl Summary for the week ending 20021215 %]
+<h3>This file is part of the Perl 6 Archive</h3>
+    <p>To see what is currently happening visit <a href="http://www.perl6.org/">http://www.perl6.org/</a></p>
+<div class='pod'>
+<a name='The Perl Summary for the week ending 20021215'></a><h1>The Perl Summary for the week ending 20021215</h1>
+<p>Hi, and welcome to the first summary prepared on my shiny second hand
+TiBook (no, it wasn't a gift from a grateful summary reader, it was
+bought from a friend who was upgrading, gifts from grateful summary
+readers are, of course, still welcomed).</p>
+<p>So, kicking off with perl6-internals</p>
+<a name='Curses Life'></a><h2>Curses Life</h2>
+<p>Or should that be &quot;Curses! Life!&quot;?</p>
+<p>Around the end of last week Leon &quot;Namecheck&quot; Brocard announced that
+he'd made use of the Native Call Interface to implement a version of
+<b><i>life.pasm</i></b> that used the curses library for drawing. Dan &quot;Dan&quot;
+Sugalski told Namecheck that he was really scary and muttered
+something about fixing up some of NCI's `register stomping'
+behaviour. Piers &quot;The Summarizer&quot; Cawley said that he'd suggested
+that Namecheck try getting Readline working next and then, once he'd
+got the zmachine loader and opcodes up and running, Dan would be
+able to take a well earned rest by playing through the Zork
+adventures without leaving Parrot.</p>
+<p><a href='http://groups.google.com/groups?threadm=a05200f0cba1a9436ad51@' target='_blank'>groups.google.com</a>[63.120.19.221]</p>
+<a name='logical_not issue.'></a><h2><code>logical_not</code> issue.</h2>
+<p>The discussion of how <code>logical_not</code> should work rolled over from last
+week with David &quot;Ruby&quot; Robins mounting a spirited defence of simple
+booleans and successfully convincing Dan of his righteousness.</p>
+<a name='Tinderbox Summary'></a><h2>Tinderbox Summary</h2>
+<p>Steve &quot;Release Boy&quot; Fink got tired of `endlessly clicking on
+tinderbox links' so he wrote something to do it for him,
+summarized the results of his investigations to the list and wondered
+if fixes for the problems were in hand. A few of the machines in the
+tinderbox had their parrot directories zapped and reinstalled before
+starting their round of rebuilds once again, but there wasn't much
+reporting back of the success or failure of these operations.</p>
+<p><a href='http://groups.google.com/groups?threadm=20021209035501.GA13658@foxglove.digital-integrity.com' target='_blank'>groups.google.com</a></p>
+<p><a href='http://foxglove.dnsalias.org/parrot/' target='_blank'>foxglove.dnsalias.org</a></p>
+<a name='IMCC and Labels'></a><h2>IMCC and Labels</h2>
+<p>Leopold &quot;The Patchmonster&quot; T&ouml;tsch warned that, with the next
+set of changes the previously informal rules about label naming would
+become formal, enforced rules.</p>
+<p><a href='http://groups.google.com/groups?threadm=3DF45564.7020903@toetsch.at' target='_blank'>groups.google.com</a></p>
+<a name='Buffer/PMC unification'></a><h2>Buffer/PMC unification</h2>
+<p>The Patchmonster announced that he would soon be starting on unifying
+Buffers and PMCs into a common Parrot Object (or PObj) and gave a
+thumbnail sketch of the changes he expected to be making. Pretty much
+every subsequent message in this thread came from the Patchmonster,
+though Dan chimed in at one point with a correction. The Patchmonster
+told him he was wrong and carried on as before. Way to go Patchmonster.</p>
+<p><a href='http://groups.google.com/groups?threadm=3DF4A86F.4070404@toetsch.at' target='_blank'>groups.google.com</a> -- Start announcement, Monday</p>
+<p><a href='http://groups.google.com/groups?threadm=3DF74F9C.8090201@toetsch.at' target='_blank'>groups.google.com</a> -- Done announcement, Wednesday</p>
+<a name='A work list! (Coming soon)'></a><h2>A work list! (Coming soon)</h2>
+<p>Dan announced that he was working on compiling a list of things that
+need doing and asked for suggestions from everyone of what they
+wanted to see. Gopal &quot;Five&quot; V wanted Object support; Nicholas &quot;Not
+Nick&quot; Clark offered a longish list including such obvious items as &quot;a
+pony&quot; and &quot;Quantum Larry (writing the apocalypses in parallel
+universes in constant time)&quot; as well as a long list of rather more
+practical requests (see the link for details); the Patchmonster had a
+list too.</p>
+<p><a href='http://groups.google.com/groups?threadm=a05200f0bba1a92ef60d9@' target='_blank'>groups.google.com</a>[63.120.19.221]</p>
+<p><a href='http://groups.google.com/groups?threadm=20021210180452.GF288@Bagpuss.unfortu.net' target='_blank'>groups.google.com</a> -- (Not Nick)'s list</p>
+<p><a href='http://groups.google.com/groups?threadm=3DF8C605.5030001@toetsch.at' target='_blank'>groups.google.com</a> -- The Patchmonster's list</p>
+<a name='Naive .const directive for IMCC'></a><h2>Naive <code>.const</code> directive for IMCC</h2>
+<p>Gregor &quot;Jako&quot; N. Purdy had a crack at adding a <code>.const</code> directive to
+IMCC and sent his patch to the list (he didn't commit the change
+because he doesn't `own' IMCC). The Patchmonster thanked him and set
+about implementing something based on Jako's patch and his recent
+lexical changes and using the same syntax.</p>
+<p><a href='http://groups.google.com/groups?threadm=OF61F601F5.DEFBABF5-ON85256C8B.006A7D35-85256C8B.006C2472@kennedytech.com' target='_blank'>groups.google.com</a></p>
+<pre>=head Parrot v.0.0.9 feature freeze</pre>
+<p>Release Boy announced that 2002-Dec-14 at 20:00 GMT would see a
+feature freeze leading to a release on the following Wednesday. He
+also said that he'd be compiling a list of changes between 0.0.8 and
+0.0.9 and noted that the release would still go out even if the
+tinderbox wasn't completely green, but that he'd greatly appreciate
+improvements in that area. Tanton &quot;This nicknames in the summary
+thing started off as a nice idea, but now it's getting silly so I'll
+stop&quot; Gibbs noted that the `multiarray' problem that was causing
+problems in the tinderbox seemed only to fail with --gc-debug turned
+on and set about investigating it. Work in this area is ongoing.</p>
+<p>J&uuml;rgen B&ouml;mmels asked that patch #18379 get added before
+the freeze as it brought <b><i>languages/scheme</i></b> much nearer to being a
+real functional language and Dan obliged.</p>
+<p>The feature freeze went ahead on time, the only patches allowed are
+bugfixes and warnings eliminations until 0.0.9 is released.</p>
+<p><a href='http://groups.google.com/groups?threadm=20021210214520.GA27402@foxglove.digital-integrity.com' target='_blank'>groups.google.com</a></p>
+<p><a href='http://groups.google.com/groups?threadm=20021214204421.GH13658@foxglove.digital-integrity.com' target='_blank'>groups.google.com</a></p>
+<a name='Properties'></a><h2>Properties</h2>
+<p>Dan has added support for monkeying with a hash of PMC
+properties. Well, he thinks he has, but he hadn't written any tests
+so he wasn't entirely sure.  Simon Glover promptly found a bug and Leo
+patched things up. Simon also wondered if the fact that hash keys are
+passed by reference is a bug or a feature. Feature says Dan.</p>
+<p><a href='http://groups.google.com/groups?threadm=a05200f04ba1d796b22e8@' target='_blank'>groups.google.com</a>[63.120.19.221]</p>
+<a name='More Jako changes'></a><h2>More Jako changes</h2>
+<p>Gregor N. Purdy checked in a huge rewrite of the Jako compiler, which
+has been ported to IMCC. Apparently there's a fair bit of cruft left
+in the jako directory, but there's lots of cool stuff in there
+too. Gregor then announced the addition of native calls via thunks
+(what is a thunk? anyone?) It wasn't quite working when he first
+announced it. Leo narrowed it down to a GC bug, the effect of which
+he minimized but apparently there's was issue with Parrot's
+'toCstring' function which is now resolved, but which will require
+changes in a host of places to fix properly.</p>
+<p><a href='http://groups.google.com/groups?threadm=OF5807B241.A446159C-ON85256C8E.0077DD93-85256C8E.007966C2@kennedytech.com' target='_blank'>groups.google.com</a></p>
+<p><a href='http://groups.google.com/groups?threadm=OFAF129365.DC6EA89B-ON85256C8F.003D3FE8-85256C8F.003DC55F@kennedytech.com' target='_blank'>groups.google.com</a></p>
+<a name='CVSMonitor'></a><h2>CVSMonitor</h2>
+<p>Robert Spier pointed at the CVS Monitor installation on perl.org and
+recommended that people check it out. Dan was impressed (So am I,
+it's very spiffy) and wondered if there was somewhere which gathered
+all such useful links together, and Brent Dax pointed out just such a
+place.</p>
+<p><a href='http://bugs6.perl.org/cgi-bin/cvsmonitor/cvsmonitor.pl?cmd=viewBrowse' target='_blank'>bugs6.perl.org</a></p>
+<p><a href='http://www.parrotcode.org/resources' target='_blank'>www.parrotcode.org</a></p>
+<a name='Meanwhile in perl6-language'></a><h1>Meanwhile in perl6-language</h1>
+<a name='Right-to-left pipelines'></a><h2>Right-to-left pipelines</h2>
+<p>During the discussion of <code>purge</code> (which became <code>part</code>) Stephane
+Payrard changed the subject to 'right-to-left pipelines' and
+proceeded to make the unsupported assertion that left to right
+pipelines were a good idea and wondered what syntactic tricks would
+be needed to support them. (I'm afraid I'm not exactly impartial on
+when it comes to summarizing this thread; personally I think that
+left to right pipelines supported via anything more than
+<code>@ary.grep(...).map(...).sort(...)</code> are a really bad idea,
+especially if the tools needed to support them mean a change in the
+current right to left syntax.)</p>
+<p>Luke Palmer thought there might be something in the idea; apparently
+he's been playing with Mathematica which has similar functionality
+and which he found to be useful and Arcadi Shehter liked the idea
+too. Adam D. Lopresto pointed out that, with some appropriate methods
+on the <code>Array</code> class that left to right pipelines could be handled
+with a chain of method calls. Damian pointed out that Adam's proposed
+behaviour didn't quite work because method calls needed to have their
+argument list in brackets. Simon Cozens started a digression into the
+way Ruby does this sort of thing by wondering if there was any way to
+get 'round that when passing a block. Damian thinks not. (Essentially
+it's to do with when things are known. Parsing happens at compile
+time, at which time Perl generally doesn't know the class of an
+object on which a method is being invoked, so it can't know the
+prototype of the method, so you can't omit parentheses around the
+method arguments, param checking only happens at runtime when methods
+are involved.)</p>
+<p>Somewhere in all this Damian pulled <code>then</code> out of his bag of tricks:</p>
+<pre>   @out = @in then map { foo }
+              then grep { bar }
+              then sort { $^a &lt;=&gt; $^b };</pre>
+<p>Ralph Mellor suggested binary <code>-&gt;</code> possible syntax for left to
+right pipelines.</p>
+<p><a href='http://groups.google.com/groups?threadm=20021209050040.GA18269@stefp.dyndns.org' target='_blank'>groups.google.com</a></p>
+<p><a href='http://groups.google.com/groups?threadm=87adjef6e4.fsf@simoncozens-2.dsl.easynet.co.uk' target='_blank'>groups.google.com</a> -- Ruby Digression
+starts here.</p>
+<p><a href='http://groups.google.com/groups?threadm=3DF66FBB.5040507@conway.org' target='_blank'>groups.google.com</a></p>
+<p><a href='http://groups.google.com/groups?threadm=00d101c29f64$398293c0$6601a8c0@ralph' target='_blank'>groups.google.com</a></p>
+<a name='Purge: opposite of grep'></a><h2>Purge: opposite of grep</h2>
+<p>Another thread that ran over from last week (Sadly, in the real
+world, threads don't start neatly on a Monday and end on a Sunday
+night. Ah well.) Ken Fox had asked Damian to explain some stuff about
+his proposed <code>part</code> mechanism so Damian provided an
+explanation. Later in the thread, Smylers said something that Damian
+deliberately requoted a huge chunk of &quot;because it's so very right&quot;.</p>
+<p><a href='http://groups.google.com/groups?threadm=3DF3D3B0.4090306@conway.org' target='_blank'>groups.google.com</a></p>
+<p><a href='http://groups.google.com/groups?threadm=20021209200753.56029.qmail@onion.perl.org' target='_blank'>groups.google.com</a></p>
+<p><a href='http://groups.google.com/groups?threadm=3DF554D9.2000903@conway.org' target='_blank'>groups.google.com</a> -- Damians requote of the previous link</p>
+<a name='Hashkey context/Str context'></a><h2>Hashkey context/Str context</h2>
+<p>It appears that the `purge' thread can be thought of as the driver
+thread for this week. In this subthread Dave Storrs asked for
+confirmation that, in Perl 6 hash keys could be any datatype and that
+one should not expect them always to be smashed into a
+string. The answer is that the default will be to downcase everything
+to a string in a hashkey context, but that you would be able to
+declare different sorts of hash (e.g. <code>my %hash is keyed(Object)</code>)
+and get different hashkey behaviour.</p>
+<p>Dave went on to wonder if all this discussion of typed declarations
+meant that type declarations was going to be required. Answer: Hell
+no, type declarations are there to allow the compiler chances for
+optimization and for setting up multiply dispatched functions and
+methods (that's my reading of it anyway).</p>
+<p><a href='http://groups.google.com/groups?threadm=20021208215233.B53733@megazone.bigpanda.com' target='_blank'>groups.google.com</a></p>
+<a name='Partially Memoized Functions'></a><h2>Partially Memoized Functions</h2>
+<p>Smylers wondered about writing a function that would be partially
+memoized, giving as an example a function for getting the number of
+days in a month where, he argued, things would only really need to be
+memoized for the 'February' calculation. It was thought that, in the
+particular example given, there wasn't really much point in not
+memoizing the whole thing. Then Damian Conway reached into his Big
+Bag O' Perl 6 tricks and came up with a lexically scoped, named,
+cached subroutine, which made Adam Turoff gasp and stretch his eyes,
+and wonder if that would work. Answer: Yup, named subs, even
+lexically scoped ones are only compiled the once (and they're not
+closures).</p>
+<p><a href='http://groups.google.com/groups?threadm=20021209203620.98484.qmail@onion.perl.org' target='_blank'>groups.google.com</a></p>
+<p><a href='http://groups.google.com/groups?threadm=3DF55728.6010505@conway.org' target='_blank'>groups.google.com</a></p>
+<a name='Usage of \[oxdb]'></a><h2>Usage of \[oxdb]</h2>
+<p>Nicholas Clark played the `ask an awkward question' game and wondered
+what the Perl 6 <code>&quot;&quot;</code> parser would do when presented with what
+appears to be a $() interpolation sequence inside some other double
+quoting construct, and offered three options. Luke Palmer thought
+that the first of Nicholas's options was what would happen because
+&quot;The Perl 6 parser is one-pass now&quot;. Dan wasn't sure that the parser
+is one-pass. Joseph F Ryan thought that it should be, but added the
+caveat that it doesn't actually exist yet...</p>
+<p><a href='http://groups.google.com/groups?threadm=20021209234344.GD14144@Bagpuss.unfortu.net' target='_blank'>groups.google.com</a></p>
+<a name='Stringification of references'></a><h2>Stringification of references</h2>
+<p>In another continuation (reopening) of an old thread, Michael Lazzaro
+asked for a decision on how References were to be stringified. And
+didn't get one. However, the thread morphed into:</p>
+<p><a href='http://groups.google.com/groups?threadm=C682CEFD-0D33-11D7-8A09-00050245244A@cognitivity.com' target='_blank'>groups.google.com</a></p>
+<a name='Comparing Object Identity'></a><h2>Comparing Object Identity</h2>
+<p>This thread looks set to run and run. Luke Palmer pointed out that, in
+many OO languages there's a distinction between &quot;equal&quot; and &quot;same&quot;,
+and wondered if Perl needed another equality operator, proposing
+<code>===</code> for the task. Michael Lazzaro came down on the &quot;Yes&quot; side, and
+suggested <code>:=:</code> as another option. Michael Schwern thought that this
+would be better handled with a method, proposing <code>sameas</code> for the
+task, and Dan Sugalski agreed with him. Damian pointed out that
+that's what the universal <code>id</code> operator was for; you should just be
+able to do <code>$obj1.id == $obj2.id</code>. But John Siracusa reckoned that
+<code>id</code> was badly named, as it was the kind of method name that would
+be more useful for user code.</p>
+<p>I'm afraid that the waters here are still rather muddy, but it looks
+to me like we're heading in the direction of a method on Object to
+determine object identity.</p>
+<p><a href='http://groups.google.com/groups?threadm=20021211191621.097CE33B@babylonia.flatirons.org' target='_blank'>groups.google.com</a></p>
+<p><a href='http://groups.google.com/groups?threadm=20021213010721.GA9212@wall.org' target='_blank'>groups.google.com</a> -- I'm not sure how this relates to
+the subject at hand, but it's a good Larry moment.</p>
+<a name='Everything is an Object'></a><h2>Everything is an Object</h2>
+<p>Michael Schwern reminded everyone that, in Perl 6, everything is an
+object and pointed out some of the consequences this has for language
+design (chiefly, that it has the potential to &quot;stem the tide of new
+grammar&quot;). As with most stuff from Schwern's cursor his post is worth
+reading, I commend it to you. Larry commented that &quot;About the only
+things that have to be truly built-in to Perl 6 are lambda and the
+regex engine. Everything else is negotiable.&quot; and noted that he
+counted method dispatch under &quot;lambda&quot;.</p>
+<p>For some reason this thread led back to the 'left to right pipelines'
+thing, during which Piers Cawley got rather wound up.</p>
+<p><a href='http://groups.google.com/groups?threadm=20021211232729.GJ912@blackrider.schwern.org' target='_blank'>groups.google.com</a></p>
+<a name='In Brief'></a><h1>In Brief</h1>
+<p>Gregor is looking at adding native calls to Jako and thought he
+needed changes to IMCC to get things working, but the Patchmonster
+pointed him toward a workaround.</p>
+<p>Leo T&ouml; checked in some changes allowing gdb to inspect parrot
+registers inside JITted code (with some caveats about N and I
+registers). Way to go Leo.</p>
+<p>Simon Glover made Nicholas Clark a happy man by checking in an
+<b><i>interpreter.c</i></b> bugfix that made at least one FreeBSD box a happier
+computer.</p>
+<p>David Whipp wondered if it'd be possible to do <i>value</i> based
+multi dispatch. Adam Turoff thought that it'd be an accident waiting to
+happen while Damian said that it was being considered and that &quot;we're
+still weighing our courage against our sanity on that idea. ;-)&quot;</p>
+<p>Rich Morin wondered about using regular expressions as sequence
+generators. Most people seemed to think it wasn't such a good idea in
+the general case and Luke Palmer suggested using junctions, which
+appear to fit the bill rather neatly.</p>
+<a name='Who's Who in Perl 6?'></a><h1>Who's Who in Perl 6?</h1>
+<ul>
+<li><a name='Who are you?'></a>Who are you?</li>
+<p>Andy Wardley</p>
+<li><a name='What do you do for/with Perl 6?'></a>What do you do for/with Perl 6?</li>
+<p>Not a great deal, just hanging around, mostly lurking, occasionally
+asking stupid or frequently asked questions.  I designed the Parrot
+logo (which I'm rather pleased with), but it's hardly a monumental
+contribution to getting Parrot or Perl 6 out the door.</p>
+<li><a name='Where are you coming from?'></a>Where are you coming from?</li>
+<p>Guildford, England.  I've been programming computers for about twice
+as long in my life as I haven't (answers on a postcard).  Started with
+a ZX81 and things went downhill from there, through assembly, C, C++
+and finally ending up happy and (mostly) content at Perl's door
+(although I have been known to visit Ruby's house on occasion).</p>
+<li><a name='When do you think Perl 6 will be released?'></a>When do you think Perl 6 will be released?</li>
+<p>On a tuesday, shortly after lunch.</p>
+<li><a name='Why are you doing this?'></a>Why are you doing this?</li>
+<p>Because you asked us to send you our answers.  Oh, you mean why am I
+doing Perl 6?  Well, like I say, I'm not really doing much right now.
+I love Perl and I'm excited to see it evolving (or should that be
+revolting?).  But mostly I'm just hanging around with the smart kids,
+hoping some of it rubs off on me.</p>
+<li><a name='You have 5 words. Describe yourself.'></a>You have 5 words. Describe yourself.</li>
+<p>Someone who needs more than 5 words.</p>
+<li><a name='Do you have anything to declare?'></a>Do you have anything to declare?</li>
+<p>Nothing officer, I've been in Amsterdam on business, honest.</p>
+</ul>
+<a name='Acknowledgements'></a><h1>Acknowledgements</h1>
+<p>Once again this summary has mostly been written in a first class
+carriage travelling between London and Newark, usually behind
+schedule (a bit like the summaries in fact).</p>
+<p>Proofreading was handled by a spell checker and me. I really should
+stop running so close to my self imposed deadlines that I don't have
+time to get the summary looked over externally.</p>
+<p>Thanks to Andy &quot;Brain out of control&quot; Wardley for his questionnaire
+answers this week. My answer queue is down to two sets of answers, so
+if you think you should, please answer the questions and send your
+answers to mailto:<a href='mailto:5Ws@bofh.org.uk'>5Ws@bofh.org.uk</a></p>
+<p>And now, the chorus:</p>
+<p>If you didn't like the summary, what are you doing still reading it?
+If you did like it, please consider one or more of the following
+options:</p>
+<ul>
+<li><a name='Send money to the Perl Foundation at donate/perl-foundation.org/ and help support the ongoing development of Perl 6.'></a>Send money to the Perl Foundation at
+<a href='http://donate/perl-foundation.org/' target='_blank'>donate</a> and help support the ongoing
+development of Perl 6.</li>
+<li><a name='Get involved with the Perl 6 process. The mailing lists are open to everyone, dev.perl.org/perl6 and dev.perl.org/parrot are good starting points with links to the appropriate mailing lists.'></a>Get involved with the Perl 6 process. The mailing lists are open to
+everyone, <a href='http://dev.perl.org/perl6' target='_blank'>dev.perl.org</a> and
+<a href='http://dev.perl.org/parrot' target='_blank'>dev.perl.org</a> are good starting points with links to
+the appropriate mailing lists.</li>
+<li><a name='Send feedback, flames, money and or a decent pair of headphones to mailto:<a href='mailto:p6summarizer@bofh.org.uk'>p6summarizer@bofh.org.uk</a>'></a>Send feedback, flames, money and or a decent pair of headphones to
+mailto:<a href='mailto:p6summarizer@bofh.org.uk'>p6summarizer@bofh.org.uk</a></li>
+</ul>
+<p>The fee paid for publication of these summaries on perl.com is paid
+directly to the Perl Foundation.</p>
+</div>

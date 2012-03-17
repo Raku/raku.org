@@ -1,0 +1,38 @@
+[% setvar title Generate module dependencies easily %]
+<h3>This file is part of the Perl 6 Archive</h3>
+    <p>To see what is currently happening visit <a href="http://www.perl6.org/">http://www.perl6.org/</a></p>
+<div class='pod'>
+<a name='TITLE'></a><h1>TITLE</h1>
+<p>Generate module dependencies easily</p>
+<a name='VERSION'></a><h1>VERSION</h1>
+<pre>  Maintainer: Adam Turoff &lt;<a href='mailto:ziggy@panix.com'>ziggy@panix.com</a>&gt;
+  Date: 24 Sep 2000
+  Last Modified: 26 Sep 2000
+  Mailing List: <a href='mailto:perl6-stdlib@perl.org'>perl6-stdlib@perl.org</a>
+  Number: 289
+  Version: 2
+  Status: Frozen</pre>
+<a name='ABSTRACT'></a><h1>ABSTRACT</h1>
+<p>Perl6 should ship with a simple utility that shows all modules a program
+uses, and all modules those modules use.</p>
+<a name='DESCRIPTION'></a><h1>DESCRIPTION</h1>
+<p>Tom Christiansen proposed this in his perl6storm message:</p>
+<pre>	=item perl6storm #0043
+
+	Write something that spits out module dependencies.  Like makedep.
+	A tool that sources but doesn't run? a program/module then spits
+	out %INC might suffice.  Can we autobundle with CPAN tricks?</pre>
+<p>This feature will be useful for quite a number of uses, including bundling
+modules for distribution, and generating snapshots of large Perl programs.</p>
+<p>Curtis Jewell noticed that this will not be able to detect runtime
+dependencies, such as those coming from eval'ed code.  This could be
+handled by adding extensions to the language, adding POD constructs
+that a dependency checker will examine, or possibly other means.</p>
+<p>Even if the dependency checker could not detect runtime dependencies,
+it would still be damn useful.</p>
+<a name='IMPLEMENTATION'></a><h1>IMPLEMENTATION</h1>
+<p>This feature is probably best implemented through a standard module used as
+a compiler backend.</p>
+<a name='REFERENCES'></a><h1>REFERENCES</h1>
+<p>perl6storm</p>
+</div>

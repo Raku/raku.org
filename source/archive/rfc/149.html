@@ -1,0 +1,152 @@
+[% setvar title Lvalue subroutines: implicit and explicit assignment %]
+<h3>This file is part of the Perl 6 Archive</h3>
+    <p>To see what is currently happening visit <a href="http://www.perl6.org/">http://www.perl6.org/</a></p>
+<div class='pod'>
+<a name='TITLE'></a><h1>TITLE</h1>
+<p>Lvalue subroutines: implicit and explicit assignment</p>
+<a name='VERSION'></a><h1>VERSION</h1>
+<pre>  Maintainer: James Mastros &lt;<a href='mailto:james@rtweb.net'>james@rtweb.net</a>&gt;
+  Date: 24 Aug 2000
+  Mailing List: <a href='mailto:perl6-language-subs@perl.org'>perl6-language-subs@perl.org</a>
+  Number: 149
+  Version: 1
+  Status: Developing</pre>
+<a name='ABSTRACT'></a><h1>ABSTRACT</h1>
+<p>This RFC proposes two parallel methods for subroutines to be used as lvalues:
+implicit and explicit assignment.  These methods are similar to the methods
+proposed previously in RFCs 107 and 118.</p>
+<a name='DESCRIPTION'></a><h1>DESCRIPTION</h1>
+<a name='Implicit Assignment'></a><h2>Implicit Assignment</h2>
+<p>This is very similar to the lvalue subs in perl5.6, and to the method
+recommended in RFC 107.</p>
+<p>It allows code such as</p>
+<pre>        package Object;
+        sub foo(\%inner) : method {
+                return %inner{foo};
+        }</pre>
+<p>to be used as the lvalue in an assignment.  It also allows it in a mutator
+context with single-evalutation, and allows it to be dynamically assigned
+to.</p>
+<p>This requires, however, that the return statement not return the value of
+<code>%inner{foo}</code>, which is, after all, just a value and therefore cannot be
+assigned to, but rather a reference thereto.</p>
+<p>Therefore, the definition of the return function must be changed such that
+it is lazy.</p>
+<p>Additionally, the definition of assignment must not normally evaluate a lazy
+expression, but rather evaluate it to the point where its value would become
+the value of a <b>variable</b>, and then assign to that variable.  If the
+expression cannot be evaluated to that point, (for example, <code>$x+3</code>), then
+it may be an error to assign to it.</p>
+<p>(The may be is there because we might try solving the equation of the
+assignment until one side becomes the value of a variable, and then assigning
+the value to the variable such that it becomes true.  This is almost certainly
+what is meant by the original expression.  However, this almost certainly isn't
+worth the effort required.)</p>
+<p>(This process could also be expressed in terms of automatic enreferencing and
+dereferencing, but this way seems more perlish.)</p>
+<p>Given the definition of <code>Object::foo</code> above, the code <code>$obj-&gt;foo = 42;</code>
+should result in this process:</p>
+<ul>
+<li><a name='1.'></a>1.</li>
+<p><code>Object::foo</code> is called</p>
+<pre>        Object::foo($obj);</pre>
+<li><a name='2.'></a>2.</li>
+<p>The arguments are processed in accordance with the parameter list of foo:</p>
+<pre>        %inner = %$obj;</pre>
+<li><a name='3.'></a>3.</li>
+<p><code>Object::foo</code> runs</p>
+<li><a name='4.'></a>4.</li>
+<p><code>Object::foo</code> returns.</p>
+<pre>        $temp = lazy $inner{foo} # = $obj-&gt;{foo}</pre>
+<li><a name='5.'></a>5.</li>
+<p>The assignment is preformed.</p>
+<pre>        $temp = 42</pre>
+<li><a name='6.'></a>6.</li>
+<p>The lazy expression is partially evaluated.</p>
+<pre>        $temp =&gt;
+        $obj-&gt;{foo}</pre>
+<li><a name='7.'></a>7.</li>
+<p>The (real) assignment is preformed.</p>
+<pre>        $obj-&gt;{foo} = 42;</pre>
+</ul>
+<p>The context of the LHS is propagated from the RHS.  This implies that the
+RHS is evaluated first.</p>
+<p>A lvalue sub using implicit assignment may be local()ized or safe()d using
+the normal methods.</p>
+<a name='Explicit Assignment'></a><h2>Explicit Assignment</h2>
+<p>In this form of lvalue sub, the sub is passed both it's LHS arguments and
+it's RHS value.</p>
+<p>To indicate that the subrotuine may be called with explicit assignment, one
+or more of the elements of its parameter list must be declared with a
+:lvalue attribute.</p>
+<p>The context of the RHS is determined by the declared calling convention of
+the lvalue sub.  If and only if the lvalue sub is defined to take one scalar
+argument (not including a forced-reference [?]), then the RHS is evaluated
+in a scalar context.  Otherwise, it is evaluated in a list context.</p>
+<p>If more explicit contexts are added, then the context of the RHS exactly
+matches that specified by the <code>:lvalue</code>d elements of the LHS' parameter
+list.</p>
+<p>Given the code</p>
+<pre>        sub mode(\%self; $mode :lvalue) {
+         if ($mode &lt;5 &amp;&amp; $mode &gt;= 0) {
+          %self{mode} = $mode;
+         } else {
+          carp &quot;Mode outside of range 0..5!&quot;;
+         }
+        }</pre>
+<p>The code <code>mode($foo) = 3;</code> executes by calling mode with %self = %$foo and
+$mode = 3.  The code <code>mode($foo) = qw(3 4 5)</code> has the same effect, since
+<code>qw(3 4 5)</code> is it's lengh in scalar context.  The code <code>mode($foo)</code>
+executes by calling mode wih %self = %$foo and $mode undef (it would be an
+error had the semicolon been a comma).</p>
+<p>Note that the RHS is evaluated first, since it's context can be gathered
+from
+the signature of the lvalue sub.</p>
+<p>Mutators are called with the lvalue part being the result of calling the
+function first in a rvalue context lazaly.</p>
+<p>Thus, the code <code>mode($foo)++</code> results in a call to <code>mode($foo, lazy
+mode($foo)+1);</code>.  It is the lvalue sub's responsibility to make certain that
+single-evaluation semantics are followed if it wishes to do so by decomposing
+the lazy parameter.  Such decomposition is outside the realm of this RFC.</p>
+<p>It is not possible to <code>local()</code>ize or <code>safe()</code>ty an explicit-assignment style
+lvalue sub in a manner transparent to that sub.  For that reason, a closure
+returning the current rvalue of the lvalue sub is created into a temporary.
+The temporary is then evaluated and it's value assigned back to the call at
+then end of the block (but only if the block exits cleanly in the case of a
+safe() assignment).</p>
+<p>Thus, given the definition of mode above,</p>
+<pre>        {
+         local mode($foo) = 1;
+         ...;
+        }</pre>
+<p>Results in code equivalent to</p>
+<pre>        {
+         my $temp = sub { mode($foo) }; #create a closure
+         mode($foo) = 1;
+         ...;
+         mode($foo) = &amp;$temp; #evaluate the closure
+        }</pre>
+<p>Note that this results in three calls to the sub in response to one explicit
+assignment.  This may be a very bad thing in some cases, but is unavoidable.</p>
+<a name='Miscellany'></a><h2>Miscellany</h2>
+<p>A subroutine may be marked as being in error to call in a lvalue context by
+specifying a <code>:nonlvalue</code> attribute on it.  This prevents it from being
+called as an implicit lvalue function.</p>
+<a name='REFERENCES'></a><h1>REFERENCES</h1>
+<p>RFC 118: lvalue subs: parameters, explicit assignment, and wantarray() changes:
+This is the basis for our explicit assignment section.</p>
+<p>RFC 107: lvalue subs should receive the rvalue as an argument:
+This is the basis for our implicit assignment section.</p>
+<p>RFC 132: subroutines should be able to return an lvalue:
+We, in effect, always make the value returned by <code>return</code> a valid
+lvalue, so that the same code can be used for both the rvalue and
+lvalue cases.  This is in direct contradiction to the lreturn
+keyword recommended here.</p>
+<p>RFC 130: Transaction-enabled variables for Perl6:
+We discuss how lvalue subs can be safe()d in the Implementation
+sections.</p>
+<p>RFC 128: Subroutines: Extend subroutine contexts to include named
+parameters and lazy arguments:
+We use the syntax defined here.</p>
+<p><i><a href='http://search.cpan.org/perldoc?perlfunc#return'>&quot;return&quot; in perlfunc</a></i>: We extend the definition of return given here.</p>
+</div>

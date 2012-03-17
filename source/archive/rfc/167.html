@@ -1,0 +1,42 @@
+[% setvar title Simplify C<do BLOCK> Syntax %]
+<h3>This file is part of the Perl 6 Archive</h3>
+    <p>To see what is currently happening visit <a href="http://www.perl6.org/">http://www.perl6.org/</a></p>
+<div class='pod'>
+<a name='TITLE'></a><h1>TITLE</h1>
+<p>Simplify <code>do BLOCK</code> Syntax</p>
+<a name='VERSION'></a><h1>VERSION</h1>
+<pre>  Maintainer: Mark Senn &lt;<a href='mailto:mds@purdue.edu'>mds@purdue.edu</a>&gt;
+  Date: 26 Aug 2000
+  Last Modified: 29 Aug 2000
+  Mailing List: <a href='mailto:perl6-language@perl.org'>perl6-language@perl.org</a>
+  Number: 167
+  Version: 2
+  Status: Developing</pre>
+<a name='ABSTRACT'></a><h1>ABSTRACT</h1>
+<p>Simpify syntax of <code>do BLOCK</code> by deleting <code>do</code> before the
+block and <code>;</code> after it.</p>
+<a name='DESCRIPTION'></a><h1>DESCRIPTION</h1>
+<p>One of the most common mistakes I make is forgetting a <code>;</code> after
+<code>do BLOCK</code>, probably because I'm thinking ``if'' and an if doesn't
+require a <code>:</code> after it's closing <code>}</code>.  I'll type, for example,</p>
+<pre>    $cond  and  do  {
+        # statements
+    }</pre>
+<p>instead of</p>
+<pre>    $cond  and  do  {
+        # statements
+    };</pre>
+<p>Can the syntax be simplified to drop the <code>;</code>, and while you're at
+it, how about the <code>do</code> also, so one can type</p>
+<pre>    $cond  and  {
+        # statements
+    }</pre>
+<p>If the <code>do</code> and <code>;</code> are redundant should they be eliminated
+to obey the rule:</p>
+<pre>    Omit redundant punctuation as long as clarity doesn't suffer.</pre>
+<p>on page 604 of Camel III?</p>
+<a name='IMPLEMENTATION'></a><h1>IMPLEMENTATION</h1>
+<p>Unknown.</p>
+<a name='REFERENCES'></a><h1>REFERENCES</h1>
+<p>Camel III, pages 123--125, 604</p>
+</div>

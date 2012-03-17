@@ -1,0 +1,40 @@
+[% setvar title Sort order for any hash %]
+<h3>This file is part of the Perl 6 Archive</h3>
+    <p>To see what is currently happening visit <a href="http://www.perl6.org/">http://www.perl6.org/</a></p>
+<div class='pod'>
+<a name='TITLE'></a><h1>TITLE</h1>
+<p>Sort order for any hash</p>
+<a name='VERSION'></a><h1>VERSION</h1>
+<pre>  Maintainer: David Nicol &lt;<a href='mailto:perl6rfc@davidnicol.com'>perl6rfc@davidnicol.com</a>&gt;
+  Date: 17 Aug 2000
+  Mailing List: <a href='mailto:perl6-language@perl.org'>perl6-language@perl.org</a>
+  Number: 124
+  Version: 1
+  Status: Developing</pre>
+<a name='ABSTRACT'></a><h1>ABSTRACT</h1>
+<p>Herein a new syntax is introduced to specify a sort function
+for the keys of any hash.</p>
+<a name='DESCRIPTION'></a><h1>DESCRIPTION</h1>
+<pre>	%professors{ $a-&gt;name cmp $b-&gt;name };
+
+	%students{ $$students{$b}{GPA} &lt;=&gt; $$students{$a}{GPA} };</pre>
+<p>is proposed as an extension to specify a &quot;sort order&quot; on the
+values returned from the each, keys, and values functions regarding
+the associative array.</p>
+<p>When the assignment is made, the expression returns the an anonymous
+coderef which can be saved and restored to the hash later if needed.</p>
+<p>The expression can also be made temporary by use of the <code>my</code> or <code>local</code>
+operators.</p>
+<p>The side effects of making a large, tied array a sorted large tied
+array are possibly dangerous.</p>
+<a name='IMPLEMENTATION'></a><h1>IMPLEMENTATION</h1>
+<p>A &quot;sort function&quot; will need to be added into the list of magics
+maintained for every associative array.</p>
+<p>A set of macros in terms of sort will need to be defined which
+replace keys, values, and each functions on sorted arrays</p>
+<p>Since the proposed syntax is currently an error, little modification to
+the parser will be required:  Fatal syntax errors may be filtered for
+this instance.</p>
+<a name='REFERENCES'></a><h1>REFERENCES</h1>
+<p><a href='http://www.mail-archive.com/perl6-language@perl.org/msg01950.html' target='_blank'>www.mail-archive.com</a></p>
+</div>

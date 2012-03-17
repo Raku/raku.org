@@ -1,0 +1,97 @@
+[% setvar title Arrays: Overview of multidimensional array RFCs (RFC 203 through RFC 207) %]
+<h3>This file is part of the Perl 6 Archive</h3>
+    <p>To see what is currently happening visit <a href="http://www.perl6.org/">http://www.perl6.org/</a></p>
+<div class='pod'>
+<a name='TITLE'></a><h1>TITLE</h1>
+<p>Arrays: Overview of multidimensional array RFCs (RFC 203 through RFC 207)</p>
+<a name='VERSION'></a><h1>VERSION</h1>
+<pre>  Maintainer: Jeremy Howard &lt;<a href='mailto:j@howard.fm'>j@howard.fm</a>&gt;
+  Date: 8 Sep 2000
+  Last Modified: 21 Sep 2000
+  Mailing List: <a href='mailto:perl6-language-data@perl.org'>perl6-language-data@perl.org</a>
+  Number: 202
+  Version: 2
+  Status: Frozen</pre>
+<a name='DISCUSSION'></a><h1>DISCUSSION</h1>
+<p>All agreed that multidimensional arrays would be a useful addition to
+Perl. There was general consensus on this proposed overall approach to
+multidimensional arrays. RFC 231 is presented as an alternative to RFCs
+204 and 205, but since it provides suggested implementation of a subset of
+interfaces proposed in RFCs 204 and 205, they need not be mutually
+exclusive. This is discussed further in RFC 205.</p>
+<a name='ABSTRACT'></a><h1>ABSTRACT</h1>
+<p>Adding multidimensional array syntax to Perl 6 requires a large number of
+separate but highly connected language and internals changes. Each of
+these changes has its own RFC. This RFC describes how these changes fit
+together, and provides a 'reading guide' through the multidimensional
+array RFCs.</p>
+<a name='DESCRIPTION'></a><h1>DESCRIPTION</h1>
+<p>Arrays are data structures that store a series of elements all of the same
+type in a contiguous area of memory. The elements of an array can most
+simply be indexed by the count of the number of elements into the array.
+This style of indexing results in a one dimensional array, also called a
+<i>vector</i>. A more sophisticated approach allows indexing into a two
+dimensional plane of elements, where the plane is 'flattened' by laying
+the rows or columns end on end in order to find the correct offset into
+the area of memory. Two dimensional arrays are called <i>matrices</i>. Arrays
+of more than two dimensions follow the same logic, but use coordinate
+systems of three or more coordinates for their indexing. These arrays
+mirror the mathematical structures known as <i>tensors</i>.</p>
+<p>Perl 5 does not strictly provide a syntax for defining arrays, since
+the closest equivalent in Perl 5, the <i>list</i>, can contain different
+types of element within one structure. Using a list in Perl 5 to mirror
+a one dimensional array leads to a loss of efficiency, because the
+elements of a list may be of different sizes, and can therefore not be
+jumped to directly.</p>
+<p>Perl 5 does not strictly provide a syntax for indexing arrays of greater
+than one dimension, however the use of a <i>list of lists</i> (or <i>LOL</i>)
+allows an approximation, as described in <i><a href='http://search.cpan.org/perldoc?perllol'>perllol</a></i> in the Perl 5
+documentation. The LOL structure does not guarantee that sub-lists are of
+equal size, which, with the lack of guarantee that list elements are of
+equal size, results in a loss of efficiency. Furthermore, the syntax for
+indexing LOLs:</p>
+<pre>  $scalar = $lol[$i][$j][$k];
+  </pre>
+<p>does not allow multiple elements to be accessed in a way that takes
+advantage of the coordinate system (such as taking all elements that are
+one plane of a three dimensional array).</p>
+<p>The multidimensional array RFCs describe a set of language and internals
+changes that together provide the two key foundations of arrays:</p>
+<ul>
+<li><a name='Declaration of a data structure that contains elements of the same type stored contiguously in memory'></a>Declaration of a data structure that contains elements of the same type
+stored contiguously in memory</li>
+<li><a name='Ability to index arrays using a multidimensional coordinate syntax'></a>Ability to index arrays using a multidimensional coordinate syntax</li>
+</ul>
+<p>In addition, the RFCs describe syntax that allows the more rigid structure
+of an array to be utilised to create more efficient programs.</p>
+<p>The following RFCs describe the proposals:</p>
+<pre> RFC 203 - Arrays: Notation for declaring and creating arrays
+ RFC 204 - Arrays: Use list reference for multidimensional array access
+ RFC 205 - Arrays: New operator ';' for creating array slices
+ RFC 206 - Arrays: @#arr for getting the dimensions of an array
+ RFC 207 - Arrays: Efficient array loops</pre>
+<p>RFC 203 describes the notation to create data structures that contain
+elements of the same type stored contiguously in memory. RFC 204 describes
+the notation to index arrays in multiple dimensions, and RFC 205 describes
+how to utilise the coordinate nature of indices to index multiple elements
+easily. These three RFCs provide the core foundation of arrays in Perl 6.</p>
+<p>RFC 206 provides the syntax to query arrays to find their structure
+at runtime.</p>
+<p>Finally, RFC 207 provides the means to operate efficiently on
+multidimensional arrays, bypassing Perl's more flexible but slower generic
+looping approaches.</p>
+<p>The multidimensional array RFCs rely on the lazily generated list
+generation syntax provided by RFC 81 for creating slices, and on the
+reduce() builtin provided by RFC 76 for reducing arrays.</p>
+<a name='IMPLEMENTATION'></a><h1>IMPLEMENTATION</h1>
+<p>None necessary; this is a summary RFC</p>
+<a name='REFERENCES'></a><h1>REFERENCES</h1>
+<p>&lt;perllol&gt; in the Perl 5 documentation</p>
+<p>Arrays in Numeric Python: <a href='http://starship.python.net/~da/numtut/array.html' target='_blank'>starship.python.net</a></p>
+<p>Arrays in Haskell:
+<a href='http://haskell.cs.yale.edu/haskell-report/newlib/Array.html' target='_blank'>haskell.cs.yale.edu</a></p>
+<p>Arrays in Perl Data Language: <a href='http://pdl.sourceforge.net/PDLdocs/Impatien-' target='_blank'>pdl.sourceforge.net</a>
+t.html#Perl_Datatypes_and_how_PDL_exten</p>
+<p>Arrays in Blitz++ (efficient C++ library):
+<a href='http://oonumerics.org/blitz/manual/blitz02.html' target='_blank'>oonumerics.org</a>#l26</p>
+</div>

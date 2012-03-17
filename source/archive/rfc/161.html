@@ -1,0 +1,84 @@
+[% setvar title Everything in Perl becomes an object. %]
+<h3>This file is part of the Perl 6 Archive</h3>
+    <p>To see what is currently happening visit <a href="http://www.perl6.org/">http://www.perl6.org/</a></p>
+<div class='pod'>
+<a name='TITLE'></a><h1>TITLE</h1>
+<p>Everything in Perl becomes an object.</p>
+<a name='VERSION'></a><h1>VERSION</h1>
+<pre>  Maintainer: Matt Youell &lt;<a href='mailto:matt@siliconspike.com'>matt@siliconspike.com</a>&gt;
+  Date: 25 Aug 2000
+  Last Modified: 26 Sep 2000
+  Mailing List: <a href='mailto:perl6-language-objects@perl.org'>perl6-language-objects@perl.org</a>
+  Number: 161
+  Version: 4
+  Status: Frozen</pre>
+<a name='ABSTRACT'></a><h1>ABSTRACT</h1>
+<p>Everything in Perl becomes an object, out of sight, but within easy reach.</p>
+<p>Perl stays Perlish. Syntax remains fundamentally the same; Perl 5 code
+migrates well.</p>
+<p>Previous versions of this RFC were entitled &quot;OO Integration/Migration Path&quot;.</p>
+<a name='NOTES ON FREEZE'></a><h1>NOTES ON FREEZE</h1>
+<p>Not an awful lot was said once this RFC was condensed down to &quot;Everything
+becomes an object&quot;. I believe some implementation and conceptual hurdles
+exist which have discouraged more serious discussion. At the suggestion of
+others I've opted to freeze rather than withdraw.</p>
+<a name='DESCRIPTION'></a><h1>DESCRIPTION</h1>
+<a name='Goals'></a><h2>Goals</h2>
+<p>1. Provide a more complete mechanism for extending the language.</p>
+<p>2. Organize responsibilities closer to the corresponding data structures.</p>
+<p>3. Maintain a compatibility bridge to Perl 5.</p>
+<a name='Proposal'></a><h2>Proposal</h2>
+<p>Everything in Perl becomes an object, using (mostly) existing object-syntax.
+The built-in types $scalar, @list, and %hash become the extensible base
+classes Scalar, List, and Hash. New built-in data types (such as int, bool,
+string, etc.) are derived from Scalar. Regular &quot;vanilla&quot; $scalars don't go
+away, they are simply considered to be instances of Scalar. And like any
+$scalar, they still Do The Right Thing.</p>
+<a name='Syntax'></a><h2>Syntax</h2>
+<p>&quot;my Dog $spot&quot; works under this model.</p>
+<p>Where a class is not provided, a default is deduced from context ($, @, %).</p>
+<p>For example:</p>
+<pre>    my $foo = &quot;foo&quot;;</pre>
+<p>is equivalent to:</p>
+<pre>    my Scalar $foo = new Scalar(&quot;foo&quot;); # (Or similar. This syntax is
+currently in discussion.)</pre>
+<p>Methods would be called as they are for any object:</p>
+<pre> $noun-&gt;verb();</pre>
+<p>or, indirectly:</p>
+<pre> verb $noun;</pre>
+<a name='Extensibility'></a><h2>Extensibility</h2>
+<p>By allowing Perl's built-in types to be extended, programmers can retain
+Perl's simple syntax while better fitting their particular problem domain.
+All without polluting the core language.</p>
+<p>For example, there has been discussion of adding transaction support to
+Perl. Rather than adding such support into the language directly, it could
+be added as a subclass of Scalar. This might work like so:</p>
+<pre> use Transactions::Scalar; # This replaces the default scalar with a derived
+class. A detail needing exploration.
+
+ my $firstName = &quot;Bob&quot;; # AKA: my Transactions::Scalar $firstName = new
+Transactions::Scalar(&quot;Bob&quot;);
+
+ # ... (transaction happens) ...
+
+ commit $firstName; # or rollback $firstName</pre>
+<p>Or, say that you wanted to override built-in behavior. Perhaps you want
+'ord' to return numeric EBCDIC values. You can create your own 'ord' routine
+in your derived class and have it do that very thing.</p>
+<a name='Conclusion'></a><h2>Conclusion</h2>
+<p>This approach provides a means for adding functionality while leaving the
+basic language structure alone. It doesn't interfere with improvements
+happening elsewhere in the language, and it leaves a clean migration path
+for Perl 5 code.</p>
+<a name='IMPLEMENTATION'></a><h1>IMPLEMENTATION</h1>
+<p>This RFC tries to present a user-interface view of how this feature would
+work. Other RFCs cover the specific nuts &amp; bolts approaches that are
+possible.</p>
+<a name='REFERENCES'></a><h1>REFERENCES</h1>
+<p>RFC 137: Overview: Perl OO should <i>not</i> be fundamentally changed.
+(specifically the EXECUTIVE SUMMARY)</p>
+<p>RFC 159: True Polymorphic Objects</p>
+<p><a href='http://www.youell.com/matt/perlstring/' target='_blank'>www.youell.com</a> - A C++ string class that emulates
+Perl's scalar manipulation tools. Bears some similarity to the Scalar object
+described here.</p>
+</div>

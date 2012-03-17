@@ -1,0 +1,101 @@
+[% setvar title context-based method overloading %]
+<h3>This file is part of the Perl 6 Archive</h3>
+    <p>To see what is currently happening visit <a href="http://www.perl6.org/">http://www.perl6.org/</a></p>
+<div class='pod'>
+<a name='TITLE'></a><h1>TITLE</h1>
+<p>context-based method overloading</p>
+<a name='VERSION'></a><h1>VERSION</h1>
+<pre>  Maintainer: David Nicol &lt;<a href='mailto:perl6rfc@davidnicol.com'>perl6rfc@davidnicol.com</a>&gt;
+  Date: 15 Aug 2000
+  Last Modified: 29 Sep 2000
+  Mailing List: <a href='mailto:perl6-language-subs@perl.org'>perl6-language-subs@perl.org</a>
+  Number: 98
+  Version: 3
+  Status: Frozen</pre>
+<a name='freeze notes'></a><h1>freeze notes</h1>
+<p>the suggested coercion system is admitedly ad hoc.</p>
+<a name='ABSTRACT'></a><h1>ABSTRACT</h1>
+<p>Another to overload a named function is
+by return type.  This document is a companion piece to
+a similarly named one about protoypes.</p>
+<a name='DESCRIPTION'></a><h1>DESCRIPTION</h1>
+<p>Defining multiple subroutines with both the same name and the same calling
+interface that explicitly return items of differing types is now
+allowed.</p>
+<a name='methods are subroutines'></a><h2>methods are subroutines</h2>
+<p>I use the words &quot;method&quot; and &quot;subroutine&quot; interchangably in this document.
+I do this because I find &quot;subroutine&quot; to invoke an aura of drawing flow charts and explicit program counter incrementation.  &quot;subroutine&quot; means, &quot;a routine
+which is part of a larger routine&quot; and focuses on the implementation. &quot;Method&quot;
+on the other hand means &quot;a way of doing&quot; and is a word more at home with
+the OO abstractions which this RFC promotes.</p>
+<a name='what constitutes a context?'></a><h2>what constitutes a context?</h2>
+<p>We are familiar with &quot;scalar context&quot; and &quot;array context&quot; from perl5 and
+previous.  Perl6 gives us user-defined contexts as well as user defined
+types or all sorts.  Any unique string or &quot;compiled interface object,&quot;
+should such exist,  can be a context, for the purposes
+of context-based method overloading.</p>
+<a name='interaction with prototype-based and traditional overloading'></a><h2>interaction with prototype-based and traditional overloading</h2>
+<p>A traditional perlsub may be considered the simultaneous
+definition of two routines
+<code>$ sub(PROTO){body}</code> and
+<code>@ sub(PROTO){body}</code>.</p>
+<p>It is now possible to differentiate between these two explicitly, as
+well as accessing the (now extended?) <code>want</code> methods within a generic method.</p>
+<a name='guaranteed sane values'></a><h2>guaranteed sane values</h2>
+<p>The return context is considered before considering the types of the
+arguments, and in the case of no exact match, the fallback is to a
+default method defined to work in the given context rather than to
+the default method for the name, should one exist.</p>
+<p>This provides a guarantee to a typed variable that it will not be
+loaded with a value that does not make sense to it.  Untyped variables
+are not affected.</p>
+<a name='implicit contexts'></a><h2>implicit contexts</h2>
+<p>Assignment where the Lvalue is typed implies a context, which
+may change dynamicly as typed objects move around as scalars.</p>
+<a name='acceptable coercions'></a><h2>acceptable coercions</h2>
+<p>When resolving which method <code>foo()</code> to call in a context CTXT, and there
+is no method  <code>foo()</code> defined for the context CTXT, Perl will examine
+the types listed in <code>@CTXT::ISA{OVERLOAD_CONTEXTS}</code> for a list
+of other contexts
+to see if <code>foo()</code> can produce, before throwing an error.  This search
+is NOT recursive, unless defined so by the tying of the array to a
+dynamic iterator.</p>
+<a name='ambiguity resolution'></a><h2>ambiguity resolution</h2>
+<p>In situations where multiple interpretations are possible, such
+as the f(g()) situation, the first possible method that will work
+is called.</p>
+<p>The search order is based on the preferences of the outer function,
+then the preferences of the inner function.</p>
+<p>Functions maintain their preference order in an array</p>
+<pre>	@PACKNAME::methodname{OVERLOAD_PREFERENCES}</pre>
+<p>and the first context specifier found in that array, which can be
+satisifed with a call to the named method, is used.</p>
+<p>If no such array exists,</p>
+<pre>	@PACKNAME::OVERLOAD_PREFERENCES </pre>
+<p>is consulted.</p>
+<p>Perl6 maintains a global @CORE::OVERLOAD_PREFERENCES which begins
+with <code>qw(ARRAY SCALAR)</code> and has all types declared in the program
+appended to it as they appear, which is used when neither a method
+nor its class does not
+provide its own OVERLOAD_PREFERENCES array.</p>
+<a name='specification incomplete'></a><h2>specification incomplete</h2>
+<p>Further points to discuss and agree on include the relation of this
+mechanism to inheritance, and multiple inheritance, and the meta-alteration
+of all aspects of the mechanism.</p>
+<a name='IMPLEMENTATION'></a><h1>IMPLEMENTATION</h1>
+<p>At compile time, the keys in the big hash (be it global or per-package
+or per-class) that holds the mapping from the names of the classes
+to their coderefs are further extended to include,
+as well as the prototype,
+the declared type of the return values, when specified,
+as part of the
+name of each method.</p>
+<p>Method names store their own rules, if any, for resolving which
+method of the set with that name are to be called in a dispatch
+situation, in a specially prototyped method.</p>
+<a name='REFERENCES'></a><h1>REFERENCES</h1>
+<p>RFC 21: Subroutines: Replace <code>wantarray</code> with a generic <code>want</code> function</p>
+<p>RFC 57: Subroutine prototypes and parameters</p>
+<p>RFC 61: Interfaces for linking C objects into perlsubs</p>
+<p>RFC 75: structures and interface definitions</p>
+</div>

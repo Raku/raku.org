@@ -1,0 +1,101 @@
+[% setvar title Builtin: reduce %]
+<h3>This file is part of the Perl 6 Archive</h3>
+    <p>To see what is currently happening visit <a href="http://www.perl6.org/">http://www.perl6.org/</a></p>
+<div class='pod'>
+<a name='TITLE'></a><h1>TITLE</h1>
+<p>Builtin: reduce</p>
+<a name='VERSION'></a><h1>VERSION</h1>
+<pre>  Maintainer: Damian Conway &lt;<a href='mailto:damian@conway.org'>damian@conway.org</a>&gt;
+  Date: 10 August 2000
+  Last Modified: 20 Sep 2000
+  Mailing List: <a href='mailto:perl6-language@perl.org'>perl6-language@perl.org</a>
+  Number: 76
+  Version: 4
+  Status: Frozen
+  Frozen since: v2
+  Note: Really Really Frozen this time</pre>
+<a name='ABSTRACT'></a><h1>ABSTRACT</h1>
+<p>This RFC proposes a built-in <code>reduce</code> function, modelled after Graham
+Barr's <code>reduce</code> subroutine from the List::Utils module (a.k.a. The
+Module Formerly Known As builtin.pm).</p>
+<a name='DESCRIPTION'></a><h1>DESCRIPTION</h1>
+<p>A new built-in -- <code>reduce</code> -- is proposed.</p>
+<p>This function would take an block, subroutine reference, or curried function
+(hereafter referred to as <i>the reduction subroutine</i>),
+and call it repeatedly to reduce the remaining arguments
+(hereafter, referred to as <code>the list</code>).</p>
+<p>If the reduction subroutine has a prototype, that prototype
+determines how many items are reduced at a time. If the reduction subroutine
+is a block or has no prototype, two items are reduced each time.</p>
+<p>The first call to the reduction subroutine will be passed the first N
+elements of the list, and subsequent calls will be passed the result of
+the previous call and the next N-1 elements in the list, until no more
+elements remain in the list. All calls to the reduction subroutine are
+made in a scalar context.</p>
+<p>If fewer than N-1 elements would be available for the final reduction
+call, a exception is thrown, unless the reduction subroutine's parameter
+list specifies the missing data as being optional. For example:</p>
+<pre>	sub reducer1 ($sum,$n,$k) { $sum + $n**$k }
+	sub reducer2 ($sum,$n;$k) { $sum + $n**($k||0) }
+
+	@data = (1..9);
+
+	$result = reduce \&amp;reducer1, 0, @data;	# die (no $k for last reduction)
+	$result = reduce \&amp;reducer2, 0, @data;	# okay (final $k is undef)</pre>
+<p>Note that this exception could be thrown <i>before</i> the reduction begins
+(assuming <code>reduce</code> and the other list ops aren't made lazy in Perl 6),
+by determining the total number of elements to be reduced (<i>E</i>), the
+maximal number of elements that may be procesed on each reduction step
+(<i>R</i>), and the minimal number of elements that may be processed on each
+step (<i>r</i>), and then testing whether:</p>
+<pre>                            ___  ___
+                           | E+1-2R |
+        r  &gt;  E - R - (R-1)| ------ |
+                           |   R-1  |</pre>
+<p>is true (in which case an exception is required as there will be insufficient
+elements to pass to the final reduction step).</p>
+<p>If the original list has no elements, <code>reduce</code> immediately throws an
+exception. If the original list has a single element, that element is
+immediately returned (without ever calling the reduction subroutine).
+Otherwise, in a scalar context, the result of the final reduction call
+is the result returned by <code>reduce</code>. In a list context, a list of all
+the interim values, plus the final value, would be returned.</p>
+<a name='EXAMPLES'></a><h1>EXAMPLES</h1>
+<p>Summation:</p>
+<pre>        $sum = reduce {$_[0]+$_[1]}     0, @numbers;
+        $sum = reduce sub{$_[0]+$_[1]}, 0, @numbers;
+        $sum = reduce ^_+^_,            0, @numbers;</pre>
+<p>Note that the first element of the list -- zero in this case, 1 in the next
+example -- represents the default value if the list is empty.</p>
+<p>Production:</p>
+<pre>        $prod = reduce {$_[0]*$_[1]}     1, @numbers;
+        $prod = reduce sub{$_[0]*$_[1]}, 1, @numbers;
+        $prod = reduce ^_*^_,            1, @numbers;</pre>
+<p>Minimization:</p>
+<pre>        $min = reduce ^x &lt;= ^y ? ^x : ^y,  @numbers
+        $min = reduce ^x le ^y ? ^x : ^y,  @strings</pre>
+<p>Minimization to zero:</p>
+<pre>        $min = reduce any(^x,^y)&lt;0 ? 0 : ^x&lt;^y ? ^x : ^y,  @numbers</pre>
+<p>Collection:</p>
+<pre>        @triples = @{ reduce sub($;$$$){ [@{shift},[@_]] }, [], @singles };</pre>
+<p>Separation:</p>
+<pre>        $sorted = reduce { push @{$_[0][$_[1]%2]}, $_[1]; $_[0] }
+                         [[],[]],
+                         @numbers;
+
+        # or, more cleanly:
+
+        $sorted = reduce { push @{^0-&gt;[ ^1 % 2 ]},^1; ^0 }, [[],[]], @numbers;</pre>
+<p>Accumulative sequence generation:</p>
+<pre>        @increase = reduce ^value + ^delta, $original, @bonuses;
+
+        @growth = reduce ^value * ^rate, $principal, @annual_interest_rates;</pre>
+<a name='IMPLEMENTATION'></a><h1>IMPLEMENTATION</h1>
+<p>Extend Graham's List::Util, I'd imagine.</p>
+<a name='REFERENCES'></a><h1>REFERENCES</h1>
+<p>The List::Util module</p>
+<p>RFC 23: Higher order functions</p>
+<p>RFC 128: Subroutines: Extend subroutine contexts to include
+named parameters and lazy arguments</p>
+<p>RFC 199: Short-circuiting built-in functions and user-defined subroutines</p>
+</div>

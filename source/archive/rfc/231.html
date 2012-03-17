@@ -1,0 +1,179 @@
+[% setvar title Data: Multi-dimensional arrays/hashes and slices %]
+<h3>This file is part of the Perl 6 Archive</h3>
+    <p>To see what is currently happening visit <a href="http://www.perl6.org/">http://www.perl6.org/</a></p>
+<div class='pod'>
+<a name='TITLE'></a><h1>TITLE</h1>
+<p>Data: Multi-dimensional arrays/hashes and slices</p>
+<a name='VERSION'></a><h1>VERSION</h1>
+<pre>  Maintainer: Ilya Zakharevich &lt;<a href='mailto:ilya@math.ohio-state.edu'>ilya@math.ohio-state.edu</a>&gt;
+  Date: 15 Sep 2000
+  Mailing List: <a href='mailto:perl6-language-data@perl.org'>perl6-language-data@perl.org</a>
+  Number: 231
+  Version: 1
+  Status: Developing</pre>
+<a name='ABSTRACT'></a><h1>ABSTRACT</h1>
+<p>This RFC</p>
+<ul>
+<li><a name='proposes a convenient syntax to access multi-dimensional arrays' elements;'></a>proposes a convenient syntax to access multi-dimensional arrays' elements;</li>
+<li><a name='proposes a convenient syntax to slice multi-dimensional arrays;'></a>proposes a convenient syntax to slice multi-dimensional arrays;</li>
+<li><a name='proposes a convenient syntax create subobjects which behave as slices;'></a>proposes a convenient syntax create subobjects which behave as slices;</li>
+<li><a name='does it with as little overhead as possible.'></a>does it with as little overhead as possible.</li>
+</ul>
+<a name='DESCRIPTION'></a><h1>DESCRIPTION</h1>
+<p>Observation1: it is enough to define the interface which tie()d arrays
+can use.  Then *if judged useful*, this semantic can be optionally
+supported by the builtin arrays/hashes.</p>
+<p>Observation2: current supports for multi-dimensional objects and slicing
+clash between themselves (at least visually):</p>
+<pre>   @slice = @hash{$ind1,$ind2};
+   @slice = @arry[$ind1,$ind2];
+   $elmnt = $hash{$ind1,$ind2};</pre>
+<p>moreover, the analogue for arrays</p>
+<pre>   $elmnt = $arry[$ind1,$ind2];</pre>
+<p>is not supported (syntax error).</p>
+<p>Observation3: comma operator has 3 different meanings: one in list context,
+one in scalar context, one inside an index for a hash/array.</p>
+<p>The following proposals move the special meaning from <code>,</code> to <code>;</code>,
+introduce a new meaning for <code>...</code> inside indices, 4 new tie()ed methods,
+and 4 new utility functions in a module <code>tie::multi</code>.  An optional
+OO access to slices, an optional iterator, and an optional support
+for builtin arrays complement the proposal.</p>
+<ul>
+<li><a name='1. Multi-dim hashes'></a>1.  Multi-dim hashes</li>
+<p>change multi-dimensional hash syntax to become</p>
+<pre>   $elmnt = $hash{$ind1;$ind2};</pre>
+<p>(so that <code>;</code> is used as a separator instead of <code>,</code>).  Note that this
+is more compatible with the name of $;.</p>
+<p>The difference with RFC 205 &quot;New operator ';' for creating array slices&quot;
+is that <code>;</code> is special inside a hash/array index only.</p>
+<li><a name='2. Tied multi-dim hashes'></a>2.  Tied multi-dim hashes</li>
+<p>Allow multi-dimensional support for tied objects, so that</p>
+<pre>   $elmnt = $hash{$ind1;$ind2};
+   $elmnt = $arry[$ind1;$ind2];</pre>
+<p>would call <code>tied(%hash)-</code>FETCH_MULTY($ind1,$ind2)&gt; (same for @arry and
+STORE_MULTY) with a scalar context.  If no FETCH_MULTY is available, do
+as now: join() arguments using $;.</p>
+<li><a name='3. Slices of tied array/hashes'></a>3.  Slices of tied array/hashes</li>
+<p>Allow slices for tied objects, so that</p>
+<pre>   @slice = @hash{$ind1,$ind2};
+   @slice = @arry[$ind1,$ind2];</pre>
+<p>would call <code>tied(%hash)-</code>FETCH_SLICE($ind1,$ind2)&gt; (same for @arry and
+STORE_SLICE) with a list context.  If no FETCH_SLICE is available, do
+as now: get/set elements one-by-one using FETCH/STORE.</p>
+<p>STORE_SLICE should have a prototype</p>
+<pre>    sub STORE_SLICE ($me, @keys, @values);</pre>
+<p>to allow the proposals below, and to avoid the (giant) overhead of
+an anonymous array.</p>
+<li><a name='4. Multidimensional slices'></a>4.  Multidimensional slices</li>
+<p>Extend &quot;3&quot; to allow slices for multi-dimensional tied objects,
+so that</p>
+<pre>   @slice = @hash{$ind11,$ind12,$ind13 ; $ind21,$ind22};
+   @slice = @arry[$ind11,$ind12,$ind13 ; $ind21,$ind22];</pre>
+<p>would call</p>
+<pre>   tied(%hash)-&gt;FETCH_SLICE( $ind11,$ind12,$ind13, tie::multi::separator(),
+                             $ind21,$ind22 )</pre>
+<p>(same for @arry and STORE_SLICE) with a list context.  If no FETCH_SLICE
+is available, this is an error.</p>
+<p>A special token for a separator is used to avoid the (giant) overhead of
+creation of anonymous arrays, and allow the proposal which follows.</p>
+<li><a name='5. Ranges in slices'></a>5. Ranges in slices</li>
+<p>Extend &quot;3&quot;, &quot;4&quot; to allow ranges in slices:</p>
+<pre>   @slice = @hash{$ind1, $ind2..$ind3, $ind4..$ind5, $ind6};
+   @slice = @arry[$ind1, $ind2..$ind3, $ind4..$ind5, $ind6];</pre>
+<p>would call</p>
+<pre>   tied(%hash)-&gt;FETCH_SLICE( $ind11,
+                             tie::multi::range(), $ind2, $ind3,
+                             tie::multi::range(), $ind4, $ind5,
+                             $ind6 )</pre>
+<p>(same for @arry and STORE_SLICE) with a list context.  Similarly for
+combinations of <code>..</code> and <code>;</code> for multi-dimensional access.  If no
+FETCH_SLICE is available, this is an error in multi-dimensional case,
+in one-dimensional case <code>..</code> are inlined (as now), and FETCH/STORE
+are called one-by-one.</p>
+<li><a name='6. Bidirectional ranges'></a>6.  Bidirectional ranges</li>
+<p>Extend this to allow bidirectional ranges for arrays:</p>
+<pre>   @slice = @arry[3, 4...-3, -6...7, 9];
+   @slice = @arry[3, 4.. 7,   4.. 7, 9];</pre>
+<p>would behave the same if no FETCH_SLICE is defined (for <code>@array==10</code>.
+If FETCH_SLICE is defined, the first slice will use tie::multi::bi_range()
+as the tokens preceeding (4,-3) and (-6,7).</p>
+<li><a name='7. Convenience index parser'></a>7.  Convenience index parser</li>
+<p>Usage of tokens to separate arguments makes it possible to
+parse arguments in XSUBs with a very low overhead.  To facilitate an
+easier (but slower) parsing by Perl subroutines, provide a utility
+which would translate keys which may include separators and ranges:</p>
+<pre>   @slice = @arry[3, 4...-3, 4..7 ; 4, 3...-5];
+   sub FETCH_SLICE ($me, @keys, @values) {
+       my $dimensions = [$me-&gt;dimensions];
+       @keys = tie::multi::inline($dimensions, @keys); ...
+ </pre>
+<p>would make @keys into</p>
+<pre>     ( [3, 4..(10-3), 4..7], [4, 3..(20-5)] )</pre>
+<p>if $dimensions is <code>[10,20]</code>.  Optionally, a call to
+tie::multi::inline_ranges() would convert the above list to</p>
+<pre>     ( [3, [4,(10-3)], [4,7]], [4, [3,(20-5)]] )</pre>
+<li><a name='8. (Optional) OO slicing'></a>8. (Optional)  OO slicing</li>
+<p>Allow slicing of objects.  The FETCH_SLICE
+interfaces introduced above return lists.  Sometimes it is reasonable
+to make them return objects: suppose that $matrix is a <code>7x8</code> matrix,
+which is a reference to a tie()d array (with appropriate overloading
+as well).  Then</p>
+<pre>  @subvectors = @$matrix[2..5; 2..4]</pre>
+<p>would most probably return a list of 4 3-dimensional vectors.  However,
+time to time it is desirable to be able to extract the <code>4x3</code> submatrix
+with the indices specified above as <i>one object</i>.  The proposal is to
+allow the leading <code>$</code> (instead of <code>@</code>) as the syntax fo such a request:</p>
+<pre>  $submatrix  = $$matrix[2..5; 2..4];</pre>
+<p>For example,</p>
+<pre>  $matrix1-&gt;[2..5; 2..4] * $matrix2-&gt;[1,3,5; 11..64];</pre>
+<p>would denote: create two new objects for the specified submatrices, apply
+(overloaded) multiplication to these objects.  Such a request is illegal
+for untie()d arrays; for tie()d arrays it is converted to a call to
+FETCH_SLICE in a <i>scalar</i> context.  (Alternative: introduce two new
+tie()d methods: FETCH_SUBOBJECT, STORE_SUBOBJECT.)</p>
+<p>Such a call evaluates indices to the matrix in a <i>list</i> contents.
+Disambiguation of extraction of a 1-dimensional vector and of an element:</p>
+<pre>  $element  = $array[7];
+  $vector1d = $array[(7)];</pre>
+<p>Similarly,</p>
+<pre>  $element  = $array[func()];	# func() is a scalar context
+  $vector1d = $array[(func())];	# func() in a list context</pre>
+<p>(These is the only ambiguity, since <code>,</code> and <code>;</code> were prohibited
+inside array index in a scalar access to array.)</p>
+<li><a name='9. (Optional) Multi-dimensional builtin arrays.'></a>9. (Optional) Multi-dimensional builtin arrays.</li>
+<p>Translate</p>
+<pre>  $arry[$a;$b;$c]        to     $arry[$a][$b][$c]
+  @arry[$a,$b...$c]      to     @arry[$a,$b..($c &gt;=0 ? $c : @arry-$c)]
+                                # Same translation for $b, in fact
+  @arry[$a,$b;$c,$d,$e]  to     map [$arry[$_][$c,$d,$e]], $a, $b;
+  $arry[$a,$b;$c,$d,$e]  to     [map [$arry[$_][$c,$d,$e]], $a, $b];</pre>
+<p>etc.</p>
+<li><a name='10: (Optional) ==&gt;'></a>10: (Optional)  ==&gt;</li>
+<p>Syntactic sugar <code>&lt;EXPR==</code>ACCESSOR&gt;&gt; for mapping:
+This operator evaluates the EXPR in list context, and does the same as
+<code>&lt;map $_-</code>ACCESSOR, EXPR&gt;&gt;.  Same effects:</p>
+<pre>  $arry[$a,$b]==&gt;[$c,$d,$e];
+  map $arry[$_]-&gt;[$c,$d,$e], $a, $b;</pre>
+<p>(flat list, while <code>$arry[$a,$b;$c,$d,$e]</code> is multi-dimensional).</p>
+</ul>
+<a name='MIGRATION ISSUES'></a><h1>MIGRATION ISSUES</h1>
+<ul>
+<li><a name='a)'></a>a)</li>
+<p><code>@arry[3...-5]</code> calls <code>...</code> in a list context.  This operator was
+not defined, but some people could have used it nevertheless.  Translate
+to <code>@arry[3..-5]</code>.  Probably a non-issue.</p>
+<li><a name='b)'></a>b)</li>
+<p><code>$arry[3..5]</code> calls <code>..</code> in a list context, while Perl5 called it
+in a scalar context.  Translate to <code>$arry[scalar(3..5)]</code>.
+Probably a non-issue.</p>
+<li><a name='c)'></a>c)</li>
+<p><code>$arry[(func())]</code> calls func() in a list context, while Perl5 called
+it in a scalar context.  Translate to <code>$arry[func()]</code>.  Probably a non-issue.</p>
+</ul>
+<p>Without the optional proposal 8 only &quot;a&quot; stands.</p>
+<a name='IMPLEMENTATION'></a><h1>IMPLEMENTATION</h1>
+<p>With the exception of Proposals 9 and 10 should be straightforward.
+9 and 10 require some dexterity with building optrees on the fly.</p>
+<a name='REFERENCES'></a><h1>REFERENCES</h1>
+<p>RFC 205: New operator ';' for creating array slices.</p>
+</div>

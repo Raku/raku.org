@@ -1,0 +1,187 @@
+[% setvar title Perl 6 Summary for 2006-01-02 though 2006-01-09 %]
+<h3>This file is part of the Perl 6 Archive</h3>
+    <p>To see what is currently happening visit <a href="http://www.perl6.org/">http://www.perl6.org/</a></p>
+<div class='pod'>
+<a name='Perl 6 Summary for 2006-01-02 though 2006-01-09'></a><h1>Perl 6 Summary for 2006-01-02 though 2006-01-09</h1>
+<p>All~</p>
+<p>Welcome to another Perl 6 Summary.  On a complete tangent, if you are playing World of Warcraft and see a troll hunter named Krynna, she rocks.  She royally saved me.  Be nice to her.</p>
+<a name='Perl 6 Compiler'></a><h2>Perl 6 Compiler</h2>
+<a name='PIL Containers and Roles'></a><h3>PIL Containers and Roles</h3>
+<p>Audrey explained that she and Stevan have been putting in effort to allow Pugs and PIL to bootstrap Roles and eventually the entire object model.</p>
+<p><a href='http://groups.google.com/group/perl.perl6.compiler/browse_thread/thread/b4dd4226a05aabd4/942641fb351db8bb' target='_blank'>groups.google.com</a>#942641fb351db8bb</p>
+<a name='Reference and Assignment Semantics'></a><h3>Reference and Assignment Semantics</h3>
+<p>Audrey posted a brain dump focusing on the issues and implications of  how containers, assignment, and auto dereferencing interact.</p>
+<p><a href='http://groups.google.com/group/perl.perl6.compiler/browse_thread/thread/9b13766895a21db0/146e208baf93c9da' target='_blank'>groups.google.com</a>#146e208baf93c9da</p>
+<a name='Table of Perl 6 &quot;Types&quot;'></a><h3>Table of Perl 6 &quot;Types&quot;</h3>
+<p>Stevan Little posted a summary of his understanding of Perl 6's core type hierarchy.  Larry replied with a few comments and corrections.</p>
+<p><a href='http://groups.google.com/group/perl.perl6.compiler/browse_thread/thread/343c6ca45eaf75b2/43efd79fd877512e' target='_blank'>groups.google.com</a>#43efd79fd877512e</p>
+<a name='Parrot'></a><h2>Parrot</h2>
+<a name='Configure and Symlinks'></a><h3>Configure and Symlinks</h3>
+<p>Alberto Simoes wondered how the configuration system should handle symlinks.  Warnock applies.</p>
+<p><a href='http://groups.google.com/group/perl.perl6.internals/browse_thread/thread/65d0580f06163e62/46dd98da13a4e2e4' target='_blank'>groups.google.com</a>#46dd98da13a4e2e4</p>
+<a name='Removed NCI Types'></a><h3>Removed NCI Types</h3>
+<p>Dan Sugalski wondered why the T and L parameters have been removed from NCI and how he should work around their absence.  Leo suggested you ManagedStruct PMCs for it and pointed him to the SDL libraries.</p>
+<p><a href='http://groups.google.com/group/perl.perl6.internals/browse_thread/thread/79282160cc3b7caf/232ca7c167792d94' target='_blank'>groups.google.com</a>#232ca7c167792d94</p>
+<a name=' mkdir test can fail'></a><h3><code> mkdir </code> test can fail</h3>
+<p>Bob rogers posted a patch fixing an unanchored regular expression in the mkdir test.  Warnock applies.</p>
+<p><a href='http://groups.google.com/group/perl.perl6.internals/browse_thread/thread/80e0fcdcb79ac604/6e6f210b0feb68ab' target='_blank'>groups.google.com</a>#6e6f210b0feb68ab</p>
+<a name='Build html should use Pod::Find'></a><h3>Build html should use Pod::Find</h3>
+<p>Joshua Isom suggested that Pod::Find would make building html less error prone and more robust to changes the Pod structure.  Warnock applies.</p>
+<p><a href='http://groups.google.com/group/perl.perl6.internals/browse_thread/thread/e52de8403e23a161/eb1caef45f448f85' target='_blank'>groups.google.com</a>#eb1caef45f448f85</p>
+<a name='CWD on HP-UX'></a><h3>CWD on HP-UX</h3>
+<p>Nick Glencross posted a fix to os.pmc for HP-UX.  Alberto Simões applied the patch.</p>
+<p><a href='http://groups.google.com/group/perl.perl6.internals/browse_thread/thread/efa7305ff99b48a0/f167ae99bae4704a' target='_blank'>groups.google.com</a>#f167ae99bae4704a</p>
+<a name='Alignment Issues on HP-UX'></a><h3>Alignment Issues on HP-UX</h3>
+<p>Nick Glencross posted a back trace from a test failing on HP_UX.  His initial analysis indicates that it is an alignment issue.  Warnock applies.</p>
+<p><a href='http://groups.google.com/group/perl.perl6.internals/browse_thread/thread/ce9628374307221e/e459d1f5ef3cc1bd' target='_blank'>groups.google.com</a>#e459d1f5ef3cc1bd</p>
+<a name='Tcl Todo'></a><h3>Tcl Todo</h3>
+<p>Will Coleda posted more todos for Tcl.  Like last week, I won't summarize them all.  But I am very happy to see Tcl coming along again.  I must say that I always like watching the test percentages climb.</p>
+<a name='Parrot 0.4.1'></a><h3>Parrot 0.4.1</h3>
+<p>Leo announced the release of Parrot 0.4.1.</p>
+<a name='Sun's Compiler No Like CRLF'></a><h3>Sun's Compiler No Like CRLF</h3>
+<p>Andy Dougherty noticed that Sun's compiler was choking on coroutine.pmc because it had bad line endings.  He fixed it, and Jerry Gay applied the patch.</p>
+<p><a href='http://groups.google.com/group/perl.perl6.internals/browse_thread/thread/edfd440125aa9b33/9f646f2379ad520a' target='_blank'>groups.google.com</a>#9f646f2379ad520a</p>
+<a name='atan2 issues'></a><h3>atan2 issues</h3>
+<p>Joshua Hoblitt committed a possible fix for some atan2 issues occuring on openbsd, solaris, and cygwin.  The fix didn't help cygwin or solaris.  No word on openbsd.</p>
+<p><a href='http://groups.google.com/group/perl.perl6.internals/browse_thread/thread/f0304137d88751b6/c0712e007deeede5' target='_blank'>groups.google.com</a>#c0712e007deeede5</p>
+<a name='OS.pmc needs a few methods'></a><h3>OS.pmc needs a few methods</h3>
+<p>Will Coleda created a few todo:  OS.pmc needs an lstat method, and methods to set atime and mtime.</p>
+<p><a href='http://groups.google.com/group/perl.perl6.internals/browse_thread/thread/82e08434f37eafaa/3609da9d2641ecd0' target='_blank'>groups.google.com</a>#3609da9d2641ecd0</p>
+<p><a href='http://groups.google.com/group/perl.perl6.internals/browse_thread/thread/acf4595682eeba3c/a78191943a5cd21e' target='_blank'>groups.google.com</a>#a78191943a5cd21e</p>
+<a name='Vanishing Warnings'></a><h3>Vanishing Warnings</h3>
+<p>Will Coleda noticed that a few warnings disappeared.  Leo admitted that he accidentally applied a fix some time ago.</p>
+<p><a href='http://groups.google.com/group/perl.perl6.internals/browse_thread/thread/e799005367e5738d/123ccc8d1143a23d' target='_blank'>groups.google.com</a>#123ccc8d1143a23d</p>
+<a name='Configure.pl and Optimize'></a><h3>Configure.pl and Optimize</h3>
+<p>Andy Dougherty noticed that Configure.pl --optimize no longer worked correctly.  Joshua Hoblitt took the opportunity to clean up that portion of Configure.pl.</p>
+<p><a href='http://groups.google.com/group/perl.perl6.internals/browse_thread/thread/1c68358164e8b36a/b672f5f84be459cb' target='_blank'>groups.google.com</a>#b672f5f84be459cb</p>
+<a name='Event System Question'></a><h3>Event System Question</h3>
+<p>Klaas-Jan Stol wondered why events (unlike exceptions) are handled after a little time instead of immediately.  Leo explained that this was due to the asynchronous nature of an events arrival and the inability to resume execution after a long jump.</p>
+<p><a href='http://groups.google.com/group/perl.perl6.internals/browse_thread/thread/622417a1fb7b15c6/0ab9e044ba779988' target='_blank'>groups.google.com</a>#0ab9e044ba779988</p>
+<a name='CFLAGS missed two files'></a><h3>CFLAGS missed two files</h3>
+<p>Andy Dougherty noticed that the core_ops source files missed come of the directory rearrangements.  Jerry Gay applied the patch.</p>
+<p><a href='http://groups.google.com/group/perl.perl6.internals/browse_thread/thread/554a5adc0b00f73c/e5067070cb6b621c' target='_blank'>groups.google.com</a>#e5067070cb6b621c</p>
+<a name='File::Temp Issue'></a><h3>File::Temp Issue</h3>
+<p>Leo noticed an issue in t/run/options.  Jerry tracked it down to an old version of Perl and the File::Temp module and fixed the problem.</p>
+<p><a href='http://groups.google.com/group/perl.perl6.internals/browse_thread/thread/1712fb8a8b4c77b8/f5e8fbfa18d7279e' target='_blank'>groups.google.com</a>#f5e8fbfa18d7279e</p>
+<a name='Simple Namespace Question'></a><h3>Simple Namespace Question</h3>
+<p>Joshua Isom wondered how to separate namespaces for find_global calls.  Leo explain that he should use a list like ['Foo'; 'Bar'].</p>
+<p><a href='http://groups.google.com/group/perl.perl6.internals/browse_frm/thread/a884cc3c8cb83634/18813183c113508e' target='_blank'>groups.google.com</a>#18813183c113508e</p>
+<a name='Credits'></a><h3>Credits</h3>
+<p>The ever modest Nick Glencross updated his name in the credits file to be a little more understated.  Oddly, no one applied the patch.</p>
+<p><a href='http://groups.google.com/group/perl.perl6.internals/browse_frm/thread/d57f1d7f86dd17d5/ba9a9277f45d4b94' target='_blank'>groups.google.com</a>#ba9a9277f45d4b94</p>
+<a name='parrot config revisited'></a><h3>parrot config revisited</h3>
+<p>Nick Glencross posted a few questions, thoughts, and patches involving parrot_get_config.  Leo agreed with most of it, but had a few comments.</p>
+<p><a href='http://groups.google.com/group/perl.perl6.internals/browse_frm/thread/581d87d36d7752b1/3c124a185e2a02ff' target='_blank'>groups.google.com</a>#3c124a185e2a02ff</p>
+<a name='pkgsrc build'></a><h3>pkgsrc build</h3>
+<p>Anders Nor Berle provided a few patches making thing work a little more smoothly with FreeBSD and pkgsrc.  Jerry Gay reviewed the patches and Florian Ragwitz applied the relevant portions.  In fact, 0.4.1 got added to pkgsrc for the curious.</p>
+<p><a href='http://groups.google.com/group/perl.perl6.internals/browse_frm/thread/f2f0cfcfe8ae27c4/5bde981c101a524a' target='_blank'>groups.google.com</a>#5bde981c101a524a</p>
+<p><a href='http://groups.google.com/group/perl.perl6.internals/browse_frm/thread/e21d0d22545c9a1f/073b244c8fc1effc' target='_blank'>groups.google.com</a>#073b244c8fc1effc -- 0.4.1 added</p>
+<a name='static and shared libparrot'></a><h3>static and shared libparrot</h3>
+<p>Florian Ragwitz provided a patch that fixed the issue with building both a shared and static libparrot.  Nick Glencross applied the patch.  Nick Glencross made OS X and HP-UX build shared parrots.  Anders Nor Berle helped FreeBSD along.  Jonathan Worthington brought MSVC into line.  Nick Glencross also finished up the painful task of making it all work on Cygwin.</p>
+<p><a href='http://groups.google.com/group/perl.perl6.internals/browse_frm/thread/8958d41e014961da/804eb49e16fce1f3' target='_blank'>groups.google.com</a>#804eb49e16fce1f3</p>
+<p><a href='http://groups.google.com/group/perl.perl6.internals/browse_frm/thread/a588ac33cc52216f/62ebd6819467e5ca' target='_blank'>groups.google.com</a>#62ebd6819467e5ca</p>
+<p><a href='http://groups.google.com/group/perl.perl6.internals/browse_frm/thread/cfd3979b696361b7/30d773996ead034e' target='_blank'>groups.google.com</a>#30d773996ead034e</p>
+<p><a href='http://groups.google.com/group/perl.perl6.internals/browse_frm/thread/0fc8e0b3b4173d1f/d7150979859a5686' target='_blank'>groups.google.com</a>#d7150979859a5686</p>
+<p><a href='http://groups.google.com/group/perl.perl6.internals/browse_frm/thread/56dcf1f0a9026681/f498525fcdf16214' target='_blank'>groups.google.com</a>#f498525fcdf16214</p>
+<p><a href='http://groups.google.com/group/perl.perl6.internals/browse_frm/thread/8b2081073b558507/f9440a32da3c78cf' target='_blank'>groups.google.com</a>#f9440a32da3c78cf</p>
+<a name='GC Bug with String Ops'></a><h3>GC Bug with String Ops</h3>
+<p>Roger Browne was tracking a GC Bug involving string operations.  Unfortunately, no one else could reproduce it.  Doubtless, we will see it again.</p>
+<p><a href='http://groups.google.com/group/perl.perl6.internals/browse_frm/thread/76ba86f5792028f8/e2689bb5cc96ad53' target='_blank'>groups.google.com</a>#e2689bb5cc96ad53</p>
+<a name='Winter Cleaning'></a><h3>Winter Cleaning</h3>
+<p>Jerry Gay, not content with his fall clean up, has done a winter clean up too.  This time he went through and cleaned all the svn metadata.</p>
+<p><a href='http://groups.google.com/group/perl.perl6.internals/browse_frm/thread/80610e42f8532b28/4b3441e6d59214ad' target='_blank'>groups.google.com</a>#4b3441e6d59214ad</p>
+<a name='Paper on Parrot'></a><h3>Paper on Parrot</h3>
+<p>Klaas-Jan Stol posted a link to his paper on Parrot.  It is not yet finished and, like most things documenting parrot, already out-of-date, but it can probably serve as a good introduction.</p>
+<p><a href='http://groups.google.com/group/perl.perl6.internals/browse_frm/thread/f62ba03f728f4715/157620587fc8920b' target='_blank'>groups.google.com</a>#157620587fc8920b</p>
+<p><a href='http://members.home.nl/joeijoei/parrot/paper.pdf' target='_blank'>members.home.nl</a> -- The Paper</p>
+<p><a href='http://members.home.nl/joeijoei/parrot/paper.pdf' target='_blank'>members.home.nl</a></p>
+<a name='string_to_int issues'></a><h3>string_to_int issues</h3>
+<p>Roger Browne found and tried to fix a problem with string_to_int.  Unfortunately Leo beat him to the fix.  Fortunately, Roger found a fixed another problem with it.</p>
+<p><a href='http://groups.google.com/group/perl.perl6.internals/browse_frm/thread/179b11d7a05f56a1/768d8a8b3d3c6128' target='_blank'>groups.google.com</a>#768d8a8b3d3c6128</p>
+<p><a href='http://groups.google.com/group/perl.perl6.internals/browse_frm/thread/838c12171baf29e7/932db171dd5163a9' target='_blank'>groups.google.com</a>#932db171dd5163a9</p>
+<a name='Parrot for Windows Macros'></a><h3>Parrot for Windows Macros</h3>
+<p>Christian Lott wondered how hard it would be to write inter application macros in Parrot.  Unfortunately, his wonderings didn't seem to make it to the list.  Warnock applies.</p>
+<p><a href='http://groups.google.com/group/perl.perl6.internals/browse_frm/thread/352a7091170ac2d2/c61bd0d26ff13edd?utoken=K8yzFTcAAADWXQ4sS--whFjzzhFxvEM0DybgO1VO7hObr9VCWjXlbtO6JXaRzBummFrFvR-_qGYgXZvolmEQX2aER5F1QK86' target='_blank'>groups.google.com</a></p>
+<a name='Installation of Include Files'></a><h3>Installation of Include Files</h3>
+<p>Anders Nor Berle provided a patch which fixed parrot's installation of include files.  Warnock applies.</p>
+<p><a href='http://groups.google.com/group/perl.perl6.internals/browse_frm/thread/0e40335eabbd471e/25cec580b185f538' target='_blank'>groups.google.com</a>#25cec580b185f538</p>
+<a name='Parrot on Cygwin'></a><h3>Parrot on Cygwin</h3>
+<p>Alberto Simões wondered if he was doing something wrong while trying to get parrot to build on cygwin.  Nick Glencross answered that it didn't work yet, but he was on the job.</p>
+<p><a href='http://groups.google.com/group/perl.perl6.internals/browse_frm/thread/bc4f9357e6649a12/afb039ecfd6ad300' target='_blank'>groups.google.com</a>#afb039ecfd6ad300</p>
+<a name='Clearing Exceptions Only in the Current Context'></a><h3>Clearing Exceptions Only in the Current Context</h3>
+<p>Bob Rogers provided a patch which makes clear_eh only clear exception handlers in the current context.  Warnock applies.</p>
+<p><a href='http://groups.google.com/group/perl.perl6.internals/browse_frm/thread/fdc7033d01108917/44855db848f6cc0f' target='_blank'>groups.google.com</a>#44855db848f6cc0f</p>
+<a name='Update Patch Instructions'></a><h3>Update Patch Instructions</h3>
+<p>Roger Browne posted a patch updating submissions.pod.  Joshua Hoblitt applied and improved upon Roger's patch.</p>
+<p><a href='http://groups.google.com/group/perl.perl6.internals/browse_frm/thread/db9d0eff03781959/fc82328218aeb4fc' target='_blank'>groups.google.com</a>#fc82328218aeb4fc</p>
+<a name='File Copy'></a><h3>File Copy</h3>
+<p>Will Coleda opened a can of worms when he asked for a copy file method on os.pmc.  Chip had some good insights.</p>
+<p><a href='http://groups.google.com/group/perl.perl6.internals/browse_frm/thread/1c11f0a67bde34c2/07daca1c6e17fac1' target='_blank'>groups.google.com</a>#07daca1c6e17fac1</p>
+<a name='doc/ops Permission Issue'></a><h3>doc/ops Permission Issue</h3>
+<p>Joshua Isom posted a patch fixing some permissions issues with installed parrot docs.  Warnock applies.</p>
+<p><a href='http://groups.google.com/group/perl.perl6.internals/browse_frm/thread/62a61c089c0d0063/0bde8dd35b98204d' target='_blank'>groups.google.com</a>#0bde8dd35b98204d</p>
+<a name='Smoke that Cross Site Scripting'></a><h3>Smoke that Cross Site Scripting</h3>
+<p>Joshua Hoblitt noticed that the smoke system was not very health conscious about its input.  Florian Ragwitz said that he was about to do a rewrite to fix the issue.</p>
+<p><a href='http://groups.google.com/group/perl.perl6.internals/browse_frm/thread/9056405f08428637/f59aedd91a7f0d2a' target='_blank'>groups.google.com</a>#f59aedd91a7f0d2a</p>
+<a name='Patches Go to parrotbug'></a><h3>Patches Go to parrotbug</h3>
+<p>Joshua Hoblitt noticed that not all patches were making it into RT.  So he posted a friendly reminder that everyone should submit patches through parrotbug.</p>
+<p><a href='http://groups.google.com/group/perl.perl6.internals/browse_frm/thread/1f5b8cf5d3b18535/29ea7fb95a2adb67' target='_blank'>groups.google.com</a>#29ea7fb95a2adb67</p>
+<a name='TODO: make distcheck'></a><h3>TODO: make distcheck</h3>
+<p>Joshua Hoblitt created a TOD for distcheck.</p>
+<p><a href='http://groups.google.com/group/perl.perl6.internals/browse_frm/thread/6df6c66d68ce39dd/6766691ced8f1c0d' target='_blank'>groups.google.com</a>#6766691ced8f1c0d</p>
+<a name='META.yml Needed'></a><h3>META.yml Needed</h3>
+<p>Joshua Hoblitt also suggested that we generate a META.yml so CPAN can index it.</p>
+<p><a href='http://groups.google.com/group/perl.perl6.internals/browse_frm/thread/d03881ef79c8e40a/760e9a0101f75253' target='_blank'>groups.google.com</a>#760e9a0101f75253</p>
+<a name='Muddle Cleanup'></a><h3>Muddle Cleanup</h3>
+<p>Bernhard Schmalhofer resurrected an old ticket when he posted his thoughts on how far our documentation muddle had progressed.  Original ticket from Sep 2004.</p>
+<p><a href='http://groups.google.com/group/perl.perl6.internals/browse_frm/thread/0696c10897a4bba2/833729bcaabc3e5d' target='_blank'>groups.google.com</a>#833729bcaabc3e5d</p>
+<a name='optimize pmc2c.pl'></a><h3>optimize pmc2c.pl</h3>
+<p>Joshua Hoblitt noticed that pmc2c.pl could be fairly easily optimized.  Any up for some low hanging fruit?</p>
+<p><a href='http://groups.google.com/group/perl.perl6.internals/browse_frm/thread/ee8da32d7c701bda/2b256995c5a05672' target='_blank'>groups.google.com</a>#2b256995c5a05672</p>
+<a name='Dynamic Binding'></a><h3>Dynamic Binding</h3>
+<p>Bob Rogers posted an RFC about dynamic binding. Leo and Steve Gunnell both provided comments.</p>
+<p><a href='http://groups.google.com/group/perl.perl6.internals/browse_frm/thread/03080716c382777b/e98296c5f83bf35e' target='_blank'>groups.google.com</a>#e98296c5f83bf35e</p>
+<a name='svk-bootstrap-dump'></a><h3>svk-bootstrap-dump</h3>
+<p>Joshua Hoblitt noticed that svk's bootstrap dump was a little old.  We should probably automatically generate updated one for the SVK loving world.</p>
+<p><a href='http://groups.google.com/group/perl.perl6.internals/browse_frm/thread/c5af8f390965b654/a7ed7ba32c67fabd' target='_blank'>groups.google.com</a>#a7ed7ba32c67fabd</p>
+<a name='Dyn Op Build Process'></a><h3>Dyn Op Build Process</h3>
+<p>Jonathan Worthington committed some changes rationalizing and improving the dynops build process.  Nick Glencross affirmed that it worked on cygwin.</p>
+<p><a href='http://groups.google.com/group/perl.perl6.internals/browse_frm/thread/feb1376b19577157/0c7ec926160f63ff' target='_blank'>groups.google.com</a>#0c7ec926160f63ff</p>
+<a name='COWs Eat Memory'></a><h3>COWs Eat Memory</h3>
+<p>Leo found an interesting example.  By reversing a string in place using substr he can make Parrot consume memory like never before.  This was causing a panic, which he fixed.  But the core issue remains.</p>
+<p><a href='http://groups.google.com/group/perl.perl6.internals/browse_frm/thread/7b57df47d1cafba5/097808a56675ff13' target='_blank'>groups.google.com</a>#097808a56675ff13</p>
+<a name='Bug Wranglers'></a><h3>Bug Wranglers</h3>
+<p>Joshua Hoblitt posted a start to a bug wrangler document.  Jerry Gay encouraged him to check it in.</p>
+<p><a href='http://video.google.com/videoplay?docid=4057591681481453187' target='_blank'>video.google.com</a>&amp;q=cats+herding</p>
+<p>Funny EDS Commercial - Cat Herding - Google Video
+<a href='http://groups.google.com/group/perl.perl6.internals/browse_frm/thread/39c645e9a0c8d631/8864eae5becaac9a' target='_blank'>groups.google.com</a>#8864eae5becaac9a</p>
+<a name='Lua2PIR Translator'></a><h3>Lua2PIR Translator</h3>
+<p>Klaas-Jan Stol posted an update to his Lua2PIR translator.</p>
+<p><a href='http://groups.google.com/group/perl.perl6.internals/browse_frm/thread/adbeecb12dc0bf7a/6746c6d18aaff181' target='_blank'>groups.google.com</a>#6746c6d18aaff181</p>
+<a name='Perl 6 Language'></a><h2>Perl 6 Language</h2>
+<a name='Environmental Variables'></a><h3>Environmental Variables</h3>
+<p>Luke Palmer suggested that $/ and $! should be made into environmental variables.  Thomas Sandlass like the idea.</p>
+<p><a href='http://groups.google.com/group/perl.perl6.language/browse_frm/thread/c786b08adcb05de4/4be6c807430c91ad?utoken=_u3iJzYAAACm_q77TyrrVe_fwJ69_5uAbTPhSNyRrVYFoesl1T45OZNOpZR5DAKMQdongt7EtgAokkP7PIEG6lz8OJ6yP8p-' target='_blank'>groups.google.com</a></p>
+<a name='Implementing Several Signatures'></a><h3>Implementing Several Signatures</h3>
+<p>Jonathan Lang wondered if there where a concise way to implement several function signatures at once.  Fayland Lam pointed out the is commutative trait, but Miroslav Silovic warned that that actually generated another function which transposed the arguments.</p>
+<p><a href='http://groups.google.com/group/perl.perl6.language/browse_frm/thread/2644235fdb0d4971/c37ea5f7f141e882' target='_blank'>groups.google.com</a>#c37ea5f7f141e882</p>
+<a name='Zip vs Each'></a><h3>Zip vs Each</h3>
+<p>Jonathan Lang noticed that S4 and S3 did not agree on the usage of zip.  Larry clarified that S4 was out of date.</p>
+<p><a href='http://groups.google.com/group/perl.perl6.language/browse_frm/thread/69729272707d39c2/2097797fe3dda319' target='_blank'>groups.google.com</a>#2097797fe3dda319</p>
+<a name='Junctions Again'></a><h3>Junctions Again</h3>
+<p>Once more the perennial argument has returned.  Junctions will either cure cancer, kill babies, or both.  Odds are they won't change this time.</p>
+<p><a href='http://groups.google.com/group/perl.perl6.language/browse_frm/thread/45507ab64b0aa771/82d7bc5304e1a214' target='_blank'>groups.google.com</a>#82d7bc5304e1a214</p>
+<a name='Friendly Facades'></a><h3>Friendly Facades</h3>
+<p>Gaal Yahas wondered how to make &quot;friendly facades&quot; like use_ok.  Yuval Kogman suggested making it a macro, and Luke Palmer suggested a powerful scope object.</p>
+<p><a href='http://groups.google.com/group/perl.perl6.language/browse_frm/thread/02c5a7051cb25247/afa19cc3dfdc6ccc' target='_blank'>groups.google.com</a>#afa19cc3dfdc6ccc</p>
+<a name='Class vs Object Contradiction'></a><h3>Class vs Object Contradiction</h3>
+<p>Stevan Little posted a possible contradiction he saw from S12.  Warnock applies.</p>
+<a name='Representation Types'></a><h3>Representation Types</h3>
+<p>Stevan Little wondered how to handle representation types other that P6opaque.  Warnock applies.</p>
+<p><a href='http://groups.google.com/group/perl.perl6.language/browse_frm/thread/b27b8d2aac67b5bb/ce8b1d93c796cef8' target='_blank'>groups.google.com</a>#ce8b1d93c796cef8</p>
+<a name='The usual footer'></a><h2>The usual footer</h2>
+<p>To post to any of these mailing lists please subscribe by sending email to &lt;<a href='mailto:perl6-internals-subscribe@perl.org'>perl6-internals-subscribe@perl.org</a>&gt;, &lt;<a href='mailto:perl6-language-subscribe@perl.org'>perl6-language-subscribe@perl.org</a>&gt;,  or &lt;<a href='mailto:perl6-compiler-subscribe@perl.org'>perl6-compiler-subscribe@perl.org</a>&gt;.  If you find these summaries useful or enjoyable, please consider contributing to the Perl Foundation to help support the development of Perl. You might also like to send feedback to <a href='mailto:ubermatt@gmail.com'>ubermatt@gmail.com</a></p>
+<p><a href='http://donate.perl-foundation.org/' target='_blank'>donate.perl-foundation.org</a> -- The Perl Foundation
+<a href='http://dev.perl.org/perl6/' target='_blank'>dev.perl.org</a> -- Perl 6 Development site
+<a href='http://planet.parrotcode.org/' target='_blank'>planet.parrotcode.org</a> -- Parrot Blog aggregator</p>
+</div>

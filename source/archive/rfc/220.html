@@ -1,0 +1,27 @@
+[% setvar title wait() and waitpid() should return false on failure %]
+<h3>This file is part of the Perl 6 Archive</h3>
+    <p>To see what is currently happening visit <a href="http://www.perl6.org/">http://www.perl6.org/</a></p>
+<div class='pod'>
+<a name='TITLE'></a><h1>TITLE</h1>
+<p>wait() and waitpid() should return false on failure</p>
+<a name='VERSION'></a><h1>VERSION</h1>
+<pre>  Maintainer: Nathan Torkington &lt;<a href='mailto:gnat@frii.com'>gnat@frii.com</a>&gt;
+  Date: 13 Sep 2000
+  Mailing List: <a href='mailto:perl6-language@perl.org'>perl6-language@perl.org</a>
+  Number: 220
+  Version: 1
+  Status: Developing</pre>
+<a name='ABSTRACT'></a><h1>ABSTRACT</h1>
+<p>All system calls in Perl should return false on failure.</p>
+<a name='DESCRIPTION'></a><h1>DESCRIPTION</h1>
+<p>wait() and waitpid() return -1 on failure.  They should
+return <code>undef</code>, and return <code>&quot;0 but true&quot;</code> if the system call
+returned 0.</p>
+<a name='IMPLEMENTATION'></a><h1>IMPLEMENTATION</h1>
+<p>Straightforward.  The perl526 translator simply wraps the perl6 wait()
+and waitpid():</p>
+<pre>  do { my $r = waitpid(...); return -1 if !defined $r;
+       return 0 if !$r; $r }</pre>
+<a name='REFERENCES'></a><h1>REFERENCES</h1>
+<p>the perlfunc manpage for information on waitpid() and wait()</p>
+</div>

@@ -1,0 +1,122 @@
+[% setvar title docs/pdds/pdd05_opfunc.pod - Opcode Function specs %]
+<h3>This file is part of the Perl 6 Archive</h3>
+    <p>To see what is currently happening visit <a href="http://www.perl6.org/">http://www.perl6.org/</a></p>
+<div class='pod'>
+<a name='NAME'></a><h1>NAME</h1>
+<p>docs/pdds/pdd05_opfunc.pod - Opcode Function specs</p>
+<a name='ABSTRACT'></a><h1>ABSTRACT</h1>
+<p>This PDD specifies how the opcode functions should behave and how they
+are called by the Parrot interpreter.</p>
+<a name='DESCRIPTION'></a><h1>DESCRIPTION</h1>
+<p>The opcode functions are the workhorse of the Parrot engine. They
+control program flow and do most of the work in a program. (The rest
+being done by the variable vtable functions)</p>
+<p>Opcode functions have very few limitations or restrictions on them. In
+particular, opcode functions:</p>
+<ul>
+<li><a name='Can assume a working interpreter'></a>Can assume a working interpreter</li>
+<li><a name='Must leave all interpreter registers the way they were found, unless the opcode signature indicates otherwise'></a>Must leave all interpreter registers the way they were found, unless the
+opcode signature indicates otherwise</li>
+</ul>
+<p>Each opcode has two separate functions. The first function takes two
+parameters, the current interpreter pointer and current interpreter
+PC, and returns the address of the next opcode to execute. The second
+function takes zero or more parameters as addresses, register numbers,
+integers, or floating point numbers and optionally returns either the
+address of the next opcode or the register number holding the address
+of the next opcode. These are referred to as the <i>wrapping function</i>
+and the <i>inner function</i>, respectively.</p>
+<p>The <i>wrapping function</i> is required, as this is the code that the
+interpreter will call. Normally this is automatically generated.</p>
+<p>The <i>inner function</i> is the code that gets directly executed when
+parrot gets TIL-ified. If there is no <i>inner function</i> for some reason,
+then your opcode will likely run slower (as the interpreter would need
+to set up the registers and other stuff that would normally get
+stripped away for speed)</p>
+<a name='The wrapping function'></a><h2>The wrapping function</h2>
+<p>This is the function that the interpreter actually executes. It has
+all the intimate knowledge of its parameters embedded in it, and is
+responsible for figuring out what register data it needs and from
+where.</p>
+<p>This function is generally created automatically by
+<code>opcode_process.pl</code>, so the programmer doesn't have to create it. If,
+for some reason, you do need or want to write it (for example if you
+have no inner function) that's fine.</p>
+<a name='The inner function'></a><h2>The inner function</h2>
+<p>The inner function is the code that actually does the work. This is
+generally a chunk of C code, though the interpreter will be able to
+call perl code soon.</p>
+<a name='IMPLEMENTATION'></a><h1>IMPLEMENTATION</h1>
+<a name='Prototype declaration of inner function'></a><h2>Prototype declaration of inner function</h2>
+<pre>   RETURN function(INPUT[, INPUT[, INPUT...]])</pre>
+<p>The <code>RETURN</code> type may be one of:</p>
+<ul>
+<li><a name='void'></a>void</li>
+<p>Indicates the function returns nothing. The <i>wrapping function</i> will
+automagically figure out what address to return based on the size of
+the current opcode.</p>
+<li><a name='void *'></a>void *</li>
+<p>Indicates the function returns the address of the next opcode to execute.</p>
+<li><a name='Indicates the function returns the number of the PMC register that holds address of the next opcode to be execute.'></a>Indicates the function returns the number of the <code>PMC</code> register that
+holds address of the next opcode to be execute.</li>
+</ul>
+<p>The <code>ITEM</code> may be one of:</p>
+<ul>
+<li><a name='IV'></a>IV</li>
+<p>Indicates the item is an integer</p>
+<li><a name='IV *'></a>IV *</li>
+<p>Indicates the item is a pointer to an integer</p>
+<li><a name='NV'></a>NV</li>
+<p>Indicates the item is a float</p>
+<li><a name='NV *'></a>NV *</li>
+<p>Indicates the item is a pointer to a float</p>
+<li><a name='STRING'></a>STRING</li>
+<p>Indicates the item is a parrot string pointer</p>
+<li><a name='PMC'></a>PMC</li>
+<p>Indicates the item is a pointer to a PMC</p>
+<li><a name='INT'></a>INT</li>
+<p>Indicates the item is a pointer to an bigint structure</p>
+<li><a name='NUM'></a>NUM</li>
+<p>Indicates the item is a pointer to a bignum structure</p>
+<li><a name='Ix'></a>Ix</li>
+<p>Indicates the item is an integer register number.</p>
+<li><a name='Nx'></a>Nx</li>
+<p>Indicates the item is a float register number.</p>
+<li><a name='Sx'></a>Sx</li>
+<p>Indicates the item is a string register number.</p>
+<li><a name='Px'></a>Px</li>
+<p>Indicates the item is a PMC register number.</p>
+</ul>
+<p>The function starts with the first open brace, which should generally
+be on the first non-empty line.</p>
+<p>For example:</p>
+<pre>     void addI(Ix out, Ix in1, Ix in2)
+     {
+       INTREG(out) = INTREG(in1) + INTREG(in2);
+     }</pre>
+<p>is a simple opcode function that corresponds to the <code>addI</code>
+opcode.</p>
+<a name='TODO'></a><h1>TODO</h1>
+<ul>
+<li><a name='write opcode_process.pl'></a>write opcode_process.pl</li>
+</ul>
+<a name='REFERENCES'></a><h1>REFERENCES</h1>
+<p>Oploop PDD, PDD 4 (Internal types)</p>
+<a name='FOOTNOTES'></a><h1>FOOTNOTES</h1>
+<p>None.</p>
+<a name='VERSION'></a><h1>VERSION</h1>
+<p>1.0</p>
+<a name='CURRENT'></a><h2>CURRENT</h2>
+<pre>    Maintainer: Dan Sugalski &lt;<a href='mailto:dan@sidhe.org'>dan@sidhe.org</a>&gt;
+    Class: Internals
+    PDD Number: 5
+    Version: 1.0
+    Status: Developing
+    Last Modified: 16 Jul 2001
+    PDD Format: 1
+    Language: English</pre>
+<a name='HISTORY'></a><h2>HISTORY</h2>
+<p>None. First version</p>
+<a name='CHANGES'></a><h1>CHANGES</h1>
+<p>None. First version</p>
+</div>

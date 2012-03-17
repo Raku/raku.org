@@ -1,0 +1,203 @@
+[% setvar title The Perl Summary for the week ending 20021222 %]
+<h3>This file is part of the Perl 6 Archive</h3>
+    <p>To see what is currently happening visit <a href="http://www.perl6.org/">http://www.perl6.org/</a></p>
+<div class='pod'>
+<a name='The Perl Summary for the week ending 20021222'></a><h1>The Perl Summary for the week ending 20021222</h1>
+<p>Hello, good morning and welcome to the Christmas edition of the Perl 6
+summary. For some reason I have convinced myself to sit here on
+Christmas Eve writing a summary for all you crazy kids out there who
+hang on my every word. Plus, it beats wrapping all the presents and
+last minute panic shopping.</p>
+<p>So, let's get perl6-internals out of the way first.</p>
+<a name='The Road to 0.0.9'></a><h2>The Road to 0.0.9</h2>
+<p>The first half of the week saw a feature freeze in the run up to the
+release of Parrot 0.0.9, so people spent their time trying to track
+down and fix various tinderbox issues and other bugs.</p>
+<p>Steve Fink worked on trying to get the NCI (Native Call Interface)
+tests to work properly.</p>
+<p>Simon Glover and Leo T&ouml;tsch worked on tracking down a GC bug
+that was causing problems for the scratchpad tests.</p>
+<p>Andy Dougherty is having problems getting <b><i>languages/perl6</i></b> to pass
+its tests. Apparently part of the problem is that the undef function
+isn't fully defined.</p>
+<p>Andy also found problems with sprintf and 64 bit INTVALs (fixed by Brent
+Dax), PMCs and 64 bit INTVALs (fixed by Leo T&ouml;tsch), PerlHashes
+and gcc-2.95.3 and 2.8.1 on Solaris (confirmed as a problem with
+other versions of gcc on Solaris by Joshua Hoblitt), dependency
+issues between Jako and IMCC from a clean directory and problems with
+the Jako life implementation.</p>
+<p>Bruce Gray sent a pile of fixes for Win32 systems, covering GC and
+build problems.</p>
+<a name='Compiling to ParrotVM'></a><h2>Compiling to ParrotVM</h2>
+<p>Klaas-Jan Stol is thinking of writing a compiler that targets Parrot
+for his Bachelor's in Computer Science, probably a TCL compiler, and
+he asked for suggestions and tips.</p>
+<p>David Robins made a few suggestions and pointed out that parrot is a
+moving target. Dan protested that it wasn't moving that much (&quot;If I
+'adn't nailed it to the perch, it'd've muscled up to them bars
+and... VOOM!&quot;) and said that he thought a TCL to Parrot compiler would
+be great. Will Coleda put up a URL for his first pass at such a beast
+and asked that we be gentle with him (he put up a URL for his second
+pass later, which is the link below). Gopal V pointed out that IMCC
+may be a better target than Parrot assembly as that took care of
+register allocation and generally helped programmers retain their hair
+and also suggested that, if the compiler was written in C then
+DotGNU's TreeCC would be worth looking at. Tanton Gibbs, who is
+working on a C++ compiler agreed that TreeCC is 'an extremely nice
+system' that he recommended highly.</p>
+<p><a href='http://groups.google.com/groups?threadm=BAY1-DAV15hXlHCSO2H000081fc@hotmail.com' target='_blank'>groups.google.com</a></p>
+<p><a href='http://www.coleda.com/users/coke/parrot/' target='_blank'>www.coleda.com</a></p>
+<p><a href='http://www.southern-storm.com.au/treecc.html' target='_blank'>www.southern-storm.com.au</a></p>
+<a name='Register scanning'></a><h2>Register scanning</h2>
+<p>Apologizing for reopening the register scanning can of worms, Steve
+Fink wondered about the requirement that all Parrot GC implementations
+scan all hardware registers for live pointers. Apparently this is a
+real problem with, for example, the IA64 architecture. He proposed
+that configure probe for systems that would support register scanning
+GC, but that the default implementation should use a 'registration'
+system. He followed this up with a 'naive' implementation of such a
+system. Jason Gloudon suggested another scheme that I'm afraid I
+didn't understand to implement 'accurate' GC.</p>
+<p><a href='http://groups.google.com/groups?threadm=20021218070312.GA2006@foxglove.digital-integrity.com' target='_blank'>groups.google.com</a></p>
+<p><a href='http://groups.google.com/groups?threadm=20021218153245.GA9603@gloudon.com' target='_blank'>groups.google.com</a></p>
+<a name='Returning a new PMC from ops'></a><h2>Returning a new PMC from ops</h2>
+<p>David Robins wondered about the cleanest way to return a new PMC from
+an op. He and Leo T&ouml;tsch thrashed it out.</p>
+<p><a href='http://groups.google.com/groups?threadm=Pine.LNX.4.44.0212181114050.12112-100000@davidrobins.net' target='_blank'>groups.google.com</a></p>
+<a name='Parrot v0.0.9 &quot;Nazgul&quot; released'></a><h2>Parrot v0.0.9 &quot;Nazgul&quot; released</h2>
+<p>Steve Fink announced the release of Parrot version 0.0.9, aka
+&quot;Nazgul&quot; complete with a long list of new features, and the usual
+call for further assistance. Well done everyone. As Steve says,
+Parrot is getting dangerously close to being really usable...</p>
+<p><a href='http://groups.google.com/groups?threadm=20021220074636.GC1981@foxglove.digital-integrity.com' target='_blank'>groups.google.com</a></p>
+<p><a href='http://www.cpan.org/authors/id/S/SF/SFINK/parrot-0.0.9.tar.gz' target='_blank'>www.cpan.org</a></p>
+<a name='Meanwhile, in perl6-language'></a><h1>Meanwhile, in perl6-language</h1>
+<p>It was quiet... too quiet. Only 48 messages in perl6-language, maybe
+we're all keeping quiet so as not to distract Larry from writing the
+next Apocalypse.</p>
+<a name='Comparing Object Identity'></a><h2>Comparing Object Identity</h2>
+<p>This thread (along with every other thread in the language list this
+week) continued from last week. Dan pointed out that using long lived
+object IDs (ie. unique for all time) would be expensive, and reckoned
+that the basic approach should be fast and good enough for the common
+case. Piers Cawley wondered if doing object 'identity' comparison with
+a method (eg: <code>$obj.is($other_obj);</code>) wasn't actually the best
+way forward. (Piers had been applying his OO rule of thumb -- if
+you're not sure of how to do something, take a look at a Smalltalk
+image). Dave Whipp proposed an adverb syntax (<code>$a eq : ID $b</code>)
+which would be generalizable:</p>
+<pre>   $a eq:i $b  # compare, case insensitive
+   $a eq:w $b  # compare, ignoring whitespace differences
+   $a eq:ID $b # are they the same object?</pre>
+<p>Which Austin Hastings (at least) liked.</p>
+<p><a href='http://groups.google.com/groups?threadm=a05200f02ba21056dae89@' target='_blank'>groups.google.com</a>[63.120.19.221]</p>
+<a name='Everything is an object'></a><h2>Everything is an object</h2>
+<p>Piers Cawley and Dave Storrs went back and forth a few times about
+left to right and right to left 'pipelines' in Perl 6. Piers was
+arguing that Perl5ish right to left pipelines (<code>@out = grep
+rx/.../, map {...} @in</code> should work without any extra syntax in Perl
+6 and would be happy if that meant the only support for left to right
+pipelines was <code>@out = @in.map({...}).grep(rx/.../)</code>. Dave agreed
+with Piers about right to left pipelines, but wants a less ugly left
+to right syntax. Both of them would like to see an 'official'
+Collection hierarchy, which led Simon Cozens to suggest that we're
+getting close to inventing Ruby. Andy Wardley didn't think this was a
+bad thing, and Dan pointed out that actually we're getting closer to
+inventing Smalltalk, which was fine, so long as we don't end up
+inventing Lisp.</p>
+<p>Dan Sugalski isn't sure about the value of a special syntax for left
+to right pipelining and, after a certain amount of back and forth
+provided a really good summary of why.</p>
+<p>After that I get the impression that we're getting a little bogged
+down. Everyone's stated and restated their position and I'm not
+entirely sure that we're moving forward. It's probably time to appeal
+to Larry, but he's busy writing an Apocalypse and doing the Christmas
+thing.</p>
+<p><a href='http://groups.google.com/groups?threadm=05519DDC-1120-11D7-8A25-00050245244A@cognitivity.com' target='_blank'>groups.google.com</a></p>
+<p><a href='http://groups.google.com/groups?threadm=a05200f18ba252f68ef26@' target='_blank'>groups.google.com</a>[63.120.19.221]</p>
+<a name='Is it required to use type declarations'></a><h2>Is it required to use type declarations</h2>
+<p>The week before, Dave Storrs mentioned that he was worried that Perl
+6 was moving further and further away from Perl 5's (almost)
+typelessness and wondered if type declarations would be required in
+Perl 6. Piers Cawley pointed out that there's a difference between
+typed variables and typed values, argued that typed values were the
+most useful. He then gave a rundown of where he saw utility in
+declaring variable types with the 'safety' issue way down at the
+bottom (of the three entry list, it'd be lower down if I could think
+of any other reasons though).</p>
+<p><a href='http://groups.google.com/groups?threadm=m27ke7y8oy.fsf@TiBook.bofh.org.uk' target='_blank'>groups.google.com</a></p>
+<a name='In Brief'></a><h1>In Brief</h1>
+<p>A discussion of Leon Brocard's Curses Life turned into a discussion
+of the merits of 'caller saves' calling conventions. Leo T&ouml;tsch
+thinks it's suboptimal, Piers Cawley doesn't, pointing out that there
+will always be cases where one style loses, but that caller saves
+makes tail call optimization and continuations a good deal easier to
+implement.</p>
+<p>Jerome Quelin upgraded his befunge interpreter giving it a big
+version number bump to 0.1.0 from 0.07 because he's now using an
+array of PerlArrays instead of an array of strings.</p>
+<p>Leo T&ouml;tsch continued down the road towards unifying buffers and
+PMCs. (Which covers a lot of ground in one sentence...).</p>
+<p>Jason Gloudon fixed a bug with PARROT_GC_DEBUG</p>
+<a name='Who's Who in Perl 6'></a><h1>Who's Who in Perl 6</h1>
+<p>I've been getting a few 'strange' entries in the questionnaire inbox
+recently from names I don't recognize so I've decided to summarize
+the answers:</p>
+<ul>
+<li><a name='Who are you?'></a>Who are you?</li>
+<p>I know this will come to you as a surprise and I do not wish to
+impose upon you, but I am Doctor Fred Mbogo, the only son of the
+former minister of the Nigerian treasury, Kevin Mbogo.</p>
+<li><a name='What do you do for/with Perl 6'></a>What do you do for/with Perl 6</li>
+<p>Gather MILLIONS of ADDRESSES for you to deliver your email AD to so
+many People at such a low cost!!!</p>
+<li><a name='Where are you coming from?'></a>Where are you coming from?</li>
+<p>Nigeria</p>
+<li><a name='When do you think Perl 6 will be released?'></a>When do you think Perl 6 will be released?</li>
+<p>WHILE stocks LAST!</p>
+<li><a name='Why are you doing this?'></a>Why are you doing this?</li>
+<p>Because l wish to solicit for you assistance in a transaction which l
+strongly believe will be of mutual benefit to both of us.</p>
+<li><a name='You have 5 words. Describe yourself'></a>You have 5 words. Describe yourself</li>
+<p>Red Hot Lolitas for you!</p>
+<li><a name='Do you have anything to declare?'></a>Do you have anything to declare?</li>
+<p>This message isn't spam. Honestly. Really. If you don't believe me
+send mail to addresstrap at scum-sucking-spammer dot com and I'll
+send you lots more mail that isn't spam.</p>
+</ul>
+<a name='Acknowledgements'></a><h1>Acknowledgements</h1>
+<p>Well, Christmas is coming, the goose is getting fat so, for once this
+didn't get written on a train. It got written sat in a comfortable
+chair with the ginger ninjas (our two new kittens, Sully &amp; Mike)
+tearing up the place.</p>
+<p>I'd like to say a big &quot;Go disembowel yourselves over a red hot brazier
+you worthless pustules on the backside of humanity&quot; to the folks who
+spam the questionnaire mailbox with pointers to photos of naked 12
+year olds, stock tips and offers of a share of millions of dollars of
+fairy gold. Seriously folks, Christmas is a season of Peace and good
+will to all men so, do the world a favour and remove yourselves from
+it.</p>
+<p>Ahem. Merry Christmas to everyone else, have a great holiday.</p>
+<p>Proofreading was done by the ever lovely Aspell and the ever ugly
+Piers Cawley. Between them, they probably screwed it up again.</p>
+<p>If you're not a pustule on the backside of humanity, please consider
+answering the questionnaire and sending it to
+mailto:<a href='mailto:5Ws@bofh.org.uk.'>5Ws@bofh.org.uk.</a></p>
+<p>If you didn't like this summary, what are you doing still reading it?
+If you did like it, please consider one or more of the following
+options:</p>
+<ul>
+<li><a name='Send money to the Perl Foundation at donate.perl-foundation.org/ and help support the ongoing development of Perl 6.'></a>Send money to the Perl Foundation at
+<a href='http://donate.perl-foundation.org/' target='_blank'>donate.perl-foundation.org</a> and help support the ongoing
+development of Perl 6.</li>
+<li><a name='Get involved in the Perl 6 process. The mailing lists are open to all (except the aforementioned pustules). dev.perl.org/perl6/ and www.parrotcode.org/ are good starting points with links to the appropriate mailing lists.'></a>Get involved in the Perl 6 process. The mailing lists are open to all
+(except the aforementioned pustules). <a href='http://dev.perl.org/perl6/' target='_blank'>dev.perl.org</a>
+and <a href='http://www.parrotcode.org/' target='_blank'>www.parrotcode.org</a> are good starting points with links
+to the appropriate mailing lists.</li>
+<li><a name='Send feedback, flames, money and/or a household robot to do the chores (we're in the future now, everyone should have robots) to mailto:<a href='mailto:p6summarizer@bofh.org.uk'>p6summarizer@bofh.org.uk</a>'></a>Send feedback, flames, money and/or a household robot to do the
+chores (we're in the future now, everyone should have robots) to
+mailto:<a href='mailto:p6summarizer@bofh.org.uk'>p6summarizer@bofh.org.uk</a></li>
+</ul>
+<p>The fee paid for publication of these summaries on perl.com is paid
+directly to the Perl Foundation.</p>
+</div>

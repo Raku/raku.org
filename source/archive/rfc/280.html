@@ -1,0 +1,36 @@
+[% setvar title Tweak POD's CE<lt>E<gt> %]
+<h3>This file is part of the Perl 6 Archive</h3>
+    <p>To see what is currently happening visit <a href="http://www.perl6.org/">http://www.perl6.org/</a></p>
+<div class='pod'>
+<a name='TITLE'></a><h1>TITLE</h1>
+<p>Tweak POD's C&lt;&gt;</p>
+<a name='VERSION'></a><h1>VERSION</h1>
+<pre>  Maintainer: Simon Cozens &lt;<a href='mailto:simon@brecon.co.uk'>simon@brecon.co.uk</a>&gt;
+  Date: 24 Sep 2000
+  Mailing List: <a href='mailto:perl6-language@perl.org'>perl6-language@perl.org</a>
+  Number: 280
+  Version: 1
+  Status: Developing</pre>
+<a name='ABSTRACT'></a><h1>ABSTRACT</h1>
+<p>C&lt;&gt; is not as intuitive as it could be.</p>
+<a name='DESCRIPTION'></a><h1>DESCRIPTION</h1>
+<p>In Perl 5.6.0, we altered the behaviour of the C&lt;&gt; construct in
+POD, so that you could say <code>C&lt;&lt; ... &gt;&gt;</code> to avoid the
+problem that</p>
+<pre>    C&lt;&lt; $foo-&gt;bar &gt;&gt;</pre>
+<p>would be ended by the arrow.</p>
+<p>However, this isn't too Perlish, and there's an easier solution; give
+the C&lt;&gt; the same semantics as a single quoted string with
+<code>q//</code>. That is:</p>
+<ul>
+<li><a name='Do away with the need to escape stuff inside C&lt;&gt;, because that stops you cutting and pasting the code.'></a>Do away with the need to escape stuff inside C&lt;&gt;, because that
+stops you cutting and pasting the code.</li>
+<li><a name='Allow the use of alternate delimiters to avoid the arrow problem.'></a>Allow the use of alternate delimiters to avoid the arrow problem.</li>
+<pre>    C&lt;$xyz&gt;
+    C/$foo-&gt;bar/</pre>
+</ul>
+<a name='IMPLEMENTATION'></a><h1>IMPLEMENTATION</h1>
+<p>Just some tweaks to <code>POD::Parser</code>, haha.</p>
+<a name='REFERENCES'></a><h1>REFERENCES</h1>
+<p>None.</p>
+</div>

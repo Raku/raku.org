@@ -1,0 +1,93 @@
+[% setvar title lvalue subs: parameters, explicit assignment, and wantarray() changes %]
+<h3>This file is part of the Perl 6 Archive</h3>
+    <p>To see what is currently happening visit <a href="http://www.perl6.org/">http://www.perl6.org/</a></p>
+<div class='pod'>
+<a name='TITLE'></a><h1>TITLE</h1>
+<p>lvalue subs: parameters, explicit assignment, and wantarray() changes</p>
+<a name='VERSION'></a><h1>VERSION</h1>
+<pre>  Maintainer: Nathan Torkington &lt;<a href='mailto:gnat@frii.com'>gnat@frii.com</a>&gt;
+  Date: 16 Aug 2000
+  Last Modified: 6 Sep 2000
+  Mailing List: <a href='mailto:perl6-language-subs@perl.org'>perl6-language-subs@perl.org</a>
+  Number: 118
+  Version: 2
+  Status: Retired</pre>
+<a name='ABSTRACT'></a><h1>ABSTRACT</h1>
+<p>RFC 107 proposed that lvalue subs should receive their rvalues as
+subroutine arguments.  I counter-propose that lvalue subs should
+receive their rvalues as lexical variables named in a prototype
+associated with the :lvalue modifier.  The lvalue-ness of a given
+subroutine call should be discoverable with the wantarray() function
+(or its replacement), and the assignment behaviour should be written
+in the subroutine rather than implicitly done by Perl.</p>
+<a name='DESCRIPTION'></a><h1>DESCRIPTION</h1>
+<p>Subroutines may be called with multiple values.  Lvalue subroutines
+may be assigned multiple values.  Simple passing on the argument
+list conflates the two:</p>
+<pre>  foo(@args) = @rvalues;</pre>
+<p>would be identical to:</p>
+<pre>  foo(@args, @rvalues);</pre>
+<p>Perl's list flattening would prevent the subroutine from knowing where
+one began and the other ended.  Better would be if the rvalue were
+passed as a last or first argument, making it equivalent to:</p>
+<pre>  foo(\@rvalues, @args);</pre>
+<p>or</p>
+<pre>  foo(@args, \@rvalues);</pre>
+<p>I don't think this is appropriate, either.  Perl's OO tried implicit
+arguments, and now we're rebelling against them.  Better would be to
+have the values magically appear as lexicals in the subroutine.</p>
+<a name='Prototypes'></a><h2>Prototypes</h2>
+<p>To the language it would appear as a prototype associated with the
+:lvalue modifier:</p>
+<pre>  sub foo (@) : lvalue ($first, $second, @rest) {
+    print &quot;My first rvalue is $first\n&quot;;
+    print &quot;My second rvalue is $second\n&quot;;
+    print &quot;The rest of my rvalues are: @rest\n&quot;;
+    print &quot;My arguments are: @_\n&quot;;
+  }</pre>
+<a name='Explicit assignment'></a><h2>Explicit assignment</h2>
+<p>This would change the perl5 meaning of lvalue subroutines.  Currently
+you must have the lvalue as the last value before the return, and the
+assignment is implicitly done by Perl.  I advocate making it explicit:</p>
+<pre>  # this is perl5
+  sub foo :lvalue {
+    $variable;		# am I rvalue or lvalue sub?  I don't know
+  }
+  foo = 5;		# implicitly $variable = 5</pre>
+<p>I would now have this as:</p>
+<pre>  # this is perl6
+  sub foo :lvalue ($new) {
+    $variable = $new;
+  }</pre>
+<a name='Lvalue context discoverable'></a><h2>Lvalue context discoverable</h2>
+<p>Then the wantarray() replacement, whatever it may be, can be used
+to say whether you're lvalue or rvalue and what to do.  That makes
+an lvalue sub more like the STORE method of a tied variable, where
+you can decide whether the storage is acceptable:</p>
+<pre>  # still perl6
+  sub foo :lvalue ($new) {
+    if (want(&quot;lvalue&quot;)) {
+      if ($new &gt;= 0) {
+        $variable = $new;
+      } else {
+	croak &quot;Attempt to store negative number in foo&quot;;
+      }
+    } else {
+      return $variable;
+    }
+  }</pre>
+<a name='IMPLEMENTATION'></a><h1>IMPLEMENTATION</h1>
+<p>Straightforward.  Requires changes to:</p>
+<ul>
+<li><a name='prototypes'></a>prototypes</li>
+<p>Permit named function prototypes.  On the lvalue modifier.</p>
+<li><a name='wantarray'></a>wantarray</li>
+<p>Identify lvalue context.</p>
+</ul>
+<a name='NOTES'></a><h1>NOTES</h1>
+<p>This RFC has been retired as an historical artifiact of discussion.</p>
+<a name='REFERENCES'></a><h1>REFERENCES</h1>
+<p>RFC 107: lvalue subs should receive the rvalue as an argument</p>
+<p>RFC 57: Subroutine prototypes and parameters</p>
+<p>RFC 21: Replace wantarray with a generic want function</p>
+</div>

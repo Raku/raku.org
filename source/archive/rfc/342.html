@@ -1,0 +1,38 @@
+[% setvar title Pascal-like "with" %]
+<h3>This file is part of the Perl 6 Archive</h3>
+    <p>To see what is currently happening visit <a href="http://www.perl6.org/">http://www.perl6.org/</a></p>
+<div class='pod'>
+<a name='TITLE'></a><h1>TITLE</h1>
+<p>Pascal-like &quot;with&quot;</p>
+<a name='VERSION'></a><h1>VERSION</h1>
+<pre>  Maintainer: David Nicol &lt;<a href='mailto:perl6rfc@davidnicol.com'>perl6rfc@davidnicol.com</a>&gt;
+  Date: 28 Sep 2000
+  Mailing List: <a href='mailto:perl6-language@perl.org'>perl6-language@perl.org</a>
+  Number: 342
+  Version: 1
+  Status: Developing</pre>
+<a name='ABSTRACT'></a><h1>ABSTRACT</h1>
+<p>We adopt Pascal's very useful <code>with</code> syntax</p>
+<a name='DESCRIPTION'></a><h1>DESCRIPTION</h1>
+<pre>        %record = loadrecord($studentID);
+        with %record {
+		open SPAM, $PreferredSpam;
+                print &lt;&lt;SPAM;
+        Dear $Name:
+                Your tuition is now due.  Please send in a payment
+        of at least $Minumum.           
+
+        SPAM
+	};</pre>
+<p>All existing keys of <code>%record</code> hide similarly named variables,
+if any, within the <code>with</code> block.</p>
+<p>These things can nest.</p>
+<a name='IMPLEMENTATION'></a><h1>IMPLEMENTATION</h1>
+<p>within a <code>with</code> block, unqualified variable names
+must be checked against the <code>with</code> name space before
+being instantiated.</p>
+<p>In concert with named packed structure types serious
+optimizations could be achieved.</p>
+<a name='REFERENCES'></a><h1>REFERENCES</h1>
+<p>&quot;Learning Pascal&quot; textbook, CS101, 1985</p>
+</div>

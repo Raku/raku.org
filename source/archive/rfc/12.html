@@ -1,0 +1,82 @@
+[% setvar title variable usage warnings %]
+<h3>This file is part of the Perl 6 Archive</h3>
+    <p>To see what is currently happening visit <a href="http://www.perl6.org/">http://www.perl6.org/</a></p>
+<div class='pod'>
+<a name='TITLE'></a><h1>TITLE</h1>
+<p>variable usage warnings</p>
+<a name='VERSION'></a><h1>VERSION</h1>
+<pre>  Maintainer: Steve Fink &lt;<a href='mailto:steve@fink.com'>steve@fink.com</a>&gt;
+  Date: 2 Aug 2000
+  Last Modified: 20 Sep 2000
+  Mailing List: <a href='mailto:perl6-language@perl.org'>perl6-language@perl.org</a>
+  Number: 12
+  Version: 3
+  Status: Developing</pre>
+<a name='ABSTRACT'></a><h1>ABSTRACT</h1>
+<p>&quot;VARIABLE used only once: possible typo&quot; should be replaced with
+warnings on uses of uninitialized variables (including lexicals).</p>
+<a name='CHANGES'></a><h1>CHANGES</h1>
+<p>v2: Separated &quot;definitions without uses&quot; from &quot;uses without
+definitions&quot; (def-use and use-def chains).</p>
+<p>v3: Added example and attempted to improve the explanation.</p>
+<a name='DESCRIPTION'></a><h1>DESCRIPTION</h1>
+<p>Perl6 should distinguish between uses and assignments to variables,
+and warn only when a variable is used without being assigned, or
+assigned to without being used. In perl5 the complete program</p>
+<pre> $x = 3</pre>
+<p>complains, but</p>
+<pre> $x = 3; $x = 3</pre>
+<p>does not, nor does</p>
+<pre> my $x = 3</pre>
+<p>nor</p>
+<pre> use vars qw($x $y); $x = $z; $y = $z;</pre>
+<p>It would be more useful to have a complaint for both lexical and
+package variables, and only when a variable is used without ever being
+assigned to (or having its reference taken), or assigned to without
+its value ever being used.</p>
+<p>The warning for the use of an unassigned variable should be &quot;use of
+uninitialized variable <code>$x</code>&quot;. This message is too close to the
+existing &quot;use of uninitialized value&quot;, but that message is badly
+phrased anyway, so it will change to &quot;use of undefined value&quot; to
+better reflect its actual meaning. (The two are related; &quot;use of
+undefined value&quot; can be thought of as encompassing the runtime
+counterpart to the compile-time &quot;use of uninitialized variable&quot;
+proposed here.) The assignment of a variable which is never used will
+result in &quot;variable <code>$x</code> defined but never used&quot;.</p>
+<p>If whether a variable is initialized is conditional upon the control
+flow and thus unknowable at compile time, the warning is &quot;possible use
+of uninitialized variable <code>$x</code>&quot;.</p>
+<p>Note that if you currently depend on lexical variables having
+undefined values, you would need to change <code>my $x</code> to
+<code>my $x = undef</code>. This is a good thing.</p>
+<a name='EXAMPLE'></a><h2>EXAMPLE</h2>
+<pre>    1 my ($x, $y, $z, $r);
+    2 $z = 1;
+    3 f(\$r);
+    4 my $logfile = &quot;/tmp/log&quot;;
+    5 $x = 1 if cond();
+    6 print $x+$y;
+    7 undef $z;
+    8 print $z;
+
+    --&gt; possible use of uninitialized variable $x in line 6 (compile
+time)
+    --&gt; use of uninitialized variable $y in line 6 (compile time)
+    --&gt; variable $logfile defined in line 4 but never used (compile
+time)
+    --&gt; use of undefined value in line 8 (run time)</pre>
+<p>No warning is issued for <code>$r</code> because any variable whose reference is
+taken may be used and/or assign to through the reference.</p>
+<a name='IMPLEMENTATION'></a><h1>IMPLEMENTATION</h1>
+<p>I have no idea how difficult this would be to implement. You just need
+to distinguish between lvalue and rvalue uses of a variable, I guess?
+But hey, this is a language RFC, not an internals RFC. :-) There's
+also the question of whether to properly track uses and definitions so
+that <code>$::z = $x; $x = 3</code> is a warning, as well as
+<code>$x = 3 if f(); print $x</code>. Though the latter would require renaming
+the warning to &quot;possible use of uninitialized variable <code>$x</code>&quot;.</p>
+<a name='CONTRIBUTORS'></a><h1>CONTRIBUTORS</h1>
+<p>Glenn Linderman &lt;<a href='mailto:Glenn@Linderman.com'>Glenn@Linderman.com</a>&gt; - definitions without uses</p>
+<a name='REFERENCES'></a><h1>REFERENCES</h1>
+<p>None.</p>
+</div>

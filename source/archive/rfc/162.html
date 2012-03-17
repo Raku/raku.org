@@ -1,0 +1,140 @@
+[% setvar title Heredoc contents %]
+<h3>This file is part of the Perl 6 Archive</h3>
+    <p>To see what is currently happening visit <a href="http://www.perl6.org/">http://www.perl6.org/</a></p>
+<div class='pod'>
+<a name='TITLE'></a><h1>TITLE</h1>
+<p>Heredoc contents</p>
+<a name='VERSION'></a><h1>VERSION</h1>
+<pre>  Maintainer: Richard Proctor &lt;<a href='mailto:richard@waveney.org'>richard@waveney.org</a>&gt;
+  Date: 27 Aug 2000
+  Last Modified: 1 Oct 2000
+  Mailing List: <a href='mailto:perl6-language@perl.org'>perl6-language@perl.org</a>
+  Number: 162
+  Version: 2
+  Status: Frozen</pre>
+<a name='ABSTRACT'></a><h1>ABSTRACT</h1>
+<p>The content of a Heredoc is normally included into the program verbatim.
+RFC 111 allows whitespace (and comments) on the terminator.  This RFC covers
+the content.  It introduces the &lt;&lt;&lt; Enhanced Heredoc that removes whitespace
+and discusses the provision of other dequoting options in the library and
+documentation enhacements that should follow.</p>
+<a name='DESCRIPTION'></a><h1>DESCRIPTION</h1>
+<a name='Preamble'></a><h2>Preamble</h2>
+<p>I originally wanted to remove leading whitespace from the lines in a heredoc,
+several other people wanted to remove whitespace equivalent to the shortest
+span of whitespace at the start of lines, or the whitespace from the first
+line.  TomC pointed out ways to achieve the removal of the whitespace in
+current perl, although this sort of works (as long as the user is consistent
+about use of spaces and tabs).  I would like to make life easier.  This
+attempts to bring all these ideas together.</p>
+<a name='Discussion of options'></a><h2>Discussion of options</h2>
+<p>There are several possible ways that have been discussed:</p>
+<p>a) No Indenting - this is the current behaviour of &lt;&lt;.</p>
+<p>b) Remove all leading whitespace from all lines of input.</p>
+<p>This was not popular - no longer supported in this RFC.</p>
+<p>c) Remove whitespace equivalent to the first line of the Heredoc</p>
+<p>This was not popular - it did not fit many peoples requirements.</p>
+<p>d) Remove whitespace equialent to the smallest whitespace - a Realistic
+option, this can be performed by using regexes and the dequote function.</p>
+<p>e) Remove whitespace equialent to the terminator - a realistic option.
+This takes the whitespace off the content equivalent to that on the terminator
+and removes that amount of whitespace from the content.  (This is now
+proposed for &lt;&lt;&lt;).</p>
+<p>f) Using a Heredoc and a regex to remove unwanted whitespace.
+TomC provided some examples showing how this would work, and howw this could
+handle many of the options above.</p>
+<p>g) Using a Heredoc and a function to handle the dequoting of the content.
+This is essentially the same as a regex, but allows common types of
+dequoting to be written once.</p>
+<a name='Agreements'></a><h2>Agreements</h2>
+<p>There are three things that have been agreed:-</p>
+<a name='Enhanced Heredoc'></a><h3>Enhanced Heredoc</h3>
+<p>There will be two types of heredocs, the simple &lt;&lt;POD which just includes the
+contents of until the POD terminator and an enhanced &lt;&lt;&lt;POD which removes
+whitespace equivalent to that on the terminator from each line of the content
+(case e above).  (Note the enhacements to the terminator in RFC 111 apply in
+both  cases).</p>
+<a name='Distribute a collection of dequote() mutations with perl'></a><h3>Distribute a collection of dequote() mutations with perl</h3>
+<p>These are a set of enhanced dequoting options that can strip of all leading
+whitespace with all the options mentioned above, treatement for variable
+expansion and perhaps procedure call expansion.  These would be part of the
+standard library.  Names and content to be discussed.</p>
+<p>[ NOT as part of this RFC ]</p>
+<a name='Mention the s/// tricks in the documentation'></a><h3>Mention the s/// tricks in the documentation</h3>
+<p>In the discussion that followed this RFC various ways using regexes were
+shown that could achieve most of what people want.  Some of these should be
+included as examples in the documentation.</p>
+<a name='Tabs'></a><h2>Tabs</h2>
+<p>Some debate took place on tabs in the whitespace.  There were two
+considerations:</p>
+<p>a) The problem comes with mixing editors - some use tabs for indented
+material some dont, some reduce files using tabs etc etc.  [I move between
+too many editors].  Perl should DWIM.  I think that treating tabs=8 as the
+default would work for most people, even those who set tabs at other values
+as long as they are consistent - a &quot;use tabs 4&quot; could be used by them if they
+want to get the same behaviour if they mix tabs and spaces.</p>
+<p>b) Tabs are easy, don't expand them.  Consider them as a literal character.
+This assums that the code author is going to use the same keystrokes to
+indent their here-doc text as the terminator, about as safe an assumption as
+any for tabs.</p>
+<p>There was more support for the second case than the first.</p>
+<a name='dequoting example'></a><h2>dequoting example</h2>
+<p>TomC in the debate provided this example, which works as long as there
+are no inconsistent tabs in the whitespace.</p>
+<pre>
+	$poem = dequote&lt;&lt;EVER_ON_AND_ON;
+	       Now far ahead the Road has gone,
+		  And I must follow, if I can,
+	       Pursuing it with eager feet,
+		  Until it joins some larger way
+	       Where many paths and errands meet.
+		  And whither then? I cannot say.
+			--Bilbo in /usr/src/perl/pp_ctl.c
+	EVER_ON_AND_ON
+	print &quot;Here's your poem:\n\n$poem\n&quot;;
+
+    The following C&lt;dequote&gt; function handles all these cases.  It
+    expects to be called with a here document as its argument.  It
+    looks to see whether each line begins with a common substring,
+    and if so, strips that off.  Otherwise, it takes the amount of
+    leading white space found on the first line and removes that
+    much off each subsequent line.
+
+	sub dequote {
+	    local $_ = shift;
+	    my ($white, $leader);  # common white space and common leading string
+	    if (/^\s*(?:([^\w\s]+)(\s*).*\n)(?:\s*\1\2?.*\n)+$/) {
+		($white, $leader) = ($2, quotemeta($1));
+	    } else {
+		($white, $leader) = (/^(\s+)/, '');
+	    }
+	    s/^\s*?$leader(?:$white)?//gm;
+	    return $_;
+	}</pre>
+<a name='example s/// tricks'></a><h2>example s/// tricks</h2>
+<pre>     print &lt;&lt;&quot;EOF&quot; =~ /^\s*\| ?(.*\n)/g;
+         | Attention criminal slacker, we have yet
+         | to receive payment for our legal services.
+         |
+         |     Love and kisses
+         |
+     EOF
+
+     print &lt;&lt;FOO =~ /^\s+(.*\n)/g;
+             Attention, dropsied weasel, we are
+             launching our team of legal beagles
+             straight for your scrofulous crotch.
+
+                     xx oo
+     FOO</pre>
+<a name='CHANGES'></a><h1>CHANGES</h1>
+<p>RFC 162 V2 - Added a lot more material and the conclusions from the list</p>
+<a name='IMPLENTATION'></a><h1>IMPLENTATION</h1>
+<p>This should be a relatively simple addition to perl.</p>
+<p>The &lt;&lt;&lt; would just be to scan_heredoc in toke.c + docs in perl5.</p>
+<p>The dequote mutations would be in the standard library.</p>
+<a name='REFERENCES'></a><h1>REFERENCES</h1>
+<p>RFC111 - Here Docs Terminators</p>
+<p>and lots of discussion on the list with significant input from Micael Schwern,
+Tom Christiansen, Eric Roode and others.</p>
+</div>

@@ -1,0 +1,106 @@
+[% setvar title structures and interface definitions %]
+<h3>This file is part of the Perl 6 Archive</h3>
+    <p>To see what is currently happening visit <a href="http://www.perl6.org/">http://www.perl6.org/</a></p>
+<div class='pod'>
+<a name='TITLE'></a><h1>TITLE</h1>
+<p>structures and interface definitions</p>
+<a name='VERSION'></a><h1>VERSION</h1>
+<pre>  Maintainer: David Nicol &lt;<a href='mailto:perl6rfc@davidnicol.com'>perl6rfc@davidnicol.com</a>&gt;
+  Date: 8 Aug 2000
+  Last Modified: 5 Sep 2000
+  Mailing List: <a href='mailto:perl6-language-subs@perl.org'>perl6-language-subs@perl.org</a>
+  Number: 75
+  Version: 2
+  Status: Frozen</pre>
+<a name='ABSTRACT'></a><h1>ABSTRACT</h1>
+<p>A structure definition language can also be used to provide
+named arguments to subroutines, and vice versa.</p>
+<a name='SUMMARY'></a><h1>SUMMARY</h1>
+<pre>	$xys = qs{ $x, my $y }; # $x is pass by reference, $y by value
+
+	sub foo($xys){
+		print &quot;x is $x and y is $y\n&quot;;
+	};
+
+	%fasthash = unpack( $xys, $Structure );
+
+	$Structure = pack( $xys, %fasthash );</pre>
+<a name='DESCRIPTION'></a><h1>DESCRIPTION</h1>
+<p>Stack based compiled languages like C organize all the arguments
+to a subroutine onto the stack before calling the subroutine, and
+from the subroutine the arguments are accessed, in the compiled
+machine code, with offsets from a &quot;stack pointer.&quot;</p>
+<p>This process is similar to the way that fields in a record are accessed
+by a fixed offset from a pointer to the beginning of the record.</p>
+<p>Perl has a structure definition syntax, it is the &quot;pack format&quot; language.
+By extending that language in a way that names are associated with parts
+of the format, we can achieve something that will interact with the
+other language elements much like a hash.</p>
+<p>We may also import structure definition languages from other languages
+that have them, such as C or COBOL.</p>
+<p>Imagine:</p>
+<pre>	use COBOL_pic; 		# might not be needed
+	
+	$mypic =&lt;&lt;ENDCOBOL;
+	I don't know COBOL data structure language :)
+	ENDCOBOL
+
+	%DataHash = unpack $mypic, $SomePackedCobolData;
+
+	A_routine_taking_the_data(%DataHash);
+
+	#Or, in a more perl5 way:
+
+	%{$DataHash} = unpack $mypic, $SomePackedCobolData;
+	
+	bless $DataHash, 'coboldata';
+
+	operate $DataHash;</pre>
+<p>Pseudohash type definitions  are Structure-Definitions are Interfaces.  All of
+these may be considered key-value associative arrays for purposes
+of language syntax.</p>
+<p>Structure definitions are declared using the <code>qs</code> operator,
+or can be inlined in situations that syntacticly call for them,
+such as function prototypes.</p>
+<p>In invoking a subroutine prototyped using a structure definition,
+(aka fully defined interface) the arguments can come from
+a list, in which case they are loaded into the structure in order,
+they can come from a(nother) (pseudo)hash, in which case they are
+loaded into the structure by name.</p>
+<p>Rather than Special-casing the interpretation of
+function call parameters, we can create an object of type $xy
+and send it to the function that takes that type. This way
+the name localization is in the called subroutine, and we
+don't have names from subroutines appearing in the calling
+code.</p>
+<p>Any subroutine with a prototype with named variables, no matter how scoped,
+can be called with a hash or hash-like structure with the
+required keys, and the correct keys will be used as the subroutine
+parameters.</p>
+<a name='IMPLEMENTATION'></a><h1>IMPLEMENTATION</h1>
+<p>The default subroutine interface becomes <code>qs{@}</code> like it
+has been all along, but by using explicit interfaces we
+can introduce a more extensive conversion step when required.</p>
+<p>This system was proposed within RFC 61 as an implementation detail,
+and after reading RFC 57 it became clear that the problems of stuffing
+a set of data into the interface for an external function apply equally
+to a native perl function.</p>
+<p>I think that after settling on an extensible interface declaration
+system, much cool stuff that cannot happen with the current lists
+will be possible.</p>
+<a name='MIGRATION'></a><h1>MIGRATION</h1>
+<p>perl5 prototype definition language will be one type recognized
+by <code>qs</code>, and perl6 argument coercion will be a proper superset
+of perl5 argument coercion.</p>
+<p>subroutines expecting hashes decomposed into arrays wouldn't
+have a prototype indicating anything else, so that's what they'd
+get.</p>
+<a name='CHANGES'></a><h1>CHANGES</h1>
+<p>rewrite to focus on the universality of</p>
+<pre> interfaces == parameter lists == structures</pre>
+<p>rather than expecting people to intuit that more readily</p>
+<a name='REFERENCES'></a><h1>REFERENCES</h1>
+<p>RFC 57: Subroutine prototypes and parameters</p>
+<p>RFC 61: Interfaces for linking C objects into perlsubs</p>
+<p>e-mails from Chaim Frenkel</p>
+</div>

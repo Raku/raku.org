@@ -1,0 +1,44 @@
+[% setvar title Perl should allow specially attributed subs to be called as C functions %]
+<h3>This file is part of the Perl 6 Archive</h3>
+    <p>To see what is currently happening visit <a href="http://www.perl6.org/">http://www.perl6.org/</a></p>
+<div class='pod'>
+<a name='TITLE'></a><h1>TITLE</h1>
+<p>Perl should allow specially attributed subs to be called as C functions</p>
+<a name='VERSION'></a><h1>VERSION</h1>
+<pre>  Maintainer: Dan Sugalski &lt;<a href='mailto:dan@sidhe.org'>dan@sidhe.org</a>&gt;
+  Date: 28 Sep 2000
+  Mailing List: <a href='mailto:perl6-internals@perl.org'>perl6-internals@perl.org</a>
+  Number: 334
+  Version: 1
+  Status: Developing</pre>
+<a name='ABSTRACT'></a><h1>ABSTRACT</h1>
+<p>One of the goals of the perl 6 port is to be able to call perl
+routines just as if they were routines in a compiled language. This
+makes callbacks into perl from embedded apps easier, and it makes it a
+lot easier on us when we have folks writing low-level bits of the perl
+system in perl.</p>
+<a name='DESCRIPTION'></a><h1>DESCRIPTION</h1>
+<p>Any sub that has the appropriate attribute can be called from C (or some other
+compiled language). Perl will automagically convert the input
+parameters (which is what the attributes tells us) to things perl can
+use, and be off and running.</p>
+<p>Prototypes are insufficient to the task, as they don't get detailed
+enough, nor do they detail the return value (which does need to be a
+single thing)</p>
+<p>This means that a sub like this:</p>
+<pre>   sub foo : C_visible(&quot;i&quot;, &quot;iii&quot;) {#sub body}</pre>
+<p>can be called from C code that looks like:</p>
+<pre>   int ret;
+   a = foo(1, 2, 3);</pre>
+<p>Assuming that foo is really the perl sub. (A method to get a pointer
+to the function will be needed)</p>
+<a name='IMPLEMENTATION'></a><h1>IMPLEMENTATION</h1>
+<p>Perl will generate vararg functions on the fly for any sub with the
+appropriate attribute. This is very platform specific, unfortunately,
+but there's no real way around it. The generated function doesn't need
+to be all that funky--one that knows the address of the 'real' perl
+sub's coderef and that knows how to slurp in the passed in parameters
+is sufficient.</p>
+<a name='REFERENCES'></a><h1>REFERENCES</h1>
+<p>None.</p>
+</div>

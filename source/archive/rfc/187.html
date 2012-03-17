@@ -1,0 +1,94 @@
+[% setvar title Objects : Mandatory and enhanced second argument to C<bless> %]
+<h3>This file is part of the Perl 6 Archive</h3>
+    <p>To see what is currently happening visit <a href="http://www.perl6.org/">http://www.perl6.org/</a></p>
+<div class='pod'>
+<a name='TITLE'></a><h1>TITLE</h1>
+<p>Objects : Mandatory and enhanced second argument to <code>bless</code></p>
+<a name='VERSION'></a><h1>VERSION</h1>
+<pre>  Maintainer: Damian Conway &lt;<a href='mailto:damian@conway.org'>damian@conway.org</a>&gt;
+  Date: 1 Sep 2000
+  Last Modified: 18 Sep 2000
+  Mailing List: <a href='mailto:perl6-language-objects@perl.org'>perl6-language-objects@perl.org</a>
+  Number: 187
+  Version: 2
+  Status: Frozen</pre>
+<a name='ABSTRACT'></a><h1>ABSTRACT</h1>
+<p>This RFC proposes that the second argument to <code>bless</code> be made
+mandatory, and that its semantics be enhanced slightly to cover a
+common, ugly, and frequently buggy usage.</p>
+<a name='DESCRIPTION'></a><h1>DESCRIPTION</h1>
+<a name='Mandatory second argument'></a><h2>Mandatory second argument</h2>
+<p>When omitted, the second argument to <code>bless</code> currently defaults to the
+name of the package from which the call to <code>bless</code> is being made. This
+default behaviour leads to unexpected and undesirable behaviour whenever
+a constructor is inherited by a derived class:</p>
+<pre>        package Base;
+        
+        sub new { bless {} }
+        
+        
+        package Derived;
+        use base 'Base';
+        
+        
+        package main;
+        
+        $obj = Derived-&gt;new();          # Creates an object blessed into Base!
+        </pre>
+<p>To remove this nasty surprise is proposed that the second argument to
+<code>bless</code> be made mandatory.</p>
+<p>Alternatively, if the second argument is to remain optional, the default
+value should be the invocant: normally $_[0], but possibly whatever
+access mechanism has been specified under <code>use invocant</code>.</p>
+<a name='Extended second argument semantics'></a><h2>Extended second argument semantics</h2>
+<p>A common idiom in OO Perl is to allow constructors to be called
+as both class- and object- methods by writing:</p>
+<pre>        sub new {
+                bless {}, ref($_[0]) || $_[0];
+        }
+        </pre>
+<p>It is proposed that the above clutter be rendered unnecessary.
+Specifically, if the second argument to <code>bless</code> is a reference,
+that it be stringified by calling <code>ref</code>, rather than by the usual
+stringification process.</p>
+<p>This would allow the above example to be written as:</p>
+<pre>        sub new {
+                bless {}, $_[0];
+        }
+        </pre>
+<p>More importantly, it would allow calls to <code>bless</code> which <i>don't</i>
+use the <code>ref($_[0])||$_[0]</code> idiom to Do The Right Thing,
+instead of the existing bizarre behaviour (i.e. blessing
+into classes with names like <code>'MyClass=HASH(0x5a7f590)'</code> [sic].</p>
+<a name='Alternative (restricted) second argument semantics'></a><h2>Alternative (restricted) second argument semantics</h2>
+<p>An alternative to extending the semantics of the second argument, would
+be to cause <code>bless</code> to issue a warning or exception when called with a
+reference as its second argument. This would still require an explicit
+<code>ref($_[0])||$_[0]</code> where such behaviour was desired, but would catch
+erroneous uses.</p>
+<p>And anyone truly desiring the bizarre existing behaviour could
+simply use:</p>
+<pre>        sub new {
+                bless {}, &quot;$_[0]&quot;;
+        }
+        </pre>
+<a name='MIGRATION ISSUES'></a><h1>MIGRATION ISSUES</h1>
+<p>Minimal, since only the truly wicked ever invoke <code>bless</code> with only
+one argument.</p>
+<p>Migration would consist of translating instances of:</p>
+<pre>        bless REF;
+        </pre>
+<p>to:</p>
+<pre>        bless REF, __PACKAGE__;         # Note: this may break inheritance!
+        
+        </pre>
+<p>Changes to second argument semantics would have no impact except in
+pathological cases. In practice, the new semantics would silently fix a
+large number of lurking bugs in existing code.</p>
+<a name='IMPLEMENTATION'></a><h1>IMPLEMENTATION</h1>
+<p>Trivial.</p>
+<a name='REFERENCES'></a><h1>REFERENCES</h1>
+<p><i>perltoot</i></p>
+<p>Conway, <i>Object Oriented Perl</i>, p. 77 &amp; 172</p>
+<p>Forthcoming RFC on <code>use invocant</code></p>
+</div>

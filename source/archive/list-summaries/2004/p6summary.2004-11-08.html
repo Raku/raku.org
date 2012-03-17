@@ -1,0 +1,152 @@
+[% setvar title Perl 6 Summary for 2004-11-01 through 2004-11-08 %]
+<h3>This file is part of the Perl 6 Archive</h3>
+    <p>To see what is currently happening visit <a href="http://www.perl6.org/">http://www.perl6.org/</a></p>
+<div class='pod'>
+<a name='Perl 6 Summary for 2004-11-01 through 2004-11-08'></a><h1>Perl 6 Summary for 2004-11-01 through 2004-11-08</h1>
+<p>All~</p>
+<p>Welcome to yet another summary, brought to you (once again) with the aid of the musical stylings of Dar Williams and Soul Coughing and a small stuffed elephant name Aliya.  And, without further ado, I give you Perl 6 Language (whose traffic has picked up a little)...</p>
+<a name='Perl 6 Language'></a><h2>Perl 6 Language</h2>
+<a name='What was that anonymous thing?'></a><h3>What was that anonymous thing?</h3>
+<p>Juerd wondered what things could be named and what anonymous.  Larry provided the answer: Subtypes, Enums, Lists (Lazy and Eager), Grammars, and Packages, but then threatened to attack Juerd with hot grits.</p>
+<p><a href='http://groups-beta.google.com/group/perl.perl6.language/browse_frm/thread/c4b53a25cd59f0a7/8747ef5293a08eab?_done=/group/perl.perl6.language/threads?start=0&order=recent&' target='_blank'>groups-beta.google.com</a>&amp;_doneTitle=Back&amp;&amp;d#8747ef5293a08eab</p>
+<a name='updated Apocalypses and Synopses'></a><h3>updated Apocalypses and Synopses</h3>
+<p>Larry proved links to the current versions of the various Apocalypses and Synopses.  Unfortunately he forgot to start a new thread with his message...</p>
+<p><a href='http://groups-beta.google.com/group/perl.perl6.language/browse_frm/thread/c4b53a25cd59f0a7/8747ef5293a08eab?_done=/group/perl.perl6.language/threads?start=0&order=recent&' target='_blank'>groups-beta.google.com</a>&amp;_doneTitle=Back&amp;&amp;d#8747ef5293a08eab</p>
+<p><a href='http://www.wall.org/~larry/apo' target='_blank'>www.wall.org</a> -- apocalypses
+<a href='http://www.wall.org/~larry/syn' target='_blank'>www.wall.org</a> -- synopses</p>
+<a name='suggested warning for overriding operators'></a><h3>suggested warning for overriding operators</h3>
+<p>Aaron Sherman wanted to receive a warning for defining things like <code>multi sub *infix:+(...) {...}</code>.  But Larry reasoned the anyone who'd use the * there does not care for warnings.</p>
+<p><a href='http://groups-beta.google.com/group/perl.perl6.language/browse_frm/thread/eec0d9935fe3ea91/55cf32a4ca4963ea?_done=/group/perl.perl6.language/threads?start=0&order=recent&' target='_blank'>groups-beta.google.com</a>&amp;_doneTitle=Back&amp;&amp;d#55cf32a4ca4963ea</p>
+<a name='Perl 6 Compiler'></a><h2>Perl 6 Compiler</h2>
+<p>Last week, I bemoaned my lack of google (and thus links).  But a couple kind souls pointed out that I could get links straight from the horses mouth: nntp.perl.org.  All I can say is, ::shrug:: &quot;Who knew that there was an internet outside of google?&quot;.  Fortunately, I do not have to admit to its existence as there were no message this week.</p>
+<a name='Parrot Internals'></a><h2>Parrot Internals</h2>
+<a name='she-bangs for none!!'></a><h3>she-bangs for none!!</h3>
+<p>Last week James deBoer offered a patch to remove all of the  shebang lines from config/*.pl (after his initial patch to add them to all of them was turned away).  Warnock applies.</p>
+<p><a href='http://groups-beta.google.com/group/perl.perl6.internals/browse_frm/thread/fccba601b9f123a7/4e033ddb808ae530?_done=/group/perl.perl6.internals/threads?start=30&order=recent&' target='_blank'>groups-beta.google.com</a>&amp;_doneTitle=Back&amp;&amp;d#4e033ddb808ae530</p>
+<a name='Solaris 9 troubles'></a><h3>Solaris 9 troubles</h3>
+<p>Christian Aperghis-Tramoni has some trouble whil trying to install on Solaris 9.  Warnock applies.</p>
+<a name='more vtables'></a><h3>more vtables</h3>
+<p>Leo wanted to add a finalize vtable entry (in addition to destroy, which is apparently use for free memory and not active resources).  Jeff commented on the difficulties implicit in finalizing stuff, and the thread ran out of gas.</p>
+<p><a href='http://groups-beta.google.com/group/perl.perl6.internals/browse_frm/thread/c15fda261df908d4/d60dd3c8ba18afca?_done=/group/perl.perl6.internals/threads?start=30&order=recent&' target='_blank'>groups-beta.google.com</a>&amp;_doneTitle=Back&amp;&amp;d#d60dd3c8ba18afca</p>
+<a name='build dynclasses by default'></a><h3>build dynclasses by default</h3>
+<p>Last week, Leo was stalling to here about success and failures before adding them to the default build. Brent 'Dax' Royal-Gordon and Sam Ruby both chimed in with success.  And so they did.</p>
+<p><a href='http://groups-beta.google.com/group/perl.perl6.internals/browse_frm/thread/8bcf88645937dd6a/985aaaced9fae5ee?_done=/group/perl.perl6.internals/threads?start=30&order=recent&' target='_blank'>groups-beta.google.com</a>&amp;_doneTitle=Back&amp;&amp;d#985aaaced9fae5ee</p>
+<p><a href='http://groups-beta.google.com/group/perl.perl6.internals/browse_frm/thread/7c1cf78371e85ca5/8889a9ff91765133?_done=/group/perl.perl6.internals/threads?start=30&order=recent&' target='_blank'>groups-beta.google.com</a>&amp;_doneTitle=Back&amp;&amp;d#8889a9ff91765133</p>
+<a name='register frame recycling'></a><h3>register frame recycling</h3>
+<p>Leo added in some basic continuation recycling.  Dan didn't like that it required the user to clone return continuations into full ones.  Leo agreed, but felt that a returncc function would be needed first.  I wondered why we needed this recycling and couldn't just let the DOD/GC do it for us.  The answer: speed.</p>
+<p><a href='http://groups-beta.google.com/group/perl.perl6.internals/browse_frm/thread/d1a6fc01b672fe6e/adb788aec2ea202f?_done=/group/perl.perl6.internals/threads?start=30&order=recent&' target='_blank'>groups-beta.google.com</a>&amp;_doneTitle=Back&amp;&amp;d#adb788aec2ea202f</p>
+<a name='upcase binary strings'></a><h3>upcase binary strings</h3>
+<p>Dan wondered what should happen if you tried to play with the case of a binary encoded string.  The concensus seems to be either throw an exception or nothing, depending on settings.</p>
+<p><a href='http://groups-beta.google.com/group/perl.perl6.internals/browse_frm/thread/d79772e8c745d445/850f72bc069c7795?_done=/group/perl.perl6.internals/threads?start=30&order=recent&' target='_blank'>groups-beta.google.com</a>&amp;_doneTitle=Back&amp;&amp;d#850f72bc069c7795</p>
+<a name='setref poorly named'></a><h3>setref poorly named</h3>
+<p>Sam Ruby was initially confused by the strange behavior of setref.  Leo told him that it was intended to set a reference inside a reference type and noted that classes needs a clean up.  With the advent of dynclasses, this sounds like a job for some adventurous lurker...</p>
+<p><a href='http://groups-beta.google.com/group/perl.perl6.internals/browse_frm/thread/90726dfd92f0f328/f8ad6d55d69c33a2?_done=/group/perl.perl6.internals/threads?start=30&order=recent&' target='_blank'>groups-beta.google.com</a>&amp;_doneTitle=Back&amp;&amp;d#f8ad6d55d69c33a2</p>
+<a name='tracebacks pmc vs ops'></a><h3>tracebacks pmc vs ops</h3>
+<p>Leo wondered if we should have a PMC that could access the entire call chain and do whatever evil it wanted.  Dan conjectured that this sort of thing was evil enough that ops might be well advised.  Leo initially put some methods into the continuation to do this, but later though about putting them into the interpreter instead.  I like the interp idea.</p>
+<p><a href='http://groups-beta.google.com/group/perl.perl6.internals/browse_frm/thread/9057152ac53fbeaa/f6d2f0368c01eccd?_done=/group/perl.perl6.internals/threads?start=30&order=recent&' target='_blank'>groups-beta.google.com</a>&amp;_doneTitle=Back&amp;&amp;d#f6d2f0368c01eccd</p>
+<a name='parrot -t memory leaks'></a><h3>parrot -t memory leaks</h3>
+<p>Last week our fearless leader notice some not insignificant memory leaks with parrot -t.  This week our fearless pumpking fixed them.</p>
+<p><a href='http://groups-beta.google.com/group/perl.perl6.internals/threads?start=30' target='_blank'>groups-beta.google.com</a>&amp;order=recent</p>
+<a name='Performance graphs'></a><h3>Performance graphs</h3>
+<p>Matt Diephouse (assisted by Joshua Gatcomb) provided a pointer to a page of periodic parrot performances, provided as pretty pictures.  Please provide possible improvement pointers.</p>
+<p><a href='http://groups-beta.google.com/group/perl.perl6.internals/browse_frm/thread/7792145da33f3fab/aaca12a6db6fb81e?_done=/group/perl.perl6.internals/threads?start=30&order=recent&' target='_blank'>groups-beta.google.com</a>&amp;_doneTitle=Back&amp;&amp;d#aaca12a6db6fb81e</p>
+<p><a href='http://groups-beta.google.com/group/perl.perl6.internals/browse_frm/thread/1a0a767141eaedc0/3e501c3d2e955d4f?_done=/group/perl.perl6.internals/threads?start=30&order=recent&' target='_blank'>groups-beta.google.com</a>&amp;_doneTitle=Back&amp;&amp;d#3e501c3d2e955d4f</p>
+<p><a href='http://www.sidhe.org/~timeparrot/graphs/' target='_blank'>www.sidhe.org</a></p>
+<a name='uniline yield() and return()'></a><h3>uniline yield() and return()</h3>
+<p>Stéphane Payrard (whose name google objects to strenuously) resent his patch for uniline yield and return in PIR.  Leo applied the patch.</p>
+<p><a href='http://groups-beta.google.com/group/perl.perl6.internals/browse_frm/thread/e514bc61cb8bb0ed/01b371534f842002?_done=/group/perl.perl6.internals/threads?start=30&order=recent&' target='_blank'>groups-beta.google.com</a>&amp;_doneTitle=Back&amp;&amp;d#01b371534f842002</p>
+<a name='mod_parrot 0.1'></a><h3>mod_parrot 0.1</h3>
+<p>Jeff Horwitz released mod_parrot 0.1.  Pretty nifty.</p>
+<p><a href='http://groups-beta.google.com/group/perl.perl6.internals/browse_frm/thread/01f6230b32065b7b/7340b20806394574?_done=/group/perl.perl6.internals/threads?start=30&order=recent&' target='_blank'>groups-beta.google.com</a>&amp;_doneTitle=Back&amp;&amp;d#7340b20806394574</p>
+<p><a href='http://www.smashing.org/mod_parrot' target='_blank'>www.smashing.org</a></p>
+<a name='IO auto-flush troubles'></a><h3>IO auto-flush troubles</h3>
+<p>Christian Aperghis-Tramoni wondered how to make stdout not buffer away his prompt.  The answer (provided by Mary Pauley and Luke Palmer) require using pioctl and strange magic numbers.</p>
+<p><a href='http://groups-beta.google.com/group/perl.perl6.internals/browse_frm/thread/28bce753a99c9e98/1ba2e26c2ad05135?_done=/group/perl.perl6.internals/threads?start=30&order=recent&' target='_blank'>groups-beta.google.com</a>&amp;_doneTitle=Back&amp;&amp;d#1ba2e26c2ad05135</p>
+<a name='bigChanges--; release++?'></a><h3>bigChanges--; release++?</h3>
+<p>Since the big indirect register change has gone through, some voices suggested putting out a 0.1.2 release.  Leo felt that it was too soon, but seemed to be holding a minority opinion.  I vote that we release after the new register allocator (and possibly Dan's string stuff depending on how long it takes).</p>
+<p><a href='http://groups-beta.google.com/group/perl.perl6.internals/browse_frm/thread/95b0b650ef4242fd/68fa31dd8602c6f2?_done=/group/perl.perl6.internals/threads?start=30&order=recent&' target='_blank'>groups-beta.google.com</a>&amp;_doneTitle=Back&amp;&amp;d#68fa31dd8602c6f2</p>
+<a name='Dan's String Stuff'></a><h3>Dan's String Stuff</h3>
+<p>Dan is about to make some &quot;Irrevocable Changes&quot; so he decided to do his work in a branch named &quot;pluggable_encodings&quot;, assuming he can use CVS (which is surprisingly hard at times).  Since no one screamed foul, I think it is a safe assumption.</p>
+<p><a href='http://groups-beta.google.com/group/perl.perl6.internals/browse_frm/thread/710474fc55e34d4c/9233e10f11cf4ccd?_done=/group/perl.perl6.internals/threads?start=0&order=recent&' target='_blank'>groups-beta.google.com</a>&amp;_doneTitle=Back&amp;&amp;d#9233e10f11cf4ccd</p>
+<a name='clone mmd'></a><h3>clone mmd</h3>
+<p>Sam Ruby submitted a patch adding mmd_clone for dynclasses.  Leo suggested an alternate approach, and Warnock['s Dilemna] took over.</p>
+<p><a href='http://groups-beta.google.com/group/perl.perl6.internals/browse_frm/thread/583ba46d8fbbddab/63b3bdd708a711b1?_done=/group/perl.perl6.internals/threads?start=0&order=recent&' target='_blank'>groups-beta.google.com</a>&amp;_doneTitle=Back&amp;&amp;d#63b3bdd708a711b1</p>
+<a name='true coroutines'></a><h3>true coroutines</h3>
+<p>Klaas-Jan Stol wondered if parrot had &quot;true&quot; coroutine because Roberto Ierusalimschy (of Lua fame) called it into question.  Some confusion ensued as to what the platonic ideal of a coroutine actually is, but the answer seems to be: we should and if they aren't patches welcome.</p>
+<p><a href='http://groups-beta.google.com/group/perl.perl6.internals/browse_frm/thread/95f8a55e82104953/6dbc23b7c1a31850?_done=/group/perl.perl6.internals/threads?start=0&order=recent&' target='_blank'>groups-beta.google.com</a>&amp;_doneTitle=Back&amp;&amp;d#6dbc23b7c1a31850</p>
+<a name='trouble with Closures and Subs'></a><h3>trouble with Closures and Subs</h3>
+<p>Klaas-Jan Stol was having trouble with closures and subs.  Many people provided some very useful pointers.  If you are writing a compiler for Parrot you should read this thread carefully.  If you are writing a summary for Parrot you should skim it and punt.</p>
+<p><a href='http://groups-beta.google.com/group/perl.perl6.internals/browse_frm/thread/8833921a7fe8f01c/86f2b9a889e12a03?_done=/group/perl.perl6.internals/threads?start=0&order=recent&' target='_blank'>groups-beta.google.com</a>&amp;_doneTitle=Back&amp;&amp;d#86f2b9a889e12a03</p>
+<a name='Shared library and dynclasses'></a><h3>Shared library and dynclasses</h3>
+<p>Sam Ruby wondered if dynclasses should link to libparrot.so.  Dan provided the answer: yes.  Sam Ruby went on to suggest that if most PMCs would eventually become dynclasses, then (to reduce executable size, the parrot executable should probably also link to libparrot.so rather than including all of it.  No one commented on this observation...</p>
+<p><a href='http://groups-beta.google.com/group/perl.perl6.internals/browse_frm/thread/dedc7b6976453118/2cd17d927455d315?_done=/group/perl.perl6.internals/threads?start=0&order=recent&' target='_blank'>groups-beta.google.com</a>&amp;_doneTitle=Back&amp;&amp;d#2cd17d927455d315</p>
+<a name='serach paths and libraries'></a><h3>serach paths and libraries</h3>
+<p>Dan wants to stop being annoyed by library path issues.  He figures that the right way to do this is to allow dynamic library loading.  Best of all he wants the code to do that to be in the library.  Thus he put out a request for the ability to embed bytecode into an executable.  Brent 'Dax' Royal-Gordon provided a slightly too evil method of doing this.  Other slightly less evil (or even good) options would definitely be received thankfully.</p>
+<p><a href='http://groups-beta.google.com/group/perl.perl6.internals/browse_frm/thread/22e4d4b564c40a4f/100a59daf0bb1fe4?_done=/group/perl.perl6.internals/threads?start=0&order=recent&' target='_blank'>groups-beta.google.com</a>&amp;_doneTitle=Back&amp;&amp;d#100a59daf0bb1fe4</p>
+<a name='Benchmarks? tests? or both?'></a><h3>Benchmarks? tests? or both?</h3>
+<p>Joshua Gatcomb noticed that some benchmarks fail on occassion.  Matt Diephouse suggested making them tests too.  Leo felt that would be fine provided they did not take too long to run.</p>
+<p><a href='http://groups-beta.google.com/group/perl.perl6.internals/browse_frm/thread/ec722732809d4018/4c81b0a9f9b4bfff?_done=/group/perl.perl6.internals/threads?start=0&order=recent&' target='_blank'>groups-beta.google.com</a>&amp;_doneTitle=Back&amp;&amp;d#4c81b0a9f9b4bfff</p>
+<a name='Fibonacci Still Slow'></a><h3>Fibonacci Still Slow</h3>
+<p>It is odd how the wheel comes full circle.  Originally designed as an exercise in addition for students, the Fibonacci sequence has some really interesting mathematical properties.  While comletely ignoring its unexpected niftiness (and explicit formula), this miraculous sequence is still used as busy work for poor creatures.  This time the creature is parrot, and, despite Leo's best efforts,  it is still slow.  There was some talk of how to optimize this before Dan put the smack down all of it:</p>
+<p>&quot;No more performance changes. Period. We get parrot fully functional first.&quot;</p>
+<p><a href='http://groups-beta.google.com/group/perl.perl6.internals/browse_frm/thread/2206aea97ae3c271/a72974934d1deb7d?_done=/group/perl.perl6.internals/threads?start=0&order=recent&' target='_blank'>groups-beta.google.com</a>&amp;_doneTitle=Back&amp;&amp;d#a72974934d1deb7d</p>
+<a name='Parrot on Windows'></a><h3>Parrot on Windows</h3>
+<p>Jerry Wiltz wondered how to get Parrot on his poor Win XP box.  Fred and Georgy provided many pointers. Christian Lott also had trouble, but Nicholas Clark, Ron Blaschke, Peter Sinnott, and Steve Peters all provided pointers.</p>
+<p><a href='http://groups-beta.google.com/group/perl.perl6.internals/browse_frm/thread/511afed40dc50daf/59f1ebe88ce276a7?_done=/group/perl.perl6.internals/threads?start=0&order=recent&' target='_blank'>groups-beta.google.com</a>&amp;_doneTitle=Back&amp;&amp;d#59f1ebe88ce276a7</p>
+<p><a href='http://groups-beta.google.com/group/perl.perl6.internals/browse_frm/thread/094ddcf92400bff0/cf4ceefbef88c27c?_done=/group/perl.perl6.internals/threads?start=0&order=recent&' target='_blank'>groups-beta.google.com</a>&amp;_doneTitle=Back&amp;&amp;d#cf4ceefbef88c27c</p>
+<a name='Parrot build issues'></a><h3>Parrot build issues</h3>
+<p>Jack J. Woehr was having trouble building parrot on his Sun.  Leo provided the needed help.  But then ICU became problematic.  Many people provided help and he eventually got it running forth, which promptly segfaulted.  Jack sounded discouraged, but he really should stay with it now that he has gotten by the hard part...</p>
+<p><a href='http://groups-beta.google.com/group/perl.perl6.internals/browse_frm/thread/a3218e7a2effa654/7ac836e88a026ebb?_done=/group/perl.perl6.internals/threads?start=0&order=recent&' target='_blank'>groups-beta.google.com</a>&amp;_doneTitle=Back&amp;&amp;d#7ac836e88a026ebb</p>
+<p><a href='http://groups-beta.google.com/group/perl.perl6.internals/browse_frm/thread/30fd47f015186eb9/044a364558d0f5f4?_done=/group/perl.perl6.internals/threads?start=0&order=recent&' target='_blank'>groups-beta.google.com</a>&amp;_doneTitle=Back&amp;&amp;d#044a364558d0f5f4</p>
+<a name='detecting perldoc'></a><h3>detecting perldoc</h3>
+<p>James deBoer wondered if we should detect the presences of perldoc and fail to configure if it is missing.  The concensus seems to be that we should detect the absence of perldoc, but if it is no there throw up a big fat warning and procede.</p>
+<p><a href='http://groups-beta.google.com/group/perl.perl6.internals/browse_frm/thread/0a55500e9120e00c/a04c9502ca72fcfe?_done=/group/perl.perl6.internals/threads?start=0&order=recent&' target='_blank'>groups-beta.google.com</a>&amp;_doneTitle=Back&amp;&amp;d#a04c9502ca72fcfe</p>
+<a name='pow and other ops'></a><h3>pow and other ops</h3>
+<p>There was/is a fairly long and ongoing discussion about ops on PMCs, which Sam Ruby unwittingly started when he asked for MMD pow.  While there are people on all sides, it appears likely that the ops will stay.</p>
+<p><a href='http://groups-beta.google.com/group/perl.perl6.internals/browse_frm/thread/5fce0a2f562fb365/a00cfc36163415a9?_done=/group/perl.perl6.internals/threads?start=0&order=recent&' target='_blank'>groups-beta.google.com</a>&amp;_doneTitle=Back&amp;&amp;d#a00cfc36163415a9</p>
+<p><a href='http://groups-beta.google.com/group/perl.perl6.internals/browse_frm/thread/83c6931a62f197c1/e4eceed146e32abe?_done=/group/perl.perl6.internals/threads?start=0&order=recent&' target='_blank'>groups-beta.google.com</a>&amp;_doneTitle=Back&amp;&amp;d#e4eceed146e32abe</p>
+<p><a href='http://groups-beta.google.com/group/perl.perl6.internals/browse_frm/thread/4f37b6ee1dfc94a0/a1b284c4cd2a7f21?_done=/group/perl.perl6.internals/threads?start=0&order=recent&' target='_blank'>groups-beta.google.com</a>&amp;_doneTitle=Back&amp;&amp;d#a1b284c4cd2a7f21</p>
+<a name='C on parrot?'></a><h3>C on parrot?</h3>
+<p>bloves wondered what the current state of C on parrot was.  But I think he posted it through google groups (which does not actually reach the list) as I did not find it in my email.  The answer is essentially non-existant, but if you are feeling brave/insane/suicidal patches welcome.</p>
+<p><a href='http://groups-beta.google.com/group/perl.perl6.internals/browse_frm/thread/07f89d47edca2134/44a3351978152fb7?_done=/group/perl.perl6.internals/threads?start=0&order=recent&' target='_blank'>groups-beta.google.com</a>&amp;_doneTitle=Back&amp;&amp;d#44a3351978152fb7</p>
+<a name='Streams and Filters'></a><h3>Streams and Filters</h3>
+<p>Ron Blaschke tracked does the problem with t/library/streams.t #14 on Win32.  The guilty party is line endings.  One workaround would be to have the file in question be set to binary in cvs (although that feels like cheating).</p>
+<p><a href='http://groups-beta.google.com/group/perl.perl6.internals/browse_frm/thread/fa182996be3080db/bd2bff3e7c80abb4?_done=/group/perl.perl6.internals/threads?start=0&order=recent&' target='_blank'>groups-beta.google.com</a>&amp;_doneTitle=Back&amp;&amp;d#bd2bff3e7c80abb4</p>
+<a name='AIX PPC JIT'></a><h3>AIX PPC JIT</h3>
+<p>Adam Thomason provided a patch to fix some warnings.  Leo applied it.</p>
+<p><a href='http://groups-beta.google.com/group/perl.perl6.internals/browse_frm/thread/aad34cadf9171483/df893a6e259a2297?_done=/group/perl.perl6.internals/threads?start=0&order=recent&' target='_blank'>groups-beta.google.com</a>&amp;_doneTitle=Back&amp;&amp;d#df893a6e259a2297</p>
+<a name='Register allocation/volatility'></a><h3>Register allocation/volatility</h3>
+<p>Despite Dan's line in the sand strong statements about no more optimization, Jeff Clites and Leo tossed about some radical ideas for how to speed everything up.</p>
+<p><a href='http://groups-beta.google.com/group/perl.perl6.internals/browse_frm/thread/3b6dba0cb48cc9dd/0aca976737afef9e?_done=/group/perl.perl6.internals/threads?start=0&order=recent&' target='_blank'>groups-beta.google.com</a>&amp;_doneTitle=Back&amp;&amp;d#0aca976737afef9e</p>
+<a name='GC invocation'></a><h3>GC invocation</h3>
+<p>Leo suggested changing the GC from one that interupts everybody and does its thing, to one that waits its turn and does its thing.  I am concerned that this could lead to resource starvation in a multithreaded system, but nobody else posted anything.  Of course he only suggested this today.</p>
+<p><a href='http://groups-beta.google.com/group/perl.perl6.internals/browse_frm/thread/205fe39d5646faba/f46feb6b8fbffe83?_done=/group/perl.perl6.internals/threads?start=0&order=recent&' target='_blank'>groups-beta.google.com</a>&amp;_doneTitle=Back&amp;&amp;d#f46feb6b8fbffe83</p>
+<a name='eval questions'></a><h3>eval questions</h3>
+<p>Leo wants some answers to some eval questions before he tries to clean up dynamic code compiling.  Answers??</p>
+<p><a href='http://groups-beta.google.com/group/perl.perl6.internals/browse_frm/thread/89bca37459280b08/4cb790bd8bb7bfde?_done=/group/perl.perl6.internals/threads?start=0&order=recent&' target='_blank'>groups-beta.google.com</a>&amp;_doneTitle=Back&amp;&amp;d#4cb790bd8bb7bfde</p>
+<a name='include perl 6 files in config'></a><h3>include perl 6 files in config</h3>
+<p>Gerd Pokorra wants to be able to run perl6 from anywhere.  He even provided a means of achieving this end (although not in unified diff format as is the custom).</p>
+<p><a href='http://groups-beta.google.com/group/perl.perl6.internals/browse_frm/thread/cabe544e8dd78ccc/8fae1332e13b0fed?_done=/group/perl.perl6.internals/threads?start=0&order=recent&' target='_blank'>groups-beta.google.com</a>&amp;_doneTitle=Back&amp;&amp;d#8fae1332e13b0fed</p>
+<a name='pioctl -&gt; segfault'></a><h3>pioctl -&gt; segfault</h3>
+<p>Stephane Payrard got a segfault while playing with the previously mentioned pioctl magic numbers.  Leo speculates that this might be do to the lack of an end opcode.</p>
+<a name='[TODO] improve parrot-config.imc'></a><h3>[TODO] improve parrot-config.imc</h3>
+<p>Takers wanted.</p>
+<p><a href='http://groups-beta.google.com/group/perl.perl6.internals/browse_frm/thread/05c919fbfccba296/1191abc0e4b45a75?_done=/group/perl.perl6.internals/threads?start=0&order=recent&' target='_blank'>groups-beta.google.com</a>&amp;_doneTitle=Back&amp;&amp;d#1191abc0e4b45a75</p>
+<a name='Missing arguments'></a><h3>Missing arguments</h3>
+<p>Klaas-Jan Stol wondered how to detecting missing arguments.  Leo and Dan both pointed to the argument count registers.</p>
+<p><a href='http://groups-beta.google.com/group/perl.perl6.internals/browse_frm/thread/765a35f9f2284b78/a8972c85f6527d0b?_done=/group/perl.perl6.internals/threads?start=0&order=recent&' target='_blank'>groups-beta.google.com</a>&amp;_doneTitle=Back&amp;&amp;d#a8972c85f6527d0b</p>
+<a name='Update to embed.pod'></a><h3>Update to embed.pod</h3>
+<p>Stéphane Payrard provided an update to embed.pod.  Leo applied it, but Brent 'Dax' Royal-Gordon cried fould over the including of parrot.h.  Dan aggreed with Brent, and Stéphane Payrard provided a patch to remove the offending line.</p>
+<p><a href='http://groups-beta.google.com/group/perl.perl6.internals/browse_frm/thread/c8625a1604d21bd6/c33d681a6b2a0d68?_done=/group/perl.perl6.internals/threads?start=0&order=recent&' target='_blank'>groups-beta.google.com</a>&amp;_doneTitle=Back&amp;&amp;d#c33d681a6b2a0d68</p>
+<a name='calling convenctions, traceback, and register allocation'></a><h3>calling convenctions, traceback, and register allocation</h3>
+<p>Leo suggested a new way to invoke functions which would clean up calling, tracebacks, and register allocation.  While such a change would have great aesthetic value, Dan declared it premature as parrot is not yet fully specified.  Doubtless this will rearrise later, as aesthetics is a powerful motivator.</p>
+<p><a href='http://groups-beta.google.com/group/perl.perl6.internals/browse_frm/thread/c81b2f5ff646d03f/75d6e84efc2a1124?_done=/group/perl.perl6.internals/threads?start=0&order=recent&' target='_blank'>groups-beta.google.com</a>&amp;_doneTitle=Back&amp;&amp;d#75d6e84efc2a1124</p>
+<p><a href='http://groups-beta.google.com/group/perl.perl6.internals/browse_frm/thread/2e36720d69d8ede2/e2443868d177f973?_done=/group/perl.perl6.internals/threads?start=0&order=recent&' target='_blank'>groups-beta.google.com</a>&amp;_doneTitle=Back&amp;&amp;d#e2443868d177f973</p>
+<a name='The usual footer'></a><h2>The usual footer</h2>
+<p>If you find these summaries useful or enjoyable, please consider
+contributing to the Perl Foundation to help support the development of
+Perl. You might also like to send feedback to ubermatt@gmail.com
+<a href='http://donate.perl-foundation.org/' target='_blank'>donate.perl-foundation.org</a> -- The Perl Foundation
+<a href='http://dev.perl.org/perl6/' target='_blank'>dev.perl.org</a> -- Perl 6 Development site
+<a href='http://planet.parrotcode.org/' target='_blank'>planet.parrotcode.org</a> -- Parrot Blog aggregator</p>
+</div>

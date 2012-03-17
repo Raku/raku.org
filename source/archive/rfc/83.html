@@ -1,0 +1,88 @@
+[% setvar title Make constants look like variables %]
+<h3>This file is part of the Perl 6 Archive</h3>
+    <p>To see what is currently happening visit <a href="http://www.perl6.org/">http://www.perl6.org/</a></p>
+<div class='pod'>
+<a name='TITLE'></a><h1>TITLE</h1>
+<p>Make constants look like variables</p>
+<a name='VERSION'></a><h1>VERSION</h1>
+<pre>  Maintainer: Jeremy Howard &lt;<a href='mailto:j@howard.fm'>j@howard.fm</a>&gt;
+  Date: 10 Aug 2000
+  Last Modified: 21 Sep 2000
+  Mailing List: <a href='mailto:perl6-language@perl.org'>perl6-language@perl.org</a>
+  Number: 83
+  Version: 3
+  Status: Frozen</pre>
+<a name='DISCUSSION'></a><h1>DISCUSSION</h1>
+<p>The syntax was widely accepted. Some posters preferred to see constants
+expanded to work within complex data structures. Others preferred to keep
+things simple. This RFC keeps things simple. A counter-RFC has not been
+submitted.</p>
+<a name='ABSTRACT'></a><h1>ABSTRACT</h1>
+<p>This RFC proposes that the current constant.pm module removed, and
+replaced with a syntax allowing any variable to be marked as constant.</p>
+<a name='CHANGES'></a><h1>CHANGES</h1>
+<a name='Since v1'></a><h2>Since v1</h2>
+<ul>
+<li><a name='Changed notation to be consistent with other value attributes'></a>Changed notation to be consistent with other value attributes</li>
+<li><a name='Specified behaviour of references, arrays, and lists'></a>Specified behaviour of references, arrays, and lists</li>
+<li><a name='Added definition'></a>Added definition</li>
+</ul>
+<a name='DESCRIPTION'></a><h1>DESCRIPTION</h1>
+<p>A constant is a value that can not be changed once it is declared.
+Once declared, it behaves just as if it was the actual literal value
+that it contains.</p>
+<p>Currently, constants are created in Perl using the constant.pm module:</p>
+<pre>  use constant PI =&gt; 3.1415926;</pre>
+<p>which creates an inlined subroutine:</p>
+<pre>  sub PI () {3.1415926;}</pre>
+<p>This method of creating constants has three serious drawbacks:</p>
+<ul>
+<li><a name='Can not be interpolated in strings'></a>Can not be interpolated in strings</li>
+<p>Whereas variables can be interpolated into strings (e.g. &quot;PI is $Pi&quot;),
+subroutines can not be. This makes using constants inconvenient, since
+string concatenation must be used.</p>
+<li><a name='Inconsistant syntax'></a>Inconsistant syntax</li>
+<p>The sudden appearance of barewords can be quite unsettling to new users.
+After becoming told that 'arrays are @name, scalars are $name, ...', the
+rule suddenly stops working just because the programmer wants the value to
+stay constant.</p>
+<li><a name='Redundant warnings'></a>Redundant warnings</li>
+<p>In persistant Perl environments such as mod_perl, inlined subroutines
+often created the redundant warning 'Constant subroutine PI redefined'.
+This has been a frequent source of confusion amongst new mod_perl users.</p>
+</ul>
+<p>It is proposed that a new syntax for declaring constants be introduced:</p>
+<pre>  my $PI : constant = 3.1415926;
+  my @FIB : constant = (1,1,2,3,5,8,13,21);
+  my %ENG_ERRORS : constant = (E_UNDEF=&gt;'undefined', E_FAILED=&gt;'failed');
+  </pre>
+<p>Constants can be lexically or globally scoped (or any other new scoping
+level yet to be defined).</p>
+<p>If an array or hash is marked constant, it cannot be assigned to, and its
+elements can not be assigned to:</p>
+<pre>  @FIB = (1,2,3);   # Compile time error
+  @FIB[0] = 2;      # Compile time error
+  %ENG_ERRORS=();   # Compile time error
+  %ENG_ERRORS{E_UNDEF=&gt;'No problem'} # Compile time error
+  </pre>
+<p>To create a reference to a constant use the reference operator:</p>
+<pre>  my $ref_pi = \$PI;
+  </pre>
+<p>To create a constant reference use a reference operator in the
+declaration:</p>
+<pre>  my $a = 'Nothing to declare';
+  my $const_ref : constant = \$a;</pre>
+<p>Note that this does not make the scalar referenced become constant:</p>
+<pre>  $$const_ref = 'Jewellery';   # No problems
+  $const_ref = \4;             # Compile time error</pre>
+<a name='IMPLEMENTATION'></a><h1>IMPLEMENTATION</h1>
+<p>Constants should have the same behaviour as the do now. They should be
+inlined, and constant expressions should be calculated at compile time.</p>
+<a name='EXTENSIONS'></a><h1>EXTENSIONS</h1>
+<p>It may be desirable to have a way to remove constness from a value. This
+will not be covered in this RFC--if it is required a separate RFC should
+be written referencing this one.</p>
+<a name='REFERENCES'></a><h1>REFERENCES</h1>
+<p>perldoc constant</p>
+<p>perldoc perlsub (for constant subroutines)</p>
+</div>

@@ -1,0 +1,220 @@
+[% setvar title The Perl 6 Summary for the week ending 20021020 %]
+<h3>This file is part of the Perl 6 Archive</h3>
+    <p>To see what is currently happening visit <a href="http://www.perl6.org/">http://www.perl6.org/</a></p>
+<div class='pod'>
+<a name='The Perl 6 Summary for the week ending 20021020'></a><h1>The Perl 6 Summary for the week ending 20021020</h1>
+<p>I'm sorry to have to inform you that I've returned from my holiday
+(no, base jumping and paragliding were <i>not</i> involved) and that this
+week's summary will not be written by the estimable Leon
+Brocard. Sorry about that. Leon is currently taking a rest cure.</p>
+<p>So, with the customary mention of Mister Brocard out of the way good
+and early this week, it's time to take a look at what's been discussed
+on the internals list:</p>
+<a name='Regarding JVM - Parrot Compatibility'></a><h2>Regarding JVM - Parrot Compatibility</h2>
+<p>Newcomer Karthik Kumar is interested in writing a tool to convert java
+<code>.class</code> files to parrot <code>.pbc</code> files and asked for information on
+what had been done in this area. Leon Brocard says it's very easy to
+get the basics working because of the low number of JVM bytecodes. But
+getting the fundamentals (classes, objects) right is hard. Ramesh
+Ananthakrishnan commented that it might be a little early for anything
+more than proofs of concept at the moment as Parrot is a rapidly
+moving target. Ramesh also came up with the idea of compiling `real
+machine' assembly language to `virtual machine' parrot assembler.</p>
+<p>Karthik commented that the real issue seems to be one of what level of
+support Parrot will offer for objects, and until that is known the
+class-&gt;parrot problem is almost pointless to solve.</p>
+<p><a href='http://groups.google.com/groups?threadm=20021014103743.83432.qmail@web13204.mail.yahoo.com' target='_blank'>groups.google.com</a></p>
+<p><a href='http://groups.google.com/groups?threadm=20021015083634.61117.qmail@web40503.mail.yahoo.com' target='_blank'>groups.google.com</a> -- Ramesh
+clarifies his `Linux in Parrot' idea.</p>
+<a name='The Getting Started Guide'></a><h2>The Getting Started Guide</h2>
+<p>Erik Lechak is still not loving POD but, despite his distaste he
+posted version 0.4 of his getting started guide in POD format. Thanks
+a lot Erik. Marty Pauley suggested that Erik take a look at the Simple
+Document Format which may meet his needs better than POD</p>
+<p><a href='http://groups.google.com/groups?threadm=20021017182228.GO3764@soto.kasei.com' target='_blank'>groups.google.com</a></p>
+<p><a href='http://groups.google.com/groups?threadm=3DB1B188.2000508@the-small-print.com' target='_blank'>groups.google.com</a></p>
+<a name='C# and Parrot'></a><h2>C# and Parrot</h2>
+<p>Rhys Weatherly, author of Portable.NET, part of the DotGNU project
+made a welcome appearance on the list. Apparently the DotGNU people
+are looking into compiling C# down to parrot bytecode and hoped that
+there might be parrot people who were interested in trying to complete
+their compiler and system library.</p>
+<p>Rhys wanted to know how to make a user-defined class in Parrot; what
+the convention is for which registers must be saved across a call;
+the size of <code>int</code> and whether there was a way to store and access
+auxiliary data in a Parrot bytecode file.</p>
+<p>Answers were provided. Sadly, the answer to Rhys's question about
+user-defined classes was &quot;You don't, yet.&quot; Other answers were more
+immediately useful.</p>
+<p>The DotGNU weekly IRC meeting discussed Parrot this week, Leon and Dan
+managed to cover both sessions between them, and there's a log
+available.</p>
+<p><a href='http://groups.google.com/groups?threadm=3DAF74B6.1B9A6B1@zip.com.au' target='_blank'>groups.google.com</a></p>
+<p><a href='http://dotgnu.info/pipermail/developers/2002-October/008380.html' target='_blank'>dotgnu.info</a> --
+Condensed summary of the meeting</p>
+<p><a href='http://ajmitch.dhis.org/dotgnu/' target='_blank'>ajmitch.dhis.org</a> -- unedited logs available here</p>
+<a name='Variable/Value Split Prelims'></a><h2>Variable/Value Split Prelims</h2>
+<p>Leopold Toetsch rather confused me when he replied to a two week old
+message (I thought I'd completely screwed up setting the `limit by
+date' values in my summary buffer) about the conceptual split between
+variables and values. Leo wanted some clarification which Dan
+provided.</p>
+<p><a href='http://groups.google.com/groups?threadm=a05111b07b9c6cdf2da21@' target='_blank'>groups.google.com</a>[63.120.19.221] -- Dan's old message</p>
+<p><a href='http://groups.google.com/groups?threadm=200210180849.g9I8ngI11385@thu8.leo.home' target='_blank'>groups.google.com</a> -- Leo's questions</p>
+<a name='PMC Initializers'></a><h2>PMC Initializers</h2>
+<p>Leon Brocard attempted to kick start discussion of Jonathan Sillito's
+patch to pass more information when creating new PMCs. Leopold Toetsch
+and Josef H&ouml;&ouml;k both said they thought that something along
+those lines was a good idea, but the discussion seemed to die
+there. Later in the week, Dan introduced the new <code>init_pmc</code> function
+to PDD02, which works along the lines suggested.</p>
+<p><a href='http://groups.google.com/groups?threadm=a05111b06b9d5e367ade6@' target='_blank'>groups.google.com</a>[63.120.19.221]</p>
+<p><a href='http://groups.google.com/groups?threadm=20021014191656.GA13787@ns0' target='_blank'>groups.google.com</a></p>
+<a name='PerlHash questions'></a><h2>PerlHash questions</h2>
+<p>Clinton A. Pierce wondered about how to do the equivalent of <code>exists
+$hash{$key}</code> in Parrot when one doesn't necessarily know the types of
+the things in the hash. Leo Toetsch pointed to <code>exists_keyed</code> and
+<code>type_keyed</code>. Jason Gloudon pointed out that the docs for
+<code>type_keyed</code> referred only to PMCs, with no mention of 'primitive'
+types. He wondered if PerlHash shouldn't just dictate that its
+contents were all PMCs.</p>
+<p><a href='http://groups.google.com/groups?threadm=5.1.0.14.2.20021019230909.02179648@www.geeksalad.org' target='_blank'>groups.google.com</a></p>
+<a name='Meanwhile in Perl6-language'></a><h2>Meanwhile in Perl6-language</h2>
+<p>The language group is trying to catch up with internals in number of
+posts. They managed 89 posts this week compared to internals' 96. If
+you discount attachments, language probably won on volume (and it
+certainly wins hands down on the `difficulty of summarization'
+metric).</p>
+<a name='Draft Proposal: Declaring Classwide Attributes'></a><h2>Draft Proposal: Declaring Classwide Attributes</h2>
+<p>The discussion of how to declare classwide attributes rumbled on from
+last week; I'll just pick out a few nuggets.</p>
+<ul>
+<li><a name='HASH, &lt;ARRAY&gt; etc will likely become &lt;Hash&gt;, &lt;Array&gt; etc, and there's a good chance that UNIVERSAL will become Object'></a><code>HASH</code>, &lt;ARRAY&gt; etc will likely become &lt;Hash&gt;, &lt;Array&gt; etc,
+and there's a good chance that <code>UNIVERSAL</code> will become <code>Object</code></li>
+<li><a name='Implicit invocants can participate in multiple dispatch'></a>Implicit invocants can participate in multiple dispatch</li>
+<li><a name='It's worth taking a look at Smalltalk metaclasses, or Ruby's classes. Putting Metaclasses to To Work might also be worth a read'></a>It's worth taking a look at Smalltalk metaclasses, or Ruby's
+classes. <i>Putting Metaclasses to To Work</i> might also be worth a read</li>
+</ul>
+<p><a href='http://groups.google.com/groups?threadm=9B4F541C-D7F2-11D6-8390-00050245244A@cognitivity.com' target='_blank'>groups.google.com</a> -- Thread
+starts here</p>
+<p><a href='http://www.aw.com/catalog/academic/product/1,4096,0201433052,00.html' target='_blank'>www.aw.com</a>
+-- the Metaclasses book</p>
+<a name='Perl6 Operator Precedence Table'></a><h2>Perl6 Operator Precedence Table</h2>
+<p>The `Operator Precedence' thread kept on rolling from last week. The
+current game appears to be `working out how to free <code>&amp;</code> and <code>|</code> to
+become superposition constructors', which means hanging the bitwise
+operators somewhere else. Various ideas have been proposed, but people
+really didn't like <code>|||</code> and <code>&amp;&amp;&amp;</code>. The current front runners appear
+to be:</p>
+<ul>
+<li><a name='$a b&amp; $b'></a><code>$a b&amp; $b</code></li>
+<li><a name='$a .&amp; $b'></a><code>$a .&amp; $b</code></li>
+<li><a name=' my @a is bitmap($a); my @b is bitmap($b); my @c is bitmap($c); @a = @b ^|| @c; # Correcting what I assume is Larry's typo'></a>    my @a is bitmap($a);
+    my @b is bitmap($b);
+    my @c is bitmap($c); 
+
+    @a = @b ^|| @c; # Correcting what I assume is Larry's typo</li>
+</ul>
+<p>It looks like this whole area is still somewhat fluid though.</p>
+<p><a href='http://groups.google.com/groups?threadm=Pine.LNX.4.44.0210170843110.11057-100000@london.wall.org' target='_blank'>groups.google.com</a></p>
+<p><a href='http://groups.google.com/groups?threadm=Pine.LNX.4.44.0210171406430.13330-100000@london.wall.org' target='_blank'>groups.google.com</a></p>
+<p><a href='http://groups.google.com/groups?threadm=Pine.LNX.4.44.0210171436350.13850-100000@london.wall.org' target='_blank'>groups.google.com</a></p>
+<a name='untaintby property'></a><h2><code>untaintby</code> property</h2>
+<p>Miko O'Sullivan proposed an <code>untaintby</code> property which `restricts
+which modules may untaint the data or data derived from that data.'
+The feedback wasn't that positive, but Larry came up with the idea of
+callbacks on properties which look rather cool. (`too cool!' according
+to Miko).</p>
+<p><a href='http://groups.google.com/groups?threadm=232810-220021011414941899@M2W063.mail2web.com' target='_blank'>groups.google.com</a></p>
+<p><a href='http://groups.google.com/groups?threadm=Pine.LNX.4.44.0210141007390.20533-100000@london.wall.org' target='_blank'>groups.google.com</a></p>
+<a name='Indeterminate Maths'></a><h2>Indeterminate Maths</h2>
+<p>Michael Schwern opened a can of worms when he wondered if <code>1/0</code> would
+throw an error or just return a value representing an indeterminate
+result. Leon wondered if it'd be possible to, for instance have a
+module which did all its arithmetic in, say, integers module prime
+P. Dan thought yes, with lots of overloading. Adam Lopresto thought
+<code>1/0</code> would be a good place for the new <code>fail</code> semantics. We ended
+up in a debate about the mathematical values of <code>$n/0</code> (apparently
+x/0 is indeterminate when x is zero and undefined otherwise).</p>
+<p>This thread also saw discussion of: the nature of Object Orientation
+and the benefits of instance based inheritance; the
+semantics of NaN. (Did you know that <code>NaN != NaN</code>; the use of
+exceptions; proofs that 1/0 is, necessarily, undefined; Lukasiewiczian
+logic (SQL type NULLs); Miko's `inner Larry Wall'; and the hypothetical
+<code>Math::Perverse</code> module, which sounds like a candidate for the Acme
+namespace to me.</p>
+<p>Larry seems to think that a combination of pragmas and overloaded
+classes should be enough to do the job.</p>
+<p><a href='http://groups.google.com/groups?threadm=20021014210513.GM4719@ool-18b93024.dyn.optonline.net' target='_blank'>groups.google.com</a></p>
+<p><a href='http://groups.google.com/groups?threadm=168270-220021021505816688@M2W053.mail2web.com' target='_blank'>groups.google.com</a> -- complete with
+citation of www.userfriendly.org</p>
+<a name='A concept for Exceptions'></a><h2>A concept for Exceptions</h2>
+<p>Miko O'Sullivan has been doing some serious thinking. After wowing us
+with his <code>untaintby</code> proposal, he came up with some proposals for
+exceptions which would allow for all sorts of cunning tricks. Dan
+pointed out that at least one of the cunning tricks wasn't actually
+possible, but that you could get something like it by throwing
+continuations with your exceptions.</p>
+<p><a href='http://groups.google.com/groups?threadm=410-2200210215183328386@M2W045.mail2web.com' target='_blank'>groups.google.com</a></p>
+<a name='In brief'></a><h1>In brief</h1>
+<p>The effort to fix the JIT core when compiled with optimizations on x86
+boxes continues (with a certain amount of discussion of how to use the
+test modules).</p>
+<p>Simon Glover sent a covey of patches, mostly adding tests (yay!) along
+with one to fix up and document the <code>.include</code> assembler
+macro. Applied.</p>
+<p>Chromatic did some copy editing of the docs and sent in a patch with
+his fixes. Applied.</p>
+<p>Leopold Toetsch has a large patch for the GC system which tries to
+deal with some of the problems. It's not a complete fix, but Leo
+thinks it's a start.</p>
+<p>Simon Glover noticed that <b><i>lib/Parrot/PMC.pm</i></b> is marked as
+autogenerated and therefore removed by a <code>make clean</code>, which would be
+okay, but there's no rule in the makefile to regenerate it. Steve Fink
+fixed it using Simon's suggested solution.</p>
+<p>Dan's fixed the docs for the splice vtable entries in PDD2. Leopold
+Toetsch promised to implement it.</p>
+<p>Michael Lazzaro offers a summary of variables and assignment at
+<a href='http://cog.cognitivity.com/perl6/var.html.' target='_blank'>cog.cognitivity.com</a> Thanks Michael.</p>
+<a name='Who's Who in Perl 6'></a><h1>Who's Who in Perl 6</h1>
+<ul>
+<li><a name='Who are you?'></a>Who are you?</li>
+<p>Brent Dax</p>
+<li><a name='What do you do for/with Perl 6?'></a>What do you do for/with Perl 6?</li>
+<p>I manage Configure changes and occasionally work on embedding and
+extending, the regex engine, misc.c, or whatever catches my fancy.</p>
+<li><a name='Where are you coming from?'></a>Where are you coming from?</li>
+<p>The end of a day in high school (or sometimes the middle of the day...)
+:^)</p>
+<p>Seriously, I think Perl 6 is an excellent idea.  Perl is a great
+language, but it's been in need of a de-crufting for some time.</p>
+<li><a name='When do you think Perl 6 will be released?'></a>When do you think Perl 6 will be released?</li>
+<p>Hmm...probably next year sometime.  Not soon enough for me to like it,
+but not late enough to complain about it.</p>
+<li><a name='Why are you doing this?'></a>Why are you doing this?</li>
+<p>Because it's fun and interesting.  And I get paid to manage a Web site,
+so Perl eq money.  And I'm actually taken seriously.</p>
+<li><a name='You have 5 words. Describe yourself.'></a>You have 5 words. Describe yourself.</li>
+<p>Hubristic hacker who really knows_little.</p>
+<li><a name='Do you have anything to declare?'></a>Do you have anything to declare?</li>
+<p>No, of course not.  No need to search this suitcase.  Nope, not a bit.
+The customs dogs must have smelled a doggy treat or something.</p>
+</ul>
+<a name='Acknowledgements'></a><h1>Acknowledgements</h1>
+<p>Thanks are, of course, due to Leon Brocard for ably filling my shoes
+for the past couple of weeks and making sure that the summaries got
+through.</p>
+<p>I'd also like to thank Rhys Weatherly and Gopal V for popping up on
+the internals list. I think it's <i>great</i> to see good communication
+and cooperation between the different projects working in this field.</p>
+<p>Thanks too to my army of crack proofreaders who help to turn the
+misspelled morass of bad grammar that is my first draft into something
+that's readable. This week's team was: Chris Ball</p>
+<p>The Perl 6 Summary was produced with the aid of GNER tea, the
+distractions of MAME and <i>10 Yard Fight</i> and with money from O'Reilly
+and Associates. If you liked it, please consider giving money to the
+Perl Foundation at <a href='http://donate.perl-foundation.org' target='_blank'>donate.perl-foundation.org</a> and feedback
+and/or NeXTcubes to me, mailto:pdcawley@bofh.org.uk.</p>
+<p>The fee paid for publication of this summary on perl.com has been
+donated directly to the Perl Foundation.</p>
+</div>

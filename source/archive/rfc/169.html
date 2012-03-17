@@ -1,0 +1,161 @@
+[% setvar title Proposed syntax for matrix element access and slicing. %]
+<h3>This file is part of the Perl 6 Archive</h3>
+    <p>To see what is currently happening visit <a href="http://www.perl6.org/">http://www.perl6.org/</a></p>
+<div class='pod'>
+<a name='TITLE'></a><h1>TITLE</h1>
+<p>Proposed syntax for matrix element access and slicing.</p>
+<a name='VERSION'></a><h1>VERSION</h1>
+<pre>  Maintainer: Buddha Buck &lt;<a href='mailto:bmbuck@14850.com'>bmbuck@14850.com</a>&gt;
+  Date: 29 Aug 2000
+  Last Modified: 14 Sep 2000
+  Mailing List: <a href='mailto:perl6-language-data@perl.org'>perl6-language-data@perl.org</a>
+  Number: 169
+  Version: 2
+  Status: Withdrawn
+  Superceded By: RFC 204, RFC 205, RFC 206, RFC 207</pre>
+<a name='CHANGES'></a><h1>CHANGES</h1>
+<p>This RFC is withdrawn in favor of RFCs 202-207.  Most of the ideas
+presented in this RFC have been incorporated in RFC 205 (New operator ;
+for creating array slices), RFC 206 (@#arr for getting the dimensions
+of an array), and RFC 207 (Efficient Array Loops).  The combination of
+RFC 205 and RFC 204 create a more flexible array index technique than
+presented in this RFC.</p>
+<p>The main body of this RFC is left here as a historical record.</p>
+<a name='ABSTRACT'></a><h1>ABSTRACT</h1>
+<p>I propose the use of ';' as a separator for index terms when accessing
+multi-dimensional arrays (matrices).  The syntax
+&quot;$matrix[$w;$x;$y;$z];&quot; is clearer and more flexible than other
+proposed alternatives.  The flexibility is mainly in the possibility
+of a robust slicing syntax.</p>
+<p>Although I know of no RFC's that recommend the implementation of
+matrices, I expect such a proposal to be made, and this RFC does not
+make such a suggestion.</p>
+<a name='DESCRIPTION'></a><h1>DESCRIPTION</h1>
+<p>Several suggestions have been made for matrix element accessors,
+including:</p>
+<pre>    $matrix[$x][$y][$z]   # aka &quot;(Lo)*L&quot; notation ( (lists of)* lists)
+    $matrix[$x,$y,$z]     # aka &quot;[,,]&quot; notation
+    $matrix{&quot;$x,$y,$z&quot;}   # aka hash notation</pre>
+<p>All three of these have problems.  The (Lo)*L notation either requires
+matrices be (lists of)* lists, or uses the same syntax for both
+matrices and (lists of)* lists.  The hash notation has the same
+confusion, but with hashes.  The [,,] notation is too similar to
+the existing syntax for array slices.</p>
+<p>None of them allow for convenient matrix slicing.</p>
+<p>Using $matrix[$i;$j;$k;$l] has the advantage that it is dissimilar
+from exising syntax, thus minimizing confusion with pre-existing data
+structures, and it provides a clean separation of indices, allowing
+for a flexible slice notation.</p>
+<a name='Matrix Element Access.'></a><h2>Matrix Element Access.</h2>
+<p>Matrix elements should be accessed as normal arrays, but using &quot;;&quot; to
+separate the indices:</p>
+<pre>   my @matrix;
+   $matrix[1;2;3;4] = 5;
+
+   sub tensor2mul {
+     my @tensor1 = @{shift @_};
+     my @tensor2 = @{shift @_};
+     my @tensor3;
+
+     for $i (0..3) {
+       for $j (0..3) {
+         for $k (0..3) {
+           for $l (0..3) {
+             $tensor3[$i;$j;$k;$l] = $tensor1[$i;$j] * $tensor2[$k;$l];
+     } } } }
+     return @tensor3;
+   }</pre>
+<p>Currently, ';' is only used for statement separators and as term
+separators in for(;;) loops.  This new proposed use should not be a
+problem for the parser or programmers to understand in this context.</p>
+<a name='Matrix Slices'></a><h2>Matrix Slices</h2>
+<p>Because the indices are separate, array slice notation can easily be
+used for the individual indices.</p>
+<pre>   #exlude row $j and column $k, as if taking a determinant.
+   @submatrix = @matrix[0..$j-1,$j+1..$n;0..$k-1,$k+1..$n];</pre>
+<p>While that should work obviously enough, a more flexible syntax would
+be nice:</p>
+<pre>   # leave index blank for &quot;all&quot;  # or use unterminated &quot;..&quot;
+   @row = @matrix[1;];            # @row = @matrix[1;..];
+   @col = @matrix[;1];            # @col = @matrix[..;1];
+   @swaprow = @matrix[1,0,2..$n;]
+
+   # Use ^var to get more complicated slices
+   @diagonal    = @matrix[^i;^i];
+   @rdiagonal   = @matrix[^i;$n-$i];
+   @uptriangle  = @matrix[^i;0..$i];
+   @lowtriangle = @matrix[^i;$i..$#];
+
+   # These would be nice, but probably not feasable
+
+   @trans[^i;^j] = @matrix[^j;^i];
+   @tensor3[^i;^j;^k;^l] = @tensor1[^i;^j] * @tensor2[^k;^l];
+   $dotproduct = reduce ^1+^2 , 0, a[^_] * b[^_];</pre>
+<p>Those above would work if the ^vars would scope across all indices in
+the statement, not just one.</p>
+<pre>   # use $# to get maximum val for index
+   sub lowtriangle {
+      @matrix = @{ shift @_ };
+      return @matrix[^i;^i..$#];  # works for all 2-d matrices.
+   }</pre>
+<p>Matrices of more than two dimensions should be handled similarly:</p>
+<pre>   # Slice through middle of cube perpendicular to main diagonal
+   @slice = @matrix[^i;^j;^i-^j];</pre>
+<p>The use of the ^var syntax is analogous to the use of ^placeholder
+syntax in Damian Conway's HOF RFC.</p>
+<a name='Computing the size of matrices'></a><h2>Computing the size of matrices</h2>
+<p>I'd propose that, analogous to the $#array notation for revealing the
+upper index of @array, @#matrix return the analogous list:</p>
+<pre>   my @matrix
+   $matrix[2;2;2] = 1;
+   @sizes  = @#matrix;   # @sizes == (2,2,2)
+   $numdim = @#matrix;   # array in scaler context.</pre>
+<a name='Unresolved issue -- variable dimensionality'></a><h2>Unresolved issue -- variable dimensionality</h2>
+<p>Right now, the syntax above hardcodes the dimension of a matrix in the
+index list.  This does not allow you to write programs which
+manipulate $n-dimensional matrices, where $n is computed at run-time.
+This is unfortunate, and I'd like to hear suggestions on how to deal
+with that issue.</p>
+<p>One possible mechanism would be to allow @k = @matrix[$n;]; to always
+assign to @k a matrix of one less dimension that @matrix, regardless
+of the original dimensionality, with the exception that @array[$n;]
+will return a singleton list rather than a 0-dimension matrix (which
+should by rights be a scalar).  How that should generalize is not
+clear.</p>
+<a name='Unresolved issue -- ^var slices and HOF'></a><h2>Unresolved issue -- ^var slices and HOF</h2>
+<p>Damian Conway suggested a HOF syntax which used ^var as a
+placeholder.  The &quot;reduce&quot; example above shows how confusing using
+both HOF and ^var slices in the same expression can be.  Originally, I
+thought this wouldn't be a problem because closures are not allowed as
+array indices, so @a[^i;^j] would be unambiguous.  But this precludes
+being able to say:</p>
+<pre>   my &amp;closure = $matrix[^_;^_]; # closure(1,2) == $matrix[1;2]
+   my &amp;c2      = closure(^_,5) ;   c2(4)        == $matrix[4;5]</pre>
+<p>I think both functionalities are powerful and useful.  I would
+appreciate how to get both of them unambiguously and cleanly.</p>
+<a name='IMPLEMENTATION'></a><h1>IMPLEMENTATION</h1>
+<p>Using ; as a indices separator should cause no serious problems of
+implementation.</p>
+<p>The use of ^var indices could, in a reference implementation, be
+syntactic sugar for something like:</p>
+<p>@matrix[^i;^j;^k;^k]
+==&gt;
+do { my @result; my ($i,$j,$k);
+my @indices = @#matrix;
+for $i (0..$indices[0]) {
+for $j (0..$indices[1]) {
+for $k (0..$indices[2] {
+$result[$i;$j;$k] = $matrix[$i,$j,$k,$k];
+}
+}
+}
+@result;
+}</p>
+<p>It should be noted that the matrix slice operations are likely to be
+inherently O(k), where k is the number of dimensions indexed over.</p>
+<a name='REFERENCES'></a><h1>REFERENCES</h1>
+<p>RFC 24: &quot;Higher Order Functions&quot;</p>
+<p>RFC 204: &quot;Arrays: Use list references for multidimensional array access&quot;</p>
+<p>RFC 205: &quot;Arrays: New operator ';' for creating array slices&quot;</p>
+<p>RFC 206: &quot;Arrays: @#arr for getting the dimensions of an array&quot;</p>
+</div>

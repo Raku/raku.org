@@ -1,0 +1,410 @@
+[% setvar title Modify open() to support FileObjects and Extensibility %]
+<h3>This file is part of the Perl 6 Archive</h3>
+    <p>To see what is currently happening visit <a href="http://www.perl6.org/">http://www.perl6.org/</a></p>
+<div class='pod'>
+<a name='TITLE'></a><h1>TITLE</h1>
+<p>Modify open() to support FileObjects and Extensibility</p>
+<a name='VERSION'></a><h1>VERSION</h1>
+<pre>  Maintainer: Nathan Wiger &lt;<a href='mailto:nate@wiger.org'>nate@wiger.org</a>&gt;
+  Date: 4 Aug 2000
+  Last Modified: 15 Sep 2000
+  Mailing List: <a href='mailto:perl6-language-io@perl.org'>perl6-language-io@perl.org</a>
+  Number: 14
+  Version: 4
+  Status: Frozen</pre>
+<a name='ABSTRACT'></a><h1>ABSTRACT</h1>
+<p>Currently, <code>open()</code>, <code>opendir()</code>, <code>sysopen()</code>, and other file open
+functions are given handle arguments, whose values are twiddled if a
+filehandle can be created:</p>
+<pre>   open(HANDLE, &quot;&lt;$filename&quot;);
+   open PIPE, &quot;| $program&quot;;
+   open my $fh, &quot;&lt;$filename&quot;;
+   opendir DIR, $dirname;</pre>
+<p>There are several problems with this approach:</p>
+<pre>   1. The calling style is uncharacteristic of other Perl funcs
+   2. There is no way to support a list of return values
+   3. There is no way to overload or extend them</pre>
+<p>In order to make these functions more consistent with other constructor
+like functions, they should be changed to instead return <b>first-class
+fileobjects</b>:</p>
+<pre>   $fo = open &quot;&lt;$filename&quot; or die;
+   $po = open &quot;|$program&quot; or die;
+   $do = open dir $dirname or die;</pre>
+<p>This would make these functions more internally consistent within Perl,
+as well as allowing for the power of true <b>fileobjects</b> and an
+extensibile framework that can handle a multitude of different file
+types.</p>
+<a name='NOTES ON FREEZE'></a><h1>NOTES ON FREEZE</h1>
+<p>This RFC received an excellent response; almost surprisingly so, in
+fact. Most everyone agreed that the new <code>open</code> syntax was much more
+Perlish and flexible. And many were enthusiastic about basic
+<b>fileobjects</b> being so powerful. Some of the concepts - like URI
+support - were suggested by others and, once integrated, rounded out the
+proposal very nicely.</p>
+<p>This proposal can stand on its own, but for best results should probably
+be coupled with:</p>
+<pre>   RFC 101: Handlers and Pseudo-classes
+   RFC 239: Standardization of IO Functions to use Indirect Objects</pre>
+<p>Or at least read together, to get a little better overview of how these
+could be tied together.</p>
+<a name='DESCRIPTION'></a><h1>DESCRIPTION</h1>
+<a name='Overview'></a><h2>Overview</h2>
+<p>First, this RFC assumes that <b>fileobjects</b> will be $ single-whatzitz
+(thanks Tom) types, which seems to have reached an overall informal
+consensus.</p>
+<p>As many have observed, the current filehandle mechanism is insufficient
+and largely &quot;a historial accident&quot;. The goal of the redesign of file
+handles into full-fledged <b>fileobjects</b> is to make them as flexible and
+powerful as other objects within Perl, which still retaining a means to
+interact with them simply. Since we are redesigning filehandles to be
+true <b>fileobjects</b>, we should revise their constructor functions as
+well, returning <b>fileobjects</b> and providing extensibility.</p>
+<p>As shown above, in the simplest case this would change the <code>open()</code>
+function to:</p>
+<pre>   $fo = open $filename or die;</pre>
+<p>If successful, <code>open()</code> and its relatives will return <b>fileobjects</b>.
+On failure, they will return undef. This still allows the user to test
+the return value of <code>open()</code> (as shown above) by checking for a &quot;true&quot;
+(<code>fileobject</code>) or &quot;false&quot; (undef) condition.</p>
+<a name='New Syntax of open()'></a><h2>New Syntax of open()</h2>
+<p>The syntax of the <code>open()</code> function would be changed as follows:</p>
+<pre>   $fileobject, [ @params ] = open [ $handler ] $file, [ @args ];</pre>
+<p>Let's examine this syntax more closely:</p>
+<pre>   $fileobject  -  Replacement object for current filehandles.
+
+   @params      -  Optional parameters that may be returned in a list
+                   context. These may be things such as the owner for
+                   a true file, or the content-type for a web document.
+
+   $handler     -  The class from which to load the appropriate file
+                   methods, the default being &quot;file&quot;. This is just a
+                   special type of pseudoclass. The handler type is
+                   bound to a class given by the user, or taken from a
+                   set of core methods. Think Apache handler.
+
+                   This is simply called via the indirect object syntax
+                   if it exists. For more details on handlers, see
+                   RFC 101: Handlers and Pseudoclasses.
+
+   $file        -  File to open. This might be a real file or directory,
+                   but might also be a website, port for a socket,
+                   ftp server, ipc pipe, rpc client, and so on.
+
+   @args        -  Optional arguments to pass to the handler's C&lt;open&gt;.</pre>
+<p>The <code>open</code> function, as I propose it, is an overloaded and extensible
+function that differs from other constructors in that it returns a valid
+<b>fileobject</b>. This object can then be used in <code>read</code>, <code>print</code>, and
+other such file functions. As such, development of classes that can
+handle objects on new platforms (ex: Mac, Palm) and handle new types of
+files (XML documents, etc) is much quicker. Plus, these modules are much
+lighter weight since they don't have to reinvent the wheel every time.</p>
+<a name='Simple Scalar Form'></a><h2>Simple Scalar Form</h2>
+<p>In the simplest, &quot;looks like Perl 5&quot; form, <code>open()</code> can take one file
+parameter, which is then opened per the descriptor provided and the
+corresponding <b>fileobject</b> returned. Here are some examples (note that
+<code>my</code> has been left out for clarity):</p>
+<pre>   # Read from a file
+   $fo = open &quot;&lt;/etc/passwd&quot; or die;
+   print while (&lt;$fo&gt;);
+   close $fo;
+
+   # Write a file to a pipe
+   $mailpipe = open &quot;|/usr/lib/sendmail&quot; or die;
+   ($motd, $owner) = open &quot;&lt;/etc/motd&quot;;       # return owner in list
+   die unless $owner == 0;                    # owner not root
+   while (&lt;$motd&gt;) {
+      print $mailpipe;
+   }
+   close $motd;
+
+   # Go fork yourself
+   ($myself, $pid) = open &quot;-|&quot; or exec 'ls';  # return PID in list
+   print while (&lt;$myself&gt;);
+   close $myself;   # not myself anymore, hah! ;-)</pre>
+<p>In addition, the <code>$file</code> argument becomes optional in this new syntax.
+If not supplied, it defaults to <code>$_</code>, making it consistent with other
+Perl functions:</p>
+<pre>   for (@filenames) {
+      my $fo = open;      
+      push @open_handles, $fo;
+   }
+
+   # ... stuff happens ...
+
+   for (@open_handles) {
+      close;
+   }</pre>
+<p>Perhaps this specific example is ugly (and useless), but there are
+probably other situations in which one could take advantage of this.
+Since <code>$_</code> is just a string, it can contain a web doc, pipe, file,
+directory, or anything else you want.</p>
+<a name='True First-Class FileObjects'></a><h2>True First-Class FileObjects</h2>
+<p>One major limitation of Perl's current filehandles is that they are
+bareword scalars, with no object properties or power. The redesign of
+simple filehandles into first-class <b>fileobjects</b> allows us to give
+them full object-oriented power, while still allowing them to be used
+in a simple manner as shown above. Each object can contain methods to
+allow us to access features of that <b>fileobject</b> much more efficiently.</p>
+<p>Here are some proposed default accessor methods of <b>fileobjects</b>. Each
+of these would return the appropriate value, or undef if not available.
+This is a brief listing; the intent would be to support all of the
+current <code>FileHandle</code> methods and then some. In a string context, the
+filename as opened (including descriptors like | and &lt;) is returned.</p>
+<pre>   $fo-&gt;STRING    -  Same as $fo-&gt;filename
+   $fo-&gt;NUMBER    -  Same as $fo-&gt;fileno
+
+   $fo-&gt;filename  -  Name of the file, web document, port, etc
+   $fo-&gt;fileno    -  System file number
+   $fo-&gt;type      -  One of 'PIPE', 'FILE', 'Class', etc, ala want()
+   $fo-&gt;mode      -  Way the file was opened (|,&lt;,&gt;+,etc)
+   $fo-&gt;dup       -  Returns a duplicate of the current B&lt;fileobject&gt;
+   $fo-&gt;pid       -  Return current PID of the process (if pipe/fork)</pre>
+<p>In addition, these functions would allow you to modify key elements of
+the <b>fileobject</b>:</p>
+<pre>   $fo-&gt;autoflush -  Sets buffer flushing policy
+   $fo-&gt;untaint   -  Removes tainting from that data source
+   $fo-&gt;options   -  Some syscalls, like C&lt;socket()&gt;, allow you to set
+                     options which affect the handling of C&lt;$fo&gt;</pre>
+<p>If we decide that <b>fileobjects</b> should be persistent across <code>close()</code>
+operations, we could define the following functions:</p>
+<pre>   $fo-&gt;open      -  Object methods to open/close C&lt;fileobjects&gt;
+   $fo-&gt;close
+   $fo-&gt;is_open   -  1 or undef, depending on the state of the object
+   $fo-&gt;is_closed</pre>
+<p>Why would a <b>fileobject</b> be persistent across <code>close()</code> operations? If
+it contains lots of properties, it may be a waste if we simply want to
+close it to make sure buffers are flushed or bandwidth is not wasted on
+TCP connections. We could use <code>close()</code> to flush buffers and tidy
+things up, but not destroy the object until the end of the script or
+<code>undef $fo</code> was called (similar to <code>FileHandle</code>).</p>
+<a name='Extensible Handler Bindings'></a><h2>Extensible Handler Bindings</h2>
+<p>In addition to the standard file form, <code>open()</code> can also now take an
+optional handler name (the default is &quot;file&quot;) from which to load the
+appropriate methods. This gives us easy access to methods that open
+Directory, Socket, HTTP, FTP, or other types of files, meaning we no
+longer have to start from the ground up every time we want to open a new
+type of &quot;file&quot;.</p>
+<p>Handlers are discussed in detail in <b>RFC 101: Handlers and
+Pseudoclasses</b>. However, since they are relevant to this RFC, we'll
+digress and discuss them a little.</p>
+<p><code>handlers</code> work much like Apache handlers. You specify a certain type
+of handler (for example, &quot;file&quot;, &quot;dir&quot;, &quot;http&quot;, &quot;ftp&quot;, and so on), which
+is really just a pseudoclass that inherits its methods from other
+classes. The only requirement is that the classes the handler inherits
+from return one of two values:</p>
+<pre>   1. A valid C&lt;fileobject&gt; which contains certain mandatory
+      object methods (exact methods yet to be hammered out).
+
+   2. undef if the file can't be handled, which allows stacked
+      handlers.</pre>
+<p>As such, when a user specifies something like:</p>
+<pre>   # Open a dir
+   $dir = open dir &quot;/usr/bin&quot;;</pre>
+<p>Then the <code>dir</code> handler is called automatically by Perl's standard
+indirect object notation:</p>
+<pre>   $dir = dir-&gt;open(&quot;/usr/bin&quot;);</pre>
+<p>However, <code>dir</code> would not correspond directly to a class, but rather a
+<code>handler</code>. To paraphrase Tom Hughes's great explanation of this, the
+core should provide a way for modules to register themselves as being
+handlers. For example, you might use <code>LWP::UserAgent</code>, which would
+register as being a valid <code>http</code> handler. Or, you might use
+<code>Net::FTP</code>,
+which would register itself as being an <code>ftp</code> handler.</p>
+<p><code>RFC 101: Handlers and Pseudoclasses</code>, explores this in detail.
+Basically:</p>
+<pre>   use LWP::UserAgent;
+   handler http =&gt; 'LWP::UserAgent';   # RFC 101
+
+   $web = open http &quot;<a href='http://www.yahoo.com' target='_blank'>www.yahoo.com</a>&quot;, 'GET'; </pre>
+<p>The <code>handler</code> line gives an example of what might happen. This might be
+specified by the user (as shown), or might be done automatically by
+loading modules under a certain part of the lib tree. This mechanism is
+considered fully in <b>RFC 101</b>.</p>
+<!-- POD_ERROR: unterminated C<...> at line 277 in file rfc/14.pod -->
+<p>These handlers are stackable. If a <code>handler? returns undef, then the
+next one in line tries to open it. If no handler can open a specific
+file, then undef is returned from <code>open</code> to the user, consistent with
+current behavior.</code></p>
+<p>For example, we might might stack <code>dir</code> handlers so that only certain
+users can look at the contents of &quot;/usr/sbin&quot;, for example:</p>
+<pre>   use Unix::OnlyRootSeesUsrSbin;   
+   handler dir =&gt; 'Unix::OnlyRootSeesUsrSbin';    # RFC 101
+
+   $dir = open dir &quot;/usr/sbin&quot;;     # not root? no /usr/sbin for you!
+  </pre>
+<p>Here are some more examples which could be use to provide essentially
+native file access for many different media:</p>
+<pre>   # Open a file
+   # Note &quot;file&quot; is the default class so doesn't have to be specified
+   $motd = open &quot;&gt;/etc/motd&quot; or die;
+   print $motd @data;
+   close $motd;
+
+   # Open a directory 
+   $dir = open dir &quot;/usr/bin&quot;;
+   @files = grep !/^\..*/, &lt;$dir&gt;;  # no more readdir
+   close $dir;                      # no more closedir
+
+   # Open a client socket with IO::Socket
+   # By overloading &lt; and &gt; we can do clients and servers!
+   $socket = open socket &quot;&lt; 25&quot;, PF_INET, SOCK_STREAM, TCP;
+   @input = &lt;$socket&gt;;
+   close $socket;
+   do_something(@input);
+
+   # Open a remote webpage
+   $http = open http &quot;<a href='http://www.perl.com' target='_blank'>www.perl.com</a>&quot;, GET;
+   @doc = &lt;$http&gt;;
+   print @doc if $http-&gt;content_type eq 'text/html';
+   close $http;
+
+   # Open an ftp connection
+   $ftp = open ftp &quot;ftp.perl.com&quot;;
+   $ftp-&gt;cwd('CPAN') or die;
+   @files = &lt;$ftp&gt;;          # overloading as dir
+   close $ftp;               # $ftp-&gt;close</pre>
+<p>The advantages to using such an extensible <code>open</code> are twofold:</p>
+<pre>   1. No more reinventing the wheel to support new file
+      types on different platforms or networks.
+
+   2. Easy integration so that a single syntax can address files,
+      dirs, pipes, websites, ipc communications, sockets, rpc...</pre>
+<p>Assuming that these handlers all agree to return <code>fileobjects</code> with a
+consistent set of properties, this could lead to great optimizations
+since the structure of these <code>fileobjects</code> will be known ahead of time.</p>
+<a name='Custom File Methods'></a><h2>Custom File Methods</h2>
+<p>In addition, handlers can provide a custom set of <code>read</code>, <code>print</code>, and
+other functions that do different things from the core Perl set. So, a
+Unix/NT integration module might include a <code>print</code> method that delimits
+strings differently based on filesystem. Or, a module might provide a
+custom <code>close</code> method that does special cleanup before closing a file.</p>
+<p>This is all accomplished automatically by Perl's indirect object
+notation. All of a given <code>open</code> module's functions would inherit from
+the core file methods. For example:</p>
+<pre>   package MyHttpOpen;
+   
+   sub open {
+       # do stuff...
+       return $new_http_fileobject;
+   }
+
+   sub print {
+       # overrides CORE::print()
+       # maybe it PUTs or POSTs data
+   }
+
+   sub readline {
+       # overrides CORE::readline()
+       # maybe it GETs or HEADs data
+   }</pre>
+<p>Then, in your script, you would say:</p>
+<pre>   use MyHttpOpen;
+   handler http =&gt; 'MyHttpOpen';
+
+   $post = open http &quot;<a href='http://upload.mydomain.com/upload.cgi' target='_blank'>upload.mydomain.com</a>&quot;, POST;
+   print $post @filedata;     # calls $post-&gt;print
+   $reply = &lt;$post&gt;;          # calls $post-&gt;readline</pre>
+<p>In this example, the methods are automatically invoked via the wonderful
+indirect object syntax. However, to the user it appears just like
+everything's working normally, with the same set of core functions. It
+looks like Perl natively supports http protocol documents, but it
+doesn't have to, yielding great flexibility.</p>
+<a name='Embedded URI Support'></a><h2>Embedded URI Support</h2>
+<p>This is something that many other languages, such as PHP, already
+support, and which would make Perl that much nicer to work with. With
+our new <code>open</code>, we have the ability to say:</p>
+<pre>   $htdoc = open &quot;<a href='http://www.yahoo.com' target='_blank'>www.yahoo.com</a>&quot; or die;</pre>
+<p>And have Perl figure out to fork the <code>http</code> handler. This is actually
+not that hard. All that has to happen is <code>CORE::open</code> needs to read the
+file and see if it matches a URI pattern, namely:</p>
+<pre>   ($scheme, $scheme_data) = /^([a-z][a-z0-9.+-]*):(.*)$/i;</pre>
+<p>And then check to see if there is an existing class handler for that
+through a simple object call, namely something like:</p>
+<pre>   if ( $scheme-&gt;can(&quot;open&quot;) )</pre>
+<p>If the above returns true, then the open string is passed through to the
+handler to deal with. Otherwise, it is assumed that you want to open a
+file and the string is passed to the default <code>file</code> handler. Note that
+using this scheme we could extend URIs to anything we wanted. For
+example, PHP has a special <code>php://</code> URI type that specifies certain
+internal actions. We might choose to specify:</p>
+<pre>  $process = open &quot;ipc://$parent&quot;;   
+  $socket  = open &quot;socket://$hostname:$port&quot;;</pre>
+<p>However, this is not required, or even necessarily suggested, but just a
+demonstration of what could be done.</p>
+<p>Note that some web mirroring applications use directories named for
+URLs. However, this is not difficult to work around. Using either one of
+these instantly disambiguates this situation:</p>
+<pre>  $htdoc = open file &quot;<a href='http://www.yahoo.com' target='_blank'>www.yahoo.com</a>&quot; or die;
+  $htdoc = open &quot;&lt; <a href='http://www.yahoo.com' target='_blank'>www.yahoo.com</a>&quot; or die;</pre>
+<p>The first one would automatically call the <code>file</code> handler via indirect
+object syntax. For the second one, <code>CORE::open</code> would see that it did
+not match the syntax for a URI and would pass it to the <code>file</code> handler
+as well.</p>
+<p>Remember, any extra arguments are passed to the handler automatically,
+so to modify your <code>http</code> access method you would simply say:</p>
+<pre>  $htdoc = open &quot;<a href='http://www.yahoo.com' target='_blank'>www.yahoo.com</a>&quot;, 'GET' or die;
+  $htdoc = open &quot;<a href='http://www.yahoo.com' target='_blank'>www.yahoo.com</a>&quot;, 'POST' or die;</pre>
+<p>Again, simple and quite Perlish.</p>
+<a name='IMPLEMENTATION'></a><h1>IMPLEMENTATION</h1>
+<a name='Syntax Changes'></a><h2>Syntax Changes</h2>
+<p>The <code>CORE::open</code> function would have to be altered to act more as a
+simple dispatch than anything. It could simply do some detecting of URIs
+then turn around and fork file-&gt;open for standard files. Or, perhaps
+the <code>file</code> handler should be builtin to <code>CORE::open</code> still, since this
+the most common operation.</p>
+<p>The <code>CORE::close</code> function would remain basically unchanged, acting on
+the <b>fileobject</b> (or <code>$_</code> if none is specified).</p>
+<p>There are many other function changes that are somewhat tied to this
+RFC, but which this RFC does <i>not</i> require strictly, that should be
+considered. These are covered in detail in <b>RFC 239</b>.</p>
+<p>Finally, I am in the process of constructing a Perl 5 prototype of this
+proposal; I will announce it to the list when it's complete.</p>
+<a name='Function Deletions'></a><h2>Function Deletions</h2>
+<p>Because this syntax is flexible enough to handle any type of file
+opening, the following functions should be removed from Perl 6:</p>
+<pre>   # Replaced by 'open dir'
+   opendir         # dir-&gt;open   instead
+   readdir         # dir-&gt;read   instead
+   closedir        # dir-&gt;close  instead
+   seekdir         # dir-&gt;seek   instead
+   rewinddir       # dir-&gt;rewind instead
+   telldir         # dir-&gt;tell   instead</pre>
+<p>Notice how the indirect object syntax yields us the ability for function
+names to overlap, meaning that Perl appears to DWIM embedded file types:</p>
+<pre>   seek $FH;       # file-&gt;seek
+   seek $DH;       # dir-&gt;seek
+   seek $WEB;      # http-&gt;seek</pre>
+<p>When in fact it's a &quot;simple&quot; matter of parsing.</p>
+<pre>   # Replaced by 'open socket'
+   socket          # socket-&gt;open
+   setsockopt      # socket-&gt;options
+   connect         # socket-&gt;connect
+   close           # socket-&gt;close
+   shutdown        # socket-&gt;shutdown   </pre>
+<p>For more details on these and other proposed changes to IO functions,
+please see <b>RFC 239: Standardization of Perl IO Functions to use
+Indirect Objects</b>, since that RFC is what truly addresses these changes.</p>
+<a name='Performance'></a><h2>Performance</h2>
+<p>In order to prevent performance hits, anything that is packaged as a
+default file type (such as files, pipes, directories, sockets, ipc,
+and so on) must be highly optimized for interaction with this new
+version of <code>open()</code>. Basically, anything living under the <code>IO::</code>
+tree should be ripped apart and put back together again.</p>
+<a name='REFERENCES'></a><h1>REFERENCES</h1>
+<p>RFC 101: Handlers and Pseudoclasses</p>
+<p>RFC 239: Standardization of Perl IO Functions to use Indirect Objects</p>
+<p>RFC 174: Improved parsing and flexibility of indirect object syntax</p>
+<p>RFC 159: True Polymorphic Objects</p>
+<p>RFC 33: Eliminate bareword filehandles</p>
+<p>RFC 30: STDIN, STDOUT, and STDERR should be renamed</p>
+<p>RFC 186: Standard support for opening i/o handles on scalars and
+arrays-of-scalars</p>
+<a name='ACKNOWLEDGEMENTS'></a><h1>ACKNOWLEDGEMENTS</h1>
+<p>Tom Christiansen's great analysis of file object methods</p>
+<p>Tim Jenness's suggestion to use optimized IO objects for all I/O</p>
+<p>Nick Ing-Simmon's suggestion to hide IO:: classes from the user</p>
+<p>Tom Hughes's formalization of a way to register open() handlers</p>
+<p>Jonathan Scott Duff, Jon Ericson, and Kai Henningsen's help with URIs</p>
+<p>Chaim Frenkel's suggestion of a way to register classes in Perl 6</p>
+<p>Everyone else on perl6-language-io, you guys are great! Thanks. :-)</p>
+</div>

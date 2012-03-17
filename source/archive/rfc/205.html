@@ -1,0 +1,128 @@
+[% setvar title Arrays: New operator ';' for creating array slices %]
+<h3>This file is part of the Perl 6 Archive</h3>
+    <p>To see what is currently happening visit <a href="http://www.perl6.org/">http://www.perl6.org/</a></p>
+<div class='pod'>
+<a name='TITLE'></a><h1>TITLE</h1>
+<p>Arrays: New operator ';' for creating array slices</p>
+<a name='VERSION'></a><h1>VERSION</h1>
+<pre>  Maintainer: Jeremy Howard &lt;<a href='mailto:j@howard.fm'>j@howard.fm</a>&gt;
+  Date: 8 Sep 2000
+  Last Modified: 24 Sep 2000
+  Mailing List: <a href='mailto:perl6-language-data@perl.org'>perl6-language-data@perl.org</a>
+  Number: 205
+  Version: 3
+  Status: Frozen
+  Frozen since: v2</pre>
+<a name='DISCUSSION'></a><h1>DISCUSSION</h1>
+<p>The semantics discussed here were accepted by all on the list. The use of
+<code>;</code> outside of a list index did not reach consensus, due to concerns that
+its implementation may be too inefficient.</p>
+<p>RFC 231 is presented as an alternative to RFCs 204 and 205, but since it
+provides suggested implementation of a subset of interfaces proposed in
+RFCs 204 and 205, they need not be mutually exclusive. This is discussed
+further in the implementation section.</p>
+<a name='CHANGES'></a><h1>CHANGES</h1>
+<a name='Since v1'></a><h2>Since v1</h2>
+<ul>
+<li><a name='Added discussion of efficiency and RFC 231 in implementation section'></a>Added discussion of efficiency and RFC 231 in implementation section</li>
+<li><a name='Added comparison to use of slices without ;'></a>Added comparison to use of slices without <code>;</code></li>
+</ul>
+<a name='ABSTRACT'></a><h1>ABSTRACT</h1>
+<p>RFC 204 described and extension of standard list indexing which allows
+indexing directly into a multidimensional array by using a list of lists
+of coordinates. This RFC describes a new operator <code>;</code> that can create
+lists of coordinates corresponding to slices and blocks of
+multidimensional arrays. The <code>;</code> operator creates the cartesian product
+of its operands as a list of lists. It can only operate within a list
+constructor.</p>
+<a name='DESCRIPTION'></a><h1>DESCRIPTION</h1>
+<p>It is proposed that a new operator <code>;</code> be introduced that operates within
+a list constructor to create the cartesian product of its operands:</p>
+<pre>  @lol = ( (1,2) ; (3,4) );   # ([1,3], [1,4], [2,3], [2,4])</pre>
+<p>The order of the resultant list is to generate pairs by iterating through
+the right-hand operand for each element of the left-hand operand in turn,
+going from left to right.</p>
+<p>If an operand is a list of lists, the <code>;</code> operator creates the cartesian
+product of the component lists:</p>
+<pre>  @lol = ( ([1,3],[1,4]);(5,6) ) # ([1,3,5], [1,3,6], [1,4,5], [1,4,6])</pre>
+<p>which is equivalent to:</p>
+<pre>  @lol = ( (1 ; (3,4)); (5,6) ) # ([1,3,5], [1,3,6], [1,4,5], [1,4,6])
+  </pre>
+<p>which, because <code>;</code> is associative, is equivalent to:</p>
+<pre>  @lol = ( 1 ; (3,4); (5,6) ) # ([1,3,5], [1,3,6], [1,4,5], [1,4,6])</pre>
+<p>and, because <code>;</code> evaluates its arguments in a list context, and has a
+lower precendence than <code>,</code>, it equivalent to:</p>
+<pre>  @lol = ( 1 ; 3,4 ; 5,6 ) # ([1,3,5], [1,3,6], [1,4,5], [1,4,6])</pre>
+<p><code>;</code> is particularly useful for creating slices of multidimensional
+arrays:</p>
+<pre>  my int @array = ([1,2,3],
+                   [4,5,6],
+                   [7,8,9]);
+  @col2 = @array[0..2; 1];   # @array[[0,1],[1,1],[2,1]] == (2,5,8)
+  </pre>
+<p>Allowing <code>;</code> in contexts other than just within a list index leads to
+both consistency and convenience with how list slicing is done in Perl 5:</p>
+<pre>  # Perl 5 behaviour
+  @indices = (1,3);
+  @list = (3,4,5,6);
+  @list[@indices] = (1,2);   # (3,1,5,2)
+
+  # Multidim extension
+  @2d_indices = ([0,0],[1,1]);
+  @2d_arr = ([3,4,5],[6,7,8]);
+  @2d_arr[@2d_indices] = (1,2);   # ([1,4,5],[6,2,8])
+
+  # Slice syntax extension
+  @2d_slice = (0..1 ; 0..1);       # ([0,0],[0,1],[1,0],[1,1])
+  @2d_arr = ([3,4,5],[6,7,8]);
+  @2d_arr[@2d_slice] = ([0,1],[0,1]);   # ([0,1,5],[0,1,8])</pre>
+<p>Large matrices can be flexibly manipulated using infinite lists (from RFC
+24) and list generation functions (from RFC 81):</p>
+<pre>  my int @matrix = get_big_file();
+  my @first_5_odd_cols = ( 0.. ; 1..9:2 ); # ([0,1],[0,3],[0,5],...)
+  my @matrix_slice = @matrix[@first_5_odd_cols];</pre>
+<p>Since RFC 24 as now been retracted, the second line of this would actually
+have to be:</p>
+<pre>  my @first_5_odd_cols = ( 0..10000 ; 1..9:2 ); # ([0,1],[0,3],[0,5],...)</pre>
+<p>@matrix_slice now contains the whole of columns 1,3,5,7,9 of @matrix.
+Furthermore, @first_5_odd_cols can be used to slice another matrix later,
+which may be of a different size.</p>
+<p>Because this whole-dimension slicing is so common, any argument to <code>;</code>
+may be omitted. Omitted operands default to (0..):</p>
+<pre>  ( ;1..9:2 ) == ( 0.. ; 1..9:2 );</pre>
+<p>Because of the retraction of RFC 24, it is necessary to limit the use of
+whole-dimension slicing syntax to within a list index, since in that
+case a finite sized slice can be generated (since the bounds of the list
+are known).</p>
+<p>Furthermore, in order to create generic slices that return 'all the nth
+elements' regardless of the number of dimensions of the array, the
+left-most or right-most operand to <code>;</code> may be '*', which expands to (0..)
+for every missing dimension of the sliced array:</p>
+<pre>  my int @b :shape(2,2,2) = get_some_matrix();
+  my @first_elems = @b[0;*];   # @b[[0,0,0],[0,0,1],[0,1,0],[0,1,1]]</pre>
+<p>The '*' operand may only be used in an array slicing context.</p>
+<a name='IMPLEMENTATION'></a><h1>IMPLEMENTATION</h1>
+<p>A naive implementation of <code>;</code> when used as a list index would be
+extremely inefficient. Although it should have the semantics proposed
+here, vital optimisations would mean that often no actual list would be
+created. These could include:</p>
+<ul>
+<li><a name='Create a lazily generated list, as outlined in the implementation section of &quot;RFC 81&quot;'></a>Create a lazily generated list, as outlined in the implementation section
+of <i><a href='#RFC 81'>&quot;RFC 81&quot;</a></i></li>
+<li><a name='Create a compact array (see &quot;RFC 203&quot;) rather than a standard list of lists'></a>Create a compact array (see <i><a href='#RFC 203'>&quot;RFC 203&quot;</a></i>) rather than a standard list of
+lists</li>
+</ul>
+<p>The actual optimisations would depend on context. If the cartesian product
+is not being stored, but is only being used as an array index, generation
+of a simple stream of tokens may suffice, such as described in <i><a href='#RFC 231'>&quot;RFC 231&quot;</a></i>.
+This approach is discussed in the implementation section of <i><a href='#RFC 81'>&quot;RFC 81&quot;</a></i>. Use
+of these optimisations need in no way limit the use of <code>;</code> where such
+optimisations can not be used.</p>
+<a name='REFERENCES'></a><h1>REFERENCES</h1>
+<p>RFC 231: Data: Multi-dimensional arrays/hashes and slices</p>
+<p>RFC 202: Overview of multidimensional array RFCs</p>
+<p>RFC 81: Lazily evaluated list generation functions</p>
+<p>RFC 24: Semi-finite (lazy) lists</p>
+<a name='ACKNOWLEDGEMENTS'></a><h1>ACKNOWLEDGEMENTS</h1>
+<p>Buddha Buck: Original suggestion of <code>;</code> for multidimensional array access</p>
+</div>

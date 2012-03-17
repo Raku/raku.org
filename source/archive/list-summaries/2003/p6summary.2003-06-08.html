@@ -1,0 +1,186 @@
+[% setvar title The Perl 6 Summary for the week ending 20030608 %]
+<h3>This file is part of the Perl 6 Archive</h3>
+    <p>To see what is currently happening visit <a href="http://www.perl6.org/">http://www.perl6.org/</a></p>
+<div class='pod'>
+<a name='The Perl 6 Summary for the week ending 20030608'></a><h1>The Perl 6 Summary for the week ending 20030608</h1>
+<p>It's another Monday, it's another summary and I need to get this
+finished so I can starting getting the house in order before we head
+off to Boca Raton and points north and west on the long road to
+Portland, Oregon. Via Vermont. (I'm English and as the poem comments,
+the rolling English road is &quot;A rare road, a rocky road and one that we
+did tread // The day we went to Birmingham by way of Beachy Head.&quot;
+Just because I'm in America doesn't mean I can't take an English route
+to OSCON)</p>
+<p>We'll start with the internals list this week (and, given that there are
+only 18 or so messages in my perl6-language inbox, we may well stop
+there).</p>
+<a name='Building IMCC as parrot'></a><h2>Building IMCC as parrot</h2>
+<p>It's been pretty much decided that IMCC will soon become 'the' parrot
+executable. Josh Wilmes, Robert Spier and Leo &quot;Perl Foundation grant
+recipient&quot; T&ouml;tsch are looking into what needs to be done to make
+this so. It's looking like the build system may well see some vigorous
+cleanup action in this process.</p>
+<p><a href='http://groups.google.com/groups?threadm=200306020024.h520OlPn001985@galactic.hitchhiker.org' target='_blank'>groups.google.com</a></p>
+<a name='The Horror! The Horror!'></a><h2>The Horror! The Horror!</h2>
+<p>Clint Pierce continued to expand on the internals of this Basic
+implementation. The more I see of his pathological examples, the
+gladder I am that I escaped BASIC as quickly as possible. Still, kudos
+to Clint once more for the effort, even if it is a tad embarrassing
+that the most advanced language hosted on Parrot is BASIC. (On IRC
+Leon Brocard and others have been heard to remark that they're?
+unlikely to go all out at a real language until Parrot has
+objects. Dan?)</p>
+<p><a href='http://groups.google.com/groups?threadm=5.1.0.14.2.20030601220001.01fd81a0@mail.geeksalad.org' target='_blank'>groups.google.com</a></p>
+<a name='The Horror! The Horror! Part II'></a><h2>The Horror! The Horror! Part II</h2>
+<p>The timely destruction thread still doesn't want to go away. Dan has
+been heard muttering about this on IRC. Eventually, he did more than
+mutter on IRC -- he stated clearly on list that 'We aren't doing
+reference counting' and that as far as he is concerned the matter is
+closed.</p>
+<p>Dan's blog also has another of his excellent &quot;What The Heck Is&quot; posts,
+this time about Garbage Collection.</p>
+<p><a href='http://groups.google.com/groups?threadm=3EDBBFA0.E819E6E@hotpop.com' target='_blank'>groups.google.com</a></p>
+<p><a href='http://groups.google.com/groups?threadm=a05210602bb02f82300e8@' target='_blank'>groups.google.com</a>[63.120.19.221]</p>
+<p><a href='http://www.sidhe.org/~dan/blog/archives/000200.html' target='_blank'>www.sidhe.org</a> - What the Heck
+is: Garbage Collection</p>
+<a name='The Continu(ation)ing Saga'></a><h2>The Continu(ation)ing Saga</h2>
+<p>Jonathan Sillito posted a longish meditation on Parrot's new
+continuation passing calling conventions. He wondered if, now we have
+continuation passing, we really needed the various register stacks
+that were used in the old stack based calling conventions. Warnock's
+Dilemma currently applies.</p>
+<p><a href='http://groups.google.com/groups?threadm=CNEMKELBCHOGALFFEDPFIECOCAAA.sillito@cs.ubc.ca' target='_blank'>groups.google.com</a></p>
+<a name='Clint Pierce, IMCC tester extraordinaire'></a><h2>Clint Pierce, IMCC tester extraordinaire</h2>
+<p>Over the past couple of week's Clint Pierce has been porting his BASIC
+implementation over to run on IMCC. In the process of doing so he's
+been finding and reporting all sorts of IMCC bugs and/or
+misunderstandings and Leo T&ouml;tsch (usually) has either been
+correcting Clint's assumptions or fixing the bugs he's found. I've
+mentioned a few of these exchanges that generated longish threads in
+the past, but that hasn't covered everything that's been found,
+discussed and fixed. It's been great to see this sort of dialogue
+driving the design and implementation forward based on the needs of a
+real program.</p>
+<p>The thread I've linked to below is another exchange in this ongoing
+dialogue. Clint found a way of reliably segfaulting IMCC. Leo fixed
+it. And on to the next.</p>
+<p><a href='http://groups.google.com/groups?threadm=rt-22521-58643.5.77130880187681@rt.perl.org' target='_blank'>groups.google.com</a></p>
+<a name='And, on the subject of list stalwarts...'></a><h2>And, on the subject of list stalwarts...</h2>
+<p>J&uuml;rgen B&ouml;mmels is still working away at the Parrot IO
+(PIO) subsystem. In this particular patch, he's gone through the
+Parrot source replacing occurrences <code>PIO_fprintf(interpreter,
+PIO_STDERR(interpreter, ...)</code> with the better factored
+<code>PIO_eprintf(interpreter, ...)</code>, which as well as eliminating
+repetition, helps to keep the IO code slightly easier to maintain.</p>
+<p>Leo applied the patch. (Although it's not mentioned explicitly
+elsewhere, Leo continues to keep up his astonishing productivity with
+various other patches to Parrot)</p>
+<p><a href='http://groups.google.com/groups?threadm=rt-22535-58661.11.7827035484784@rt.perl.org' target='_blank'>groups.google.com</a></p>
+<a name='Make mine SuperSized'></a><h2>Make mine SuperSized</h2>
+<p>Bryan C. Warnock continued to discuss issues of the size of Parrot's
+various types, particularly the integer types that get used within a
+running Parrot. Bryan argues that these should ideally use a given
+platform's native types, worrying about guaranteed sizes only at the
+bytecode loading/saving stage. Dan and others commented on this (Dan
+essentially said that he understood what Bryan was driving at but
+wasn't quite sure of the way forward, and outlined his
+options). Discussion continues.</p>
+<p><a href='http://groups.google.com/groups?threadm=1054644274.2210.803.camel@wakko' target='_blank'>groups.google.com</a></p>
+<pre>=head Call <code>invoke</code> call?</pre>
+<p>Jonathan Sillito submitted a patch which changes <code>invoke</code> to
+<code>call</code>, adds some PMC access macros and updates the tests. He and Leo
+T&ouml;tsch discussed things for a while and I think the patch is in
+the process of being rewritten as result of that discussion.</p>
+<p><a href='http://groups.google.com/groups?threadm=rt-22549-58682.5.99782813786945@rt.perl.org' target='_blank'>groups.google.com</a></p>
+<a name='Constant Propagation/Folding'></a><h2>Constant Propagation/Folding</h2>
+<p>Matt Fowles had another bite at his Constant Propagation cherry. His
+latest patch is rather more conservative, and actually has tests. Leo
+changed one line and applied it.</p>
+<p><a href='http://groups.google.com/groups?threadm=rt-22558-58706.18.079205723288@rt.perl.org' target='_blank'>groups.google.com</a></p>
+<a name='Destruction order'></a><h2>Destruction order</h2>
+<p>One of the good things about a simple minded reference counting
+Garbage Collector is that object destructors generally get called in a
+sensible order; if you have a tree of objects, the various node
+destructors will generally get called in such a way that a given
+node's children won't have been destroyed already. Garrett Goebel
+asked if we could keep this behaviour with the Parrot GC system. Dan
+was minded to say &quot;Yes&quot; as he's been wrestling with issues of non
+deterministic destruction order in another of his projects (So have I;
+it's a <i>very</i> long way from being fun, if I had the C chops I'd be
+trying to fix Perl 5's 'at exit' mark and sweep garbage collector to
+do something similar.)</p>
+<p><a href='http://groups.google.com/groups?threadm=71BEC0D4E1DED3118F7A009027B12028034C8D6E@EXCH_MISSION' target='_blank'>groups.google.com</a></p>
+<a name='K Stol's Lua Compiler project'></a><h2>K Stol's Lua Compiler project</h2>
+<p>Klaas-Jan Stol announced that he's turned in his project implementing
+a Lua compiler that targets Parrot. He hasn't actually finished the
+compiler, his deadline being what it was, but he did post a link to
+his project report and commented that &quot;[Parrot is] a really cool
+project and VM to target&quot; and thanked everyone on the mailing list for
+their help. I think the parrot-internals people will echo my best
+wishes to Klaas-Jan; it's great to see someone who comes to a list with a
+project and, instead of saying &quot;Write this for me!&quot;, asks sensible
+questions and makes a useful contribution to the ongoing task.</p>
+<p><a href='http://groups.google.com/groups?threadm=BAY1-DAV22zUSxvjPkQ00000969@hotmail.com' target='_blank'>groups.google.com</a></p>
+<p><i><a href='http://search.cpan.org/perldoc?members.home.nl#joeijoei/parrot/report.pdf'>&quot;joeijoei/parrot/report.pdf&quot; in members.home.nl</a></i> -- Project report</p>
+<a name='Meanwhile, in perl6-language'></a><h1>Meanwhile, in perl6-language</h1>
+<p>By gum, it's been quiet this week. I haven't seen any traffic in the
+language list since Wednesday. Maybe everyone's waiting for Damian's
+Exegesis to escape.</p>
+<a name='Multimethod dispatch?'></a><h2>Multimethod dispatch?</h2>
+<p>Adam Turoff asked if multimethod dispatch (MMD) was really <i>the</i> Right
+Thing (it's definitely <i>a</i> Right Thing) and suggested that it would
+be more Perlish to allow the programmer to override the dispatcher,
+allowing for all sorts of more or less cunning dispatch mechanisms
+(which isn't to say we could still have MMD tightly integrated, but it
+wouldn't be the <i>only</i> alternative to simple single dispatch). Luke
+Palmer gets the &quot;Pointy End Grandma&quot; award for pointing out that Perl
+6 is a '&quot;real&quot; programming language now' (as Adam pointed out, Perl's
+been a 'real' programming language for years), inspiring a particularly
+pithy bit of Cozeny. As far as I can tell, Adam wants to be able to
+dispatch on the runtime value of a parameter as well as on its runtime
+type (he's not alone in this). Right now you either have to do this
+explicitly in the body of the subroutine, or work out the correct
+macromantic incantations needed to allow the programmer to use 'nice'
+syntax for specifying such dispatch.</p>
+<p>Assuming I'm not misunderstanding what Adam is after, this has come up
+before (I think I asked about value based dispatch a few months back)
+and I can't remember if the decision was that MMD didn't extend to
+dispatching based on value, or if that decision hasn't been taken
+yet. If it's not been taken, I still want to be able to do</p>
+<pre>   multi factorial (0) { 1 }
+   multi factorial ($n) { $n * factorial($n - 1) }</pre>
+<p>It seems to me that if MMD is flexible enough to do this, then it
+becomes easy to express any other set of dispatch rules as special
+cases of this more general mechanism. (That said, I'm not sure how one
+would go about expressing Smalltalk like message specifiers, which is
+a shame, I like Smalltalk message specifiers).</p>
+<p><a href='http://groups.google.com/groups?threadm=20030602033631.GD4266@panix.com' target='_blank'>groups.google.com</a></p>
+<a name='Acknowledgements, Announcements and Apologies'></a><h1>Acknowledgements, Announcements and Apologies</h1>
+<p>Well, that's about it for another week. Next week's summary will be
+coming to you from YAPC in Boca Raton. then there should be one from
+chez Turoff in Washington DC (As far as I can tell the Washington
+summary will the first summary of the second year of my summary
+writing, if you're going to be in the Greater Washington area around
+that time, consider getting in touch with either me or Ziggy and we'll
+see about having a celebratory something or other that evening). After
+Washington I'll be in Boston for the next summary, and at OSCON for
+the one after that. I fully expect to be writing either enormously
+long summaries or drastically curtailed ones while I'm over in the
+States. After OSCON, there'll be a summary from Seattle and then I'll
+be off back home. If you're in any of those localities at the
+appropriate times drop me a line, we'll try and arrange meet-ups to wet
+the appropriate summaries' heads.</p>
+<p>If you've appreciated this summary, please consider one or more of the
+following options:</p>
+<ul>
+<li><a name='Send money to the Perl Foundation at donate.perl-foundation.org/ and help support the ongoing development of Perl.'></a>Send money to the Perl Foundation at
+<a href='http://donate.perl-foundation.org/' target='_blank'>donate.perl-foundation.org</a> and help support the ongoing
+development of Perl.</li>
+<li><a name='Get involved in the Perl 6 process. The mailing lists are open to all. dev.perl.org/perl6/ and www.parrotcode.org/ are good starting points with links to the appropriate mailing lists.'></a>Get involved in the Perl 6 process. The mailing lists are open  to
+all. <a href='http://dev.perl.org/perl6/' target='_blank'>dev.perl.org</a> and <a href='http://www.parrotcode.org/' target='_blank'>www.parrotcode.org</a>
+are good starting points with links to the appropriate mailing lists.</li>
+<li><a name='Send feedback, flames, money, photographic and writing commissions, or a large collection of appropriately shaped tuits to p<a href='mailto:6summarizer@bofh.org.uk'>6summarizer@bofh.org.uk</a>.'></a>Send feedback, flames, money, photographic and writing commissions, or
+a large collection of appropriately shaped tuits to
+<i><a href='http://search.cpan.org/perldoc?<a href='mailto:p6summarizer@bofh.org.uk'>p6summarizer@bofh.org.uk</a>'>p<a href='mailto:6summarizer@bofh.org.uk'>6summarizer@bofh.org.uk</a></a></i>.</li>
+</ul>
+</div>

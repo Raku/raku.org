@@ -1,0 +1,48 @@
+[% setvar title Eliminate dump() function %]
+<h3>This file is part of the Perl 6 Archive</h3>
+    <p>To see what is currently happening visit <a href="http://www.perl6.org/">http://www.perl6.org/</a></p>
+<div class='pod'>
+<a name='TITLE'></a><h1>TITLE</h1>
+<p>Eliminate dump() function</p>
+<a name='VERSION'></a><h1>VERSION</h1>
+<pre>  Maintainer: Dominus &lt;<a href='mailto:mjd@plover.com'>mjd@plover.com</a>&gt;
+  Date: 20 Sep 2000
+  Mailing List: <a href='mailto:perl6-language@perl.org'>perl6-language@perl.org</a>
+  Number: 267
+  Version: 1
+  Status: Developing</pre>
+<a name='ABSTRACT'></a><h1>ABSTRACT</h1>
+<p>Get rid of it completely.</p>
+<a name='DESCRIPTION'></a><h1>DESCRIPTION</h1>
+<p>dump is a common subroutine name.  People often try to define a dump
+subroutine and then get puzzled by the dump.  They have to name their
+dump functions 'Dump' or 'dumper' and then they get annoying errors
+when they call dump instead by mistake.</p>
+<p>dump is not very useful anyway; see MIGRATION below.</p>
+<a name='IMPLEMENTATION'></a><h1>IMPLEMENTATION</h1>
+<p>None needed.</p>
+<a name='MIGRATION'></a><h1>MIGRATION</h1>
+<p>The translator should translate calls to dump() to</p>
+<pre>        kill 6 =&gt; $$;</pre>
+<p>instead.</p>
+<p>If the translator fails on dump LABEL, that is probably all right.
+But if not, then it can translate</p>
+<pre>        ...
+        dump LABEL;
+        ...
+
+        LABEL: 
+        ...</pre>
+<p>to</p>
+<pre>        ...
+        ${^Please_Dump} = 1;
+        goto LABEL;
+        ...
+
+        LABEL:
+        kill 6 =&gt; $$ if ${^Please_Dump};
+        undef ${^Please_Dump};
+        ...</pre>
+<a name='REFERENCES'></a><h1>REFERENCES</h1>
+<p>perlfunc manpage for discussion of dump()</p>
+</div>

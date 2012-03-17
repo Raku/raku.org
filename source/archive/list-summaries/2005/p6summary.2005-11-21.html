@@ -1,0 +1,154 @@
+[% setvar title Perl 6 Summary for 2005-11-14 through 2005-11-21 %]
+<h3>This file is part of the Perl 6 Archive</h3>
+    <p>To see what is currently happening visit <a href="http://www.perl6.org/">http://www.perl6.org/</a></p>
+<div class='pod'>
+<a name='Perl 6 Summary for 2005-11-14 through 2005-11-21'></a><h1>Perl 6 Summary for 2005-11-14 through 2005-11-21</h1>
+<p>All~</p>
+<p>Welcome to another Perl 6 Summary.  The attentive among you may notice that this one is on time.  I am not sure how that happened, but we will try and keep it up.  On a complete side note, I think there should be a Perl guild of some sort on World of Warcraft.  It should probably be horde if there is, both because I hate the alliance and because it fits better.</p>
+<a name='Perl 6 Language'></a><h2>Perl 6 Language</h2>
+<p>As usual for Pugs, most development continued off list.</p>
+<p><a href='http://planetsix.perl.org/' target='_blank'>planetsix.perl.org</a></p>
+<a name='Too Lazy?'></a><h3>Too Lazy?</h3>
+<p>Luke Palmer posted a problem he was having with pugs.  Warnock applies (which likely means it was made into a test and fixed).</p>
+<p><a href='http://groups.google.com/group/perl.perl6.compiler/browse_frm/thread/9d5012c0b3e5079a/6bdb59de0fab8246' target='_blank'>groups.google.com</a>#6bdb59de0fab8246</p>
+<a name='Assigning to Named Subrules'></a><h3>Assigning to Named Subrules</h3>
+<p>Jerry Gay had a question about the semantics of assigning to named subrules in PGE.  Patrick explained that it created an array of capture objects.</p>
+<p><a href='http://groups.google.com/group/perl.perl6.compiler/browse_frm/thread/9dc568a5a0391365/d8ee99798212f58a' target='_blank'>groups.google.com</a>#d8ee99798212f58a</p>
+<a name='Keyed Access to Match Objects'></a><h3>Keyed Access to Match Objects</h3>
+<p>Jerry Gay was having trouble with keyed access to match objects.  After some discussion he implemented the keyed routine he needed and threatened to implement a few more.</p>
+<p><a href='http://groups.google.com/group/perl.perl6.compiler/browse_frm/thread/16c8af4290e75b22/e529fe533110ecbe' target='_blank'>groups.google.com</a>#e529fe533110ecbe</p>
+<a name='PGE Now compreg s'></a><h3>PGE Now <code> compreg </code>s</h3>
+<p>Patrick announced that PGE was now a better citizen in the parrot world, using compreg to locate the compiler instead of find_global.</p>
+<p><a href='http://groups.google.com/group/perl.perl6.compiler/browse_frm/thread/eb50bb834327a5ab/b77c56575c3ebfbe' target='_blank'>groups.google.com</a>#b77c56575c3ebfbe</p>
+<a name='Parrot'></a><h2>Parrot</h2>
+<p>I am going to get an English muffin.  More in a moment...  much better.  Peanut butter is a wonderful thing.  Where was I?</p>
+<a name='Character Classes Done'></a><h3>Character Classes Done</h3>
+<p>Jerry Gay wondered if the TODO about strings and character classes was still open.  Patrick said it was resolved and should be closed.</p>
+<p><a href='http://groups.google.com/group/perl.perl6.internals/browse_frm/thread/ca6c07bfaee9f1d4/b55caddf2dfc400a' target='_blank'>groups.google.com</a>#b55caddf2dfc400a</p>
+<a name='rx_grammar.pl Progress?'></a><h3>rx_grammar.pl Progress?</h3>
+<p>Jerry Gay wondered if rx_grammar.pl had seen any work lately.  Warnock applies.</p>
+<p><a href='http://groups.google.com/group/perl.perl6.internals/browse_frm/thread/64c78fe69846258d/7c1b88c491deac16' target='_blank'>groups.google.com</a>#7c1b88c491deac16</p>
+<a name='N Registers No Longer Get Whacked'></a><h3>N Registers No Longer Get Whacked</h3>
+<p>Leo, thanks to his new calling scheme, closed an RT ticket from Dec 2004.</p>
+<p><a href='http://groups.google.com/group/perl.perl6.internals/browse_frm/thread/1a49ff84b16b7198/1a377bd2d11060ef' target='_blank'>groups.google.com</a>#1a377bd2d11060ef</p>
+<a name='Report SVN Revision in parrotbug?'></a><h3>Report SVN Revision in parrotbug?</h3>
+<p>Jerry Gay resurrected an old ticket wondering whether to add a revision field to RT tickets.</p>
+<p><a href='http://groups.google.com/group/perl.perl6.internals/browse_frm/thread/cd7dfe074c37d174/c3fccf655c51904a' target='_blank'>groups.google.com</a>#c3fccf655c51904a</p>
+<a name='Making Parrot Potable'></a><h3>Making Parrot Potable</h3>
+<p>Florian Ragwitz was having trouble drinking Parrot so he wants to expend some effort to make it more potable.  Apparently it does not get drunk so well by many machines in debian's build farms and he would like to fix it.  When he asked how best to do his work (so as not to upset to many), Chip suggested a local SVK mirror.  Hopefully after he is done even more people will be able to enjoy drinking the Parrot kool-aid.</p>
+<p><a href='http://groups.google.com/group/perl.perl6.internals/browse_frm/thread/d803b7f2b8417727/605393cd96d69be7' target='_blank'>groups.google.com</a>#605393cd96d69be7</p>
+<a name='pbc_merge Requires LINK_DYNAMIC'></a><h3>pbc_merge Requires LINK_DYNAMIC</h3>
+<p>Nick Glencross provided a patch fixing pbc_merge on HP-UX.  François Perrad noted that it was also  problem on Win32.  Jonathan Worthington explained that he was aware of the problem and that the dependency on the dynamic libraries would soon be removed.</p>
+<p><a href='http://groups.google.com/group/perl.perl6.internals/browse_frm/thread/42b907bf01d66a2a/212755db03cce8a1' target='_blank'>groups.google.com</a>#212755db03cce8a1</p>
+<a name='Compilable Option'></a><h3>Compilable Option</h3>
+<p>Will Coleda wants a -c option which will only tell you if the code is compilable for Parrot.</p>
+<p><a href='http://groups.google.com/group/perl.perl6.internals/browse_frm/thread/8f5f6021f1406a07/635ab82c100fa52d' target='_blank'>groups.google.com</a>#635ab82c100fa52d</p>
+<a name='Clerihewsiwhatsit?'></a><h3>Clerihewsiwhatsit?</h3>
+<p>Inspired by Piers's inspiration from his name, Roger Browne wrote a Clerihew.  Piers and Roger scare me.</p>
+<p><a href='http://groups.google.com/group/perl.perl6.internals/browse_frm/thread/6e39f1b1c84792dd/23f7b21652dfe022' target='_blank'>groups.google.com</a>#23f7b21652dfe022</p>
+<a name='Debug Segments'></a><h3>Debug Segments</h3>
+<p>There was much discussion about what sort of interface to expose to HLL for debug segments.  It looks like something good will come out of it all.</p>
+<p><a href='http://groups.google.com/group/perl.perl6.internals/browse_frm/thread/b0d36dafb42d96c4/4b9140e96ecbc701' target='_blank'>groups.google.com</a>#4b9140e96ecbc701</p>
+<a name='&quot;Amber for Parrot&quot; version 0.3.1'></a><h3>&quot;Amber for Parrot&quot; version 0.3.1</h3>
+<p>Announced, Roger Browne
+displaying Amber 0.3.1 aroun':
+this latest version, magic cookie,
+is more than just a rookie.</p>
+<p><a href='http://groups.google.com/group/perl.perl6.internals/browse_frm/thread/760810ec5160f2ab/70741c55ab3815fa' target='_blank'>groups.google.com</a>#70741c55ab3815fa</p>
+<a name='t/library/streams.t Failing'></a><h3>t/library/streams.t Failing</h3>
+<p>Patrick is still having trouble with t/library/streams.t.  It sounds like he would appreciate help, but Warnock applies.</p>
+<p><a href='http://groups.google.com/group/perl.perl6.internals/browse_frm/thread/1535345f3306e138/01b1a6bdfb5e2a6f' target='_blank'>groups.google.com</a>#01b1a6bdfb5e2a6f</p>
+<a name='PGE::glob Issues'></a><h3>PGE::glob Issues</h3>
+<p>Will Coleda spotted a problem with PGE::Glob.  Patrick fixed it.</p>
+<p><a href='http://groups.google.com/group/perl.perl6.internals/browse_frm/thread/859b7c3b313aa140/de0b3b571aec6cb9' target='_blank'>groups.google.com</a>#de0b3b571aec6cb9</p>
+<a name=' find_word_boundary Unneeded'></a><h3><code> find_word_boundary </code> Unneeded</h3>
+<p>Patrick posted his explanation of why find_word_boundary was an unneeded opcode.  Too that end he posted a patch updating t/op/string_cs.t.  Warnock applies to both thoughts.</p>
+<p><a href='http://groups.google.com/group/perl.perl6.internals/browse_frm/thread/0b0dc706caf34982/5908986db872e3d7' target='_blank'>groups.google.com</a>#5908986db872e3d7</p>
+<p><a href='http://groups.google.com/group/perl.perl6.internals/browse_frm/thread/fe28c6d9555fcca9/4ca61d7331cc256c' target='_blank'>groups.google.com</a>#4ca61d7331cc256c</p>
+<a name='Coroutines Trample Scratchpads'></a><h3>Coroutines Trample Scratchpads</h3>
+<p>Nick Glencross noted that coroutine_3.pasm was trampling some memory.  Leo said that scratchpads were on their way out.  Nick wondered if the ticket should be closed now, or when this is fixed.  I vote that we not close tickets until the problem is gone, but Warnock applies.</p>
+<p><a href='http://groups.google.com/group/perl.perl6.internals/browse_frm/thread/ba3acad8cc01d330/e07c73b1b14ecec3' target='_blank'>groups.google.com</a>#e07c73b1b14ecec3</p>
+<a name='MD5 Broken'></a><h3>MD5 Broken</h3>
+<p>Chip noticed that MD5 was horribly broken recently.  He decided that parrot should avoid it in favor of the SHA-2 family and maybe Whirlpool.  If you are a crypto dork, you have your job cut out for you.</p>
+<p><a href='http://groups.google.com/group/perl.perl6.internals/browse_frm/thread/1b33ec021704caa6/fa2107632828f6cb' target='_blank'>groups.google.com</a>#fa2107632828f6cb</p>
+<pre>=head TODONE! remove $(MAKE_C)</pre>
+<p>Joshua Hoblitt joyously closed an RT ticket about removing $(MAKE_C).</p>
+<p><a href='http://groups.google.com/group/perl.perl6.internals/browse_frm/thread/ab7660806ca6b225/e27261481f068261' target='_blank'>groups.google.com</a>#e27261481f068261</p>
+<a name='inconsistent dll linkage'></a><h3>inconsistent dll linkage</h3>
+<p>Jerry Gay announce that the last MSVC 7.1 compiler warning had him thoroughly confused.  Ron Blaschke explained the problem and suggested two solutions.  I wonder if we have a clean windows build now?</p>
+<p><a href='http://groups.google.com/group/perl.perl6.internals/browse_frm/thread/937691fd89bf2b89/22931e95370ba697' target='_blank'>groups.google.com</a>#22931e95370ba697</p>
+<a name='STM and Cycle Counting'></a><h3>STM and Cycle Counting</h3>
+<p>Erik Paulson explained that he was looking into adding STM to parrot, but wanted some sort of cycle counter.  Leo explained what his rough idea for implementing this had been and suggested a way to implement the cycle counter with a minimum of slow down for everyone else.</p>
+<p><a href='http://groups.google.com/group/perl.perl6.internals/browse_frm/thread/945c682af42c038b/c690a4a9bce7c0be' target='_blank'>groups.google.com</a>#c690a4a9bce7c0be</p>
+<a name='Branching to Nonexistent Labels'></a><h3>Branching to Nonexistent Labels</h3>
+<p>Jonathan Worthington was having fun making parrot segfault with malformed PIR.  Leo put a stop to some of his fun.</p>
+<p><a href='http://groups.google.com/group/perl.perl6.internals/browse_frm/thread/d7458f2a4f239e28/8b9d63453646a4d4' target='_blank'>groups.google.com</a>#8b9d63453646a4d4</p>
+<a name='Changing Default File Handles'></a><h3>Changing Default File Handles</h3>
+<p>chromatic wants to be able to reopen his file handles for Parrot::Test.  Jerry Gay suggest some sort of freopen opcode.</p>
+<p><a href='http://groups.google.com/group/perl.perl6.internals/browse_frm/thread/421a54eb55fdfeab/866f5e2b7c04a60c' target='_blank'>groups.google.com</a>#866f5e2b7c04a60c</p>
+<a name='New pmc syntax for HLLs'></a><h3>New pmc syntax for HLLs</h3>
+<p>Will Coleda stole some of Ambers type registration magic, but he made it a little sugarier syntactically.  So Roger Browne stole back.</p>
+<p><a href='http://groups.google.com/group/perl.perl6.internals/browse_frm/thread/27c5730226210376/5f7274fad212101b' target='_blank'>groups.google.com</a>#5f7274fad212101b</p>
+<a name='Call Frame Access'></a><h3>Call Frame Access</h3>
+<p>Chip began to pontificate about how one should access call frames.  Chip suggested using a PMC, but Leo thought that would be too slow.  It looks like the preliminary decision was to go with methods on the interpreter PMC.</p>
+<p><a href='http://groups.google.com/group/perl.perl6.internals/browse_frm/thread/609fc6101532949c/d593b0069ea729a0' target='_blank'>groups.google.com</a>#d593b0069ea729a0</p>
+<a name='test suite refactoring'></a><h3>test suite refactoring</h3>
+<p>Jerry Gay posted an idea for how to refactor the test suite to make it a little less scattered about.  Response was positive and he began working.</p>
+<p><a href='http://groups.google.com/group/perl.perl6.internals/browse_frm/thread/a90eb8e5243fc2e2/d43bb21ae39f2c51' target='_blank'>groups.google.com</a>#d43bb21ae39f2c51</p>
+<a name='RESPONSIBLE_PARTIES'></a><h3>RESPONSIBLE_PARTIES</h3>
+<p>Joshua Hoblitt made Jerry Gay the responsible/culpable party for the test suite.  Jerry Gay, having successfully drunk the kool-aid, was honored.</p>
+<p><a href='http://groups.google.com/group/perl.perl6.internals/browse_frm/thread/743a913188ceecc4/eb934c1c08832acf' target='_blank'>groups.google.com</a>#eb934c1c08832acf</p>
+<a name='Perl 6 Language'></a><h2>Perl 6 Language</h2>
+<p>I want a cookie.  Sadly there are none in the house.</p>
+<a name='but, but, but... optimizations!'></a><h3>but, but, but... optimizations!</h3>
+<p>Aaron Sherman wondered if chained buts would be optimized to one big anonymous class or would generate intermediate classes.  Larry thought that maybe <code> $b but C | D | E | F; </code> would be the syntax to use to get the first behavior and <code> $b but C but D but E but F; </code> would provide the second.</p>
+<p><a href='http://groups.google.com/group/perl.perl6.language/browse_frm/thread/3254713549f08b08/3cfdbb9e1e8f1916' target='_blank'>groups.google.com</a>#3cfdbb9e1e8f1916</p>
+<a name='Too Lazy?'></a><h3>Too Lazy?</h3>
+<p>In an attempt to dewarnock himself, Luke Palmer changed audiences and expanded his question to allow for the autoloading of functions that were not found initially.  Austin Hastings provided a few thoughts.</p>
+<p><a href='http://groups.google.com/group/perl.perl6.language/browse_frm/thread/d2a29bf0743bfb8a/f62cad068f431c06' target='_blank'>groups.google.com</a>#f62cad068f431c06</p>
+<a name='Filling a Role Different Ways'></a><h3>Filling a Role Different Ways</h3>
+<p>Christopher D. Malon posted an analysis of how he would like to fill roles in several different ways depending on whim.  Warnock applied.</p>
+<p><a href='http://groups.google.com/group/perl.perl6.language/browse_frm/thread/cbe74c028340926e/da1758af0e39db19' target='_blank'>groups.google.com</a>#da1758af0e39db19</p>
+<a name='Signature of = &gt;?'></a><h3>Signature of <code> =</code> &gt;?</h3>
+<p>Joshua Choi wondered what the signature of =&gt; would be.  Larry explained that it was undeclarable.</p>
+<p><a href='http://groups.google.com/group/perl.perl6.language/browse_frm/thread/24442afd2e433c30/7b03fc019968b112' target='_blank'>groups.google.com</a>#7b03fc019968b112</p>
+<a name='s:g/grep/$something_better/'></a><h3>s:g/grep/$something_better/</h3>
+<p>Ilmari Vacklin though that perhaps grep should be renamed to something better like filter.  Some voiced their support for grep.  I would guess that this is not going to change, although I did like the generalization for allowing arbitrary binning of items by returning an int from the block...</p>
+<p><a href='http://groups.google.com/group/perl.perl6.language/browse_frm/thread/dd29618fec14cec9/4d97d50ab80cee5b' target='_blank'>groups.google.com</a>#4d97d50ab80cee5b</p>
+<p><a href='http://groups.google.com/group/perl.perl6.language/browse_frm/thread/58fe5b1b2a2e2eb9/c310e61b6ef80262' target='_blank'>groups.google.com</a>#c310e61b6ef80262</p>
+<a name='Private Behavior in Roles'></a><h3>Private Behavior in Roles</h3>
+<p>Ovid was having trouble with Class::Trait not hiding its imports.  Larry explained that in Perl 6 importation would be lexically scoped to solve this problem.</p>
+<p><a href='http://groups.google.com/group/perl.perl6.language/browse_frm/thread/01a4f062b13a215a/e6731cfc2e1eb110' target='_blank'>groups.google.com</a>#e6731cfc2e1eb110</p>
+<a name='Using Hyphens in Identifiers'></a><h3>Using Hyphens in Identifiers</h3>
+<p>Daniel Brockman wondered about allowing hyphens in identifiers. <code>@a[$i-1] + @a[$i+1]</code> convinced him it would be a bad idea.</p>
+<p><a href='http://groups.google.com/group/perl.perl6.language/browse_frm/thread/245e28632af8731e/5acf6612f2f68743' target='_blank'>groups.google.com</a>#5acf6612f2f68743</p>
+<a name='Lvalue Reverse'></a><h3>Lvalue Reverse</h3>
+<p>Juerd noticed that reverse in Perl 5 is quasi-lvalue-ish because of an optimization in for.  He wants it to be made either fully or not at all an lvalue.  People seem to agree.</p>
+<p><a href='http://groups.google.com/group/perl.perl6.language/browse_frm/thread/58c07ba51836f67a/d96a7660f7e45366' target='_blank'>groups.google.com</a>#d96a7660f7e45366</p>
+<a name='The Once and Future Flipflop'></a><h3>The Once and Future Flipflop</h3>
+<p>Ingo Blechschmidt wondered how till (the new flipflop operator) would work.  Larry explained that it was a macro and Ingo was enlightened.</p>
+<p><a href='http://groups.google.com/group/perl.perl6.language/browse_frm/thread/d96fd1dc838c0bc0/d80f02c50aaba8b4' target='_blank'>groups.google.com</a>#d80f02c50aaba8b4</p>
+<pre>
+	</pre>
+<a name='multi-dimensional argument lists'></a><h3>multi-dimensional argument lists</h3>
+<p>Ingo Blechschmidt was a little confused with multidimensional argument lists (such as that of zip).  Much explanation ensued.</p>
+<p><a href='http://groups.google.com/group/perl.perl6.language/browse_frm/thread/215213b56405f298/bc35e105e7c8c180' target='_blank'>groups.google.com</a>#bc35e105e7c8c180</p>
+<pre>
+	</pre>
+<a name='statement_control?'></a><h3>statement_control?</h3>
+<p>Rob Kinyon wondered what things were statement control items like for.  Comments both helpful and snarky were offered.  Fortunately the snarky ones were later apologized for.</p>
+<p><a href='http://groups.google.com/group/perl.perl6.language/browse_frm/thread/716cc00c900c7093/9614bc329fe4b75d' target='_blank'>groups.google.com</a>#9614bc329fe4b75d</p>
+<a name='Where Has Ponie Run?'></a><h3>Where Has Ponie Run?</h3>
+<p>Joshua Gatcomb wondered what the state of Ponie is.  I must admit to wondering the exact same thing silently earlier this week.</p>
+<p><a href='http://groups.google.com/group/perl.perl6.language/browse_frm/thread/7f39c2e9d28e1b54/d9850edd26060582' target='_blank'>groups.google.com</a>#d9850edd26060582</p>
+<pre>
+	</pre>
+<a name='Combining Unicode Escapes'></a><h3>Combining Unicode Escapes</h3>
+<p>Ruud H.G. van Tol (who has one of the cooler names I have seen lately) wondered about providing a nice syntax for escaping several Unicode sequences in a row.  Larry explained that he already had it and pointed him to the latest set of apocalypses.</p>
+<p><a href='http://groups.google.com/group/perl.perl6.language/browse_frm/thread/22fc5d41c69c7153/e8596c28d0e6fd89' target='_blank'>groups.google.com</a>#e8596c28d0e6fd89</p>
+<a name='The usual footer'></a><h2>The usual footer</h2>
+<p>To post to any of these mailing lists please subscribe by sending email to &lt;<a href='mailto:perl6-internals-subscribe@perl.org'>perl6-internals-subscribe@perl.org</a>&gt;, &lt;<a href='mailto:perl6-language-subscribe@perl.org'>perl6-language-subscribe@perl.org</a>&gt;,  or &lt;<a href='mailto:perl6-compiler-subscribe@perl.org'>perl6-compiler-subscribe@perl.org</a>&gt;.  If you find these summaries useful or enjoyable, please consider contributing to the Perl Foundation to help support the development of Perl. You might also like to send feedback to <a href='mailto:ubermatt@gmail.com'>ubermatt@gmail.com</a></p>
+<p><a href='http://donate.perl-foundation.org/' target='_blank'>donate.perl-foundation.org</a> -- The Perl Foundation
+<a href='http://dev.perl.org/perl6/' target='_blank'>dev.perl.org</a> -- Perl 6 Development site
+<a href='http://planet.parrotcode.org/' target='_blank'>planet.parrotcode.org</a> -- Parrot Blog aggregator</p>
+</div>

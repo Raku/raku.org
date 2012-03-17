@@ -1,0 +1,36 @@
+[% setvar title C<sort> algorithm to be selectable at compile time %]
+<h3>This file is part of the Perl 6 Archive</h3>
+    <p>To see what is currently happening visit <a href="http://www.perl6.org/">http://www.perl6.org/</a></p>
+<div class='pod'>
+<a name='TITLE'></a><h1>TITLE</h1>
+<p><code>sort</code> algorithm to be selectable at compile time</p>
+<a name='VERSION'></a><h1>VERSION</h1>
+<pre>  Maintainer: Simon Cozens &lt;<a href='mailto:simon@brecon.co.uk'>simon@brecon.co.uk</a>&gt;
+  Date: 25 Sep 2000
+  Mailing List: <a href='mailto:perl6-internals@perl.org'>perl6-internals@perl.org</a>
+  Number: 304
+  Version: 1
+  Status: Developing</pre>
+<a name='ABSTRACT'></a><h1>ABSTRACT</h1>
+<p>Quicksort and mergesort both have their uses. Let the user choose which
+Perl uses.</p>
+<a name='DESCRIPTION'></a><h1>DESCRIPTION</h1>
+<p>While this RFC is ostensibly to allow the user to say something like
+this:</p>
+<pre>    { 
+        use sort 'quick';
+        @array2 = sort @array;
+    }
+    use sort 'merge';
+    ...</pre>
+<p>the real benefit comes when the code is being compiled into a standalone
+executable; given sufficient magic, the compiler can analyze the
+expected data flow and guess what the most suitable sort algorithm
+should be for each instance of <code>sort</code>.</p>
+<a name='IMPLEMENTATION'></a><h1>IMPLEMENTATION</h1>
+<p>Provide multiple sort algorithms, and have a pragma select which Perl
+uses; when a program is being compiled, analyze the data and
+heuristically select the better algorithm if possible.</p>
+<a name='REFERENCES'></a><h1>REFERENCES</h1>
+<p>None.</p>
+</div>

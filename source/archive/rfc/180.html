@@ -1,0 +1,47 @@
+[% setvar title Object Class hooks into C<printf> %]
+<h3>This file is part of the Perl 6 Archive</h3>
+    <p>To see what is currently happening visit <a href="http://www.perl6.org/">http://www.perl6.org/</a></p>
+<div class='pod'>
+<a name='TITLE'></a><h1>TITLE</h1>
+<p>Object Class hooks into <code>printf</code></p>
+<a name='VERSION'></a><h1>VERSION</h1>
+<pre>  Maintainer: Mark Biggar &lt;<a href='mailto:mark.biggar@TrustedSysLabs.com'>mark.biggar@TrustedSysLabs.com</a>&gt;
+  Date: 30 Aug 2000
+  Mailing List: <a href='mailto:perl6-language-io@perl.org'>perl6-language-io@perl.org</a>
+  Number: 180
+  Version: 1
+  Status: Developing</pre>
+<a name='ABSTRACT'></a><h1>ABSTRACT</h1>
+<p>There needs to be a way for an object class to define <code>printf</code> format
+specifiers for use in formatting objects into strings with <code>printf</code> and
+<code>sprintf</code>.</p>
+<a name='DESCRIPTION'></a><h1>DESCRIPTION</h1>
+<p>It would be nice to be able to do things like:</p>
+<pre>   use BigInt ':constant';
+    
+   printf &quot;%53d&quot;,(3**34);</pre>
+<p>and get a nicely formatted output.</p>
+<p>This could also simplify other proposals like RFC 48 where instead of
+cluttering up the proposed <code>date</code> and <code>gmtdate</code> operators with <code>POSIX
+strftime()</code> functionality, it could be done using <code>printf</code> instead.</p>
+<a name='IMPLEMENTATION'></a><h1>IMPLEMENTATION</h1>
+<p>I have thought of two possible implementations:</p>
+<p>1) When ever a blessed object reference appears in a <code>printf</code> argument list
+the internal <code>printf</code> code invokes the objects <code>STRING</code> method (see RFC 49)
+with an extra argument consisting of the printf format specifier (in the above
+example the extra argument would be &quot;%53d&quot;.  The <code>STRING</code> method would return
+either a properly formatted string scalar which would be incorporated in the
+output string being constructed by <code>printf</code> or <code>undef</code>, if the <code>STRING</code>
+method does not understand the specifier, which should probably cause an
+exception to be thrown.</p>
+<p>2) When ever a blessed object reference appears in s <code>printf</code> argument list
+the internal <code>printf</code> code attempts to invoke the objects <code>PRINTF_spec</code>
+method with an extra argument consisting of the inside of the <code>printf</code>
+specifier (in the above example anon-ref-&gt;PRINTF_d(&quot;53&quot;) would be invoked.  If
+the method exists then it returns a properly formatted string scalar or
+<code>undef</code> if it can not interpreted the specifier argument.  If either <code>undef</code>
+is returned or there is no such method then a exception is thrown.</p>
+<a name='REFERENCES'></a><h1>REFERENCES</h1>
+<p>RFC 49 Objects should have builtin stringifying STRING method</p>
+<p>RFC 48 Replace localtime() and gmtime() with date() and gmtdate()</p>
+</div>

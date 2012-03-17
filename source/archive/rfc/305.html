@@ -1,0 +1,28 @@
+[% setvar title C<$^C> should be true when compiling %]
+<h3>This file is part of the Perl 6 Archive</h3>
+    <p>To see what is currently happening visit <a href="http://www.perl6.org/">http://www.perl6.org/</a></p>
+<div class='pod'>
+<a name='TITLE'></a><h1>TITLE</h1>
+<p><code>$^C</code> should be true when compiling</p>
+<a name='VERSION'></a><h1>VERSION</h1>
+<pre>  Maintainer: Simon Cozens &lt;<a href='mailto:simon@brecon.co.uk'>simon@brecon.co.uk</a>&gt;
+  Date: 25 Sep 2000
+  Mailing List: <a href='mailto:perl6-language@perl.org'>perl6-language@perl.org</a>
+  Number: 305
+  Version: 1
+  Status: Developing</pre>
+<a name='ABSTRACT'></a><h1>ABSTRACT</h1>
+<p><code>$^C</code> should be true when compiling, not just when the <code>-c</code> flag is
+set.</p>
+<a name='DESCRIPTION'></a><h1>DESCRIPTION</h1>
+<p>The idea of <code>$^C</code> is that it allows programs to change their behaviour
+when being compiled. However, the way it's implemented means it's only
+true when the <code>-c</code> flag is given on the Perl command line. At the
+moment, there's no way of telling whether you're in a <code>BEGIN</code> block or
+not, and there ought to be.</p>
+<a name='IMPLEMENTATION'></a><h1>IMPLEMENTATION</h1>
+<p>Make <code>$^C</code> true while the interpreter is compiling code, and not just
+when it's going to compile and quit.</p>
+<a name='REFERENCES'></a><h1>REFERENCES</h1>
+<p>None.</p>
+</div>

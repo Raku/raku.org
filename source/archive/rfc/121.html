@@ -1,0 +1,63 @@
+[% setvar title linkable output mode %]
+<h3>This file is part of the Perl 6 Archive</h3>
+    <p>To see what is currently happening visit <a href="http://www.perl6.org/">http://www.perl6.org/</a></p>
+<div class='pod'>
+<a name='TITLE'></a><h1>TITLE</h1>
+<p>linkable output mode</p>
+<a name='VERSION'></a><h1>VERSION</h1>
+<pre>  Maintainer: David Nicol &lt;<a href='mailto:perl6rfc@davidnicol.com'>perl6rfc@davidnicol.com</a>&gt;
+  Date: 17 Aug 2000
+  Last Modified: 20 Sep 2000
+  Mailing List: <a href='mailto:perl6-language@perl.org'>perl6-language@perl.org</a>
+  Number: 121
+  Version: 2
+  Status: Frozen</pre>
+<a name='changes'></a><h1>changes</h1>
+<p>Addition of sentences concerning &quot;perl without perl&quot;</p>
+<a name='ABSTRACT'></a><h1>ABSTRACT</h1>
+<p>Perl5 offers a clunky interface for those who
+wish to call perl subroutines from within C programs.
+Herein is suggested a vastly simplified application
+programmer's interface:  a <code> -o </code> command line switch identical
+to that used in C compilers to produce a linkable object file.</p>
+<a name='DESCRIPTION'></a><h1>DESCRIPTION</h1>
+<p>Two command line switches, -o and -oh, are added to perl6's invocation syntax.</p>
+<p>Perl invoked with the -o switch does not run its program, but rather
+pukes out an &quot;object file&quot; same way gcc would if given a file full of
+C code.</p>
+<p>Perl invoked with the -oh switch does not run its program, but rather
+pukes out a &quot;header file&quot; suitable for inclusion into a C program,
+containing the correct linkage definitions for the object file created
+by the -o switch.</p>
+<p>The resulting object file must be linked with the perl library to work.</p>
+<p>The point is, the perl internals are effectively hidden from the programmer
+who wishes to use a feature available in perl from within a C program.</p>
+<p>Also, it becomes easier to generate a &quot;stand-alone&quot; deliverable
+which will work without a full Perl intallation, by linking the
+output of <code> perl -o </code> into a simple main() and delivering the resulting
+linked binary along with a perl shared object library. Or by just
+doing something like this:</p>
+<pre>        perl -o deliverme.o deliverme.pl
+        ld deliverme.o -o deliverme</pre>
+<a name='IMPLEMENTATION'></a><h1>IMPLEMENTATION</h1>
+<p>Given a nonprototyped subroutine, <code>perl6 -o</code> will
+generate suitable wrapper
+code for all subroutines in the input file, as described in the <i><a href='http://search.cpan.org/perldoc?perlcall'>perlcall</a></i>
+and <i><a href='http://search.cpan.org/perldoc?perlembed'>perlembed</a></i> perldoc pages, and then pass this code (via a temporary file)
+to the same C compiler that was used to build perl.</p>
+<p>Given a perl6 subroutine with a fully described prototype, which amounts
+to a C struct structure, that structure (with its names if any) can
+be used as the parameter types of the resulting function call. A restricted
+return type described in terms of basic C data types can function as a
+C function return type.</p>
+<p>Perl functions that are already using restricted parameter lists
+and restricted return types are effectively doing their own type conversions,
+except between SV{STRING} and char*, but allowing C access to the SV{STRING}
+data type and functions can't be anything but good.</p>
+<p>Furthermore, the porting team will need to get very chummy
+with the linking system on the platform.</p>
+<a name='REFERENCES'></a><h1>REFERENCES</h1>
+<p>my imagination</p>
+<p>perldoc perlembed</p>
+<p>perldoc perlcall</p>
+</div>

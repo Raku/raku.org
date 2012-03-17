@@ -1,0 +1,99 @@
+[% setvar title Perl 6 Summary for 2005-01-11 through 2005-01-18 %]
+<h3>This file is part of the Perl 6 Archive</h3>
+    <p>To see what is currently happening visit <a href="http://www.perl6.org/">http://www.perl6.org/</a></p>
+<div class='pod'>
+<a name='Perl 6 Summary for 2005-01-11 through 2005-01-18'></a><h1>Perl 6 Summary for 2005-01-11 through 2005-01-18</h1>
+<p>Welcome to yet another Perl Summary brought to you by music and pizza (although the pizza is late in arriving).  Like many summaries before it, we start with an attempt at non sequitur and Perl 6 Language.</p>
+<a name='Perl 6 Language'></a><h2>Perl 6 Language</h2>
+<a name='idiomatic Perl 6'></a><h3>idiomatic Perl 6</h3>
+<p>Stéphane Payrard expressed a desire for more Perl 6 sample code.  Luke Palmer issued the following, possibly foolish, response: &quot;post some \&quot;how do I\&quot;s to the list, and I'll reply with code&quot;.  Austin Hastings posed a couple, not response yet...</p>
+<p><a href='http://groups-beta.google.com/group/perl.perl6.language/browse_frm/thread/b3eee67e168e307c/1e865f9b0b1b2eec?_done=/group/perl.perl6.language?' target='_blank'>groups-beta.google.com</a>&amp;_doneTitle=Back+to+topics&amp;_doneTitle=Back&amp;&amp;d#1e865f9b0b1b2eec</p>
+<a name='generalized tainting'></a><h3>generalized tainting</h3>
+<p>Yuval Kogman posted an interesting musing about contagious properties (if you get your value from someone with a contagious property, you get the property too).  No responses, but it sounds interesting...</p>
+<p><a href='http://groups-beta.google.com/group/perl.perl6.language/browse_frm/thread/7399190967f8b425/3ab0fa30a7a3c812?_done=/group/perl.perl6.language?' target='_blank'>groups-beta.google.com</a>&amp;_doneTitle=Back+to+topics&amp;_doneTitle=Back&amp;&amp;d#3ab0fa30a7a3c812</p>
+<a name='stick/pick'></a><h3>stick/pick</h3>
+<p>Richard H. suggested a new pair of functions stick/pick which would have modifiers such that push, pop, shift, unshift, and splice could all be calls to stick or pick with appropriate modifiers.  Unfortunately, I think he posted it to the google groups interface, as it is there but not on the list :-(</p>
+<p><a href='http://groups-beta.google.com/group/perl.perl6.language/browse_frm/thread/b60b94553109d196/c23ee29694e0cdf9?_done=/group/perl.perl6.language?' target='_blank'>groups-beta.google.com</a>&amp;_doneTitle=Back+to+topics&amp;_doneTitle=Back&amp;&amp;d#c23ee29694e0cdf9</p>
+<a name='Perl 6 IDE again.'></a><h3>Perl 6 IDE again.</h3>
+<p>Matisse Enzer re-raised the question of the feasibility of an IDE for Perl 6.  Unfortunately it was re-raised on google groups (I think).</p>
+<p><a href='http://groups-beta.google.com/group/perl.perl6.language/browse_frm/thread/d31481c114e88a11/6fee65a60d6e190b?_done=/group/perl.perl6.language?' target='_blank'>groups-beta.google.com</a>&amp;_doneTitle=Back+to+topics&amp;_doneTitle=Back&amp;&amp;d#6fee65a60d6e190b</p>
+<a name='1x6 vs 6'></a><h3>1x6 vs 6</h3>
+<p>The dimension slice issues continue to grind with new suggestions from David Green and Craig DeForest.</p>
+<p><a href='http://groups-beta.google.com/group/perl.perl6.language/browse_frm/thread/96503cca52fd9c56/b335e917f3c0db0e?_done=/group/perl.perl6.language?' target='_blank'>groups-beta.google.com</a>&amp;_doneTitle=Back+to+topics&amp;_doneTitle=Back&amp;&amp;d#b335e917f3c0db0e</p>
+<a name='life span of loop counters'></a><h3>life span of loop counters</h3>
+<p>Joe Gottman wants an easy way to restrict the lifespan of his loop counter to his loop.  Some folk (myself included) did not like the answer of wrap it in a scope.  Some others (myself excluded) thought the answer &quot;don't use loop, use for&quot; was a bit of a cop-out.</p>
+<p><a href='http://groups-beta.google.com/group/perl.perl6.language/browse_frm/thread/a2ddf112aa0bbf40/82e94fb1cfb404aa?_done=/group/perl.perl6.language?' target='_blank'>groups-beta.google.com</a>&amp;_doneTitle=Back+to+topics&amp;_doneTitle=Back&amp;&amp;d#82e94fb1cfb404aa</p>
+<a name='forany &amp; forall'></a><h3>forany &amp; forall</h3>
+<p>Jonathan Lang wondered how to check if a condition is true for any element of an array  or for all elements.  The answer are the aptly named junction creaters <code>any()</code> and <code>all()</code>.</p>
+<p><a href='http://groups-beta.google.com/group/perl.perl6.language/browse_frm/thread/c0aac33183670ccb/afb1c80562a9bf40?_done=/group/perl.perl6.language?' target='_blank'>groups-beta.google.com</a>&amp;_doneTitle=Back+to+topics&amp;_doneTitle=Back&amp;&amp;d#afb1c80562a9bf40</p>
+<a name='Perl 6 Compiler'></a><h2>Perl 6 Compiler</h2>
+<p>Already reached p6c and no pizza :-(  Ah well, it was a light week.</p>
+<a name='Parrot Internals'></a><h2>Parrot Internals</h2>
+<p>Already p6i and no pizza :-(.  Although it was close, after I wrote the head2 my door buzzed.  It was just a neighbor who got locked out, but that would have been impressive timing.</p>
+<a name='blib in 25 seconds'></a><h3>blib in 25 seconds</h3>
+<p>Peter Christopher asked for a 25 second summary of the ./blib directory.  Apparently this is harder than Hamlet in 30 seconds, as one of the two has been done.</p>
+<p><a href='http://groups-beta.google.com/group/perl.perl6.internals/browse_frm/thread/13efa03d11995889/fc4726ffd175662b?_done=/group/perl.perl6.internals?' target='_blank'>groups-beta.google.com</a>&amp;_doneTitle=Back+to+topics&amp;_doneTitle=Back&amp;&amp;d#fc4726ffd175662b</p>
+<a name='searching archives'></a><h3>searching archives</h3>
+<p>Peter Christopher wanted to know if there was a way he could search the mailing list archives.  Steve Fink pointed him to groups.google.com and the ever popular discussion topic &quot;aardvarks&quot;.</p>
+<p><a href='http://groups-beta.google.com/group/perl.perl6.internals/browse_frm/thread/144b250f3845ed3b/10ac67a3f6383aab?_done=/group/perl.perl6.internals?' target='_blank'>groups-beta.google.com</a>&amp;_doneTitle=Back+to+topics&amp;_doneTitle=Back&amp;&amp;d#10ac67a3f6383aab</p>
+<a name='dynclasses with external dependencies'></a><h3>dynclasses with external dependencies</h3>
+<p>Bernhard Schmalhofer wondered if there was a reasonable way to check for external dependencies for dynamic PMCs that does not involve the core Parrot configure step.  Later he supplied a patch with his GDBMHash pmc, which motivated the question.  Leo applied it and hinted at a mythical multi-stage configure</p>
+<p><a href='http://groups-beta.google.com/group/perl.perl6.internals/browse_frm/thread/a51cc847fc6a56b9/371bf70adf0569b0?_done=/group/perl.perl6.internals?' target='_blank'>groups-beta.google.com</a>&amp;_doneTitle=Back+to+topics&amp;_doneTitle=Back&amp;&amp;d#371bf70adf0569b0 -- question</p>
+<p><a href='http://groups-beta.google.com/group/perl.perl6.internals/browse_frm/thread/8144e9c83f34afdc/6111cee72a601a2f?_done=/group/perl.perl6.internals?' target='_blank'>groups-beta.google.com</a>&amp;_doneTitle=Back+to+topics&amp;_doneTitle=Back&amp;&amp;d#6111cee72a601a2f -- patch</p>
+<a name='s/interpreter/INTERP/g'></a><h3>s/interpreter/INTERP/g</h3>
+<p>Bernhard Schmalhofer provided a patch making the above clean up all over.  Leo and Sam applied different parts of it.</p>
+<p><a href='http://groups-beta.google.com/group/perl.perl6.internals/browse_frm/thread/076bed21ea8c5005/32c2920294524874?_done=/group/perl.perl6.internals?' target='_blank'>groups-beta.google.com</a>&amp;_doneTitle=Back+to+topics&amp;_doneTitle=Back&amp;&amp;d#32c2920294524874</p>
+<a name='black-ops parrot'></a><h3>black-ops parrot</h3>
+<p>Robert Spier posted a link to the new listing for Parrot on CIA.  Nicholas Clark dove for cover assuming he was going to be disappeared.</p>
+<p><a href='http://cia.navi.cx/stats/project/parrot' target='_blank'>cia.navi.cx</a> -- CIA
+<a href='http://groups-beta.google.com/group/perl.perl6.internals/browse_frm/thread/2ccc347e62a108d8/a4609593914578b5?_done=/group/perl.perl6.internals?' target='_blank'>groups-beta.google.com</a>&amp;_doneTitle=Back+to+topics&amp;_doneTitle=Back&amp;&amp;d#a4609593914578b5 -- actual post</p>
+<a name='PDD problems on the website'></a><h3>PDD problems on the website</h3>
+<p>Dave Brondsema noticed that PDDs 4-6 were not finding their way to the website properly.  Will Coleda fired off a patch.</p>
+<p><a href='http://groups-beta.google.com/group/perl.perl6.internals/browse_frm/thread/a53a24f2aa5cc202/54165e5ddf4f5f8e?_done=/group/perl.perl6.internals?' target='_blank'>groups-beta.google.com</a>&amp;_doneTitle=Back+to+topics&amp;_doneTitle=Back&amp;&amp;d#54165e5ddf4f5f8e</p>
+<a name='cleaning old tickets'></a><h3>cleaning old tickets</h3>
+<p>Will Coleda, in his never ending role as RT janitor, closed out a few obsolete tickets.  Thanks Will.</p>
+<p><a href='http://groups-beta.google.com/group/perl.perl6.internals/browse_frm/thread/93a08abe9dbb38aa/a2b066dbaec2a29f?_done=/group/perl.perl6.internals?' target='_blank'>groups-beta.google.com</a>&amp;_doneTitle=Back+to+topics&amp;_doneTitle=Back&amp;&amp;d#a2b066dbaec2a29f -- stone-age exceptions</p>
+<p><a href='http://groups-beta.google.com/group/perl.perl6.internals/browse_frm/thread/3b78d24f9207e120/57ddd23c5b19320b?_done=/group/perl.perl6.internals?' target='_blank'>groups-beta.google.com</a>&amp;_doneTitle=Back+to+topics&amp;_doneTitle=Back&amp;&amp;d#57ddd23c5b19320b -- assemble.pl</p>
+<p><a href='http://groups-beta.google.com/group/perl.perl6.internals/browse_frm/thread/e75ed93673aaaace/576298f84bd61718?_done=/group/perl.perl6.internals?' target='_blank'>groups-beta.google.com</a>&amp;_doneTitle=Back+to+topics&amp;_doneTitle=Back&amp;&amp;d#576298f84bd61718 -- languages/imcc</p>
+<a name='Scope and Timely Destruction'></a><h3>Scope and Timely Destruction</h3>
+<p>Leopold Toetsch raised the recurring issue of timely destruction.  It turns out that timely destruction is hard.  Various people made various suggestions.  Let me state one thing clearly as if I don't, Dan doubtless will: Parrot will NOT use reference counting of any kind.  There are a great many reasons for this some of which Luke Palmer explained.</p>
+<p><a href='http://groups-beta.google.com/group/perl.perl6.internals/browse_frm/thread/7acc217ddcbc84a8/6fa389d176b99b64?_done=/group/perl.perl6.internals?' target='_blank'>groups-beta.google.com</a>&amp;_doneTitle=Back+to+topics&amp;_doneTitle=Back&amp;&amp;d#6fa389d176b99b64</p>
+<a name='ParrotIO* should have been PMC*'></a><h3>ParrotIO* should have been PMC*</h3>
+<p>Peter Christopher provided a patch fixing a pointer declaration bug.  Leo applied it.</p>
+<p><a href='http://groups-beta.google.com/group/perl.perl6.internals/browse_frm/thread/62850c0d067ceb93/7ce1a32b0217b55b?_done=/group/perl.perl6.internals?' target='_blank'>groups-beta.google.com</a>&amp;_doneTitle=Back+to+topics&amp;_doneTitle=Back&amp;&amp;d#7ce1a32b0217b55b</p>
+<a name='questions for the compiler FAQ'></a><h3>questions for the compiler FAQ</h3>
+<p>Some time ago, a compiler faq was started.  It was to contain answers to questions that people posted to the list.  Will Coleda posted 2 such questions, but got Warnocked.</p>
+<p><a href='http://groups-beta.google.com/group/perl.perl6.internals/browse_frm/thread/10083334ec147124/448ef8053c7f0ab4?_done=/group/perl.perl6.internals?' target='_blank'>groups-beta.google.com</a>&amp;_doneTitle=Back+to+topics&amp;_doneTitle=Back&amp;&amp;d#448ef8053c7f0ab4</p>
+<a name='languages/perl6'></a><h3>languages/perl6</h3>
+<p>Will Coleda wondered what was going to come of the languages/perl6 stuff since it now has its own SVN repo.  No answer.</p>
+<p><a href='http://groups-beta.google.com/group/perl.perl6.internals/browse_frm/thread/1187c8a987294a13/7cc29b214379aff8?_done=/group/perl.perl6.internals?' target='_blank'>groups-beta.google.com</a>&amp;_doneTitle=Back+to+topics&amp;_doneTitle=Back&amp;&amp;d#7cc29b214379aff8</p>
+<a name='Parakeet with broken wings'></a><h3>Parakeet with broken wings</h3>
+<p>Will added an RT ticket for Parakeet which got broke in the shuffle.</p>
+<p><a href='http://groups-beta.google.com/group/perl.perl6.internals/browse_frm/thread/8b091009f3fc224d/1b000bb26d5cf99b?_done=/group/perl.perl6.internals?' target='_blank'>groups-beta.google.com</a>&amp;_doneTitle=Back+to+topics&amp;_doneTitle=Back&amp;&amp;d#1b000bb26d5cf99b</p>
+<a name='crashing parrot'></a><h3>crashing parrot</h3>
+<p>Will found out that he could crash parrot by doing stuff with GCed memory.  Leo admitted that one could.</p>
+<p><a href='http://groups-beta.google.com/group/perl.perl6.internals/browse_frm/thread/19b427ae3dc4e52a/b65ff846197a2e15?_done=/group/perl.perl6.internals?' target='_blank'>groups-beta.google.com</a>&amp;_doneTitle=Back+to+topics&amp;_doneTitle=Back&amp;&amp;d#b65ff846197a2e15</p>
+<a name='collecting academic garbage'></a><h3>collecting academic garbage</h3>
+<p>Shevek wondered if there was a good place where he could read about garbage collection techniques.  Garrett Goebel pointed him to just such a page.</p>
+<p><a href='http://groups-beta.google.com/group/perl.perl6.internals/browse_frm/thread/14246a9c228bd313/9f04c1d0203f09ae?_done=/group/perl.perl6.internals?' target='_blank'>groups-beta.google.com</a>&amp;_doneTitle=Back+to+topics&amp;_doneTitle=Back&amp;&amp;d#9f04c1d0203f09ae -- the post</p>
+<p><a href='http://www.cs.kent.ac.uk/people/staff/rej/gc.html' target='_blank'>www.cs.kent.ac.uk</a> -- the page</p>
+<a name='argv[0]'></a><h3>argv[0]</h3>
+<p>Will wants to get at the moral equivalent of argv[0].</p>
+<p><a href='http://groups-beta.google.com/group/perl.perl6.internals/browse_frm/thread/5ac3f1c5375d5da5/63c479a0364480d9?_done=/group/perl.perl6.internals?' target='_blank'>groups-beta.google.com</a>&amp;_doneTitle=Back+to+topics&amp;_doneTitle=Back&amp;&amp;d#63c479a0364480d9</p>
+<a name='proposed VTABLE changes for method lookup'></a><h3>proposed VTABLE changes for method lookup</h3>
+<p>Leo suggested a VTABLE change to facilitate MMD and method lookup.  Suggestions and questions were provided.</p>
+<p><a href='http://groups-beta.google.com/group/perl.perl6.internals/browse_frm/thread/2a32fa21e2795b7f/fd10f5769fb8ed39?_done=/group/perl.perl6.internals?' target='_blank'>groups-beta.google.com</a>&amp;_doneTitle=Back+to+topics&amp;_doneTitle=Back&amp;&amp;d#fd10f5769fb8ed39</p>
+<a name='food'></a><h3>food</h3>
+<p>Matt Fowles's pizza arrived.  The reader then speculated that either (he writes slowly or it arrived quickly) or (he writes quickly or it arrived slowly), depending on various readers estimates of Pizza delivery time and expected word per minute summarization.</p>
+<p><a href='http://www.sccs.swarthmore.edu/users/04/fowles/' target='_blank'>www.sccs.swarthmore.edu</a></p>
+<a name='bring hither the fatted parrot'></a><h3>bring hither the fatted parrot</h3>
+<p>Dan has returned to us.  Hopefully he will be able to advance the quest for meta-objects and interoperability.</p>
+<p><a href='http://groups-beta.google.com/group/perl.perl6.internals/browse_frm/thread/c3549ba4ffce05e7/53f3f63c523ff824?_done=/group/perl.perl6.internals?' target='_blank'>groups-beta.google.com</a>&amp;_doneTitle=Back+to+topics&amp;_doneTitle=Back&amp;&amp;d#53f3f63c523ff824</p>
+<a name='The usual footer'></a><h2>The usual footer</h2>
+<p>If you find these summaries useful or enjoyable, please consider
+contributing to the Perl Foundation to help support the development of
+Perl. You might also like to send feedback to <a href='mailto:ubermatt@gmail.com'>ubermatt@gmail.com</a></p>
+<p><a href='http://donate.perl-foundation.org/' target='_blank'>donate.perl-foundation.org</a> -- The Perl Foundation
+<a href='http://dev.perl.org/perl6/' target='_blank'>dev.perl.org</a> -- Perl 6 Development site
+<a href='http://planet.parrotcode.org/' target='_blank'>planet.parrotcode.org</a> -- Parrot Blog aggregator</p>
+</div>

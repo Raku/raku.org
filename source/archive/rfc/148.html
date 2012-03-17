@@ -1,0 +1,80 @@
+[% setvar title Arrays: Add reshape() for multi-dimensional array reshaping %]
+<h3>This file is part of the Perl 6 Archive</h3>
+    <p>To see what is currently happening visit <a href="http://www.perl6.org/">http://www.perl6.org/</a></p>
+<div class='pod'>
+<a name='TITLE'></a><h1>TITLE</h1>
+<p>Arrays: Add reshape() for multi-dimensional array reshaping</p>
+<a name='VERSION'></a><h1>VERSION</h1>
+<pre>  Maintainer: Jeremy Howard &lt;<a href='mailto:j@howard.fm'>j@howard.fm</a>&gt;
+  Date: 24 Aug 2000
+  Last Modified: 21 Sep 2000
+  Mailing List: <a href='mailto:perl6-language-data@perl.org'>perl6-language-data@perl.org</a>
+  Number: 148
+  Version: 3
+  Status: Frozen</pre>
+<a name='CHANGES'></a><h1>CHANGES</h1>
+<p>Changed semantics to match PDL, NumPy, and J. Changed maintainer from
+Nathan Wiger &lt;<a href='mailto:nate@wiger.org'>nate@wiger.org</a>&gt;.</p>
+<a name='ABSTRACT'></a><h1>ABSTRACT</h1>
+<p>Currently, there is no easy way to reshape existing arrays into
+multiple arrays or matrices. This makes nifty array manipulation and
+complex math hard.</p>
+<p>A general-purpose tool that can do arbitrary multi-dimensional array
+reshaping, from which other array manipulation functions can be derived,
+makes data manipulation easier.</p>
+<a name='DESCRIPTION'></a><h1>DESCRIPTION</h1>
+<p>Let's jump in. This RFC proposes a <code>reshape</code> builtin that takes an array
+to reshape as the second parameter, and a list of dimensions to reshape
+the array to as the first parameter:</p>
+<pre>  my int @a = ([1,2,3], [4,5,6]);
+  @b = reshape([2,3], @a);          # ([1,2],[3,4],[5,6])
+  @c = reshape([1,6], @a);          # ([1],[2],[3],[4],[5],[6])
+  @d = reshape([6,1], @a);          # (1,2,3,4,5,6)
+  @e = reshape([1,2,3], @a);        # ([[1],[2]],[[3],[4]],[[5],[6]])
+  </pre>
+<p>The dimensions specified in the first argument are the same ones used by
+the <code>:shape</code> array attribute described in <i><a href='#RFC 203'>&quot;RFC 203&quot;</a></i>. <i><a href='#RFC 202'>&quot;RFC 202&quot;</a></i> gives
+an overview of the proposed multidimensional arrays that <code>reshape</code>
+works with.</p>
+<p>We only need one <code>reshape</code> since it is a multipurpose tool that works in
+any direction, serving as its own inverse.</p>
+<p>The dimensions used are subject to the following properties:</p>
+<ul>
+<li><a name='1'></a>1</li>
+<p>Less data than specified causes <code>reshape</code> to repeat the data as many
+times as necessary to fill the new structure (like <code>$</code> in the J language)</p>
+<li><a name='2'></a>2</li>
+<p>More data than specified is silently discarded</p>
+</ul>
+<p>Any one (but no more than one) element of the list of dimensions can be
+'-1', which indicates that that dimension should be made as large as
+necessary to fill in the array:</p>
+<pre>  my int @a = ([1,2,3], [4,5,6]);
+  @b = reshape([-1,3], @a);        # ([1,2],[3,4],[5,6])
+  @c = reshape([-1], @a);        # (1,2,3,4,5,6)</pre>
+<p>The semantics of <code>reshape</code> match those of PDL's reshape(), NumPy's
+reshape(), and J's verb <code>$</code>. See the references.</p>
+<p><code>reshape</code> creates an alias to the original array, not a copy (this is
+like merge/demerge/part/flatten). See <i><a href='#RFC 90'>&quot;RFC 90&quot;</a></i> for discussion of aliasing
+behaviour that would apply to <code>reshape</code>.</p>
+<a name='IMPLEMENTATION'></a><h1>IMPLEMENTATION</h1>
+<p>For simple typed arrays (RFC 203) it is simply a case of changing the
+dimension attributes stored internally. For standard lists of lists, the
+actual references and arrays will have to be rejigged, with will be a slow
+operation. However, <code>reshape</code> should rarely be used on arrays that are
+not stored compactly, since standard lists of lists are unlikely to be
+used for heavy data crunching.</p>
+<a name='MIGRATION'></a><h1>MIGRATION</h1>
+<p>None. This introduces new functionality.</p>
+<a name='REFERENCES'></a><h1>REFERENCES</h1>
+<p>RFC 81: Lazily evaluated list generation functions</p>
+<p>RFC 90: Arrays: Builtins: merge() and demerge()</p>
+<p>RFC 202: Arrays: Overview of multidimensional array RFCs (RFC 203
+through RFC 207)</p>
+<p>RFC 203: Arrays: Notation for declaring and creating arrays</p>
+<p>Thanks to Uri Guttman for suggesting the APL &quot;reshape&quot; name</p>
+<p>The '$' verb in J, described in The J Primer (provided as a help file with
+the J Language, available from <a href='http://www.jsoftware.com/)' target='_blank'>www.jsoftware.com</a></p>
+<p>reshape() in NumPy: <a href='http://starship.python.net/~da/numtut/array.html' target='_blank'>starship.python.net</a>#SEC3</p>
+<p>reshape() in PDL: <a href='http://pdl.sourceforge.net/PDLdocs/Core.html' target='_blank'>pdl.sourceforge.net</a>#reshape</p>
+</div>

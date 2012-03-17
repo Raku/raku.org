@@ -1,0 +1,124 @@
+[% setvar title Implementation of hash iterators %]
+<h3>This file is part of the Perl 6 Archive</h3>
+    <p>To see what is currently happening visit <a href="http://www.perl6.org/">http://www.perl6.org/</a></p>
+<div class='pod'>
+<a name='TITLE'></a><h1>TITLE</h1>
+<p>Implementation of hash iterators</p>
+<a name='VERSION'></a><h1>VERSION</h1>
+<pre>  Maintainer: Tom Hughes &lt;<a href='mailto:tom@compton.nu'>tom@compton.nu</a>&gt;
+  Date: 20 Aug 2000
+  Last Modified: 28 Sep 2000
+  Mailing List: <a href='mailto:perl6-internals@perl.org'>perl6-internals@perl.org</a>
+  Number: 136
+  Version: 3
+  Status: Frozen</pre>
+<a name='ABSTRACT'></a><h1>ABSTRACT</h1>
+<p>Perl 5 makes very limited use of iterators internally. It has long
+been suggested that certain common idioms could be implemented much
+more efficiently using iterators and this RFC suggests some possible
+mechanisms for achieving this goal.</p>
+<a name='DESCRIPTION'></a><h1>DESCRIPTION</h1>
+<a name='How iterators work in perl 5'></a><h2>How iterators work in perl 5</h2>
+<p>In perl 5 every hash has exactly one iterator, which can be used
+explicitly by the programmer using the each function and which is
+also used by perl implicitly to implement the keys and values
+functions.</p>
+<p>This is confusing and dangerous as you can easily get an action
+at a distance effect whereby using each/keys/values in a function
+affects the iteration being performed by the caller.</p>
+<a name='How iterators might work in perl 6'></a><h2>How iterators might work in perl 6</h2>
+<p>In perl 6 the keys and values functions should no longer use the
+same iterator as the each function - each use of keys and values
+should use it's own private iterator instead.</p>
+<p>In fact those iterators should probably be lazy so that a piece
+of code like this:</p>
+<pre>  foreach (keys %x)
+  {
+    ...
+  }</pre>
+<p>does not immediately iterate over the whole hash, pushing copies
+of all the keys onto the stack; but should instead create an
+iterator object of some sort that can be passed to the loop op
+which will then pull off one value for each pass of the loop.</p>
+<p>This is significantly more efficient for large hashes, especially
+if the loop exits early.</p>
+<a name='Freezing state for keys and values efficiently'></a><h2>Freezing state for keys and values efficiently</h2>
+<p>The only problem with this system is that the current implementation
+of keys and values causes the result to be frozen so that changes to
+the hash made in the loop body do not effect the values being iterated
+over.</p>
+<p>I believe this problem can be solved by using the vtable for the
+hash to wrap any mutating functions with a completion routine that
+will advance the iterator to completion, creating a temporary list
+of copied keys/values that it can then continue to iterate over.</p>
+<p>Obviously after this completion was done the wrapper routine would
+call the original vtable routine to update the hash. It would also
+remove itself from the vtable so you would only pay the cost of the
+wrapper on the first change to the hash. Equally you would only pay
+for building the temporary list when it was necessary - ie when you
+change the hash inside the loop.</p>
+<p>For keys the iterator would need to trap insertions and deletions
+and for values it would need to trap these and also modifications of
+existing values.</p>
+<p>Because this mechanism can sit above the main hash implementation
+it should work equally for both builtin hashes and for things like
+tied hashes where implementation details are unknown to the core.</p>
+<a name='Handling tied hashes'></a><h2>Handling tied hashes</h2>
+<p>The current tied hash interface is only capable of supporting a
+single iterator via the FIRSTKEY and NEXTKEY functions.</p>
+<p>In order to support the enhanced iteration described above it is
+suggested that the tied hash interface be extended but the precise
+details of that are a matter for a language RFC rather than this
+document.</p>
+<p>Certain underlying structures with which tied hashes are used (for
+example some types of dbm file) only support a single iterator which
+makes support of an enhanced tied hash interface difficult.</p>
+<p>It is however possible to work around this limitation using some
+form of buffering. This could be done either by the tied hash
+implementation or, more helpfully, at the perl level if the tied
+hash indicated that it could only support a single iterator. There
+are basically three ways that this buffering could work:</p>
+<ul>
+<li><a name='Perl 5 style - always buffer all the items'></a>Perl 5 style - always buffer all the items</li>
+<p>This technique requires that when creating an iterator for a hash
+which only supports single iteration that the underlying iterator
+should be reset and then advanced to completion, creating a list
+of values which is saved and then iterated over by the perl level
+iterator.</p>
+<li><a name='Buffer previously read values'></a>Buffer previously read values</li>
+<p>This form of buffering works by having the first iterator save
+each value as it iterates. If a second iterator is then required
+it can begin work by traversing the saved values and then if
+necessary moving on to use the underlying iterator - the most
+advanced of all the iterators is responsible for reading and
+saving values from the underlying iterator.</p>
+<p>The buffer values can be discarded whenever the number of
+iterators in use falls to zero.</p>
+<li><a name='Buffer pending values when necessary'></a>Buffer pending values when necessary</li>
+<p>The final form of buffering works by having the first iterator
+work as normal, retrieving and returning values from the real
+underlying iterator, until such time as a second iterator is
+created.</p>
+<p>At this point the underlying iterator will be advanced to the
+end and the result values cached. The second logical iterator
+can then reset the underlying iterator and start to use it while
+the original logical iterator can continue by using the buffered
+values.</p>
+<p>It should be possible to share the buffering of the tail values
+between multiple iterators as appropriate and to destroy the
+buffer only when all the iterators are destroyed.</p>
+</ul>
+<p>Overall I believe that the third of these provided the best
+results - it is free until a second iterator is created and
+then only buffers as much as is necessary to support the goal
+of multiple iteration.</p>
+<a name='CHANGES'></a><h1>CHANGES</h1>
+<ul>
+<li><a name=' Added a discussion of tied hash issues and ways of resolving them'></a>    Added a discussion of tied hash issues and ways of
+    resolving them</li>
+<li><a name=' Set the status as &quot;Developing&quot;'></a>    Set the status as &quot;Developing&quot;</li>
+</ul>
+<a name='REFERENCES'></a><h1>REFERENCES</h1>
+<p>RFC 123: Builtin: lazy</p>
+<p>perlfunc manpage for discussion of each, keys and values</p>
+</div>

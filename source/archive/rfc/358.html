@@ -1,0 +1,31 @@
+[% setvar title Keep dump capability. %]
+<h3>This file is part of the Perl 6 Archive</h3>
+    <p>To see what is currently happening visit <a href="http://www.perl6.org/">http://www.perl6.org/</a></p>
+<div class='pod'>
+<a name='TITLE'></a><h1>TITLE</h1>
+<p>Keep dump capability.</p>
+<a name='VERSION'></a><h1>VERSION</h1>
+<pre>  Maintainer: S. A. Janet &lt;<a href='mailto:stosh@eskimo.com'>stosh@eskimo.com</a>&gt;
+  Date: 30 Sep 2000
+  Mailing List: <a href='mailto:perl6-language@perl.org'>perl6-language@perl.org</a>
+  Number: 358
+  Version: 1
+  Status: Developing</pre>
+<a name='ABSTRACT'></a><h1>ABSTRACT</h1>
+<p>To simplify distribution of programs in binary form,
+support for dump should be kept.</p>
+<a name='DESCRIPTION'></a><h1>DESCRIPTION</h1>
+<p>This would immensely aid distribution of code from one Linux, Windows,
+etc. machine to others without requiring all the recipients to be able
+to install Perl, compile and install modules required by the program,
+and configure their hosts so that Perl find the modules.  There are
+also times when pre-loading and pre-processing large amounts of data
+are desirable.</p>
+<a name='IMPLEMENTATION'></a><h1>IMPLEMENTATION</h1>
+<p>RFC 267 wants dump eliminated mainly because it is a common name for
+user subroutines, bit also because it can be accomplished with a kill
+signal. I really do not care if dump is renamed, but I believe keeping
+the capability is in perl's interest for greater acceptance and use.</p>
+<a name='REFERENCES'></a><h1>REFERENCES</h1>
+<p>None.</p>
+</div>

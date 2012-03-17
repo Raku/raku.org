@@ -1,0 +1,82 @@
+[% setvar title POD and comments handling in perl %]
+<h3>This file is part of the Perl 6 Archive</h3>
+    <p>To see what is currently happening visit <a href="http://www.perl6.org/">http://www.perl6.org/</a></p>
+<div class='pod'>
+<a name='TITLE'></a><h1>TITLE</h1>
+<p>POD and comments handling in perl</p>
+<a name='VERSION'></a><h1>VERSION</h1>
+<pre>  Maintainer: Richard Foley &lt;<a href='mailto:richard@rfi.net'>richard@rfi.net</a>&gt;
+  Date: 25 Sep 2000
+  Mailing List: <a href='mailto:perl6-internals@perl.org'>perl6-internals@perl.org</a>
+  Number: 325
+  Version: 1
+  Status: Developing</pre>
+<a name='ABSTRACT'></a><h1>ABSTRACT</h1>
+<p>POD and comment syntax behaviour.</p>
+<a name='DESCRIPTION'></a><h1>DESCRIPTION</h1>
+<p>Many people, especially shell programmers, are used to the <b>#</b> style of comments, and when confronted with YAPS (Yet Another Possible Style :), they give up and can't be bothered to learn how POD may actually be useful.</p>
+<p>This is a shame and it may be possible to incorporate an implementation which would allow for both styles, and would also enable inclusion of the old style with mimimal effort, thus dragging old-coders screaming into the 21st century.</p>
+<p>For example <b>perldoc perldiag</b> or <b>perldoc -f delete</b> can save a lot of time and head-scratching.  Being able to do that to your own code is sometimes extremely useful, if only to realise how much better you could have written it in hindsight.</p>
+<p>Typically a lot of code is commented like this:</p>
+<pre>	# ################# #
+	# How to use sub foo
+	# 
+	#   my $bar = &amp;foo($arg1, $arg2);
+	# 
+	# and so on
+	# ################# #</pre>
+<p>A typical POD representation could be:</p>
+<pre>	=item foo
+		
+		How to use sub foo
+		
+			my $bar = &amp;foo($arg1, $arg2);
+		
+		and so on
+	
+	=cut</pre>
+<p>There are 2 potential problems with the standard (IMHO on the whole excellent)
+POD approach:</p>
+<p>1. Sometimes it is visually difficult to seperate the code from the
+comments, especially for those without full colour syntax highlighters
+(or who have perhaps switched them off).</p>
+<p>2. Some people just don't want to learn a new/old way of doing something,
+(if it's too different to what they are used to).  While not condoning
+the ostrich-head-in-sand approach, there are a lot of people out there
+who just don't look at POD, even if they've heard of it, purely because
+the different syntax scares them off.  This reaction from grown men
+(etc.) may of course be frowned upon, or even denied, but it doesn't
+stop it being true.</p>
+<a name='IMPLEMENTATION'></a><h1>IMPLEMENTATION</h1>
+<p>A couple of possiblities raise their tentacles to allow a 'middle-ware' syntax:</p>
+<p>1. Allow the key words after comments too, which would reduce the
+modifications to existing code/modules and maintain the readability.</p>
+<pre>	# =item foo
+	# How to use sub foo
+	# 
+	#   my $bar = &amp;foo($arg1, $arg2);
+	# 
+	# and so on
+	# =cut</pre>
+<p>2. Allow 'comment key' to work as well as 'equals key', with or without
+the spaces:</p>
+<pre>	# item foo
+
+	How to use sub foo
+
+		my $bar = &amp;foo($arg1, $arg2);
+
+		and so on
+
+	# cut</pre>
+<p>Either approach, while not perhaps as elegant as <b>pure POD</b>, would
+encourage more general compliance with, and usage of, the simply excellent
+POD system, without overly complicating it.</p>
+<p>Essentially extend <code>/^=\w+/</code> to <code>/^(=|(\#\s*\=))\w+/</code></p>
+<p>You could even include the typical <b>C</b> comment characters:</p>
+<pre>	C&lt;/^(=|(\#\s*\=)|(\/\*)\w+/&gt;</pre>
+<p>But that may be stretching it a bit :-)</p>
+<a name='REFERENCES'></a><h1>REFERENCES</h1>
+<p>RFC 5: Multiline Comments for Perl.</p>
+<p>RFC 102: Inline Comments for Perl.</p>
+</div>

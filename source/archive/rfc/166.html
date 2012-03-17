@@ -1,0 +1,81 @@
+[% setvar title TITLE %]
+<h3>This file is part of the Perl 6 Archive</h3>
+    <p>To see what is currently happening visit <a href="http://www.perl6.org/">http://www.perl6.org/</a></p>
+<div class='pod'>
+<a name='TITLE'></a><h1>TITLE</h1>
+<p>Alternative lists and quoting of things</p>
+<a name='VERSION'></a><h1>VERSION</h1>
+<pre>  Maintainer: Richard Proctor &lt;<a href='mailto:richard@waveney.org'>richard@waveney.org</a>&gt;
+  Date: 27 Aug 2000
+  Last Modified: 1 Oct 2000
+  Mailing List: <a href='mailto:perl6-language-regex@perl.org'>perl6-language-regex@perl.org</a>
+  Number: 166
+  Version: 4
+  Status: Frozen</pre>
+<a name='ABSTRACT'></a><h1>ABSTRACT</h1>
+<p>Expand Alternate Lists from Arrays and Quote the contents of things
+inside regexes.</p>
+<a name='DESCRIPTION'></a><h1>DESCRIPTION</h1>
+<p>These are a couple of constructs to make it easy to build up regexes
+from other things.</p>
+<a name='Alternative Lists from arrays'></a><h2>Alternative Lists from arrays</h2>
+<p>The basic idea is to expand an array as a list of alternatives.  There
+are two possible syntaxs (?@foo) and just plain @foo.  @foo might just have
+existing uses (just), therefore I prefer the (?@foo) syntax.</p>
+<p>(?@foo) is just syntactic sugar for (?:(??{ join('|',@foo) })) A bracketed
+list of alternatives. But built at regex compile time maybe its
+@{[ join('|',@foo) ]}.</p>
+<a name='Quoting the contents of things'></a><h2>Quoting the contents of things</h2>
+<p>If a regex uses $foo or @bar there are problems if the content of
+the variables contain special characters.  What is needed is a way
+of \Quoting the content of scalars $foo or arrays (?@foo).</p>
+<p>Suggested syntax:</p>
+<p>(?Q$foo) Quotes the contents of the scalar $foo - equivalent to
+(??{ quotemeta $foo }).</p>
+<p>(?<a href='mailto:Q@foo'>Q@foo</a>) Quotes each item in a list (as above) this is equivalent to
+(?:(??{ join ('|', map quotemeta, @foo)})).</p>
+<p>In this syntax the Q is used as it represents a more inteligent \Quot\E.</p>
+<p>It is recognised that (?Q$foo) is equivalent to \Q$foo\E, but it does not
+mean that this is a bad idea to add this at the same time as (?<a href='mailto:Q@foo'>Q@foo</a>) for
+reasons of symetry and perl DWIM.</p>
+<p>It is recognised the (?Q might be reserved for control of a hypothetical
+Q flag, but this does feel &quot;appropriate&quot; as its about \Quoting.</p>
+<a name='Comments'></a><h2>Comments</h2>
+<p>Hugo:
+&gt; (?@foo) and (?<a href='mailto:Q@foo'>Q@foo</a>) are both things I've wanted before now. I'm
+&gt; not sure if this is the right syntax, particularly if RFC 112 is
+&gt; adopted: it would be confusing to have (?@foo) to have so
+&gt; different a meaning from (?$foo=...), and even more so if the
+&gt; latter is ever extended to allow (?@foo=...).
+&gt; I see no reason that implementation should cause any problems
+&gt; since this is purely a regexp-compile time issue.</p>
+<p>Me: I cant see any reasonable meaning to (?@foo=...) this seams an appropriate
+syntax, but I am open for others to be suggested.</p>
+<a name='CHANGES'></a><h1>CHANGES</h1>
+<p>V1 of this RFC had three ideas, one has been dropped, the other is now part
+of RFC 198.</p>
+<p>V2 Expands the list expansion and quoting with quoting of scalars and
+Implemention issues.</p>
+<p>V3 In an error what should have been 165 V2 was issued as 166 V2 so this is V3
+with a change in (?Q$foo).  This is in a pre-frozen state.</p>
+<p>V4 Added a couple of minor changes from Hugo and frozen.</p>
+<a name='MIGRATION'></a><h1>MIGRATION</h1>
+<p>As (?@foo) and (?Q...) these are additions with out any compatibility issues.</p>
+<p>The option of just @foo for list exansion, might represent a small problem if
+people already use the construct.</p>
+<a name='IMPLENTATION'></a><h1>IMPLENTATION</h1>
+<p>Both of these are changes are regex compile time issues.</p>
+<p>Generating lists from arrays almost works by localising $&quot; as '|' for the
+regex and just using @foo.</p>
+<p>MJD has demonstrated implementing (?@foo) as (?\@foo) by means of an overload
+of regexes, this slight change was necessary because of the expansion of
+@foo - see below.</p>
+<p>Both of these changes are currently affected by the expansion of variables in
+the regex before the regex compiler gets to work on the regex.  This problem also
+affects several other RFCs.  The expansion of variables in regexes needs
+for these (and other RFCs) to be driven from within the regex compiler so
+that the regex can expand as and where appropriate.  Changing this should not
+affect any existing behaviour.</p>
+<a name='REFERENCES'></a><h1>REFERENCES</h1>
+<p>RFC 198: Boolean Regexes</p>
+</div>

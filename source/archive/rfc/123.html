@@ -1,0 +1,155 @@
+[% setvar title Builtin: lazy %]
+<h3>This file is part of the Perl 6 Archive</h3>
+    <p>To see what is currently happening visit <a href="http://www.perl6.org/">http://www.perl6.org/</a></p>
+<div class='pod'>
+<a name='TITLE'></a><h1>TITLE</h1>
+<p>Builtin: lazy</p>
+<a name='VERSION'></a><h1>VERSION</h1>
+<pre>  Maintainer: David Nicol &lt;<a href='mailto:perl6rfc@davidnicol.com'>perl6rfc@davidnicol.com</a>&gt;
+  Date: 17 Aug 2000
+  Last Modified: 1 Sep 2000
+  Mailing List: <a href='mailto:perl6-language@perl.org'>perl6-language@perl.org</a>
+  Number: 123
+  Version: 2
+  Status: Developing</pre>
+<a name='ABSTRACT'></a><h1>ABSTRACT</h1>
+<p><code>lazy</code> is suggested as a keyword to modify an array context
+as described in RFC24, &quot;semi-finite (lazy) lists.&quot;  <code>?</code> will
+also work, when it is clear that we're not doing a ternary if.</p>
+<p>Also it will work with a block to create an array by subsequent
+calls to the block.</p>
+<p>&quot;Busy&quot; is proposed as a term for the normal lists we are familiar with,
+to differentiate them from &quot;lazy&quot; ones.</p>
+<p>A difference in assigning from lazy lists instead of busy lists
+is proposed.</p>
+<a name='DESCRIPTION'></a><h1>DESCRIPTION</h1>
+<p>In addition to lazy evaluation optimizations provided by the
+language when it recognizes clear (to it, they may be totally
+invisible to even advanced programmers)
+syntactic hints, a &quot;lazy array context&quot;
+may be indicated by the presence of the new keyword <code>lazy</code> or
+its shortened form <code>?</code>.</p>
+<a name='why a keyword is needed'></a><h2>why a keyword is needed</h2>
+<pre>
+        tie %h A_DATABASE_RETURNING_OBJECTS, ... ;
+
+        for (grep {$h{$_}-&gt;STATE eq 'NY'} keys %h){
+                $h{$_}-&gt;send_advertisement();
+        };</pre>
+<p>We would like &quot;keys&quot; to return an RFC24 &quot;lazy list&quot; when it is
+compiler-obvious that it is safe to do so, meaning:</p>
+<ul>
+<li><a name=''></a></li>
+<p>the argument hash is never part of an L-value within
+the scope where the return value will be used</p>
+<li><a name=''></a></li>
+<p>the context is marked as accepting lazy lists ?</p>
+<li><a name=''></a></li>
+<p>the argument hash is never part of an L-value within a side effect</p>
+<li><a name=''></a></li>
+<p>the hash is marked iterator-safe, meaning that it is
+not vulnerable to deadlocks during iteration.</p>
+</ul>
+<p>The question is, how do we tell the compiler that &quot;for&quot; in this
+example requires a complete list, because the <code>send_advertisement</code>
+method changes the value of its instance?</p>
+<p>Do all class methods start marking themselves as to whether they
+change their obejcts or not?  This seems too complex, and very
+likely impossible to automate effectively at this time.</p>
+<a name='make lazy keys the programmer's responsibility'></a><h2>make lazy keys the programmer's responsibility</h2>
+<p>What if adding laziness to a list context was up to the programmer
+and passed through functions that can support it:</p>
+<pre>        for (lazy(grep {$h{$_}-&gt;STATE eq 'NY'} keys %h)){
+                $h{$_}-&gt;send_advertisement();
+        };</pre>
+<p>would cause a lazy list is passed to <code>for</code>, and increment of
+the object's &quot;letters_sent_total&quot; field might break the iteration.</p>
+<pre>
+        for (grep {$h{$_}-&gt;STATE eq 'NY'} lazy(keys %h)){
+                $h{$_}-&gt;send_advertisement();
+        };</pre>
+<p>causes a lazy list to be passed to our filter function <code>grep</code>, saving
+us from allocating the entire <code>keys</code> array.  <code>Grep</code> is still in
+the default busy context, so it returns a busy array, which <code>for</code>
+can iterate over safely.</p>
+<a name='co-routine into array'></a><h2>co-routine into array</h2>
+<p>Another use of <code>lazy</code> would be in defining a lazy array in the first place,
+as opposed to wanting to evaluate a subroutine.</p>
+<pre>	@naturals = lazy { my $x=1; yield $x++ };</pre>
+<p>alternately</p>
+<pre>	@naturals = ? { my $x=1; yield $x++ };</pre>
+<p>After this assignment, <code>shift @naturals</code> will produce ever-increasing
+integers.  The state of the subroutine can be reset to the initial state
+with <code>reset \@naturals</code>.</p>
+<a name='Assigning from lazy lists'></a><h2>Assigning from lazy lists</h2>
+<p>Lazy lists maintain their own iterator, which is advanced as accesses
+are made from them.</p>
+<p><i>Assigning a non-terminating lazy list to an unsized busy array will result in
+an infinite loop.</i> &quot;Sized busy arrays&quot; with a maximum point beyond which
+autovivification does not occur, should they exist, will not
+suffer this problem.</p>
+<p>When evaluated in a scalar context, instead of returning the total
+number of elements, which may not be knowable, a lazy list returns
+the first (or next) element, as if it was <code>shift</code> is implicitly
+applied to it.</p>
+<p>Example:</p>
+<pre>	reset \@naturals;
+	(@a,@b,@c2f{c..f}) = @naturals	# $c2f{f} now == 6
+	$seven = @naturals;		# $seven is 7
+
+	@keepgoing = ? @naturals;	# lazy @keepgoing is now 
+					# a copy of @naturals
+
+	reset \@naturals;
+	print shift @keepgoing;		# prints 8;
+	print shift @naturals;		# prints 1;
+
+	@tenmore:size(10) = @keepgoing; # @tenmore is 9 .. 19
+
+	@default = @keepgoing;		# endless loop</pre>
+<a name='Memoization of Lazy Lists'></a><h2>Memoization of Lazy Lists</h2>
+<p>Unless marked with an attribute indicating that the list is memoized,
+a lazy list is not only lazy  but also forgetful.</p>
+<a name='index within the co-routine'></a><h2>index within the co-routine</h2>
+<p>it is possible that the &quot;index&quot; into the lazy array will be available
+via a reserved word from within such a co-routine.  The name of this
+reserved word is a subject of great contention but I have not seen any
+convincing arguments against having such a keyword. Perhaps it will be
+a definable keyword.</p>
+<p>The following is therefore still developing:</p>
+<pre>	use CORE::LAZY::REFLEXIVEKEYWORD bubba;
+	@fibonaccis:memoized=(0,1,?{$bubba[bubba:n-1]+$bubba[bubba:n-2]});</pre>
+<a name='IMPLEMENTATION'></a><h1>IMPLEMENTATION</h1>
+<p>&quot;Array context&quot; splits into &quot;lazy array context&quot; and &quot;busy array context&quot;
+which is the default with which we are all familiar.  Functions capable
+of returning lazy arrays (or which have been overloaded with homonymous
+functions that return lazy arrays, given overloading by context) return lazy arrays into a lazy array
+context.</p>
+<p>A lazy array evaluated in a busy array context becomes a busy array, so
+if there is no great loss in efficiency a lazy implementation, being more
+flexible, is preferred.</p>
+<p>If it becomes possible to identify lazy situations without a keyword, of
+course the optimizer is welcome to go for it.</p>
+<a name='when the language will do it for us'></a><h2>when the language will do it for us</h2>
+<p>It is expected that in situations such as</p>
+<pre>	@KeySubset = grep {$h{$_}-&gt;STATE eq 'NY'} keys %h;</pre>
+<p>where the entire array is to be accessed immediately,
+functions such as grep may automatically prefer lazy arrays over busy
+arrays. How this is specified in a parameter list is beyond the scope
+of this RFC.</p>
+<p>The stuff about blocks amounts to a wrapper that creates a package
+with a unique name and ties the lvalue to it.</p>
+<a name='impact on legacy code'></a><h1>impact on legacy code</h1>
+<p>Hardly any.  $lazy, @lazy, %lazy are not affected.</p>
+<a name='REFERENCES'></a><h1>REFERENCES</h1>
+<p>RFC24	semi-finite (lazy) lists</p>
+<p>RFC31 	Co-routines (Conway)</p>
+<p>Tom Hughes pointed out the problem with hash iterators</p>
+<a name='CHANGES'></a><h1>CHANGES</h1>
+<p>minor rewrites, addition of optimizable example and allusion to
+the possibility of a lazy preference indicator in parameter lists.</p>
+<p>Introduction of the section on assigning
+Introduction of the section on reflexive
+Introduction of the section on memoization</p>
+<p>Ug.</p>
+</div>

@@ -1,0 +1,176 @@
+[% setvar title This week on Perl 6 ~(24-30 June 2002) %]
+<h3>This file is part of the Perl 6 Archive</h3>
+    <p>To see what is currently happening visit <a href="http://www.perl6.org/">http://www.perl6.org/</a></p>
+<div class='pod'>
+<a name='This week on Perl 6 ~(24-30 June 2002)'></a><h1>This week on Perl 6 ~(24-30 June 2002)</h1>
+<p>By Piers Cawley, 020020702</p>
+<a name='Notes'></a><h2>Notes</h2>
+<p>Experimenting with a slightly different format this week (theft from
+NTKnow considered sensible...), I'll also be looking at some of the
+things that've been posted on use.perl.org (and I'd really appreciate
+some reports on the YAPC Perl6 chats from those who were there, so I
+can summarize them for the next issue or as an appendix to this one).</p>
+<a name='System calls/spawning new processes'></a><h2>System calls/spawning new processes</h2>
+<p>A newbie seemed somewhat confused about the purpose of the
+perl6-language list and asked about spawning subprocesses... in Perl 5.
+Mark J Read demonstrated admirable tact and diplomacy in both pointing
+the newcomer at a better place to ask (<a href='mailto:perl-beginners@perl.org'>perl-beginners@perl.org</a>, a
+<i>great</i> mailing list) <i>and</i> providing some pointers toward an
+answer.</p>
+<p>The only reason this particular episode made the summary, by the way, is
+because of its rareity. I've been generally impressed by the general
+'on topicness' of the perl6-* lists. I hope it stays that way for
+a long time to come.</p>
+<p>Mailing list urls omitted to protect the innocent.</p>
+<a name='Ruby iterators'></a><h2>Ruby iterators</h2>
+<p>Ruby interators were the subject of Erik Steven Harrison's post, which also
+referred to 'pass by name' and 'the Jensen Machine', and wanted to know
+'the Perl 6 stance on the matter'. Nobody has yet stepped up to the
+plate on this one and, speaking personally, I'm not entirely sure I've
+understood the question.</p>
+<p><a href='http://archive.develooper.com/perl6-language@perl.org/msg10175.html' target='_blank'>archive.develooper.com</a>
+has the whole question</p>
+<a name='Fun with the Perl 6 Grammar.'></a><h2>Fun with the Perl 6 Grammar.</h2>
+<p>Sean O'Rourke asked us to &quot;disregard my past shoddy attempt at a Perl
+6 grammar&quot; and presented &quot;a larger one that appears to capture much more of
+the syntax found in Apocalypses and Exegeses 1 - 4 (5 just scares
+me).&quot; He promises bugs and missing elements, but still earns hero
+points from me.</p>
+<p>Later in the week, Dan asked how the perl 6 grammar was going and
+Ashley Winters responded that he isn't working on a grammar, but
+posted a list of variable forms (and a couple of other awkward
+constructs) with which he'd be testing each grammar. I particularly
+liked the last three entries in his list:</p>
+<pre>   ...
+   # As a final sanity check, let's chain these things
+
+   @.proc[$*PID].ps.{RSS};
+   @proc.[$*PID].ps().{RSS};
+
+   # And, just to make sure your parser doesn't pass this suite
+
+   $foo{&quot;Do you want to try $interpolated{&quot;string&quot;}?&quot;};</pre>
+<p>Sean O'Rourke responded with some comments on the legality of some of
+the examples, and offered his own <code>*@$*foo</code>, a flattened, dereferenced,
+global <code>$foo</code>, he thinks (and I concur). (Ooh... I just had a bad
+thought. @foo^.(), AFAICT it's the same as <code>map $_.(), @foo</code>, but a
+good deal more evil).</p>
+<p>There was also some talk of overriding <code>[]</code> on hashes and <code>{}</code> on
+arrays to do surprising things. Personally, I reckon if you're going
+to do perverse stuff like that then you should add some rules to the
+grammar to make it legal, as well as writing the tie magic (or its perl
+6 equivalent), but laziness meant I didn't post that to the list.</p>
+<p>Oh yes. John Porter suggested that 'maybe Damian
+should write [the grammar]?'. Which leads me to postulate an analog to Godwin's
+Law, tailored to the perl 6 process, stating that at some point in any thread
+about the perl 6 language, someone will suggest that Damian do it. Or
+maybe Damian <i>will</i> do it. After all, Reports from YAPC seem to imply that he's
+come up with a cunning way of doing things in zero time (but I'm
+assuming he uses lots of space to compensate).</p>
+<p>This thread kicks off at
+<a href='http://archive.develooper.com/perl6-internals@perl.org/msg10705.html.' target='_blank'>archive.develooper.com</a></p>
+<p>Sean O'Rourke's parser is at
+<a href='http://archive.develooper.com/perl6-internals@perl.org/msg10692.html.' target='_blank'>archive.develooper.com</a></p>
+<a name='The increasingly misnamed 'Perl5 humor' thread.'></a><h2>The increasingly misnamed 'Perl5 humor' thread.</h2>
+<p>Particulary, the branch that should be titled 'Porting XS modules to
+Parrot' rumbled on, mostly discussing how one would do it without
+implementing the entire perl 5 virtual machine on top of Parrot, with
+a small digression about achieving flight if you waved your hands fast
+enough.</p>
+<p>Dan, as usual, applied the scalpel very neatly. &quot;Parrot's not going to
+have XS as an interface--that'd be insane&quot;, proposing instead an 80/20
+type solution and suggested that &quot;If someone wants to start a list of
+<i>sensible</i> entries in perl 5's API that should be provided, we can
+work from there&quot;. Tim Bunce suggested starting &quot;with a perl script
+that reads extension source code ... and spits out details of what
+perlapi/guts have been used&quot;, feeding it a bunch of popular
+extensions, and then profiling the results.</p>
+<p>The implementation of such a tool was left as an exercise for the
+interested reader.</p>
+<p>Dave Goehrig appears to have been that interested reader as he kicked
+off the 'Possibility of XS support' thread. He took at look at some
+sample XS based modules and reckoned that getting a minimal core of XS
+up would need about 50 functions to be ported. Dan thought that would
+be cool (no surprise there then, it <i>would</i> be cool) and Dave (the
+star) set off implementing an extension API for parrot. Dave also
+pointed at the Python and Ruby extension mechanisms as examples of
+good solutions to the general problem. Dan told us that he's &quot;trying
+to kate the line between exposing the semantics of the internals and
+the actual internals.&quot; and commented that the semantics of what XS
+does are fine, but that the syntax is horrible. He also made it clear that
+any XS compatibility layer would live outside the Parrot core.</p>
+<p>See:
+<a href='http://archive.develooper.com/perl6-internals@perl.org/msg10672.html' target='_blank'>archive.develooper.com</a>
+for the application of the scalpel.</p>
+<p><a href='http://archive.develooper.com/perl6-internals@perl.org/msg10671.html' target='_blank'>archive.develooper.com</a>
+has the start of the 'Possibility of XS support' thread. It's all
+worth reading.</p>
+<a name='Stack performance'></a><h2>Stack performance</h2>
+<p>Tom Hughes posted a patch to the stack code. His test figures are
+impressive:
+No overflow     Overflow
+Integer stack, before patch      0.065505s     16.589480s
+Integer stack, after patch       0.062732s      0.068460s
+Generic stack, before patch      0.161202s      5.475367s
+Generic stack, after patch       0.166938s      0.168390s</p>
+<p>The test programs &quot;push and pop 65536 times with the first column being when
+that loop doesn't cross a chunk boundary and the second being when it
+does cross a chunk boundary&quot;.</p>
+<p>Dan was impressed, and subject to a couple of caveats, it looks like
+the patch will be accepted.</p>
+<p><a href='http://archive.develooper.com/perl6-internals@perl.org/msg10704.html' target='_blank'>archive.develooper.com</a>
+has the patch.</p>
+<a name='Small stuff'></a><h2>Small stuff</h2>
+<p><a href='http://archive.develooper.com/perl6-internals@perl.org/msg10703.html' target='_blank'>archive.develooper.com</a>
+Dan added a <code>find_type</code> op to make working with non core PMC types
+much easier (no more modifying the assembler code every time...) And a
+<code>lookback</code> op for inspecting the user stack (in type safe fashion).</p>
+<p><a href='http://archive.develooper.com/perl6-internals@perl.org/msg10682.html:' target='_blank'>archive.develooper.com</a>
+Dan also took advantage of the new, mutable strings to write a
+<code>string_append</code> op, and doctored copre.ops to use it for &quot;concat Sx,
+Sy&quot; where x is both source and destination. The phrase &quot;Order of
+magnitude or two&quot; was used, so that's probably good then.</p>
+<p><a href='http://archive.develooper.com/perl6-internals@perl.org/msg10702.html:' target='_blank'>archive.develooper.com</a>
+Brian Wheeler gave us the &quot;typeof op which returns the integer type or
+string type of a PMC.&quot; (Thanks. Applied. -- Dan)</p>
+<p><a href='http://archive.develooper.com/perl6-internals@perl.org/msg10701.html:' target='_blank'>archive.develooper.com</a>
+Simon offers &quot;more extensive tests for the mul_p_p op.&quot;</p>
+<p><a href='http://archive.develooper.com/perl6-internals@perl.org/msg10700.html:' target='_blank'>archive.develooper.com</a>
+Eric Kidder provided a &quot;list of all the opcodes [...] that are not
+documented in docs/pdds/pdd06_pasm.pod&quot;, and a list of all the opcodes
+that are documented but not implemented.</p>
+<p>Peter Cooper pointed to his review of &quot;Virtual Machine Implementation
+in C/C++&quot;, available at <a href='http://makeashorterlink.com/?T2EA32221' target='_blank'>makeashorterlink.com</a></p>
+<p><a href='http://archive.develooper.com/perl6-internals@perl.org/msg10708.html' target='_blank'>archive.develooper.com</a>
+Leon Brocard offers a patch to escape strings when tracing.</p>
+<p>Leon also offers
+<a href='http://archive.develooper.com/perl6-internals@perl.org/msg10709.html,' target='_blank'>archive.develooper.com</a>
+the latest version of his bravura mandelbrot set generator written in
+Parrot.</p>
+<a name='Meanwhile, away from the mailing lists...'></a><h2>Meanwhile, away from the mailing lists...</h2>
+<p>Dan said in his use.perl.org journal that &quot;Damian's [YAS/Perl
+Foundation] grant is up now, and not coming back. Mine ends the end of
+July, and barring a miracle (which means we gather more than $60K
+before the end of July), is also not being extended. A chunk of what's
+left is going to hire a professional grant writer, with everything
+after, up to $40K, going to fund Larry.&quot;</p>
+<p>I'd like to extend my heartfelt thanks and best wishes to Damian
+for the work he's done for Perl 6. Whilst the more visible parts of
+the work he's done have been <i>jeux d'esprits</i>b like
+Lingua::Romana::Perligata, Acme::Bleach and the scary talks like
+Time::Space::Continuum or whatever it's called, it's also apparent
+that the work that's gone on behind the scenes to help Larry make perl
+6 be the best it can be has been unceasing, and his Exegeses have
+often been masterful examples of how to explain tricky concepts with
+clarity.</p>
+<p>Dan's work for Perl 6 has been more visible more often.  Parrot is
+looking good, in large part because of Dan's efforts as programmer and
+project manager. Personally, I hope the miracle happens; having Dan
+full time can only be a good thing.</p>
+<p><a href='http://use.perl.org/~Elian/journal/6101' target='_blank'>use.perl.org</a></p>
+<a name='Colophon'></a><h2>Colophon</h2>
+<p>I'm not getting paid for this, and I don't particularly <i>want</i> to get
+paid for it. But if you find the summaries useful, please, please
+give some money to the Perl Foundation to support the ongoing
+design and development of Perl 6 and Parrot.</p>
+</div>

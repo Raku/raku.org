@@ -1,0 +1,139 @@
+[% setvar title Interpolation of object method calls %]
+<h3>This file is part of the Perl 6 Archive</h3>
+    <p>To see what is currently happening visit <a href="http://www.perl6.org/">http://www.perl6.org/</a></p>
+<div class='pod'>
+<a name='TITLE'></a><h1>TITLE</h1>
+<p>Interpolation of object method calls</p>
+<a name='VERSION'></a><h1>VERSION</h1>
+<pre>  Maintainer: Michael G Schwern &lt;<a href='mailto:schwern@pobox.com'>schwern@pobox.com</a>&gt;
+  Date: 14 Sep 2000
+  Last Modified: 17 Sep 2000
+  Mailing List: <a href='mailto:perl6-language-objects@perl.org'>perl6-language-objects@perl.org</a>
+  Number: 222
+  Version: 2
+  Status: Developing</pre>
+<a name='CHANGES'></a><h1>CHANGES</h1>
+<a name='v2.'></a><h2>v2.</h2>
+<p>Mistakenly said that <code>&quot;$obj-</code>meth(&quot;Foo&quot;)&quot;&gt; should interpolate.  It
+should, of course, be <code>&quot;$obj-</code>meth(\&quot;Foo\&quot;)&quot;&gt;.</p>
+<p>Added a section about variable method calls <code>&quot;$obj-</code>$meth()&quot;&gt;.
+MIGRATION updated accordingly.</p>
+<p>Clarified the title, restricting this RFC to object methods only.
+Class methods will be delt with in a seperate RFC.</p>
+<p>The caveat about whitespace now has its own section.</p>
+<a name='ABSTRACT'></a><h1>ABSTRACT</h1>
+<p>Method calls should interpolate in double-quoted strings, and similar
+locations.</p>
+<pre>    print &quot;Today's weather will be $weather-&gt;temp degrees and sunny.&quot;;</pre>
+<p>Would deparse to:</p>
+<pre>    print 'Today\'s weather will be '.$weather-&gt;temp().' degrees and sunny.';</pre>
+<a name='DESCRIPTION'></a><h1>DESCRIPTION</h1>
+<a name='The Current Problem With OO &amp; Interpolation'></a><h2>The Current Problem With OO &amp; Interpolation</h2>
+<p>Object-oriented programming encourages data-hiding, and one of the most basic
+tool for this is the accessor method.  For reasons which should be obvious,
+<code>$obj-</code>foo()&gt; is usually better than <code>$obj-</code>{foo}&gt;.  However, there are
+several barriers to using an accessor method as simply as one does a hash
+lookup.  Other RFCs deal with most of the current issues, but a basic one
+still remains.</p>
+<pre>    print &quot;Today's weather will be $weather-&gt;temp degrees and sunny.&quot;;
+    </pre>
+<p>This does not DWIM.  Instead of interpolating <code>$weather-</code>temp&gt; as a method
+call, it comes out as <code>$weather.'-</code>temp'&gt; and is usually followed immediately
+by the question &quot;What does 'Weather=HASH(0x80d4174)-&gt;temp' mean??&quot;  Most
+programmers learning OO Perl expect this to work and are surprised to find
+that it does not.</p>
+<p>Work arounds abound:</p>
+<pre>    # If I wanted printf(), I'd have written it in C.
+    printf &quot;Today's weather will be %d degrees and sunny.&quot;, $weather-&gt;temp;
+
+    my $temp = $weather-&gt;temp;
+    print &quot;Today's weather will be $temp degrees and sunny.&quot;;
+    
+    print &quot;Today's weather will be @{[$weather-&gt;temp]} degrees and sunny.&quot;;
+
+    print &quot;Today's weather will be &quot;.$weather-&gt;temp.&quot; degrees and sunny.&quot;;</pre>
+<p>None are as simple and as obvious as:</p>
+<pre>    print &quot;Today's weather will be $weather-&gt;{temp} degrees and sunny.&quot;;</pre>
+<p>and because of this users groan at having to use accessor methods and are
+often tempted to violate encapsulation for ease of use.</p>
+<a name='Proposed Solution - Interpolate Methods'></a><h2>Proposed Solution - Interpolate Methods</h2>
+<p>Therefore, it is proposed that direct object method calls be interpolated
+inside double quoted strings and similar constructs.</p>
+<pre>    print &quot;Today's weather will be $weather-&gt;temp degrees and sunny.&quot;;</pre>
+<p>should parse out as:</p>
+<pre>    print 'Today\'s weather will be '.$weather-&gt;temp().' degrees and sunny.';</pre>
+<p>thus returning DWIMness to methods and strings and removing one barrier to
+accessor method's acceptance over hash lookups for objects.</p>
+<p>Methods will be run in scalar context.  A method which returns a
+single scalar is treated normally.  If a list is returned, it should
+be treated same as array interpolation.  The list seperator will be
+applied.  In effect, the deparsing will really work out as follows:</p>
+<pre>    print 'Today\'s weather will be '.join($&quot;, $weather-&gt;temp()).
+          ' degrees and sunny.';</pre>
+<p>However if temp() calls wantarray(), the result will be FALSE (scalar).</p>
+<p>(For the remainder of the RFC, the join() will be assumed when discussing
+deparsing for brevity.)</p>
+<p>Should it be decided that a formal distinction be made between accessor
+methods and other types (RFC 95), method interpolation should interpolate
+<b>any</b> method.</p>
+<a name='Argument passing'></a><h2>Argument passing</h2>
+<p>Interpolation should also handle passing arguments to methods in a string:</p>
+<pre>    print &quot;Today's weather will be $weather-&gt;temp(\&quot;F\&quot;) degrees and sunny.&quot;;</pre>
+<p><b>NOTE</b> escaping the quotes is analagous to how <code>&quot;$hash{\&quot;foo\&quot;}&quot;</code>
+currently interpolates.</p>
+<p>This should deparse to:</p>
+<pre>    print 'Today\'s weather will be '.$weather-&gt;temp(&quot;F&quot;).
+          ' degrees and sunny.';</pre>
+<p>The arguments to the method are considered as normal expressions, thus:</p>
+<pre>    print &quot;There is $obj-&gt;foo(this =&gt; $yar, that =&gt; 2 + 2) in my head.&quot;;</pre>
+<p>deparses as:</p>
+<pre>    print 'There is '.$obj-&gt;foo(this =&gt; $yar, that =&gt; 2 + 2). ' in my head.&quot;;</pre>
+<a name='Variable method calls'></a><h2>Variable method calls</h2>
+<p>The accessor method is not always known when the program is written,
+thus variable method calls should also be interpolated:</p>
+<pre>    my $what = 'temperature';
+    print &quot;The $what will be $weather-&gt;$what() with a 50% chance of kittens.&quot;;</pre>
+<p>interpolates to</p>
+<pre>    my $what = 'temperature';
+    print 'The '.$what.' will be '.$weather-&gt;$what().' with a 50% chance of kittens.';</pre>
+<p>As with normal usage, the parenthesis are mandatory.  This:</p>
+<pre>    my $what = 'color';
+    print &quot;I like traffic lights, but only when they're $light-&gt;$what&quot;;</pre>
+<p>interpolates to:</p>
+<pre>    my $what = 'color';
+    print 'I like traffic lights, but only when they're '.$light.'-&gt;'.$what;</pre>
+<a name='Whitespace'></a><h2>Whitespace</h2>
+<p>Normally, whitespace is allowed between tokens of a method call.</p>
+<pre>    $obj -&gt; bar (&quot;this&quot;);
+    </pre>
+<p>and</p>
+<pre>    $obj-&gt;bar(&quot;this&quot;);</pre>
+<p>are equivalent.  Whitespace between the object, '-&gt;', method name and opening
+paren should be disallowed when interpolated.  This will avoid many ambiguous
+cases.</p>
+<a name='CAVEATS'></a><h1>CAVEATS</h1>
+<p>Indirect object syntax, being already ambiguous, cannot be easily be
+distinguished in a string from normal text and should not be interpolated.
+This is ok, since accessors are rarely called with indirect object syntax.</p>
+<p>Are there any contexts besides double quotes (&quot;&quot;, qq{}, &lt;&lt;&quot;EOF&quot;) where this
+need be applied?  What about inside regexes?  And if so, left and/or right
+hand side?</p>
+<p>Should the method not exist, Perl will throw an exception/die as usual.</p>
+<p><code>&quot;$var-</code>{this}[2]{is}-&gt;{complex}-&gt;method&quot;&gt; should also be
+interpolated.  Also <code>&quot;$obj-</code>method-&gt;{key}&quot;&gt; for the case where a
+method returns a reference and <code>&quot;$obj-</code>method-&gt;another_method&quot;&gt; for
+the case where a method returns another object.</p>
+<a name='MIGRATION'></a><h1>MIGRATION</h1>
+<p>Perl 5 to Perl 6 can simply change s/-&gt;(\$?\w)/\\-&gt;$1/g in double
+quoted strings to avoid the new interpolation.</p>
+<a name='IMPLEMENTATION'></a><h1>IMPLEMENTATION</h1>
+<p>The behavor of the parser to check for embedded variables would have
+to be altered, namely the case where an embedded variable is being
+dereferenced.  A case would be added to allow method calls as well as
+hash and array index dereferences.  Otherwise, parsing should remain
+as normal.</p>
+<a name='REFERENCES'></a><h1>REFERENCES</h1>
+<p>RFC 95  - Object Classes (proposes automatic accessor methods)</p>
+<p>RFC 163 - Automatic accessors for hash-based objects</p>
+<p>Upcoming RFC on interpolation of class methods</p>
+</div>

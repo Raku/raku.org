@@ -1,0 +1,40 @@
+[% setvar title Data types: Semi-finite (lazy) lists %]
+<h3>This file is part of the Perl 6 Archive</h3>
+    <p>To see what is currently happening visit <a href="http://www.perl6.org/">http://www.perl6.org/</a></p>
+<div class='pod'>
+<a name='TITLE'></a><h1>TITLE</h1>
+<p>Data types: Semi-finite (lazy) lists</p>
+<a name='VERSION'></a><h1>VERSION</h1>
+<pre>  Maintainer: Damian Conway &lt;<a href='mailto:damian@conway.org'>damian@conway.org</a>&gt;
+  Date: 4 Aug 2000
+  Last Modified: 18 Sep 2000
+  Mailing List: <a href='mailto:perl6-language@perl.org'>perl6-language@perl.org</a>
+  Number: 24
+  Version: 2
+  Status: Withdrawn</pre>
+<a name='ABSTRACT'></a><h1>ABSTRACT</h1>
+<p>This RFC proposes that the right operand of a <code>..</code> operator
+may be omitted in a list context, producing a lazily evaluated
+semi-finite list. It is further proposed that operations on
+such lists also be carried out lazily.</p>
+<a name='DESCRIPTION'></a><h1>DESCRIPTION</h1>
+<p>It is proposed that the right operand of a list context range operation
+be made optional. If omitted, the resulting range would become semi-infinite:</p>
+<pre>	for (1..) {
+		print &quot;The next number is: $_\n&quot;;
+	}
+
+	@odds = grep { $_%2 } (1..);
+
+	switch ($n) {
+		case [32..]	{ print &quot;Two many characters in filename&quot; }
+		case (@odds)	{ print &quot;That's odd!&quot; }
+	}</pre>
+<p>Note that the values in @odds would also be lazily generated
+(otherwise the <code>grep</code> would never finish).</p>
+<a name='IMPLEMENTATION'></a><h1>IMPLEMENTATION</h1>
+<p>Ask MJD.</p>
+<a name='REFERENCES'></a><h1>REFERENCES</h1>
+<p>RFC proposing a co-routine mechanism</p>
+<p>The thoughts and writings of Mark-Jason Dominus.</p>
+</div>

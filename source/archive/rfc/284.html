@@ -1,0 +1,29 @@
+[% setvar title Change C<$SIG{__WARN__}> and C<$SIG{__DIE__}> to magic subs %]
+<h3>This file is part of the Perl 6 Archive</h3>
+    <p>To see what is currently happening visit <a href="http://www.perl6.org/">http://www.perl6.org/</a></p>
+<div class='pod'>
+<a name='TITLE'></a><h1>TITLE</h1>
+<p>Change <code>$SIG{__WARN__}</code> and <code>$SIG{__DIE__}</code> to magic subs</p>
+<a name='VERSION'></a><h1>VERSION</h1>
+<pre>  Maintainer: Simon Cozens &lt;<a href='mailto:simon@brecon.co.uk'>simon@brecon.co.uk</a>&gt;
+  Date: 24 Sep 2000
+  Mailing List: <a href='mailto:perl6-language@perl.org'>perl6-language@perl.org</a>
+  Number: 284
+  Version: 1
+  Status: Developing</pre>
+<a name='ABSTRACT'></a><h1>ABSTRACT</h1>
+<p>It sounds really stoopid to say <code>$SIG{__WARN__}</code> on a machine which
+doesn't have signals.</p>
+<a name='DESCRIPTION'></a><h1>DESCRIPTION</h1>
+<p>Perl 6 is going to be portable to all kinds of system, just like Perl 5.
+Some of those systems won't have signals, so it's time to question why
+the warn and die hooks are implemented as signal handlers.</p>
+<p>Instead, let's implement them as magic subroutines <code>WARN</code> and <code>DIE</code>
+like <code>BEGIN</code> and <code>END</code>. This seems more consistent anyway. Well, to
+me.</p>
+<a name='IMPLEMENTATION'></a><h1>IMPLEMENTATION</h1>
+<p>Call subroutines <code>WARN</code> and <code>DIE</code> instead of the signal handler
+versions. Everything else stays the same.</p>
+<a name='REFERENCES'></a><h1>REFERENCES</h1>
+<p>None.</p>
+</div>

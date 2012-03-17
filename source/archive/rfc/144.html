@@ -1,0 +1,170 @@
+[% setvar title Behavior of empty regex should be simple %]
+<h3>This file is part of the Perl 6 Archive</h3>
+    <p>To see what is currently happening visit <a href="http://www.perl6.org/">http://www.perl6.org/</a></p>
+<div class='pod'>
+<a name='TITLE'></a><h1>TITLE</h1>
+<p>Behavior of empty regex should be simple</p>
+<a name='VERSION'></a><h1>VERSION</h1>
+<pre>  Maintainer: Mark Dominus &lt;<a href='mailto:mjd@plover.com'>mjd@plover.com</a>&gt;
+  Date: 24 Aug 2000
+  Last Modified: 11 Sep 2000
+  Mailing List: <a href='mailto:perl6-language-regex@perl.org'>perl6-language-regex@perl.org</a>
+  Number: 144
+  Version: 3
+  Status: Frozen</pre>
+<a name='ABSTRACT'></a><h1>ABSTRACT</h1>
+<a name='Standard Documentation'></a><h2>Standard Documentation</h2>
+<p>According to <i><a href='http://search.cpan.org/perldoc?perlop'>perlop</a></i>:</p>
+<ul>
+<li><a name='m/PATTERN/cgimosx'></a>m/PATTERN/cgimosx</li>
+<li><a name='/PATTERN/cgimosx'></a>/PATTERN/cgimosx</li>
+<p>If the PATTERN evaluates to the empty string, the last successfully
+matched regular expression is used instead.</p>
+</ul>
+<p>This behavior should be changed.  If the PATTERN is empty, Perl should
+look for the empty string.  (That is, if the PATTERN is empty, it
+should always match.)</p>
+<a name='DESCRIPTION'></a><h1>DESCRIPTION</h1>
+<p>Literal empty patterns, such as:</p>
+<pre>        $s =~ // ;</pre>
+<p>are not the problem here.  The real problem is that the special case
+is invoked for interpolated patterns also.  For example,</p>
+<pre>        chomp($pat = &lt;STDIN&gt;);
+        $s =~ /\Q$pat\E/;</pre>
+<p>looks to see if $pat is a substring of $s, unless $pat is empty, in
+which case it matches $s against the last regex that was matched
+successfully.  That regex might be far away, in some other module.
+If the far-away regex happened to contain backreference groups, the
+backreference variables will be set accordingly.</p>
+<p>To make this safe in Perl 5, the programmer has to write something
+peculiar like</p>
+<pre>        $s =~ /(?=)\Q$pat\E/;</pre>
+<p>to ensure that the regex, after interpolation, is never empty.</p>
+<p>I propose that this 'last successful match' behavior be discarded
+entirely, and that an empty pattern always match the empty string.</p>
+<a name='RATIONALE'></a><h1>RATIONALE</h1>
+<a name='The Feature Was Not Useful, I'></a><h2>The Feature Was Not Useful, I</h2>
+<p>The special behavior for empty patterns has never been particularly
+useful.  For example, you could imagine code like this:</p>
+<pre>        for $pat (@patterns) {
+          if ($a =~ /$pat/ &amp;&amp; $b =~ //) {
+            # do something 
+          }
+        }</pre>
+<p>This would be more efficient than the equivalent</p>
+<pre>        for $pat (@patterns) {
+          if ($a =~ /$pat/ &amp;&amp; $b =~ /$pat/) {
+            # do something 
+          }
+        }</pre>
+<p>because $pat would be compiled only once per loop instead of twice.
+It is now more straightforward and efficient to do this sort of thing
+explicitly with the qr// operator:</p>
+<pre>        @patterns = map qr/$_/, @patterns;
+        for $pat (@patterns) {
+          if ($a =~ /$pat/ &amp;&amp; $b =~ /$pat/) {
+            # do something 
+          }
+        }</pre>
+<a name='The Feature Was Not Useful, II'></a><h2>The Feature Was Not Useful, II</h2>
+<p>People sometimes propose the following use for the empty pattern
+special case:  They have a pattern, and many strings, and they want to
+see if every string matches the pattern.  This code works, but is
+inefficient:</p>
+<pre>        sub match_all {
+          my $pat = shift;
+          for (@_) {
+            return 0 unless /$pat/;
+          }
+          return 1; 
+        }</pre>
+<p>This is because <code>/$pat/</code> must be recompiled for each string, or checked
+to see whether recompilation is necessary.</p>
+<p>This code does not work:</p>
+<pre>        sub match_all {
+          my $pat = shift;
+          for (@_) {
+            return 0 unless /$pat/o;
+          }
+          return 1; 
+        }</pre>
+<p>because <code>$pat</code> changes with each call.</p>
+<p>One solution is to use 'eval' here to generate the pattern matching
+code (with <code>/o</code>) at run time.</p>
+<p>People have sometimes tried to use <code>//</code> here, but usually without
+success.  The idea is:</p>
+<pre>        sub match_all {
+          my $pat = shift;
+          # load $pat into 'last successfully matched' space
+          for (@_) {
+            return 0 unless //;
+          }
+          return 1;
+        }</pre>
+<p>The problem here is that there is no way to designate $pat as the last
+successfully matched regex without actually finding a string that
+matches it.  In the past people attempting this strategy have appeared
+in <code>comp.lang.perl.misc</code> asking how to find a string that matches a
+given regex.  As far as I know, no useful solutions have been offered.
+(In fact, there may not be any such string.  Consider the pattern
+<code>/a\bx/</code> for example.)</p>
+<p>A better, simpler solution to this problem is to use the <code>qr</code> operator:</p>
+<pre>        sub match_all {
+          my $pat = shift;
+          $pat = qr($pat);
+          for (@_) {
+            return 0 unless /$pat/;
+          }
+          return 1; 
+        }</pre>
+<a name='This feature has resulted in bugs'></a><h2>This feature has resulted in bugs</h2>
+<p>Any code that contains the innocent-looking</p>
+<pre>        if (/\Q$string\E/) {
+          ...
+        }</pre>
+<p>is potentially booby-trapped.  Such code is common.  An example of
+this type appears in <i><a href='http://search.cpan.org/perldoc?perlfaq6'>perlfaq6</a></i>.</p>
+<a name='Alternatives'></a><h1>Alternatives</h1>
+<p>Rather than eliminating the special case entirely, alternative changes
+are sometimes proposed.</p>
+<a name='Empty pattern to mean 'last match' instead of 'last successful match''></a><h2>Empty pattern to mean 'last match' instead of 'last successful match'</h2>
+<p>This behavior would be more useful than the current behavior and is
+sometimes proposed as an alternative.</p>
+<p>For example, the application discussed in the section 'The feature was
+not useful, II' above would be feasible if the empty pattern matched
+the last-matched pattern, because it would no longer be necessary to
+manufacture a matching string.  But it is simpler and more
+straightforward to solve the problem with <code>qr//</code>.</p>
+<p>Moreover, this alternative behavior retains all the drawbacks of the
+current behavior: It yields subtle and intermittent bugs and
+introduces strange action-at-a-distance effects.</p>
+<a name='Retain special behavior for literal empty pattern?'></a><h2>Retain special behavior for literal empty pattern?</h2>
+<p>In the past it has been proposed that the special behavior be
+discarded for patterns with interpolated variables, but retained for
+empty patterns that appear literally in the source.  <code>/\Q$string\E/</code>
+would look for $string, regardless of whether $string was empty,
+becayse <code>/\Q$string\E/</code> is not a <i>literal</i> empty pattern.  But</p>
+<pre>        $s =~ // ;</pre>
+<p>would still retain the special behavior and match $s against whatever
+was the last pattern to be successfully matched.</p>
+<p>Since the feature is of marginal usefulness (especially now that
+<code>qr//</code> is available) it should be eliminated anyway to reduce code
+and documentation bloat.  However, see <code>Translation Issues</code> below.</p>
+<a name='IMPLEMENTATION'></a><h1>IMPLEMENTATION</h1>
+<p>No special implementation is necessary.</p>
+<a name='TRANSLATION ISSUES'></a><h1>TRANSLATION ISSUES</h1>
+<p>Old Perl 5 scripts that may depend on this feature may be hard to
+translate unless the feature is implemented in Perl 6 also.</p>
+<p>If the literal empty pattern were to retain the special behavior, then
+Perl 5 code like this:</p>
+<pre>        if (/$FOO/) {
+          ...
+        }</pre>
+<p>could be translated to Perl 6 code like this:</p>
+<pre>        if (do { my $_tmp = $FOO; ($_tmp eq '') ? // : /$_tmp/ }) {
+          ...
+        }</pre>
+<p>However, it's not clear that such translation is actually desirable.</p>
+<a name='REFERENCES'></a><h1>REFERENCES</h1>
+<p><i><a href='http://search.cpan.org/perldoc?perlop'>perlop</a></i> discussion of empty patterns, quoted above.</p>
+</div>

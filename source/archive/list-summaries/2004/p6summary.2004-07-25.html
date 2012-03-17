@@ -1,0 +1,133 @@
+[% setvar title The Perl 6 Summary for the week ending 2004-07-25 %]
+<h3>This file is part of the Perl 6 Archive</h3>
+    <p>To see what is currently happening visit <a href="http://www.perl6.org/">http://www.perl6.org/</a></p>
+<div class='pod'>
+<a name='The Perl 6 Summary for the week ending 2004-07-25'></a><h1>The Perl 6 Summary for the week ending 2004-07-25</h1>
+<p>Monday morning, all's well, and Piers sits down at his desk to bash out
+another in his ongoing series of Perl 6 Summaries.</p>
+<p>I've just realised that I missed noting the second anniversary of my
+writing these summaries. It came up a month ago. On my last anniversary
+I hoped I wouldn't be celebrating many more of them before we have a
+real, running Perl 6; I'm still hoping. It looks like we may well
+have a real, running Python interpreter on Parrot before Perl 6.</p>
+<p>But we won't have it this week. Read on.</p>
+<a name='Pie-thon!'></a><h2>Pie-thon!</h2>
+<p>First, the bad news. Dan's conceded.</p>
+<p>Now, the good news. Dan and Leo still got an awful lot done in a
+surprisingly short time; who knows where we'd be if Dan hadn't been
+stuck without a working laptop for most of June. In 5 weeks, we went
+from nothing at all running to having four out of seven running, and 3
+of those running faster than Python. Leo estimated that, once
+everything was done, Parrot should be averaging about twice the speed
+of Python. Next week (or possibly the week after) should see some post
+mortem documentation from Dan and Leo discussing what they've learnt
+from the exercise, and what needs to be done to get a 'proper' python
+implementation up on Parrot.</p>
+<p>So yes, Dan's going to get a pie in the face and be out a round of
+drinks. If you're at OSCON, you might like to drop in on the Python
+lightning talks and watch.</p>
+<p><a href='http://groups.google.com/groups?threadm=410238F0.8040106@toetsch.at' target='_blank'>groups.google.com</a></p>
+<a name='Cygwin JIT problems'></a><h2>Cygwin JIT problems</h2>
+<p>Joshua Gatcomb pointed out that JITted programs were dumping core on
+Cygwin. Again. He and Leo tracked down a problem with the flags used on
+the cygwin version of GCC. Joshua made a plea for experienced Cygwin
+programmers to help out with issues of getting various things working
+on the Cygwin parrot. He also called himself a 'bumbling idiot' but
+none of us (apart, possibly, from his wife) believed him.</p>
+<p><a href='http://groups.google.com/groups?threadm=20040719182323.51065.qmail@web60802.mail.yahoo.com' target='_blank'>groups.google.com</a></p>
+<a name='The whole and everything'></a><h2>The whole and everything</h2>
+<p>Leo and Dan had a long discussion about a proposal of Leo's that Dan had
+rejected without commenting on. Leo's not exactly happy about Parrot's
+subroutine call speed and had proposed something which he thought would
+make things go faster. Dan disagreed, and pointed out that it was
+actively thread dangerous (there's a difference between not optimizing
+for threads and not making threading possible).</p>
+<p>In a lighter hearted part of the thread, Larry suggested embedding
+python in Parrot as a way to get all the pie-thon tests running at
+least as quickly as python. Leo hacked something up which piped the
+Python code to python itself. But we're too honest to do that at OSCON.</p>
+<p><a href='http://groups.google.com/groups?threadm=40FC2390.8010103@toetsch.at' target='_blank'>groups.google.com</a></p>
+<a name='Parakeet 0.1'></a><h2>Parakeet 0.1</h2>
+<p>Michel Pelletier announced the release of Parakeet 0.1, a small Parrot
+language which he hopes will eventually expose all of the OO features
+of the Parrot VM. Judging by the description he posted, it's a
+fascinating Forth like language. Kudos to Michel.</p>
+<p><a href='http://groups.google.com/groups?threadm=1090774280.2033.1.camel@heinlein' target='_blank'>groups.google.com</a></p>
+<p><a href='http://www.daca.net:8080/Parakeet-0.1.tgz' target='_blank'>www.daca.net</a></p>
+<a name='Meanwhile, in perl6-language'></a><h1>Meanwhile, in perl6-language</h1>
+<a name='The infinite thread'></a><h2>The infinite thread</h2>
+<p>Pushing onto lazy lists continued to exercise the p6l crowd (or at
+least, a subset of it). Larry said that if someone wanted to hack
+surreal numbers into Perl 6.1 then that would be cool.</p>
+<a name='Do users need FileHandles?'></a><h2>Do users need FileHandles?</h2>
+<p>Remember Dave Whipp's proposal to get rid of user visible filehandles
+in favour of something like tied scalars? It sparked a good deal of
+discussion this week. A few people were pro, a few anti, with Larry
+seeming to position himself somewhere in the middle.</p>
+<p><a href='http://groups.google.com/groups?threadm=20040718172834.89363.qmail@onion.perl.org' target='_blank'>groups.google.com</a></p>
+<a name='The mathematics summary'></a><h2>The mathematics summary</h2>
+<p>Austin Hastings made me laugh when, following my announcement that I'm
+off to train to be a maths teacher, he wrote a spoof 'Mathematics
+summary'. Thanks Austin.</p>
+<p><a href='http://groups.google.com/groups?threadm=20040720152026.41626.qmail@web12307.mail.yahoo.com' target='_blank'>groups.google.com</a></p>
+<a name='String Interpolation'></a><h2>String Interpolation</h2>
+<p>The string interpolation subthread of last week broke out into it's own
+first class thread this week. Larry said that he was seriously
+considering incrementing the Ruby-o-meter some more by saying that the
+<i>only</i> interpolators in double quotes would be</p>
+<pre>    \n, \t etc.
+    $foo
+    @foo[$i]
+    %foo{$k}
+    { EXPR } </pre>
+<p>where the last provides a list context to <code>EXPR</code>. Damian thought that
+the current solution with <code>$(...)</code> and <code>@(...)</code> was still the best
+way to go. He didn't relish having to escape every <code>{</code> double quoted
+strings (code that writes code for execution by <code>eval</code> is hard enough
+to read without a whole bunch of <i>extra</i> quoted characters being
+required).</p>
+<p>As is usual with p6l, the discussion was wide ranging and touched on a
+whole bunch of other entertaining subjects. He who must not be
+capitalized, chromatic brought up curried and first class roles, and
+Larry shied away from allowing the (IMHO) eminently sensible</p>
+<pre>    $foo does $bar</pre>
+<p>Where do we stand now? Well, I can safely say that some stuff will
+interpolate in double quoted strings.</p>
+<p><a href='http://groups.google.com/groups?threadm=20040720171548.GQ6513@c4.convolution.nl' target='_blank'>groups.google.com</a></p>
+<pre>=head xx and re-running</pre>
+<p>James Mastros made my head hurt slightly as I first read his post about
+the <code>x</code> operator. For a large chunk of his post I was reading <code>x</code> as
+an algebraic <i>x</i> which stood for an arbitrary operator before it dawned
+on me that he was talking about the repetition operator (which becomes
+<code>xx</code> in Perl 6), using the particular example:</p>
+<pre>    @list = int(rand 100) xx 100</pre>
+<p>His contention was that people expected the <code>rand</code> part to be
+evaluated 100 times and that they were surprised when it wasn't
+(frankly, I'd be surprised if it were, but I might be too
+indoctrinated). He proposed that either a new <code>xxx</code> be introduced
+which reevaluated its LHS multiple times, or that <code>xx</code> be altered so
+that, if its LHS was a closure, it would execute the closure multiple
+times to get values.</p>
+<p>Joseph Ryan pointed out that that was what <code>map</code> was for.</p>
+<p><a href='http://groups.google.com/groups?threadm=20040718090352.25833.qmail@onion.perl.org' target='_blank'>groups.google.com</a></p>
+<p><a href='http://groups.google.com/groups?threadm=1df3e31dd5ad.1dd5ad1df3e3@osu.edu' target='_blank'>groups.google.com</a></p>
+<a name='What's the core?'></a><h2>What's the core?</h2>
+<p>A question arose about what modules would come as standard with Perl
+6. Larry's argued previously for an utterly minimal basic distribution
+so as to encourage people to make use of CPAN rather that relying on the
+(possibly old, broken) that came with their Perl. Others were not
+convinced that this was a good idea.</p>
+<p><a href='http://groups.google.com/groups?threadm=1f831b1f793a.1f793a1f831b@osu.edu' target='_blank'>groups.google.com</a></p>
+<a name='Announcements, Apologies, Acknowledgements'></a><h1>Announcements, Apologies, Acknowledgements</h1>
+<p>Over the next few weeks I'll be moving the cut off day for these
+summaries from Sunday to Friday. Writing summaries on a Monday when you
+don't have to drive to Middlesbrough for work is pretty easy, but less
+easy when you do. So, by moving the cut off day I hope I'll be able to
+continue writing the summaries while I'm busy doing my teacher training.</p>
+<p>If you find these summaries useful or enjoyable, please consider
+contributing to the Perl Foundation to help support the development of
+Perl. You might also like to send me feedback at
+mailto:<a href='mailto:pdcawley@bofh.org.uk'>pdcawley@bofh.org.uk</a></p>
+<p><a href='http://donate.perl-foundation.org/' target='_blank'>donate.perl-foundation.org</a> -- The Perl Foundation</p>
+<p><a href='http://dev.perl.org/perl6/' target='_blank'>dev.perl.org</a> -- Perl 6 Development site</p>
+</div>

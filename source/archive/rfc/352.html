@@ -1,0 +1,56 @@
+[% setvar title Merge Perl and C#, but have default Main class for scripting. %]
+<h3>This file is part of the Perl 6 Archive</h3>
+    <p>To see what is currently happening visit <a href="http://www.perl6.org/">http://www.perl6.org/</a></p>
+<div class='pod'>
+<a name='TITLE'></a><h1>TITLE</h1>
+<p>Merge Perl and C#, but have default Main class for scripting.</p>
+<a name='VERSION'></a><h1>VERSION</h1>
+<pre>  Maintainer: Timothy Covell &lt;<a href='mailto:dirac@ashavan.org'>dirac@ashavan.org</a>&gt;
+  Date: 29 Sep 2000
+  Mailing List: <a href='mailto:perl6-internals@perl.org'>perl6-internals@perl.org</a>
+  Number: 352
+  Version: 1
+  Status: Developing</pre>
+<a name='ABSTRACT'></a><h1>ABSTRACT</h1>
+<p>Several Perl6 RFCs have stated that &quot;everything should become
+an object&quot;.  I agree with this idea.  I would go further and
+state that perl should become an OO language at its core but
+still retain a procedural front-end.</p>
+<a name='DESCRIPTION'></a><h1>DESCRIPTION</h1>
+<p>First, let me state that I am not a language architect.  However,</p>
+<p>First, let me state that I am not a language architect.  However,
+I am a fan of Perl and like what I see of the core C# _language_.
+What I propose is to move Perl in the C# direction.  The KEY
+difference is that Perl would have an defacto Main class whose
+defacto main method which would be indestinquishable from a
+legacy procedural based script.  Of course, one is free to
+override the builtin Main class with his own Main class and
+his own main method, and thus work in a pure OO mode.</p>
+<p>To those would would direct me to use Python or Ruby
+instead, I would counter with a couple of points.  First, Perl's
+syntax is more in line with C, C++, ObjC, Java, and C#.  Second,
+Perl's syntax is more powerful (safer too) than that of indentation
+based languages.  Third, since C# and Java can be implemented as
+a subset of C++, I imagine that Perl6 could also be implemented
+thus.  Fourth, due to the aforementioned similarities, defining
+an intermediate language (a.k.a. bytecode) would be simpler.
+Fifth, I like Perl, but wish it could do versioning and objects
+better.  Lastly, I don't want to have to get locked into the
+Microsoft or Sun &quot;Cathedral&quot; platforms.</p>
+<p>Finally, to those who think that object orientation is crazy,
+I would suggest that you look at Perl5 and PostgreSQL.  Perl5
+as we all know has OO extentions.  And, as I am sure that most
+of us know already, PostgreSQL is an open source RDBMS that is
+more properly called  an &quot;object-relational&quot; database.  At it's
+heart each entry is an object and has an object id.  Yet, it
+retains the traditional RDBMS/SQL interface.</p>
+<a name='IMPLEMENTATION'></a><h1>IMPLEMENTATION</h1>
+<p>As previously stated, I am not a systems programmer nor a language
+architect; I am a systems administrator.  Thus, I cannot offer
+an implementation.  However, I think that this idea holds water.</p>
+<a name='REFERENCES'></a><h1>REFERENCES</h1>
+<p>RFC 73: All Perl core functions should return objects</p>
+<p>RFC 159: True Polymorphic Objects</p>
+<p>RFC 161: Everything in Perl becomes an object.</p>
+<p>RFC 171: my Dog $spot should call a constructor implicitly</p>
+</div>

@@ -1,0 +1,223 @@
+[% setvar title Regex assertions in plain Perl code %]
+<h3>This file is part of the Perl 6 Archive</h3>
+    <p>To see what is currently happening visit <a href="http://www.perl6.org/">http://www.perl6.org/</a></p>
+<div class='pod'>
+<a name='TITLE'></a><h1>TITLE</h1>
+<p>Regex assertions in plain Perl code</p>
+<a name='VERSION'></a><h1>VERSION</h1>
+<pre>  Maintainer: Bart Lateur &lt;<a href='mailto:bart.lateur@skynet.be'>bart.lateur@skynet.be</a>&gt;
+  Date: 28 Sep 2000
+  Last Modified: 1 Oct 2000
+  Mailing List: <a href='mailto:perl6-language-regex@perl.org'>perl6-language-regex@perl.org</a>
+  Number: 348
+  Version: 2
+  Status: Frozen</pre>
+<a name='ABSTRACT'></a><h1>ABSTRACT</h1>
+<p>Likely the most justifiable reason to want to be able execute embedded
+Perl code while trying to match a regex pattern, is to include some
+extra tests on the data just matched. The fact that the current
+implementation of the &quot;experimental&quot; /(?{...})/ construct, doesn't do
+just that, feels like a design mistake. So the proposal is to drop the
+current implementation of (?{...}) in favour of code assertions.</p>
+<a name='CHANGES'></a><h1>CHANGES</h1>
+<ul>
+<li><a name='Removed stress on deleting &quot;local&quot; feature'></a>Removed stress on deleting &quot;local&quot; feature</li>
+<li><a name='Added examples on why other &quot;advanced&quot; features are or aren't indispensable'></a>Added examples on why other &quot;advanced&quot; features are or aren't
+indispensable</li>
+</ul>
+<a name='NOTES ON FREEZE'></a><h1>NOTES ON FREEZE</h1>
+<p>Only some final tweaks on the proposed draft for v2, and that's it.</p>
+<a name='DESCRIPTION'></a><h1>DESCRIPTION</h1>
+<p>Likely the most justifiable to want to be able to execute Perl code in a
+regex, is to have additional checks, to see if what you just matched is
+indeed acceptable. Quite a few prominent Perl people have expressed
+having been unpleasantly surprised when they found out that the current
+implementation of /?{...}/ doesn't do that.</p>
+<p>Assertions are already familiar to people writing regexes: for example,
+/\b/, lookahead and lookbehind, and anchors, are all assertions, but
+only in matching subpatterns, not in code. Adding the option to do
+similar tests in code, seems like a powerful addition, while maintaining
+the basic spirit of regexes.</p>
+<p>The main problem with the current implementation of (?{...}) is that it
+&quot;always succeeds&quot;. In case of an assertion, it is the outcome of the
+execution of the embedded code, that decides if the test succeeds
+(return value is true), meaning it is safe to continue; or fails (return
+value is false), in which case the regex engine should abort exploring
+this branch, and immediately backtrack.</p>
+<a name='example'></a><h2>example</h2>
+<p>RFC 197 proposes a specific syntactic addition to regexes, just to check
+if a number is in a specific range. This is just one of the many things
+that could easily achieved using an assertion:</p>
+<pre>    /(\d+)(?{$1&lt;256})/      # proposed syntax, recycling Perl5's syntax </pre>
+<p>If your string = &quot;1234&quot;, the subpattern /(\d+)/ initially matches all
+digits, stuffs them in $1, and calls the assertion code. This code
+additionally if what was matched is within range, in this case, less
+than 256. If this fails, the submatch fails.</p>
+<p>This feature might result in matching some unexpected substrings: both
+&quot;123 and &quot;234&quot; are acceptable matches according to this assertion. In
+order only to match what you really want to match, you may have to add
+some anchors, lookahead and/or lookbehind. So it will take some getting
+used to. This does not make it less valuable.</p>
+<a name='Getting rid of the current (?{...}) construct'></a><h2>Getting rid of the current (?{...}) construct</h2>
+<p>The current implementation for embedding code in regexes, is not aimed
+at assertions. Instead, it's only useable for its &quot;effect at a
+distance&quot;, which is simply horrible. Basically, it simply provides a
+means to pass data around between various parts of the regex. This is a
+unhealty situation, since it makes regexes that use it, look incredibly
+obfuscated, and it requires deep knowledge on how a match in a regex
+proceeds.</p>
+<p>In addition, it promotes changing global data structures. Since the code
+is executed everytime something promising is matched, and not just after
+a complete match, the code will probably be executed more often than
+desired.</p>
+<p>That is the reason why Perl5 has built-in support to <i>temporarily</i>
+modify global data structures, so that the effect can automatically be
+undone when backtracking. This makes the implementation very tricky.
+Removing this feature, which is entirely unnecessary for the spirit of
+assertions, will likely reduce the complexity of implementation quite a
+bit.</p>
+<p>Richard Proctor even wants to go further still: in his RFC 274,
+&quot;Generalised Additions to Regexs&quot;, he proposes to add support for
+executing some embedded Perl code only while backtracking, specifically
+to undo changes by hand. I think that this would make the situation even
+worse than it is today.</p>
+<p>Even knowing when and why the embedded code is executed, is far from
+obvious. Take this example:</p>
+<pre>  $_ = &quot;SKIP buzzer&quot;;
+  if(/(?{print &quot;Testing\n&quot;;})([a-z])\1(?{print &quot;Got a match: $1\n&quot;})/) {
+      print &quot;YES\n&quot;;
+  } else {
+      print &quot;NO\n&quot;;
+  }</pre>
+<p>This prints:</p>
+<pre>  Testing
+  Testing
+  Testing
+  Got a match: z
+  YES</pre>
+<p>The fact that the embedded code is called 3 times, not more, surely
+suprised me. It probably will surprise many people. Apparently, it is
+only executed once for every lowercase letter, not just for any
+character.</p>
+<p>This inpredictability is yet another reason to discourage incrementally
+modify global data structures.</p>
+<a name='enter assertions'></a><h2>enter assertions</h2>
+<p>The above considerations, which are annoying at least for executing
+embedded generic code, are not hindrances at all for processing
+assertions.</p>
+<p>In spirit, assertions are intended to have a local effect only, which is
+only used immediately to direct processing of a match. All it is
+supposed to do, is optionally veto a branch. It won't have an effect on
+some other bizarre location in the regex. There isn't a secret variable
+where the result is stored, to be used elsewhere. You're not supposed to
+change global data structures.</p>
+<p>Therefore, we don't really need this localization. You basically don't
+need to undo anything. If you insist on modifying global data, you still
+can; only: you're on your own.</p>
+<a name='assertions in Perl5'></a><h2>assertions in Perl5</h2>
+<p>The current implementation of the /(?{code})/ construct makes simple
+assertion tests using embedded code hard, but not impossible. As MJD has
+pointed out: &quot;It is not pretty&quot;.</p>
+<ul>
+<li><a name='assertion'></a>assertion</li>
+<pre> (?{COND})</pre>
+<li><a name='assertion in Perl5'></a>assertion in Perl5</li>
+<pre> (?(?{not COND})(?!))
+ (?(?{not do { COND }})(?!))
+ (?(?{COND})|(?!))</pre>
+</ul>
+<p>This makes assertion look like a magic incantation, not something
+trivial, as it should have been.</p>
+<a name='OTHER EXPERIMENTAL ADVANCED FEATURES'></a><h1>OTHER EXPERIMENTAL ADVANCED FEATURES</h1>
+<a name='local'></a><h2>local</h2>
+<p>In the spirit of assertions, <code>local</code> is not necessary. It might just as
+well be removed. I think it would benefit ease of iumplementation quite
+a bit, as I think it is likely the most complex part of it.</p>
+<p>The behaviour for <code>local</code>, in the current embedded code, is rather
+unintuitive. In the Perl5 code</p>
+<pre>	/(?{local $c = $c + 1})/</pre>
+<p>it looks as if the scope for the localized variable should be scoped to
+the embedded code block. It is not. Instead, the value is maintained,
+permanently, unless the regex backtracks, in which case a previous
+value, from the part of the regex just in front of the backtracking, is
+restored. Are you still with me? I thought not.</p>
+<a name='/(?(condition)yes-pattern|no-pattern)/'></a><h2>/(?(condition)yes-pattern|no-pattern)/</h2>
+<p>This thing becomes largely unnecessary. First of all, its current main
+purpose, I think, is emulating assertions. Second, there is nothing you
+can do with it, that you can't do without it. For example, this regex:</p>
+<pre>	/$pre(?(?=$lookahead)($pattern))$post/</pre>
+<p>behaves exactly like:</p>
+<pre>	/$pre((?!$lookahead)|($pattern))$post/</pre>
+<p>i.e. if the lookahead succeeds, the pattern needs to be matched,
+otherwise it is skipped. In the latter, it is: if the negative lookahaed
+succeeds, nothing needs to be matched, otherwise the pattern must be
+matched.</p>
+<p>The IF/ELSE case is slightly more complex. This:</p>
+<pre>	/$pre(?(?=$lookahead)($if)|($else))$post/</pre>
+<p>can become:</p>
+<pre>	/$pre((?=$lookahead)($if)|($?!$lookahead)($else))$post/</pre>
+<p>The other syntax version of conditional regexes, is this rather strange
+looking:</p>
+<pre>	(?(1)yes:no)</pre>
+<p>for which the &quot;1&quot; is actually a representation of <code>defined $1</code>.</p>
+<p>With the aid of the new assertions, this can become:</p>
+<pre>	(?:(?{defined $1})yes|(?{not defined $1})no)</pre>
+<p>The outer parentheses only serve for grouping, and are not part of the
+basic syntax.</p>
+<p>I see no reason to hang on to this feature.</p>
+<a name='/(??{ code })/'></a><h2>/(??{ code })/</h2>
+<p>I do not wish to express an opinion on whether this one should stay. Its
+main purpose is to allow matching of nested structures, i.e. a grammar
+instead of a regex. In that, it is not related to assertions in any way.</p>
+<a name='IMPLEMENTATION'></a><h1>IMPLEMENTATION</h1>
+<p>Replace the old implementation of (?{...}). Optionally, throw out all
+the &quot;localizing&quot; code. Do not set any special variables.</p>
+<p>The new feature should:</p>
+<ul>
+<li><a name='have a zero width impact on matching in the regex'></a>have a zero width impact on matching in the regex</li>
+<li><a name='either succeed of fail, depending on the returned value as a boolean scalar: true means it's ok to continue, false means a veto, causing the regex to immediately backtrack.'></a>either succeed of fail, depending on the returned value as a boolean
+scalar: true means it's ok to continue, false means a veto, causing the
+regex to immediately backtrack.</li>
+</ul>
+<a name='MIGRATION'></a><h1>MIGRATION</h1>
+<p>I have been told that people in general do not use the current
+implementation of (?{...}) in production code, because it tends to dump
+core. Also, perlre calls this feature &quot;highly experimental, and [it] may
+be changed or deleted without notice&quot;. You had been warned.  ;-)</p>
+<p>You can assign any value you want to $^R or any other
+variable, if you wish, and make the assertion succeed by adding a
+constant true value at the end of the code. This can be done
+automatically:</p>
+<ul>
+<li><a name='perl5'></a>perl5</li>
+<pre>    (?{ CODE })</pre>
+<li><a name='assertion'></a>assertion</li>
+<pre>    (?{$^R = do { CODE }; 1})</pre>
+</ul>
+<p>This may require an extra &quot;local&quot;, if that feature is to be retained.</p>
+<a name='/(?(?{COND})yes-pattern|no-pattern)/'></a><h2>/(?(?{COND})yes-pattern|no-pattern)/</h2>
+<p>If conditional regexes are to stay, oddly enough, then for such a regex
+where the condition is an assertion in Perl code, the code doesn't need
+to change at all. Indeed, this is one case of where <code>(?{...})</code>
+currently indeed behaves as an assertion; $^R doesn't get set, either.</p>
+<p>In case this feature is deleted, see possible substitutions in the
+discussion above.</p>
+<a name='REFERENCES'></a><h1>REFERENCES</h1>
+<p>thread on perl-5-porters, started by Jeffrey Friedl: &quot;how to abort a
+match branch?&quot;</p>
+<p>&lt;<a href='http://www.xray.mpe.mpg.de/mailing-lists/perl5-porters/2000-08/msg00252.html' target='_blank'>www.xray.mpe.mpg.de</a>&gt;
+&lt;<a href='http://www.xray.mpe.mpg.de/mailing-lists/perl5-porters/2000-08/msg00268.html' target='_blank'>www.xray.mpe.mpg.de</a>&gt;</p>
+<p>relevant messages from Mark-Jason Dominus:</p>
+<p>&lt;<a href='http://www.mail-archive.com/perl6-language-regex@perl.org/msg00102.html' target='_blank'>www.mail-archive.com</a>&gt;
+&lt;<a href='http://www.mail-archive.com/perl6-language-regex@perl.org/msg00262.html' target='_blank'>www.mail-archive.com</a>&gt;
+&lt;<a href='http://www.mail-archive.com/perl6-language-regex@perl.org/msg00306.html' target='_blank'>www.mail-archive.com</a>&gt;</p>
+<p>It looks like in the first message, MJD mistook the current (?{...}) for
+an assertion. In a later message, he no longer made this mistake, and
+introduced the &quot;unpretty&quot; syntax for doing assertions in Perl5.</p>
+<p>RFC 274: Generalised Additions to Regexs
+(see: the suggestion to add even more support for localization and
+unwinding)</p>
+<p>RFC 308: Ban Perl hooks into regexes</p>
+<p>perlre man page, sections on /(?{ code })/ and on
+/(?(condition)yes-pattern|no-pattern)/ and /(?(condition)yes-pattern)/</p>
+</div>

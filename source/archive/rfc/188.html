@@ -1,0 +1,270 @@
+[% setvar title Objects : Private keys and methods %]
+<h3>This file is part of the Perl 6 Archive</h3>
+    <p>To see what is currently happening visit <a href="http://www.perl6.org/">http://www.perl6.org/</a></p>
+<div class='pod'>
+<a name='TITLE'></a><h1>TITLE</h1>
+<p>Objects : Private keys and methods</p>
+<a name='VERSION'></a><h1>VERSION</h1>
+<pre>  Maintainer: Damian Conway &lt;<a href='mailto:damian@conway.org'>damian@conway.org</a>&gt;
+  Date: 1 Sep 2000
+  Last Modified: 25 Sep 2000
+  Mailing List: <a href='mailto:perl6-language-objects@perl.org'>perl6-language-objects@perl.org</a>
+  Number: 188
+  Version: 3
+  Status: Frozen</pre>
+<a name='ABSTRACT'></a><h1>ABSTRACT</h1>
+<p>This RFC proposes two new keywords -- <code>private</code> and <code>public</code> -- that limit
+the accessibility of keys in a hash, and of methods. Their primary use
+would be to provide encapsulation of attributes and methods in
+hash-based objects.</p>
+<a name='DESCRIPTION'></a><h1>DESCRIPTION</h1>
+<a name='Private hash entries'></a><h2>Private hash entries</h2>
+<p>It is proposed that Perl 6 provide a unary function, <code>private</code>, that
+restricts hash entries to the current package. The keyword could be applied to
+a single hash entry:</p>
+<pre>        private $hash{key};
+        private $hash{$key};
+        private $hashref-&gt;{key};</pre>
+<p>or to a hash slice:</p>
+<pre>        private @hash{qw(_name _rank _snum)};</pre>
+<p>or to a complete hash (either directly, or via a reference):</p>
+<pre>        private %hash;
+        private { _name =&gt; &quot;demo&quot;, _rank =&gt; &quot;private&quot;, _snum =&gt; 123 };
+        private bless { @attrs }, $class;
+        bless private { @attrs }, $class;</pre>
+<p>In all cases, a call to <code>private</code> would return its single argument.</p>
+<p>The effects of applying <code>private</code> to a single hash entry would be to:</p>
+<ul>
+<li><a name='1.'></a>1.</li>
+<p>mark the entire hash as non-autovivifying (except via future calls to
+<code>private</code> or <code>public</code> -- see below)</p>
+<li><a name='2.'></a>2.</li>
+<p>mark the particular entry as being restricted to the package in which the
+call to <code>private</code> occurs</p>
+<li><a name='3.'></a>3.</li>
+<p>mark any other existing entries of the hash as publicly accessible (see
+<i><a href='#Public accessibility'>&quot;Public accessibility&quot;</a></i> below).</p>
+</ul>
+<p>After a hash has been marked in this way, the specific key(s) would only be
+directly accessible in the same package:</p>
+<pre>        package MyClass;
+        
+        sub new { bless private { secret =&gt; 'data' }, $_[0] }
+        
+
+        package main;
+        
+        my $obj = MyClass-&gt;new();
+        print $obj-&gt;{secret};                   # dies, inaccessible entry</pre>
+<p>Attempts to autovivify keys of a <code>private</code>-ized hash would also be fatal:</p>
+<pre>        package MyClass;
+        
+        sub print_me { print $_[0]-&gt;{sekret} }  # dies, no such entry
+
+        
+        package main;
+        
+        my $obj = MyClass-&gt;new();
+        print $obj-&gt;{public};                   # dies, can't create entry</pre>
+<p>Once a hash has been <code>private</code>-ized, the only way to extend its set of
+entries is via another call to <code>private</code> (or <code>public</code> -- see below):</p>
+<pre>        sub new {
+                my ($class, %self) = @_;
+                bless private \%self, $class;
+                $self{seed} = rand;             # dies, can't autovivify
+                private $self{seed} = rand;     # okay
+                $self{seed} = rand;             # now okay
+        }
+
+        </pre>
+<p>Applying <code>private</code> to a hash slice would apply it individually to each
+entry in the slice. Applying <code>private</code> to an entire hash (directly, or via
+a reference) would apply it to every entry in the hash that is not already
+private (or public -- see below).</p>
+<a name='Private entries and inheritance'></a><h3><code>Private</code> entries and inheritance</h3>
+<p>Private entries of hashes could be <i>indirectly</i> accessed in packages
+that inherit from the entry's package, by qualifying (i.e. prefixing) the
+key with the entry's package name. For example:</p>
+<pre>        package Base;
+        
+        sub new {
+                my ($class, @data) = @_;
+                bless private { data =&gt; [@data] }, $class;
+        }
+        
+        
+        package SortableBase;
+        use base 'Base';
+                
+        sub sorted {
+                my ($self) = @_;
+                print sort @{ $self-&gt;{Base::data} };
+        }
+        </pre>
+<p>Note, however, that it would still be a fatal error to attempt to access a
+private entry outside its package's hierarchy, even with full qualification:</p>
+<pre>        package main;
+        
+        my $obj = Base-&gt;new(@data);
+        
+        print $obj-&gt;{Base::data};               # dies, not in derived class</pre>
+<p>Because private entries are only directly acccessible within their own package,
+a hash could be given two private entries with the same key, but associated
+with different packages. For example:</p>
+<pre>        package Base;
+        
+        sub new {
+                my ($class, @data) = @_;
+                bless private { data =&gt; [@data] }, $class;
+        }
+        
+        sub data { return $_[0]-&gt;{data} };      # Base::data
+        
+        
+        package Derived;
+        use base 'Base';
+                
+        sub new {
+                my ($class, $derdatum, @basedata) = @_;
+                my $self = $class-&gt;SUPER::new(@basedata);
+                private $self-&gt;{data} = $derdatum;
+                return $self;
+        }
+
+        sub data { return $_[0]-&gt;{data} };      # Derived::data
+        </pre>
+<p>Note that this solves the pernicious &quot;data collision&quot; problem in OO Perl.</p>
+<a name='Iteration of private-ized hashes'></a><h3>Iteration of <code>private</code>-ized hashes</h3>
+<p>When a <code>private</code>-ized hash is iterated -- via <code>each</code>, <code>keys</code>, or
+<code>values</code> -- the only keys or values returned would be those that are
+directly or indirectly accessible within the current package. Furthermore,
+iterators that return keys would always return fully qualified keys.</p>
+<p>For example:</p>
+<pre>        package Base;
+        
+        sub new {
+                my ($class) = @_;
+                bless private { a=&gt;1, b=&gt;2 }, $class;
+        }
+        
+        sub iterate {
+                my ($obj) = @_;
+                print join &quot;, &quot;, keys %$obj;
+        }
+        
+        
+        package Derived;
+        use base 'Base';
+                
+        sub new {
+                my ($class) = @_;
+                my $self = $class-&gt;SUPER::new();
+                private $self-&gt;{c} = 3;
+                return $self;
+        }
+
+        sub iterate {
+                my ($obj) = @_;
+                print join &quot;, &quot;, keys %$obj;
+        }
+
+
+        package main;
+
+        sub iterate {
+                my ($obj) = @_;
+                print join &quot;, &quot;, keys %$obj;
+        }
+
+        
+        my $obj = Derived-&gt;new();
+        
+        Base::iterate($obj);            # prints: &quot;Base::a, Base:b&quot;
+        Derived::iterate($obj);         # prints: &quot;Base::a, Base:b, Derived::c&quot;
+        main::iterate($obj);            # prints: &quot;&quot;</pre>
+<p>This ensures that the encapsulation provided by <code>private</code> isn't accidentally
+subverted during iteration.</p>
+<a name='Public accessibility'></a><h2>Public accessibility</h2>
+<p>Although it is almost inevitably a Very Bad Idea and we shall probably
+All Come Regret To It Later, it ought to be possible to specify that
+certain entries of a <code>private</code>-ized hash are nevertheless public. This
+might, for example, be necessary when inheriting from legacy code.</p>
+<p>To provide this capacity, a second built-in function -- <code>public</code> --
+would be provided. It would act in most respects like <code>private</code>, but
+with the following differences:</p>
+<ul>
+<li><a name='Hash entries marked public would be accessible from any package.'></a>Hash entries marked <code>public</code> would be accessible from <i>any</i> package.</li>
+<li><a name='Hash entries marked public would not be assocated with any particular package (not even with the package in which they are declared), and could not be qualified with a package name.'></a>Hash entries marked <code>public</code> would not be assocated with any particular
+package (not even with the package in which they are declared), and could
+not be qualified with a package name.</li>
+<li><a name=''></a></li>
+<p>If a hash has public entry for a given key, it can have no other
+entries -- neither public nor private -- with the same key.</p>
+</ul>
+<p>In all other respects the <code>public</code> keyword has analogous effects to
+the <code>private</code> keyword. Specifically:</p>
+<ul>
+<li><a name='Any hash to which the public function is applied is thereafter non-autovivifying (except via another call to public or a call to private).'></a>Any hash to which the <code>public</code> function is applied is thereafter
+non-autovivifying (except via another call to <code>public</code> or a call to
+<code>private</code>).</li>
+<li><a name='If public is applied to a normal (non-private, non-public) hash, all the entries in the hash at that point are made public.'></a>If <code>public</code> is applied to a normal (non-private, non-public) hash,
+all the entries in the hash at that point are made public.</li>
+</ul>
+<a name='Private methods'></a><h2>Private methods</h2>
+<p>The <code>private</code> keyword could also be applied to subroutines, to restrict
+where they may be called. Access rules similar to those for private hash
+entries would apply:</p>
+<pre>        package Base;
+        
+        sub new { ... }
+        
+        private sub check { ... }
+        
+        sub do_check {
+                my ($self) = @_;
+                $self-&gt;check();         # okay
+                $self-&gt;Base::check();   # okay
+                check();                # okay
+                Base::check();          # okay
+                
+        
+        package Derived;
+        use base 'Base';
+        
+        sub do_check {
+                my ($self) = @_;
+                $self-&gt;check();         # dies, no suitable accessible method
+                $self-&gt;Base::check();   # okay
+                Base::check($self);     # okay
+        }
+                
+        
+        package main;
+        
+        my $obj = Base-&gt;new();
+        $obj-&gt;check();                  # dies, no suitable accessible method
+        $obj-&gt;Base::check();            # dies, no suitable accessible method
+        Base::check($obj);              # dies, inaccessible subroutine</pre>
+<p>In other words, declaring a subroutine <code>private</code> causes it to be
+ignored during subroutine or method dispatch unless:</p>
+<ul>
+<li><a name='1.'></a>1.</li>
+<p>The call originates in the same package, or</p>
+<li><a name='2.'></a>2.</li>
+<p>The call originates in a derived package and explicitly qualifies
+the subroutine name with the name of its owner package.</p>
+</ul>
+<p>Note: an alternative would be to make <code>private</code> a subroutine attribute:</p>
+<pre>        sub check : private { ... }</pre>
+<p>However, it is felt that the modification <code>private</code> imposes is so
+significant that it warrants a prefix modifier. Besides, the <code>private</code>
+keyword will be easier to explain and remember if it is consistently
+used as a prefix for both hash entries and subroutines.</p>
+<a name='MIGRATION ISSUES'></a><h1>MIGRATION ISSUES</h1>
+<p>None.</p>
+<a name='IMPLEMENTATION'></a><h1>IMPLEMENTATION</h1>
+<p>The Tie::SecureHash module implements much the same idea.</p>
+<a name='REFERENCES'></a><h1>REFERENCES</h1>
+<p>Christiansen &amp; Torkington, <i>Perl Cookbook</i>, pp. 470-472.</p>
+<p>Conway, <i>Object Oriented Perl</i>, pp. 309-326.</p>
+</div>

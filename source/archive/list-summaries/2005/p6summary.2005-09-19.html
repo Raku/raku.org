@@ -1,0 +1,95 @@
+[% setvar title Perl 6 Summary for 2005-09-12 through 2005-09-19 %]
+<h3>This file is part of the Perl 6 Archive</h3>
+    <p>To see what is currently happening visit <a href="http://www.perl6.org/">http://www.perl6.org/</a></p>
+<div class='pod'>
+<a name='Perl 6 Summary for 2005-09-12 through 2005-09-19'></a><h1>Perl 6 Summary for 2005-09-12 through 2005-09-19</h1>
+<p>All~</p>
+<p>Welcome to another Perl 6 Summary, this time brought to you with a shorter pause (::grumble:: $WORK ::grumble::) and assisted by cookies.</p>
+<a name='Perl 6 Compilers'></a><h2>Perl 6 Compilers</h2>
+<a name='Circular Preludes for Fun and Confusion'></a><h3>Circular Preludes for Fun and Confusion</h3>
+<p>Yuval Kogman posted a really interesting idea of using a circular prelude to facilitate creation of a new run time.  If the prelude defines everything it can in terms of itself (even circularly if need be), then a new run time implementer can break the circle wherever is most convenient for the run time.  It looks really cool to me.</p>
+<p><a href='http://groups.google.com/group/perl.perl6.compiler/browse_frm/thread/99829b80397ed149/a24a7f85ec34caf8' target='_blank'>groups.google.com</a>#a24a7f85ec34caf8</p>
+<a name='PxPerl Site Change'></a><h3>PxPerl Site Change</h3>
+<p>Grégoire Péan announced that he was having problems with his old domain and that PxPerl is now hosted at <a href='http://pxperl.com' target='_blank'>pxperl.com</a></p>
+<p><a href='http://groups.google.com/group/perl.perl6.compiler/browse_frm/thread/fbdc7bfb5ff3d803/53e13b792df0cf73' target='_blank'>groups.google.com</a>#53e13b792df0cf73</p>
+<a name='Parrot'></a><h2>Parrot</h2>
+<a name='13! == BIG!'></a><h3>13! == BIG!</h3>
+<p>James Ghofulpo noticed that the example factorial program included with Parrot gives incorrect results on 32 bit machines.  Will Coleda offered to clean the old PASM examples into shiny new PIR.</p>
+<p><a href='http://groups.google.com/group/perl.perl6.internals/browse_frm/thread/965b026dbd247636/81ee4614a2bb70cd' target='_blank'>groups.google.com</a>#81ee4614a2bb70cd</p>
+<a name='Properly Formatted POD'></a><h3>Properly Formatted POD</h3>
+<p>Unlike these summaries, Parrot's docs should be in properly formatted POD.  Joshua Hoblitt provided patches to fix them up and test them.  Bernhard Schmalhofer applied the patches.</p>
+<p><a href='http://groups.google.com/group/perl.perl6.internals/browse_frm/thread/104482996f08084f/2065b58ed4df81bd' target='_blank'>groups.google.com</a>#2065b58ed4df81bd</p>
+<a name='Bad IMCC Error Message'></a><h3>Bad IMCC Error Message</h3>
+<p>Joshua Hoblitt opened an RT ticket for the error message imcc outputs upon seeing a non-existent PMC.  No takers yet.</p>
+<p><a href='http://groups.google.com/group/perl.perl6.internals/browse_frm/thread/2af3a4fe73c5d8c1/a68deadbb8a93dff' target='_blank'>groups.google.com</a>#a68deadbb8a93dff</p>
+<a name='Globbing Like Tcl'></a><h3>Globbing Like Tcl</h3>
+<p>Amos Robinson opened am RT ticket requesting Tcl Syntax Globbing in PGE.</p>
+<p><a href='http://groups.google.com/group/perl.perl6.internals/browse_frm/thread/7c55388a732a6acb/d4b3ea2dd8a119b0' target='_blank'>groups.google.com</a>#d4b3ea2dd8a119b0</p>
+<a name='AMD64 Build Error'></a><h3>AMD64 Build Error</h3>
+<p>Joshua Hoblitt posted a build error involving posix_memalign on AMD64.  Warnock applies.</p>
+<p><a href='http://groups.google.com/group/perl.perl6.internals/browse_frm/thread/1ce347e419bf14d9/fe99694c781f10ec' target='_blank'>groups.google.com</a>#fe99694c781f10ec</p>
+<a name='TODO: Call for B0rked'></a><h3>TODO: Call for B0rked</h3>
+<p>chromatic the capless put out a call for specific TODO items that Parrot needed.  Many people provided suggestions.</p>
+<p><a href='http://groups.google.com/group/perl.perl6.internals/browse_frm/thread/681fcb5f900ce703/069d2b0126dec790' target='_blank'>groups.google.com</a>#069d2b0126dec790</p>
+<a name='Documentation Keyword Tagging'></a><h3>Documentation Keyword Tagging</h3>
+<p>Joshua Hoblitt opened a ticket requesting keyword tagging (via <code>  </code>) .</p>
+<p><a href='http://groups.google.com/group/perl.perl6.internals/browse_frm/thread/3b5f8d735f6857f9/d0dc57b7e3960154' target='_blank'>groups.google.com</a>#d0dc57b7e3960154</p>
+<a name='leo-ctx5 on Win32'></a><h3>leo-ctx5 on Win32</h3>
+<p>François Perrad solved a few link problems on Win32 for the leo-ctx5 branch.  Jonathan Worthington applied it.</p>
+<p><a href='http://groups.google.com/group/perl.perl6.internals/browse_frm/thread/457ea4033a947b7c/5010ed51efa2504a' target='_blank'>groups.google.com</a>#5010ed51efa2504a</p>
+<a name='Support Different Compilers'></a><h3>Support Different Compilers</h3>
+<p>Andy Dougherty provided a patch making it easier to compile parrot with a different options then Perl 5.  Bernhard Schmalhofer tentatively applied it, but despite his fears nobody hollered.</p>
+<p><a href='http://groups.google.com/group/perl.perl6.internals/browse_frm/thread/d689014c1c24ab0b/e6186ccfeaaccc45' target='_blank'>groups.google.com</a>#e6186ccfeaaccc45</p>
+<a name='Tcl Leo's Context'></a><h3>Tcl Leo's Context</h3>
+<p>My that sounds dirty....  Regardless Leo and Will Coleda, with much help from assorted others) managed to get all of the Tcl tests passing in the leo-ctx5 branch.</p>
+<p><a href='http://groups.google.com/group/perl.perl6.internals/browse_frm/thread/4ffc308aa735c22a/7dd5b332730154cf' target='_blank'>groups.google.com</a>#7dd5b332730154cf</p>
+<a name='4 Down 7204 to Go'></a><h3>4 Down 7204 to Go</h3>
+<p>Andy Dougherty posted a patch which eliminates 4 of Parrot 7208 compiler warnings on SPARC.  Warnock applies.</p>
+<p><a href='http://groups.google.com/group/perl.perl6.internals/browse_frm/thread/d2e018af79eb7dba/493978b84c84ddcc' target='_blank'>groups.google.com</a>#493978b84c84ddcc</p>
+<a name='Circular Finalization Returns From the Dead'></a><h3>Circular Finalization Returns From the Dead</h3>
+<p>Nicholas Clark wondered how Parrot would handle PMC loops with finalizers.  Leo and I provided some ideas.  Nothing is officially specced yet.</p>
+<p><a href='http://groups.google.com/group/perl.perl6.internals/browse_frm/thread/d8225b7088da3454/f90781ca65317c42' target='_blank'>groups.google.com</a>#f90781ca65317c42</p>
+<a name='make cleaner'></a><h3><code>make clean</code>er</h3>
+<p>Joshua Hoblitt provided a patch which makes make clean cleaner.  Warnock applies.</p>
+<p><a href='http://groups.google.com/group/perl.perl6.internals/browse_frm/thread/d9334af47224995e/c940387ed1f3b1ee' target='_blank'>groups.google.com</a>#c940387ed1f3b1ee</p>
+<a name='Pack Packfiles, Fix Fixups'></a><h3>Pack Packfiles, Fix Fixups</h3>
+<p>Jonathan Worthington split the fixup and unpack functionality of Packfiles so that he could later create a pbc_merge.  Later he did that.</p>
+<p><a href='http://groups.google.com/group/perl.perl6.internals/browse_frm/thread/b9e56d89530a4029/00c27be7ca986619' target='_blank'>groups.google.com</a>#00c27be7ca986619 -- earlier</p>
+<p><a href='http://groups.google.com/group/perl.perl6.internals/browse_frm/thread/8b4e5b0f87adba1d/592f156d4a10382b' target='_blank'>groups.google.com</a>#592f156d4a10382b -- later</p>
+<a name='Taking Exception to Leo's Tcl'></a><h3>Taking Exception to Leo's Tcl</h3>
+<p>Some days my head is just in the gutter.  Will Coleda update Tcl to use exceptions for TCL_RETURN, which apparently simplifies things.</p>
+<p><a href='http://groups.google.com/group/perl.perl6.internals/browse_frm/thread/b85178f10b8653bf/a4f59e5b97c802b1' target='_blank'>groups.google.com</a>#a4f59e5b97c802b1</p>
+<a name='Tcl on Windows'></a><h3>Tcl on Windows</h3>
+<p>Jerry Gay noticed that Tcl was not building on Windows.  Will Coleda suspected that it got fixed; he was right.</p>
+<p><a href='http://groups.google.com/group/perl.perl6.internals/browse_frm/thread/67e90f0017d37cef/59c6770da74ca7af' target='_blank'>groups.google.com</a>#59c6770da74ca7af</p>
+<a name='Implementing Splice'></a><h3>Implementing Splice</h3>
+<p>Nicholas Dronen decided to try and implement splice in *PMCArrays, after suggestions from Leo and Jonathan Worthington.  I have found these Arrays to be good starting points in the past.  Good luck, Nick.</p>
+<p><a href='http://groups.google.com/group/perl.perl6.internals/browse_frm/thread/425514e2fddaf817/8f11d04b3f8cfb4d' target='_blank'>groups.google.com</a>#8f11d04b3f8cfb4d</p>
+<a name='Optimize MinGW'></a><h3>Optimize MinGW</h3>
+<p>François Perrad provided a patch making <code> Configure.pl --optimize </code> and <code> Configure.pl --optimize=flags </code> work on MinGW.  Jonathan Worthington applied it.</p>
+<p><a href='http://groups.google.com/group/perl.perl6.internals/browse_frm/thread/242df2e3cc8f7801/02da98b7768271d6' target='_blank'>groups.google.com</a>#02da98b7768271d6</p>
+<a name='Perl 6 Language'></a><h2>Perl 6 Language</h2>
+<a name='Object Model Pictures'></a><h3>Object Model Pictures</h3>
+<p>Stevan Little posted the latest pictures of his MetaModel. Nathan Gray thanked him and put out a quiet request for a diagram about roles.</p>
+<p><a href='http://groups.google.com/group/perl.perl6.language/browse_frm/thread/0f63ce9ada905a22/3579f05a8fc31368' target='_blank'>groups.google.com</a>#3579f05a8fc31368</p>
+<a name='Coersive Context'></a><h3>Coersive Context</h3>
+<p>Juerd posted his thoughts about using types as context specifiers and coercers.  Reaction seemed interested but limited.</p>
+<p><a href='http://groups.google.com/group/perl.perl6.language/browse_frm/thread/4f2141163e99872b/b7ea8c3b2f978693' target='_blank'>groups.google.com</a>#b7ea8c3b2f978693</p>
+<a name='Perl 6 and Undefined Behavior'></a><h3>Perl 6 and Undefined Behavior</h3>
+<p>Nicholas Clark asked if Perl 6 was going to have any undefined behavior or guarantee any sequence points.  Larry does not want to have any undefined behavior, but thinks that the reference implementations quirks might be the definer for certain things.  He did point out that junction evaluation order is defined to be undefined.</p>
+<p><a href='http://groups.google.com/group/perl.perl6.language/browse_frm/thread/4d210f942e9a5a58/07c07c8c533e5ffa' target='_blank'>groups.google.com</a>#07c07c8c533e5ffa</p>
+<a name='Junctions, Patterns, and Function Maps'></a><h3>Junctions, Patterns, and Function Maps</h3>
+<p>Luke Palmer posted another version of his fmap proposal which defines junctions and hypers in terms of funtor maps.</p>
+<p><a href='http://groups.google.com/group/perl.perl6.language/browse_frm/thread/847ca0b5a1ffc15c/70cdb5528c116427' target='_blank'>groups.google.com</a>#70cdb5528c116427</p>
+<a name='Lazy vs Eager vs Something in the Middle'></a><h3>Lazy vs Eager vs Something in the Middle</h3>
+<p>Yuval Kogman requested a nifty kind of asynchronous gather take which would handle the threading automagically.  I really like it.</p>
+<p><a href='http://groups.google.com/group/perl.perl6.language/browse_frm/thread/81dde1c00715df07/cc91c1dab71d91cb' target='_blank'>groups.google.com</a>#cc91c1dab71d91cb</p>
+<a name=' \(...) '></a><h3><code> \(...) </code></h3>
+<pre>  Ingo Blechschmidt started a long thread on the exact semantics of C&lt; \ &gt; in the presence of arrays, commas, and parens.</pre>
+<p><a href='http://groups.google.com/group/perl.perl6.language/browse_frm/thread/d0d64f31a07718ca/2910c0c5726e7832' target='_blank'>groups.google.com</a>#2910c0c5726e7832</p>
+<a name='The usual footer'></a><h2>The usual footer</h2>
+<p>To post to any of these mailing lists please subscribe by sending email to &lt;<a href='mailto:perl6-internals-subscribe@perl.org'>perl6-internals-subscribe@perl.org</a>&gt;, &lt;<a href='mailto:perl6-language-subscribe@perl.org'>perl6-language-subscribe@perl.org</a>&gt;,  or &lt;<a href='mailto:perl6-compiler-subscribe@perl.org'>perl6-compiler-subscribe@perl.org</a>&gt;.  If you find these summaries useful or enjoyable, please consider contributing to the Perl Foundation to help support the development of Perl. You might also like to send feedback to <a href='mailto:ubermatt@gmail.com'>ubermatt@gmail.com</a></p>
+<p><a href='http://donate.perl-foundation.org/' target='_blank'>donate.perl-foundation.org</a> -- The Perl Foundation
+<a href='http://dev.perl.org/perl6/' target='_blank'>dev.perl.org</a> -- Perl 6 Development site
+<a href='http://planet.parrotcode.org/' target='_blank'>planet.parrotcode.org</a> -- Parrot Blog aggregator</p>
+</div>

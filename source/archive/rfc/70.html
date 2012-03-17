@@ -1,0 +1,83 @@
+[% setvar title Allow exception-based error-reporting. %]
+<h3>This file is part of the Perl 6 Archive</h3>
+    <p>To see what is currently happening visit <a href="http://www.perl6.org/">http://www.perl6.org/</a></p>
+<div class='pod'>
+<a name='TITLE'></a><h1>TITLE</h1>
+<p>Allow exception-based error-reporting.</p>
+<a name='VERSION'></a><h1>VERSION</h1>
+<pre>  Maintainer: Bennett Todd &lt;<a href='mailto:bet@rahul.net'>bet@rahul.net</a>&gt;
+  Date: 8 Aug 2000
+  Last Modified: 18 Sep 2000
+  Mailing List: <a href='mailto:perl6-language@perl.org'>perl6-language@perl.org</a>
+  Number: 70
+  Version: 4
+  Status: Frozen</pre>
+<a name='CHANGES'></a><h1>CHANGES</h1>
+<pre>   1. Status frozen.
+
+   2. Added NOTES ON FREEZE section.
+
+   3. Dropped glob from the list of non-wrappable builtins.</pre>
+<a name='ABSTRACT'></a><h1>ABSTRACT</h1>
+<p>Allow full implementation of Fatal.pm, for programmers who prefer
+exceptions for error reporting. To enable this, ensure that all
+builtins (like e.g. print()) that return errors can be wrapped. In
+addition, ensure that builtins like e.g. integer division, which
+currently throw exceptions on errors, can have that behavior
+switched off. At least print, and printf should be wrappable.</p>
+<a name='DESCRIPTION'></a><h1>DESCRIPTION</h1>
+<p>Perl has traditionally reflected the Unix syscall and library
+tradition for error reporting: errors are indicated by
+otherwise-impossible return values, which must be checked for
+explicitly, lest system error events be ignored. Some programmers
+prefer to have errors print a message and exit with non-zero status,
+by default, rather than having to always code &quot; || die ...&quot;. In
+perl5 this has proven elusive of implementation.</p>
+<p>Fatal.pm has been the attempt made to date, and it suffers from two
+problems. One can be fixed with further development: it should have
+various lists of builtins available, e.g. :io, :system, :all for
+including all calls affecting I/O, all system calls of any sort, and
+all calls that can have error returns. If these were a success, then
+the requested category could also be posted into a testable
+variable, allowing module authors who wished to to automatically
+support this functionality as well.</p>
+<p>In addition, for classes of errors that currently throw exceptions,
+Fatal could be taught to disable them, allowing e.g.</p>
+<pre>	no Fatal qw(:arithmetic);
+	my $result = 1 / 0; # $result now contains undef, w/
+	                    # error posted in $! or maybe $@</pre>
+<p>But Fatal.pm development stalls out early, because some builtins,
+which report testable error conditions, cannot be wrapped. A
+conspicuous example is print().</p>
+<a name='IMPLEMENTATION'></a><h1>IMPLEMENTATION</h1>
+<p>Ensure that every perl builtin that can return an error, can be
+wrapped. Perhaps in addition ensure that routines that currently die
+on error, can have their behavior changed as well.</p>
+<p>For the first part, tchrist posted a nice list of non-overridable
+builtins; running my eye down it, it looks like the gross offenders
+here are:</p>
+<pre>	print, printf</pre>
+<p>I don't know whether this is purely an implementation issue (and so
+lies solely in the domain of perl6-internals) or whether any
+programmer-visible changes may be necessary to allow this
+(justifying posting to perl6-language).</p>
+<a name='NOTES ON FREEZE'></a><h1>NOTES ON FREEZE</h1>
+<p>This RFC drew very little discussion. It simply proposes a fix to
+the core, allowing a couple of existing routines to be wrapped,
+which would allow the completion of an already-existing external
+module to allow exception-style error handling. Other RFCs have gone
+far further in requesting that exceptions and/or objects
+representing them be welded into the core. The changes during its
+life were additions of references, just below, and specifics about
+the currently-unwrappable core routines that can return errors,
+deduced from a list posted by tchrist.</p>
+<a name='REFERENCES'></a><h1>REFERENCES</h1>
+<p>Fatal.pm, as included with recent perls.</p>
+<p>Error.pm, available from CPAN, and cited by RFC 63: if this
+proposal should carry, then Fatal.pm will see some very
+active development, and if RFC 63 should also prevail, then
+Fatal's development should be guided by RFC 63/Error.pm.</p>
+<p>RFC 80 Proposes a taxonomy for exception objects; should it
+prevail, it should guide the structure of exceptions thrown
+when Fatal.pm gets worked on.</p>
+</div>

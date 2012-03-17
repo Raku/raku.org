@@ -1,0 +1,182 @@
+[% setvar title Apache-like Event and Dispatch Handlers %]
+<h3>This file is part of the Perl 6 Archive</h3>
+    <p>To see what is currently happening visit <a href="http://www.perl6.org/">http://www.perl6.org/</a></p>
+<div class='pod'>
+<a name='TITLE'></a><h1>TITLE</h1>
+<p>Apache-like Event and Dispatch Handlers</p>
+<a name='VERSION'></a><h1>VERSION</h1>
+<pre>  Maintainer: Nathan Wiger &lt;<a href='mailto:nate@wiger.org'>nate@wiger.org</a>&gt;
+  Date: 14 Aug 2000
+  Last Modified: 25 Sep 2000
+  Mailing List: <a href='mailto:perl6-language-objects@perl.org'>perl6-language-objects@perl.org</a>
+  Number: 101
+  Version: 3
+  Status: Frozen</pre>
+<a name='ABSTRACT'></a><h1>ABSTRACT</h1>
+<p>A complete Perl 5 implementation of this can be found as Class::Handler
+<a href='http://www.perl.com/CPAN/authors/id/N/NW/NWIGER/Class-Handler-1.03.tar.gz' target='_blank'>www.perl.com</a></p>
+<p>Currently, there is no way to have multiple methods or modules for
+dealing with events without significant contortions:</p>
+<pre>   $data = $r1-&gt;get_data || $r2-&gt;stuff || $r3-&gt;func;
+   $r1-&gt;do_stuff(@vals) or $r1-&gt;do_this(@vals);</pre>
+<p>These simple cases can actually be tolerated. However, there are many
+more complex cases which cannot be handled at all in Perl. These include
+opening files only in certain directories, having methods decline or
+partially handle requests, and so on.</p>
+<p>This RFC proposes the idea of a <code>handler</code>, which is a special type of
+class that is actually composed of one or more classes. Their operation
+is very similar to Apache handlers: requests can be handled, declined,
+or partially handled, without the top-level program having to know about
+it.</p>
+<a name='NOTES ON FREEZE'></a><h1>NOTES ON FREEZE</h1>
+<p>The only concern ever raised was on why this should be core-worthy. One
+word: speed. Currently, it can be implemented via <code>AUTOLOAD</code>, but this
+is slow. Also, other RFCs such as <b>RFC 14</b> rely on the notion of
+handlers to gain important functionality (such as the ability to
+transparently open URLs and different file types).</p>
+<p>Damian has a separate RFC on pre and post sub handlers. It may be
+possible to integrate the two into a common handler
+framework/methodology. Unfortunately, I don't think either of us has the
+time to do this at this point because of the upcoming RFC deadline.
+However, this is something that should definitely be looked into in the
+future.</p>
+<a name='DESCRIPTION'></a><h1>DESCRIPTION</h1>
+<a name='Overview'></a><h2>Overview</h2>
+<p>The concept of a <code>handler</code> is actually not that complex. In the
+simplest case, it can be thought of as a type of abstraction:</p>
+<pre>   sub open_it {
+       my $file = shift;
+       return open $file ||
+           HTTP::open $file ||
+               FTP::open $file;
+   }</pre>
+<p>Then, in your script, you would simply say:</p>
+<pre>   $fileobject = open_it &quot;&lt; $filename&quot;;</pre>
+<p>This gives you several benefits:</p>
+<pre>   1. The internal handling of open_it can be changed
+      without having to update all your programs
+
+   2. Each operation can actually partially process
+      the request, if appropriate
+
+   2. Your program is easier to read and understand</pre>
+<p>&gt;&gt;From a Perl standpoint, these handlers work just like normal functions
+and classes: they have methods, properties, inheritance, and so forth.
+The only difference is that these handlers do not live in an external
+file, but rather are assembled internally by Perl.</p>
+<a name='Adding and Using Handlers'></a><h2>Adding and Using Handlers</h2>
+<p>First, the examples assume that the reader is somewhat familiar with RFC
+14. If not, it is recommended that you give it a quick read at
+<a href='http://dev.perl.org/rfc/14.pod' target='_blank'>dev.perl.org</a></p>
+<p>There are several competing syntaxes that I have for this proposal. I've
+provided the one that I think is the best, but this is open to
+discussion.</p>
+<p>The proposed syntax is to use a pragmatic style:</p>
+<pre>   use handler 'http' =&gt; 'MyHTTP';
+   use handler 'http' =&gt; 'LWP::UserAgent';</pre>
+<p>This would assemble a <code>handler</code> called 'http' which could then be used
+in functions in your program. This handler would be a pseudo-class that
+inherits methods from <code>MyHTTP</code> and <code>LWP::UserAgent</code>, in that order.
+So:</p>
+<pre>   $fo = open http &quot;<a href='http://www.yahoo.com' target='_blank'>www.yahoo.com</a>&quot; or die;</pre>
+<p>would call <code>http-</code>open&gt;, consistent with the current Perl
+implementation. The only difference would be that <code>http</code> now tries to
+call the <code>open()</code> method from <code>MyHTTP</code> and <code>LWP::UserAgent</code>. As such,
+the above call would result in the following flow chart:</p>
+<pre> $fo         http-&gt;open                            undef
+  ^              |                                   ^
+  |              |                                   |
+  |  Does MyHTTP::open exist?                        |
+  |        YES/     \NO                              |
+  |          /       \                               |
+  |      Try it     Does LWP::UserAgent::open exist? |
+  |       / \        ^      YES/     \NO             |
+  |    OK/   \UNDEF /         /       ----------------
+  -------     ------       Try it                    |
+  |                         /  \                     |
+  |                      OK/    \UNDEF               |
+  -------------------------      ---------------------</pre>
+<p>Some highlights:</p>
+<pre>   1. Each class's open() method is tried in turn.
+
+   2. If undef is returned, the next one in sequence
+      is tried.
+
+   3. If 'OK' (simply meaning 1 or some other true
+      value, like $fo) is returned, that is propagated
+      out and returned by the top-level handler.
+
+   4. All classes are tried until 'OK' is returned
+      or the last one is reached.
+      </pre>
+<p>This allows you to easily chain classes and methods together with a
+couple key benefits over an inline <code>||</code>:</p>
+<pre>   1. Each handler can partially handle the request,
+      but still return undef, deferring to the next
+      one in line.
+
+   2. The handlers can be reordered internally at-will
+      without the main C&lt;open http&gt; code having to be
+      redone.
+
+   3. Different class open() methods can use internal
+      rules, such as &quot;only open .com URLs&quot;, without
+      you having to put checks for this all over the
+      place in the top-level program.</pre>
+<p>Note that <code>open()</code> is the name of the method called on each class
+because that is the name of the method called on the <code>http</code> handler.
+If:</p>
+<pre>   http-&gt;bob(@stuff);</pre>
+<p>was called, then <code>MyHTTP::bob</code> and <code>LWP::UserAgent::bob</code> would be
+attempted, in that order.</p>
+<a name='Removing Handlers'></a><h2>Removing Handlers</h2>
+<p>In addition to handlers being added, they need to be removed as well.
+This is where <code>no handler</code> comes in:</p>
+<pre>   no handler 'http' =&gt; 'MyHTTP';   # remove MyHTTP from list
+   no handler 'http';               # remove http handler</pre>
+<p>The first example removes <code>MyHTTP</code> from the list of classes used by the
+<code>http</code> handler. The second syntax removes the <code>http</code> handler entirely,
+meaning that this call:</p>
+<pre>   $fo = open http &quot;<a href='http://www.yahoo.com' target='_blank'>www.yahoo.com</a>&quot;;</pre>
+<p>will result in the familiar error:</p>
+<pre>   Can't locate object method &quot;open&quot; via package &quot;http&quot;</pre>
+<p>This should obey blocks as well (like <code>strict</code>), allowing you to say:</p>
+<pre>   {
+      # force LWP::UserAgent to be used
+      no handler 'http' =&gt; 'MyHTTP';
+      $fo = open http &quot;<a href='http://www.yahoo.com' target='_blank'>www.yahoo.com</a>&quot;; 
+   }
+   $fo2 = open http &quot;<a href='https://www.etrade.com' target='_blank'>www.etrade.com</a>&quot;;</pre>
+<a name='Automatic Handler Registration and Deregistration'></a><h2>Automatic Handler Registration and Deregistration</h2>
+<p>When a class is imported, it should be able to automatically register as
+a member of a certain <code>handler</code>. For example, the above code would be
+better written as:</p>
+<pre>   use MyHTTP;            # these register as 'http'
+   use LWP::UserAgent;    # handlers automatically
+
+   $fo = open http &quot;<a href='http://www.yahoo.com' target='_blank'>www.yahoo.com</a>&quot;;</pre>
+<p>This means that there needs to be some mechanism for a module to execute
+the equivalent of a 'use handler' statement, but have it take affect in
+the package <code>main</code>. The easiest way it seems is to simply qualify the
+full package name you want to affect:</p>
+<pre>   package MyHTTP;
+   use handler 'main::http' =&gt; 'MyHTTP';</pre>
+<p>This borders on scary action-at-a-distance, though, and should be used
+with care.</p>
+<a name='IMPLEMENTATION'></a><h1>IMPLEMENTATION</h1>
+<p>A complete Perl 5 implementation of this can be found as Class::Handler
+<a href='http://www.perl.com/CPAN/authors/id/N/NW/NWIGER/Class-Handler-1.03.tar.gz' target='_blank'>www.perl.com</a></p>
+<p>The Perl 5 implementation uses two functions, <code>handler</code> and
+&lt;nohandler&gt;, instead of the pragmatic style proposed in the RFC. This
+style may be more appropriate, depending how these are used. One problem
+with pragmas is that they are compile-time-only, meaning that
+dynamically changing handler lists is tricky to say the least.</p>
+<p>A module may remain the best implementation for this, the only problems
+are with speed (since the Perl 5 version requires AUTOLOAD) and also
+using this mechanism for core methods (like the new <code>open</code> from RFC
+14).</p>
+<a name='REFERENCES'></a><h1>REFERENCES</h1>
+<p>RFC 14: Modify open() to support FileObjects and Extensibility</p>
+<p>RFC 8: The AUTOLOAD subroutine should be able to decline a request</p>
+<p><a href='http://www.mail-archive.com/perl6-language-io@perl.org/msg00086.html' target='_blank'>www.mail-archive.com</a></p>
+</div>

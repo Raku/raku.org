@@ -1,0 +1,103 @@
+[% setvar title A proposed internal base format for perl variables %]
+<h3>This file is part of the Perl 6 Archive</h3>
+    <p>To see what is currently happening visit <a href="http://www.perl6.org/">http://www.perl6.org/</a></p>
+<div class='pod'>
+<a name='TITLE'></a><h1>TITLE</h1>
+<p>A proposed internal base format for perl variables</p>
+<a name='VERSION'></a><h1>VERSION</h1>
+<pre>  Maintainer: Dan Sugalski &lt;<a href='mailto:dan@sidhe.org'>dan@sidhe.org</a>&gt;
+  Date: 4 Aug 2000
+  Mailing List: <a href='mailto:perl6-internals@perl.org'>perl6-internals@perl.org</a>
+  Number: 35
+  Version: 1
+  Status: Developing</pre>
+<a name='ABSTRACT'></a><h1>ABSTRACT</h1>
+<p>Perl needs to keep track of its data somehow. This is a possible how.</p>
+<a name='DESCRIPTION'></a><h1>DESCRIPTION</h1>
+<p>This RFC describes the generic portions of perl's internal data
+representation. This information is common across all of perl's
+different data types.</p>
+<p>This is similar to the structure used in perl 5, with one major
+difference. Rather than having all the intellegence needed to use a
+variable separate from that variable, this RFC embeds that information
+into the variable itself. This allows for more efficient code to
+access the vriables, and it lets us add in variable types on the
+fly. This way perl doesn't, for example, have to know how to access an
+individual element of an array of integers--it just asks the array to
+return it a particular element. Code MUST use the vtable functions to
+get or set values from variables. They MUST NOT directly access the data.</p>
+<p>This base structure should be considered immobile, so it's safe to
+maintain pointers to it. The data portion of a variable should be
+considered moveable, and may be shuffled around if a variable changes
+its type, or the garbage collector needs to compact the heap.</p>
+<p>Implementation on various types (arrays, hashes, scalars) as well as
+sub-types (integer scalars, string scalars, objects) is left to
+another RFC.</p>
+<a name='IMPLEMENTATION'></a><h1>IMPLEMENTATION</h1>
+<p>The base variable structure looks like:</p>
+<pre>    struct {
+      IV GC_data;
+      void *variable_data;
+      IV flags;
+      void *vtable;
+      void *sync_data;
+    }</pre>
+<p>The fields, in order, are:</p>
+<ul>
+<li><a name='GC_data'></a>GC_data</li>
+<p>Random data for the garbage collector, whichever one is used. This
+could be a marker for M&amp;S GC, or a refcount for refcount GC, or just
+nothing at all if we get a really clever GC.</p>
+<li><a name='variable_data'></a>variable_data</li>
+<p>Equivalent to perl5's sv_any pointer, this is a pointer to the actual
+data structure for the variable. It may, in certain cases, be coopted
+to hold the actual value. (This is likely the case for a scalar that
+holds just an integer, where the native int size is equal to or
+smaller than the native pointer size)</p>
+<p>The actual structure that hangs off will depend both on the class of
+variable (scalar, hash, array) and the type of that class (integer
+array, integer scalar, filehandle, reference) and isn't specified here</p>
+<li><a name='flags'></a>flags</li>
+<p>This field holds various flags that hold the status of the
+variable. (Flags to be RFC'd later)</p>
+<li><a name='vtable'></a>vtable</li>
+<p>The vtable field holds a pointer to the vtable for a variable. Each
+variable type has its own vtable, holding pointers to functions for
+the variable. Vtables are shared between variables of the same
+type. (All integer arrays have the same vtable, as do all string
+scalars and so on)</p>
+<p>vtable contents will be RFCd separately. All variables will share a
+common set of functions, though scalars, arrays, and hashes will have
+their own set of extensions on top of that.</p>
+<li><a name='sync_data'></a>sync_data</li>
+<p>A pointer to a structure used for synchronization between async parts
+of perl. This will probably be used mainly for threading, but may be
+used to indicate interpreter ownership for variables shared between
+interpreters, or other such things. If 0, the scalar is assumed to be
+unshared and no synchronization is done.</p>
+</ul>
+<a name='IMPACT ON THREADING'></a><h1>IMPACT ON THREADING</h1>
+<p>The sync_data <b>MUST</b> be used properly by perl when safe access to
+data is needed. What scheme is used to synchronize is not dictated by
+this RFC. It's assumed that whatever scheme is put in place will
+perform properly.</p>
+<p>For speed and simplicity, the functions in the vtable may assume that
+proper synchronization has been done on the variable before they have
+been called, and that they have exclusive and safe access. No
+synchronization beyond this is guaranteed, so if the vtable functions
+have extra synchronization needs they are assumed to take care of that
+themselves.</p>
+<a name='IMPACT ON EMBEDDING'></a><h1>IMPACT ON EMBEDDING</h1>
+<p>None. Generally embedding apps won't deal with actual perl data</p>
+<a name='IMPACT ON EXTENSIONS'></a><h1>IMPACT ON EXTENSIONS</h1>
+<p>None. Extensions get pointers to this structure, which as far as they
+know is a magic cookie. (In fact the official perl term for the thing
+handed to extensions is a Perl Magic Cookie, or PMC) Knowledge of the
+internals is a no-no at this level.</p>
+<a name='IMPACT ON OP FUNCTIONS'></a><h1>IMPACT ON OP FUNCTIONS</h1>
+<p>Op functions have intimate knowledge of the internals and unrestricted
+access. Therefore they're assumed to know what they're doing, and will
+therefore heed the info in this RFC.</p>
+<a name='REFERENCES'></a><h1>REFERENCES</h1>
+<p>sv.h</p>
+</div>

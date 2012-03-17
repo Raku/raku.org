@@ -1,0 +1,64 @@
+[% setvar title Coroutines for Perl %]
+<h3>This file is part of the Perl 6 Archive</h3>
+    <p>To see what is currently happening visit <a href="http://www.perl6.org/">http://www.perl6.org/</a></p>
+<div class='pod'>
+<a name='TITLE'></a><h1>TITLE</h1>
+<p>Coroutines for Perl</p>
+<a name='VERSION'></a><h1>VERSION</h1>
+<pre>  Maintainer: Tom Scola &lt;<a href='mailto:tscola@inch.com'>tscola@inch.com</a>&gt;
+  Date: 4 Aug 2000
+  Mailing List: <a href='mailto:perl6-internals@perl.org'>perl6-internals@perl.org</a>
+  Number: 27
+  Version: 1
+  Status: Developing</pre>
+<a name='ABSTRACT'></a><h1>ABSTRACT</h1>
+<p>Two motavations for the development of Perl 6 are to bring threading
+and event-based programming to the core language.  Coroutines can be
+implemented in either a threaded or an event-based manner, are at a
+much higher level conceptually, and are much easier to program than
+either of those methods.  As implemented in perl, coroutines use
+programming methods that most perl programmers are already familiar
+with, making the transition to them simple and natural.</p>
+<a name='DESCRIPTION'></a><h1>DESCRIPTION</h1>
+<p>This proposal introduces a new keyword to perl, &quot;co&quot;, as a complement
+to &quot;sub&quot;.  A subroutine is defined thusly:</p>
+<pre>  co foo { ... }</pre>
+<p>Coroutines can also be closures:</p>
+<pre>  my $x = co { ... }</pre>
+<p>Unlike coroutines as defined by Knuth, and implemented in laguages
+such as Simula or Python, perl does not have an
+explicit &quot;resume&quot; call for invoking coroutines.  Instead, perl uses a
+mechanism that perl programmers are already familiar with: pipes.
+Note that these are intra-process pipes, and would be implemented
+differently than kernel pipes.</p>
+<p>Coroutines are identified by a prefixed vertical bar.  To invoke a
+coroutine, you write data to or read data from it.</p>
+<pre>   $y = &lt;|foo&gt;;
+
+   print |$x &quot;hello, world\n&quot;;</pre>
+<p>Inside a coroutine, the meanings of &quot;&lt;&gt;&quot; and the default file
+descriptor for print, printf, etc. are overloaded.</p>
+<p>Coroutines and pipelines would effectively turn Perl into a dataflow
+programming language, providing yet another paradigm for Perl to
+encompass.</p>
+<a name='IMPLEMENTATION'></a><h1>IMPLEMENTATION</h1>
+<p>Coroutines can be implemented in their traditional manner, using context
+switching, or as threads, but would hide the mundane details of threads
+from the programmer.  They would be more suited for producer/consumer type
+problems rather than massively parallel compuations, but I doubt there is
+much call for the latter to be implemented in perl.</p>
+<a name='OPEN ISSUES'></a><h2>OPEN ISSUES</h2>
+<ul>
+<li><a name='coroutine priority'></a><b>coroutine priority</b></li>
+<p>There probably needs to be some mechanism for defining the priority of
+a coroutine.</p>
+<li><a name='reference passing'></a><b>reference passing</b></li>
+<p>Is new syntax needed for passing references via pipelines?</p>
+</ul>
+<a name='REFERENCES'></a><h1>REFERENCES</h1>
+<ul>
+<li><a name='Donald Knuth, The Art of Computer Programming'></a>Donald Knuth, <i>The Art of Computer Programming</i></li>
+<li><a name='&quot;Pipes -- Powerful and Elegant Programming Paradigm&quot; www.softpanorama.org/Scripting/pipes.shtml'></a>&quot;Pipes -- Powerful and Elegant Programming Paradigm&quot; <a href='http://www.softpanorama.org/Scripting/pipes.shtml' target='_blank'>www.softpanorama.org</a></li>
+<li><a name='&quot;Coroutines in Python&quot; www.nightmare.com/~rushing/copython/'></a>&quot;Coroutines in Python&quot; <a href='http://www.nightmare.com/~rushing/copython/' target='_blank'>www.nightmare.com</a></li>
+</ul>
+</div>

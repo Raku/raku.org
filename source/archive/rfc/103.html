@@ -1,0 +1,58 @@
+[% setvar title Fix C<$pkg::$var> precedence issues with parsing of C<::> %]
+<h3>This file is part of the Perl 6 Archive</h3>
+    <p>To see what is currently happening visit <a href="http://www.perl6.org/">http://www.perl6.org/</a></p>
+<div class='pod'>
+<a name='TITLE'></a><h1>TITLE</h1>
+<p>Fix <code>$pkg::$var</code> precedence issues with parsing of <code>::</code></p>
+<a name='VERSION'></a><h1>VERSION</h1>
+<pre>  Maintainer: Nathan Wiger &lt;<a href='mailto:nate@wiger.org'>nate@wiger.org</a>&gt;
+  Date: 14 Aug 2000
+  Last Modified: 23 Sep 2000
+  Mailing List: <a href='mailto:perl6-language@perl.org'>perl6-language@perl.org</a>
+  Number: 103
+  Version: 3
+  Status: Retracted
+  Frozen since: v2</pre>
+<a name='ABSTRACT'></a><h1>ABSTRACT</h1>
+<p>Currently, trying to dynamically assign to unnamed classes is very
+difficult:</p>
+<pre>   $pkg::$var = $val;         # error
+   ${pkg}::$var = $val;       # nope
+   ${$pkg::$var} = $val;      # you wish
+   ${${pkg}::$var} = $val;    # sorry
+   ${&quot;${pkg}::$var&quot;} = $val;  # works, but bleeech :-)</pre>
+<p>The precedence and parsing of the :: operator should be fixed to allow
+easy access to anonymous package operations.</p>
+<a name='NOTES ON RETRACTION'></a><h1>NOTES ON RETRACTION</h1>
+<p>I don't see any easy way of getting this to work without causing
+potentially really hairy problems with precedence. In particular check
+out:</p>
+<p><a href='http://www.mail-archive.com/perl6-language@perl.org/msg04058.html' target='_blank'>www.mail-archive.com</a></p>
+<p>Which is actually a reply to Schwern's post, but that appears to be
+gone from the mail archives forever...</p>
+<a name='DESCRIPTION'></a><h1>DESCRIPTION</h1>
+<p>In a perfect world, these should work in Perl 6:</p>
+<pre>  $var = 'RaiseError';
+  $DBI::$var = 1 ;               # $DBI::RaiseError = 1
+
+  $pkg = 'Class';
+  $var = 'DEBUG';
+  ${${pkg}::$var} = 1;           # $Class::DEBUG = 1
+
+  $subpkg = 'Special';
+  $class = $pkg . '::' . $subpkg;
+  require $class;                # require Class::Special
+
+  $mypkg = 'Some::Package::Name';
+  $ret = $mkpkg::do_stuff(@a);   # is &amp;{&quot;${mypkg}::do_stuff&quot;}(@a) now  </pre>
+<p>Currently, the precedence of :: does not allow these operations. Some of
+the above examples may still require additional braces, but they
+shouldn't require the types of contortions currently needed.</p>
+<a name='IMPLEMENTATION'></a><h1>IMPLEMENTATION</h1>
+<p>Unfortunately, I don't have the time to think this part up yet. :-( I
+will gladly contribute to the precedence and parsing rules discussions
+that will ensue in the future if this RFC is accepted.</p>
+<a name='REFERENCES'></a><h1>REFERENCES</h1>
+<p>Programming Perl, 2ed, for the ${&quot;${pkg}::$var&quot;} syntax</p>
+<p>RFC 222: Interpolation of method calls</p>
+</div>

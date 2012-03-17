@@ -1,0 +1,40 @@
+[% setvar title Getting Data Into Unicode Is Not Our Problem %]
+<h3>This file is part of the Perl 6 Archive</h3>
+    <p>To see what is currently happening visit <a href="http://www.perl6.org/">http://www.perl6.org/</a></p>
+<div class='pod'>
+<a name='TITLE'></a><h1>TITLE</h1>
+<p>Getting Data Into Unicode Is Not Our Problem</p>
+<a name='VERSION'></a><h1>VERSION</h1>
+<pre>  Maintainer: Simon Cozens &lt;<a href='mailto:simon@brecon.co.uk'>simon@brecon.co.uk</a>&gt;
+  Date: 25 Sep 2000
+  Mailing List: <a href='mailto:perl6-internals@perl.org'>perl6-internals@perl.org</a>
+  Number: 296
+  Version: 1
+  Status: Developing</pre>
+<a name='ABSTRACT'></a><h1>ABSTRACT</h1>
+<p>Forget <code>iconv</code>, <code>ICU</code>, <code>Encode</code>, <code>tcs</code> and all that. Rule them out
+of scope, and we don't have to worry about them.</p>
+<a name='DESCRIPTION'></a><h1>DESCRIPTION</h1>
+<p>One thing we've been pushing ahead with for 5.7.0 is character encoding
+translation support. Now, there are a bunch of libraries out there which
+already do this, and I mentioned some of them in the abstract. Choosing
+one of them is going to be problematic, because there'll always be users
+that won't have it; writing our own is Not Fun.</p>
+<p>We can sidestep the whole issue by not even claiming to provide any
+character encoding support. Let's say that we're happy to convert
+ISO8859-1 into Unicode, since that's relatively trivial, but if the
+user's got anything more exotic, they have to provide us with Unicode
+themselves through the line discipline method.</p>
+<p>This means that they can grab, from CP6AN or elsewhere, modules which
+support the conversion libraries they have currently installed, or, if
+they don't have any, which perform the conversions that they want. (Such
+as the nascent <code>Encode</code> module.)</p>
+<p>This is economical for us, since we don't have to worry about encoding
+support; it's economical for the end user, since they can choose the
+library which best fits their needs.</p>
+<a name='IMPLEMENTATION'></a><h1>IMPLEMENTATION</h1>
+<p>See RFC 311: Line Disciplines.</p>
+<a name='REFERENCES'></a><h1>REFERENCES</h1>
+<p>The <code>Encode</code> module in bleadperl</p>
+<p>RFC 311: Line Disciplines</p>
+</div>

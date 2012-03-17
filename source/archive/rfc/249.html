@@ -1,0 +1,49 @@
+[% setvar title Use pack/unpack for marshalling %]
+<h3>This file is part of the Perl 6 Archive</h3>
+    <p>To see what is currently happening visit <a href="http://www.perl6.org/">http://www.perl6.org/</a></p>
+<div class='pod'>
+<a name='TITLE'></a><h1>TITLE</h1>
+<p>Use pack/unpack for marshalling</p>
+<a name='VERSION'></a><h1>VERSION</h1>
+<pre>  Maintainer: Ilya Zakharevich &lt;<a href='mailto:ilya@math.ohio-state.edu'>ilya@math.ohio-state.edu</a>&gt;
+  Date: 16 September 2000
+  Mailing List: <a href='mailto:perl6-language-data@perl.org'>perl6-language-data@perl.org</a>
+  Number: 249
+  Version: 1
+  Status: Developing</pre>
+<a name='ABSTRACT'></a><h1>ABSTRACT</h1>
+<p>This RFC extends pack/unpack builtins to store/extract the TEMPLATE to/from
+the packed data.  This allows storage of arbitrary Perl data.</p>
+<a name='DESCRIPTION'></a><h1>DESCRIPTION</h1>
+<ul>
+<li><a name='t'></a><code>t</code></li>
+<p>on unpack(): remove the last extracted value and use it as if it replaces
+this <code>t</code>.  For example, the following two calls are equivalent:</p>
+<pre>  unpack 'A5  t A5', 'aCx6,AcX6...0123456'
+  unpack 'aCx6, A5',      'AcX6...0123456'</pre>
+<p>on pack(): store the next argument so that it is extractable with <code>'t'</code>,
+this <code>t</code> acts as a modifier for the previous type.  For example,</p>
+<pre>  pack 'A3 t', [5,6,[7,8],0]</pre>
+<p>may be stored in many ways, one of them (most readable?)</p>
+<pre>  'A7t' . ' A21 t ' . ' g[ A A g[ A A ] A ] ' . '56780'</pre>
+<p>When this is unpacked with <code>'A3 t'</code>, the first 3 chars are used as a new
+template, then the next 7 chars are used as a new template, then the next
+21 chars are used as a new template, which finally extracts the structure.</p>
+<p>This example shows that an arbitrary large structure can be extracted using
+the template <code>'A3 t'</code>.</p>
+<li><a name='T'></a><code>T</code></li>
+<p>behaves the same as the <code>A4 t</code>.  (Syntactic sugar, optional).  As shown
+above, arbitrary data is restorable by a simple 'T'.  For example,</p>
+<pre>  pack 'T', [5,6,[7,8],0]</pre>
+<p>may be stored in many ways, one of them (most readable?)</p>
+<pre>  'A21t' . ' g[ A A g[ A A ] A ] ' . '56780'</pre>
+</ul>
+<a name='MIGRATION ISSUES'></a><h1>MIGRATION ISSUES</h1>
+<p>None.</p>
+<a name='IMPLEMENTATION'></a><h1>IMPLEMENTATION</h1>
+<p>Straightforward.</p>
+<a name='REFERENCES'></a><h1>REFERENCES</h1>
+<p>RFC142: Enhanced Pack/Unpack</p>
+<p>RFC 246: pack/unpack uncontrovercial enhancements</p>
+<p>RFC 248: enhanced groups in pack/unpack</p>
+</div>

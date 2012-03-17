@@ -1,0 +1,536 @@
+[% setvar title Improved Module Versioning And Searching %]
+<h3>This file is part of the Perl 6 Archive</h3>
+    <p>To see what is currently happening visit <a href="http://www.perl6.org/">http://www.perl6.org/</a></p>
+<div class='pod'>
+<a name='TITLE'></a><h1>TITLE</h1>
+<p>Improved Module Versioning And Searching</p>
+<a name='VERSION'></a><h1>VERSION</h1>
+<pre>  Maintainer: Steve Simmons &lt;<a href='mailto:scs@ans.net'>scs@ans.net</a>&gt;
+  Date: 8 Aug 2000
+  Mailing List: <a href='mailto:perl6-language@perl.org'>perl6-language@perl.org</a>
+  Number: 78
+  Version: 1
+  Status: Developing</pre>
+<a name='ABSTRACT'></a><h1>ABSTRACT</h1>
+<p>Modern production systems may have many versions of different modules
+in use simultaneously.  Workarounds are possible, but they lead to
+a vast spaghetti of fragile installation webs.  This proposal will
+attempt to redefine module versioning and its handling in a way that
+is fully upward compatible but solves the current problems.</p>
+<p>An up-to-the-instant version of this RFC will be posted as HTML
+at <code><a href='http://www.nnaf.net/~scs/Perl6/RFCxx.html' target='_blank'>www.nnaf.net</a></code> as soon as I
+know the RFC number.</p>
+<a name='DESCRIPTION'></a><h1>DESCRIPTION</h1>
+<p>There are several classes of problem with the current module
+versioning and searching, which will be discussed separately.
+The solutions proposed overlap, and are discussed in
+<b>IMPLEMENTATION</b> below.</p>
+<a name='Current Implementation Is Broken'></a><h2>Current Implementation Is Broken</h2>
+<p>These problems are ones in which I would go so far as to say that
+the current (<code>perl5</code>) performance is actually broken.</p>
+<a name='Discovery Of Older Versions Aborts Searches'></a><h3>Discovery Of Older Versions Aborts Searches</h3>
+<p>Currently a statement</p>
+<pre>  use  foo 1.2;</pre>
+<p>can cause <code>perl</code> to search <code>@INC</code> until it finds a <code>foo.pm</code> file
+or exhausts the search path.  When a <code>foo.pm</code>, its <code>VERSION</code>
+is checked against the one requested in the <code>use</code> statement.
+If the <code>foo.pm</code> version is less than 1.2, <code>perl</code> immediately
+gives an error message and halts the compilation.
+A satisfactory version may exist elsewhere in <code>@INC</code>, but it is
+not searched for.</p>
+<a name='First Module Discovered May Not Be Newest'></a><h3>First Module Discovered May Not Be Newest</h3>
+<p>I believe that when a programmer writes</p>
+<pre>    use module;</pre>
+<p>`Do What I Mean' should find the newest version of the module present on the
+<code>@INC</code> search path.
+Instead, the very first <code>module.pm</code> file found is taken,
+regardless of the presence of others on the path.</p>
+<a name='Current Methods Are Insufficient for Complex Installations'></a><h2>Current Methods Are Insufficient for Complex Installations</h2>
+<p>Deployment of perl modules in high-reliability or widely shared
+environments often requires multiple versions of modules installed
+simultaneously.
+(Comments `but that's a bad idea' will be cheerfully ignored --
+if I could control what other departments need, I would).
+This leads to an endless proliferation of <code>use lib</code> directories
+and ever-more-pervasive `silos of development.'</p>
+<p>Part of the problem is the limitations of the current system in
+how modules are versioned and how <code>perl</code> decides which version
+to load.  In worst case, code such as</p>
+<pre>    use lib '/path/to/department/module/versionX';
+    use module ;	# To get version X for sure
+    no use lib '/path/to/department/module/versionX';</pre>
+<p>has been found in production equipment.
+Why does such bogosity occur?
+It's an attempt to solve both the above problems and
+the deployment issues which follow below.</p>
+<a name='New Module Releases Can Break Existing Scripts'></a><h3>New Module Releases Can Break Existing Scripts</h3>
+<p><i>Working tools persist.</i>
+An application which does its job well will live as long as the
+problem it addresses.
+This means old code may continue running for a long time.</p>
+<p>For <code>perl</code> itself, most sites solve this problem by having
+the perl invocation include versioning:</p>
+<pre>   #!/usr/bin/perl5.005</pre>
+<p>The indicated version will likely remain installed and stable as long
+as the script which uses it and the platform on which that script runs.</p>
+<p>The proliferation and increasing use of modules is generally a
+good thing.  However, installation of new modules can and sometimes
+does break existing scripts.  Workarounds for this problem are
+cumbersome at best, and we have existence proofs in other languages
+that this can be handled better (notably <code>tcl</code>, but there are
+probably more).</p>
+<a name='Test Systems Need Test Modules'></a><h3>Test Systems Need Test Modules</h3>
+<p>Mission-critical scripts often need to have a final test pass
+by releasing experimental versions onto productions systems
+alongside the production systems.</p>
+<p>The inflexibility of perl module versioning also contributes to
+difficulties in releasing systems for test.  A new script may require
+significant changes to internals of one or more supporting modules.
+The changes need not be visible to existing scripts; if bugs are introduced
+then previously working systems may change or break in obscure ways.</p>
+<p>Ideally, there would be a mechanism by which <code>script<i>.new</i></code> or
+<code><i>new</i>script</code> could be released
+simultaneously with an appropriate version of <code>module<i>.new</i>.pm</code>
+or <code><i>new</i>module.pm</code>
+while the previous version
+remains in place for older code.
+A more flexible mechanism for module version specification
+and searching can fix the problem.</p>
+<a name='Proposed Solution'></a><h2>Proposed Solution</h2>
+<p>I believe that relatively simple changes can be made to the version
+identification and module installation systems which will solve all
+the above problems.
+In addition, those changes should be largely upward compatible
+from current functioning; and if needed could be made 100%
+compatible.</p>
+<a name='IMPLEMENTATION'></a><h1>IMPLEMENTATION</h1>
+<p>Several changes, working together, should provide the flexibility
+needed to solve all the stated problems and deficiencies:</p>
+<pre>=over4 </pre>
+<li><a name='1.'></a>1.</li>
+<p>Clarification on how version numbers are formed (largely done
+as per <code>perl5.6</code>)</p>
+<li><a name='2.'></a>2.</li>
+<p>Well-defined rules for version number comparison.</p>
+<li><a name='3.'></a>3.</li>
+<p>Extensions to the <code>use module <i>version</i></code> syntax to support
+better specification of version numbers.</p>
+<li><a name='4.'></a>4.</li>
+<p>A modification to the module installation mechanism to make
+version numbers more immediately recognizable without requiring
+parsing/compiling of <code>module.pm</code> files.</p>
+<li><a name='5.'></a>5.</li>
+<p>Modifications to the <code>@INC</code> path searching rules to reflect the
+changes in numbers 1-4 above.</p>
+</ul>
+<p>We believe that most if not all of these changes can be made without
+requiring a change either to older scripts, existing modules, or
+items already in CPAN.
+New scripts and new modules should be able to take advantage of the
+changes with relatively minimal changes.</p>
+<a name='Overview'></a><h2>Overview</h2>
+<p>In brief, I propose the installation method for modules as provided
+by <code>perl Makefile.PL</code> be changed such that version numbers appear
+in the path of the module being installed.  This would require that
+the <code>Makefile.PL</code> support functions open the module, extract the
+value of <code>$VERSION</code> (if any), and use that to build the pathnames
+to install the module.</p>
+<p>This change has two huge wins:</p>
+<ul>
+<li><a name=''></a></li>
+<p>Authors of modules would have to do literally <i>nothing</i> to use
+the new mechanism.</p>
+<li><a name=''></a></li>
+<p>Having the version numbers embedded in the path means they could be
+reliably determined without having to actually
+open and parse each candidate <code>.pm</code> file.</p>
+</ul>
+<p>Programs which request versions in their <code>use module</code> statements
+would be compiled with the ``best fit'' commensurate with their
+request and with the request of other modules.</p>
+<p>Note that it may not be possible to satisfy conflicting requests.  If
+module <code>A</code> and module <code>B</code> demand two different versions of the same
+module <code>C</code>, the compiler should halt and state the module conflicts.</p>
+<p>``Best fit'' cannot reliably be determined without examining all
+the secondary modules required as a consequence of using some
+lower-level module and without processing the <code>@INC</code> changes
+introduced by <code>use lib</code>, etc.
+Thus the compiler might have to examine the internals of a number
+of versions of some modules before choosing which to use.
+But it would not have to do a full parse of those modules,
+and the section on <b>Possible Optimization - Indexes</b> suggests
+some further wins.</p>
+<a name='Path/Module Renaming'></a><h2>Path/Module Renaming</h2>
+<p>There are a variety of mechanisms which could embed the
+version number into the path name.
+This RFC does not strongly favor any one over any other.
+It does have some general suggestions, but is not imposing
+a particular solution.</p>
+<p>Here are some guidelines for choosing a naming system:</p>
+<ul>
+<li><a name='The new names should do minimal violence to the existing structure. The following guidelines are suggestions, the implementers should feel free to follow any of the possible implementations (see below) or choose another as they please. In the discussion below, pathname means the full path from file system root to the actual file containing the module.'></a>The new names should do minimal violence to the existing structure.
+The following guidelines are suggestions, the implementers should
+feel free to follow any of the possible implementations (see below)
+or choose another as they please.
+In the discussion below, <i>pathname</i> means
+the full path from file system root to the actual file containing
+the module.</li>
+<li><a name='The new names should allow for version-less modules, indicated by a versionless pathname.'></a>The new names should allow for version-less modules, indicated
+by a versionless pathname.</li>
+<li><a name='The .pm filename extension should be preserved. Thus it is probably better to embed the version number into the file name or a directory name immediately above it on the search path.'></a>The <code>.pm</code> filename extension should be preserved.  Thus
+it is probably better to embed the version number into the file
+name or a directory name immediately above it on the search path.</li>
+<li><a name='If a module is selected for compilation and a mismatch is found between installed name (eg, foo-1.0.pm) and the setting in the VERSION statement (eg, VERSION=1.1;), perl6 should issue a compile-time error which includes the full path to the module and the internal VERSION number. No recovery should be done.'></a>If a module is selected for compilation and
+a mismatch is found between installed name (eg, <code>foo-1.0.pm</code>) and
+the setting in the <code>VERSION</code> statement (eg, <code>VERSION=1.1;</code>),
+<code>perl6</code> should issue a compile-time error which includes the full path
+to the module and the internal <code>VERSION</code> number.
+No recovery should be done.</li>
+</ul>
+<p>Here are some possible implementations:</p>
+<ul>
+<li><a name='In locations where a foo.pm file would currently be installed, replace it with a foo.pm directory. In that directory, versioned modules would be installed as foo-version.pm, and versionless as foo.pm. or as version.pm and none.pm'></a>In locations where a <code>foo.pm</code> file would currently be installed,
+replace it with a <code>foo.pm</code> directory.
+In that directory, versioned modules would be installed as
+<code>foo-version.pm</code>, and versionless as <code>foo.pm</code>.
+or as <code>version.pm</code> and <code>none.pm</code></li>
+<li><a name='Create a foo.pm directory as above, but populate it with subdirectories for each installed version. A foo.pm file containing the module code would reside in that directory. Versionless modules could be installed into the foo.pm directory rather than in a subdirectory. This mechanisms has some possible wins should it be appropriate to support simultaneous load of multiple versions.'></a>Create a <code>foo.pm</code> directory as above, but populate it
+with subdirectories for each installed version.
+A <code>foo.pm</code> file containing the module code would reside
+in that directory.
+Versionless modules could be installed into the <code>foo.pm</code>
+directory rather than in a subdirectory.
+This mechanisms has some possible wins should it be
+appropriate to support simultaneous load of multiple versions.</li>
+</ul>
+<a name='Definition Of Version Numbers'></a><h2>Definition Of Version Numbers</h2>
+<p>A detailed definition of a version number appears immediately below.
+It is my belief that this definition and usage is an upward extension
+from current <code>perl</code> performance; and therefore simple (current) use
+of version numbers should work without requiring script code change
+under this proposal.</p>
+<p>Note we are not <i>requiring</i> version numbers, just specifying
+format and comparison rules.</p>
+<ul>
+<li><a name='1.'></a>1.</li>
+<p>Version numbers consist of one or more <i>version levels</i> separated
+by dots.</p>
+<li><a name='2.'></a>2.</li>
+<p>Each version level must consist of a non-negative number expressed
+as a series of the digits, ie <code>[0-9]+</code>.</p>
+<li><a name='3.'></a>3.</li>
+<p>The first version level and first dot are required.</p>
+<li><a name='4.'></a>4.</li>
+<p>There is no limit to how many levels a version may have.</p>
+<li><a name='5.'></a>5.</li>
+<p>If a version number ends in a dot, a final level of <code>0</code> is assumed.</p>
+<li><a name='6.'></a>6.</li>
+<p>Leading zeros are allowed in level numbers, but are ignored.
+If a version level contains leading zeros, those zeros will be
+stripped in all cases except for version(s) <code>0.*</code>.</p>
+<li><a name='7.'></a>7.</li>
+<p>Trailing zeros in version numbers, whether explicit or implied by
+a final dot, are trimmed from the version number internally when
+deriving paths.
+See above for pathname deriving.</p>
+</ul>
+<p>The following example shows some valid and invalid version numbers</p>
+<pre>    use   foo  1.;	# Valid, means '1.0'
+    use   foo  01.;	# Valid, means '1.0'
+    use   foo  1.1;	# Valid, means '1.1'
+    use   foo  1.01;	# Valid, means '1.1'
+    use   foo  1.01.;	# Valid, means '1.1.0'
+    use   foo  1.1e;	# Invalid, has non-digit
+    use   foo  .1;	# Invalid, must start with explicit level
+    use   foo  0.1;	# Valid, means '0.1'
+    use   foo  1;	# Invalid, must have at least one dot
+    use   foo  1.-1;	# Invalid, no negative numbers (and not a digit)
+    use   foo  ;	# Valid, means no version specified</pre>
+<p>Invalid version numbers cause a compile-time error on the module.</p>
+<a name='Usage in Programs'></a><h2>Usage in Programs</h2>
+<p>The existing version request syntax is:</p>
+<pre>   use module [ version ] [ qw(func1 func2 func3)] ;</pre>
+<p>Currently version is a single <code>perl</code>-style version number (whatever
+the heck that means).  I propose we extend the allowable forms to allow
+ranges, lists, limits, and version limiting.
+Doing this properly requires
+some well-defined mechanisms for comparing disparate version numbers.</p>
+<p>Version numbers may appear in the <code>use</code> statement of <code>perl</code> scripts
+and in the <code>VERSION</code> statement of a <code>perl</code> modules.</p>
+<p>They may either be quoted strings or barewords.</p>
+<p>Usage in any other circumstance is not treated as a version number,
+but rather the appropriate <code>perl</code> construct for the circumstances.
+If a bareword, it is almost certainly an error.</p>
+<p>I believe that this usage is consistent with current <code>perl</code>.</p>
+<a name='Ordered and Unordered Version Lists'></a><h3>Ordered and Unordered Version Lists</h3>
+<p>A program can specify a list of versions in no-preference order
+by listing them separated by whitespace:</p>
+<pre>    use   foo 1.0 1.1 1.3;
+    use   foo 1.3 1.1 1.0;</pre>
+<p>These two requests are effectively identical, with the
+compiler accepting any version of <code>foo.pm</code>
+beginning with 1.0, 1.1 or 1.3.</p>
+<p>A program can specify a list of versions in preference order
+by adding commas:</p>
+<pre>    use   foo 1.0, 1.1, 1.3;
+    use   foo 1.3, 1.1, 1.0;</pre>
+<p>In these cases the compiler can proceed if any of the three
+versions are available.  In the first case some version 1.0 is
+preferred, the the second 1.3 is preferred.</p>
+<p>The whitespace following the commas is optional.</p>
+<p>In cases where there are requests for two different versions of
+module <code>foo</code>, both of which were first in the request orders,
+the highest-level module (closest to the original script) shall
+win.</p>
+<p>If both requests are at the same level offset from the original
+script, the first requester shall win.</p>
+<a name='Version Inequalities'></a><h3>Version Inequalities</h3>
+<p>A program can indicate a minimum, maximum, exact,
+and super-exact version it will accept.
+The following syntax handles these requests:</p>
+<p>The form</p>
+<pre>    use foo &lt;1.2;</pre>
+<p>indicates that any version prior to 1.2 is acceptable.
+This would mean any version with 1.1 or less
+for its first two levels.</p>
+<p>The form</p>
+<pre>    use foo &lt;=1.2;</pre>
+<p>indicates that any version prior to 1.2 is acceptable.
+This would mean any version with 1.2 or
+less for its first two levels.</p>
+<p>The form</p>
+<pre>    use foo &gt;1.2</pre>
+<p>indicates that any version greater than 1.2 is acceptable.
+This would mean any version with 1.3 or more for its first two levels.</p>
+<p>The form</p>
+<pre>    use foo &gt;=1.2</pre>
+<p>indicates that any version greater than or equal to 1.2 is acceptable.
+This would mean any version with has 1.2 or more as the first two levels.</p>
+<p>The form</p>
+<pre>    use foo =1.2</pre>
+<p>indicates that only versions which begins with 1.2 are acceptable.</p>
+<p>These may be further tightened by ending the version number in a period.
+The period forces the rest of the version levels to always be treated
+at zeros.  Thus the form</p>
+<pre>    use foo =1.2.</pre>
+<p>indicates that only version 1.2.0 is acceptable, not 1.2.0.0...1.</p>
+<a name='Ordered and Unordered Version Ranges'></a><h3>Ordered and Unordered Version Ranges</h3>
+<p>A program should be able to use two version numbers
+to indicate a range of acceptable version numbers.  The
+separator between the two ranges indicates preference order, with</p>
+<ul>
+<li><a name='meaning no preference,'></a>meaning no preference,</li>
+<li><a name='&lt;'></a>&lt;</li>
+<p>meaning the right hand side is preferred, and</p>
+<li><a name='&gt;'></a>&gt;</li>
+<p>meaning the left hand side is preferred.</p>
+</ul>
+<p>No whitespace is allowed between the separator and the
+version number; reasons for this will become apparent in
+the sections on complex lists.</p>
+<p>Examples of ranges:</p>
+<pre>    use foo 1.1-1.4</pre>
+<p>means that any version which begins with 1 and has a 1.4 as the
+second level is acceptable.</p>
+<pre>    use foo 1.1&lt;1.4</pre>
+<p>means that any version which begins with 1 and has a 1.4 as the
+second level is acceptable, with preference given to the highest
+version in the range.</p>
+<pre>    use foo 1.1&gt;1.4</pre>
+<p>means that any version which begins with 1 and has a 1.4 as the
+second level is acceptable, with reference given to the lowest
+version in the range.</p>
+<p>A terminating dot may be used as well, so that</p>
+<pre>    use foo 1.1-1.4.</pre>
+<p>means that any version 1.1 through 1.3 is acceptable, but the only
+acceptable 1.4 version is 1.4.0.</p>
+<a name='Combining Lists and Ranges'></a><h3>Combining Lists and Ranges</h3>
+<p>Lists and ranges may be combined in arbitrary ways to make complex
+preference sets.  Thus</p>
+<pre>    use   foo 1.5 1.0-1.3;</pre>
+<p>means that any version 1.0, 1.1, 1.2, 1.3 or 1.5 is acceptable,
+without preference order.  By contrast,</p>
+<pre>    use   foo 1.5, 1.0-1.3, 1.4;</pre>
+<p>means that 1.5 is preferred, then anything in the 1.0 to 1.3 range,
+then 1.4.</p>
+<a name='Why Not Regexps?'></a><h3>Why Not Regexps?</h3>
+<p>It has been suggested that <code>globs</code> or even full-bore regular
+expressions be allowed for version specification.  It has not
+been included for the following reasons:</p>
+<ul>
+<li><a name='Version numbers are an ordered set of positive integers. As such, simple comparisons are powerful enough to handle most needs.'></a>Version numbers are an ordered set of positive integers.
+As such, simple comparisons are powerful enough to handle
+most needs.</li>
+<li><a name='Regexps do not allow for a mechanism to order preference within a given regexp, ie, one could not write'></a>Regexps do not allow for a mechanism to order preference within
+a given regexp, ie, one could not write</li>
+<pre>    use foo 1.[023]</pre>
+<p>and indicate that there was some ordering to the sub-version.  I
+am concerned that people would naively expect that the Do What I
+Mean principle would cause <code>perl</code> to assume that the following</p>
+<pre>    use foo 1.[203]</pre>
+<p>is equivalent to</p>
+<pre>    use foo 1.2, 1.0, 1.3</pre>
+<p>on the naive theory that the two regexps look different so they should
+do something different.</p>
+<li><a name='We don't allow regexps in other non-run-time constructs, we shouldn't allow them here.'></a>We don't allow regexps in other non-run-time constructs, we shouldn't
+allow them here.</li>
+<li><a name='The use of the . as a terminator would seem to be sufficient for all cases where globs have been suggested. Having more than one mechanism for this would intermediate perl programmers to assume that there was some subtle difference between the two.'></a>The use of the . as a terminator would seem to be sufficient for
+all cases where <code>globs</code> have been suggested.
+Having more than one mechanism for this would intermediate <code>perl</code>
+programmers to assume that there was some subtle difference between
+the two.</li>
+</ul>
+<p>Since regexps and <code>globs</code> bring little additional utility and
+introduce possible confusion, I have chosen not to put them in
+this suggestion.</p>
+<a name='Resolving Version Request Problems'></a><h2>Resolving Version Request Problems</h2>
+<a name='When Nothing Works'></a><h3>When Nothing Works</h3>
+<p>When we permit modules to request only certain versions of
+other modules, we will find cases where no version of
+module <code>foo</code> is acceptable to all modules which wish to use it.
+In such as case, the compiler should give up with an error
+message stating that due to conflicting version requests,
+module <code>foo</code> could not be loaded.  This could
+become The Error Message From Hell if sufficient detail was
+included.</p>
+<p>A utility (perl module?!) should be provided which
+would recursively examine the <code>use</code> lines a perl script
+and the system configuration and produces the appropriately
+voluminous output report.</p>
+<a name='When More Than One Acceptable Version Is Found'></a><h3>When More Than One Acceptable Version Is Found</h3>
+<p>Modules load modules load modules, ad nauseum.  It is quite
+possible that two or more different modules will request some
+other module.  If there is only one version which satisfies all
+the requests, we don't have a problem.</p>
+<p>If there is more than one version acceptable to all callers,
+we choose which to use based on the following rules:</p>
+<ul>
+<li><a name='1.'></a>1.</li>
+<p>If no preference was expressed, first acceptable version that was
+found is used.</p>
+<li><a name='2.'></a>2.</li>
+<p>If a preference was expressed, highest preference is given to the
+requests which come from the original script.</p>
+<li><a name='3.'></a>3.</li>
+<p>If no request came from the original script, highest preference
+is given to second-level requesters.
+If there is more than one second-level requester, the first requesters
+preferences are used.
+If there are no second-level requester, the third level is used, and so on.</p>
+</ul>
+<a name='How This Solves The Problems'></a><h2>How This Solves The Problems</h2>
+<p>There were four problems identified with the current system.
+Implementation of this proposal solves those problems as follows:</p>
+<a name='Discovery Of Older Versions No Longer Aborts Searches'></a><h3>Discovery Of Older Versions No Longer Aborts Searches</h3>
+<p>The statement</p>
+<pre>  use  foo 1.2;</pre>
+<p>can cause <code>perl</code> to search <code>@INC</code> until it finds the first
+<code>foo.pm</code> file of version 1.2 or greater.</p>
+<a name='Programmer Can Now Specify Newest Module'></a><h3>Programmer Can Now Specify Newest Module</h3>
+<p>I believe that when a programmer writes</p>
+<pre>    use module;</pre>
+<p>`Do What I Mean' should find the newest version of the module present
+in <code>@INC</code>.
+The current proposal does <i>not</i> cause this to occur,
+and thereby permits backwards-compatible behavior.</p>
+<p>However, the programmer can now write</p>
+<pre>    use module &gt;=0.0;</pre>
+<p>and accept any module, but give preference to the highest.</p>
+<a name='New Module Releases Can Break Existing Scripts'></a><h3>New Module Releases Can Break Existing Scripts</h3>
+<p>This proposal does not prevent new modules from breaking
+existing scripts.
+It does, however, permit those scripts to be repaired by the
+simple change of locking the script to the acceptable version(s)
+of the module.
+This is often <i>significantly</i> easier than updating the script,
+and avoids the possibility of introducing new bugs either due
+to modifications of the script or from bugs in the newer module.</p>
+<a name='Test Systems Need Test Modules'></a><h3>Test Systems Need Test Modules</h3>
+<p>In mission-critical environments, production versions of
+scripts could always be released to a version range of a
+module, reflecting the ranges of the module it had been tested
+and known to work against:</p>
+<pre>    use foo 2.0-2.1;	# Accept any 2.0 or 2.1 version</pre>
+<p>When a new version of <code>foo.pm</code> needs to be rolled out with the
+new version of the script, the version of <code>foo.pm</code> could be
+set to 2.2 and the new script released with</p>
+<pre>    use foo =2.2;	# Accept any 2.2 version</pre>
+<p>Now new and old versions of script and module can be released
+with no impact on existing production software.  When it is
+decided that the new versions should become the standard
+versions, the new script is copied over the old and the modules
+are not touched.</p>
+<a name='Possible Optimization - Indexes'></a><h2>Possible Optimization - Indexes</h2>
+<p>A possible problem introduced with this proposal is an even
+greater increase in the amount of searching of directories
+that must be done.  This is an often-expensive process, and
+can have a serious impact when even small scripts are run tens
+of thousands of times per day (as ours do).</p>
+<p>This could be resolved by adding some sort of simple index
+files to the installation tree.  The index files could simply
+be a list of all the files (pathnames) found under this particular
+branch of the file tree.  Since those pathnames would contain
+the version numbers, examining any index file would be sufficient
+for determining what versions lay where.  If later uses of
+<code>use lib</code> chose a subset of that tree, the index data would
+already be present.  In an ideal situation, only one or two
+index files might be all that is needed to find all versions
+of all modules.</p>
+<p>More complex indexes could be built which might include all the
+dependency information in a manner not dissimilar to the output
+of <code>lorder(1)</code>.</p>
+<p>Reliability would best be done by implementing index construction
+as an automatic part of module install.  As above, this could
+be automated such that neither the module developer nor the
+system administrator would have to worry about it; the process
+would still be:</p>
+<pre>    perl6 Makefile.PM
+    make
+    make install</pre>
+<p>and the <code>make install</code> updates the indexes.  At that point it
+is not clear to mean that such an index is required; in its
+absence <code>perl6</code> should simply search the <code>@INC</code> directories
+as it does now.</p>
+<a name='Adaptation to Perl5'></a><h2>Adaptation to Perl5</h2>
+<p>There is nothing in this proposal which could not be implemented
+in perl5.X, and it would probably be a Good Thing if such were done.</p>
+<a name='Alternative Idea - Module Versioning In Namespaces'></a><h2>Alternative Idea - Module Versioning In Namespaces</h2>
+<p>Some languages allow multiple versions of a module to be loaded
+simultaneously.  It is my opinion that In This Way Lies Madness, but
+<code>perl</code> has done stranger things.  Should we decide to allow this,
+incorporating the version number into the namespace would allow the
+appropriate disambiguation.</p>
+<p>Let us suppose that module <code>foo</code> requires module <code>bar v1.0</code>,
+while module <code>baz</code> requires module <code>bar 2.0</code>.  Also assume
+that both versions of <code>bar</code> provide a <code>op</code> function.  Then
+these two modules could do</p>
+<pre>    module foo.pm			module baz.pm
+
+    use bar =1.0.;			use bar =2.0. ;
+    # Uses bar1.0::op                   # Uses bar2.0::op
+    bar::op();                          bar::op();</pre>
+<p>and each time get the appropriate invocation of <code>op</code>.</p>
+<p>Similarly modules <code>foo</code> and <code>baz</code> both create a <code>bar</code> object,
+the object should blessed into the appropriate version of <code>baz</code>,
+so that</p>
+<pre>    my $handle1 = new foo ;
+    my $handle2 = new bar ;
+    my $var1 = $handle1-&gt;op();	# Always gets op 1.0
+    my $var2 = $handle2-&gt;op();	# Always gets op 2.0</pre>
+<p>always invokes the appropriate version of <code>$op</code>.</p>
+<p>While I'm not seriously suggesting this dual loading be allowed, it should
+at least be considered by the folks who know more about objects than
+I do.  Note, though, that this kind of feature might prove to be invaluable
+in testing new versions of modules.  With appropriate aliasing added,
+a test script could do</p>
+<pre>    use foo &lt;3.0 as foo_old;
+    use foo =3.0. as new_foo;
+
+    # do something with foo_old
+    # do identical things with foo_new
+    # compare results</pre>
+<p>Again, I'm not seriously suggesting this feature.  But if it comes
+up, all the module versioning rules above need to be revisited.</p>
+<a name='REFERENCES'></a><h1>REFERENCES</h1>
+<pre>    lorder(1) - Optimising .o file orders for UNIX loader ld(1)</pre>
+</div>

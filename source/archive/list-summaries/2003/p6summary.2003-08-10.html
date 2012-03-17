@@ -1,0 +1,251 @@
+[% setvar title Perl 6 Summary for the week ending 20030810 %]
+<h3>This file is part of the Perl 6 Archive</h3>
+    <p>To see what is currently happening visit <a href="http://www.perl6.org/">http://www.perl6.org/</a></p>
+<div class='pod'>
+<a name='Perl 6 Summary for the week ending 20030810'></a><h1>Perl 6 Summary for the week ending 20030810</h1>
+<p>Another week, another summary. How predictable is that?</p>
+<p>In keeping with the predictability, we'll start with the internals list.</p>
+<a name='Set vs. Assign'></a><h2>Set vs. Assign</h2>
+<p>&quot;T.O.G of Spookware&quot; has an issue with the way IMCC treats <code>=</code>;
+sometimes an <code>=</code> means <code>set</code> and sometimes it means <code>assign</code>,
+which TOGoS finds confusing. What he(?) finds even more confusing is
+that sometimes <code>set</code> has <code>assign</code> semantics.</p>
+<p>Dan agreed that this was somewhat confusing, and pointed out that
+there was a third possible semantic, <code>clone</code>.</p>
+<p>Luke Palmer agreed with TOGoS and suggested that it would be useful
+if the <code>assign</code> like behaviours of of <code>set</code> were moved over to
+becoming <code>assign</code> like behaviours of <code>assign</code>.</p>
+<p>Benjamin Goldberg wasn't even sure that <code>set</code> and <code>assign</code> were good
+names for those behaviours in the first place. He proposed three
+behaviour classes; <code>mutate</code>, <code>alias</code> and <code>create</code>. The general
+feeling seemed to be that Ben's approach was a good way forward, but I
+don't think anything has actually been implemented along these lines
+yet.</p>
+<p><a href='http://groups.google.com/groups?threadm=20030801184516.98304.qmail@web41406.mail.yahoo.com' target='_blank'>groups.google.com</a></p>
+<a name='Generic code generator?'></a><h2>Generic code generator?</h2>
+<p>Not content with his efforts in porting Python to Parrot, Michal
+Wallace floated the idea of a generic code generator for parrot that
+everyone could use. Stephen Thorne liked the concept, but worried
+that it wouldn't necessarily play well with languages that allowed
+<code>eval $aString</code>. He proposed that, whatever the code generator got
+written in should be a language that would be self-hosting.</p>
+<p>Joseph Ryan argued that, instead of coming up with a new meta-language
+for the GCG (Generic Code Generator), we should use something like XML
+or YAML as a way of dumping the AST (Abstract Syntax Tree) with
+standardized node names. Dan (who has a 'deep personal loathing for
+XML') was all for just building a standard datastructure and passing
+that into the code generator. (ASTnode.pmc anyone?). He also
+suggested that having some way of doing AST transforms would be
+handy, as many languages would want to get hold of the AST and munge
+it in some way before it went any further (Lisp macros are the
+canonical example of this sort of thing).</p>
+<p>Following the discussion, Michal and Klaas-Jan Stol apparently spiked
+out a prototype that used s-expressions.</p>
+<p>Your summarizer wonders if there's any overlap between this and
+treecc. Maybe I've just misunderstood what treecc was all about.</p>
+<p><a href='http://groups.google.com/groups?threadm=Pine.LNX.4.44.0308030506570.1050-100000@hydrogen.sabren.com' target='_blank'>groups.google.com</a></p>
+<a name='Calling convention questions'></a><h2>Calling convention questions</h2>
+<p>Vladimir Lipskiy had a couple of questions about how the calling
+conventions worked. Dan and Leo supplied the answers, Vladimir
+pointed to the section of <b><i>pdd03_calling_conventions.pod</i></b> that had
+caused the confusion, and Dan went and fixed the docs.</p>
+<p><a href='http://groups.google.com/groups?threadm=000d01c35a27$40403540$999d943e@87w5ovc8gmxcahy' target='_blank'>groups.google.com</a></p>
+<a name='Infant Mortality'></a><h2>Infant Mortality</h2>
+<p>Every so often, perl6-internals ends up talking about the Infant
+Mortality Problem -- the possibility of an object being marked as
+dead by the GC system before it's even been fully
+initialized. Benjamin Goldberg addressed himself to the problem this
+week by proposing a generational Garbage Collector. I'm not sure
+anyone was convinced that his proposed use of a generational
+collector to avoid having to walk the C stack was the Right Thing,
+but nor do I think anyone's averse to trying a generational
+collection scheme to see how performance stacks up.</p>
+<p><a href='http://groups.google.com/groups?threadm=3F2DCD7B.27044224@hotpop.com' target='_blank'>groups.google.com</a></p>
+<a name='Packfile stuff'></a><h2>Packfile stuff</h2>
+<p>Dan outlined some things we need to add to the packfile format and the
+sub header in order to get things ready for more language
+work. He, Leo and the usual suspects thrashed out the implications
+(<b><i>assemble.pl</i></b> and <b><i>disassemble.pl</i></b> will finally get removed from
+the distribution for example), but I don't think a final bytecode and
+sub header format have been decided upon yet.</p>
+<p><a href='http://groups.google.com/groups?threadm=a0521060bbb543866b01b@' target='_blank'>groups.google.com</a>[63.120.19.221]</p>
+<a name='Parrot on Win32?'></a><h2>Parrot on Win32?</h2>
+<p>Valery A.Khamenya wondered if there was any news on getting a ready
+to run win32 Parrot distribution. Jonathan Worthington has
+volunteered to start work on producing regular build snapshots. Yay
+Jonathan!</p>
+<p><a href='http://groups.google.com/groups?threadm=1032203558.20030804204823@mail.ru' target='_blank'>groups.google.com</a></p>
+<a name='Bitwise string ops'></a><h2>Bitwise string ops</h2>
+<p>Leo T&ouml;tsch checked in the beginnings of bitwise operators for
+strings and dropped a huge hint that it'd be good if someone could
+finish things up. Vladimir Lipskiy took the hint, but felt a good
+deal of pain trying to produce appropriately formatted diffs until he
+worked out how to do the equivalent of <code>cvs diff -c</code> in WinCVS
+(hopefully the same trick can be used to do <code>cvs diff -u</code>, which is
+the preferred diff format of perl6-internals).</p>
+<p><a href='http://groups.google.com/groups?threadm=3F2FB556.7050705@nextra.at' target='_blank'>groups.google.com</a></p>
+<a name='Dynamic PMC classes'></a><h2>Dynamic PMC classes</h2>
+<p>Discussion of the appropriate interfaces for the dynamic loading of
+PMCs continued apace. Leo committed his current implementation,
+stressing that it wasn't final, but it is at least something to work
+on.</p>
+<p><a href='http://groups.google.com/groups?threadm=200308051559.h75Fxao03410@thu8.leo.home' target='_blank'>groups.google.com</a></p>
+<a name='extproc_parrot'></a><h2>extproc_parrot</h2>
+<p>Sometimes I worry about Parrot hackers... Jeff Horwitz announced that
+he's successfully built a library that lets you embed parrot in
+Oracle. The theory is that, if you want to eventually have an
+extproc_perl6 in oracle you'd need to embed parrot anyway. Jeff
+commented that &quot;what makes this even cooler&quot; is that, right now, you
+can theoretically write oracle extensions in, um, Parrot BASIC.</p>
+<p>Personally, I think Oracle and Brainfuck is a match made in heaven.</p>
+<p><a href='http://groups.google.com/groups?threadm=Pine.LNX.4.44.0308051346180.22768-100000@booger.sixgeeks.org' target='_blank'>groups.google.com</a></p>
+<a name='Pirate guide'></a><h2>Pirate guide</h2>
+<p>Michal Wallace has now got Py-Pirate (The new name for Python on
+Parrot; Pirate has been promoted to being the name of the new Generic
+Code Generator) up and running using the Parrot calling
+conventions. He's also written a guide which explains how the code is
+laid out for those who don't know Python.</p>
+<p><a href='http://groups.google.com/groups?threadm=Pine.LNX.4.44.0308062136400.24346-100000@hydrogen.sabren.com' target='_blank'>groups.google.com</a></p>
+<p><a href='http://pirate.versionhost.com/viewcvs.cgi/pirate/GUIDE?rev=1.1' target='_blank'>pirate.versionhost.com</a></p>
+<a name='TWEAKS'></a><h2>TWEAKS</h2>
+<p>Leo T&ouml;tsch is a man of many admirable qualities: Official
+Patchmonster to the Parrot process; far, far easier to mention every
+week than Leon Brocard; and damn fine company when sat in a Parisian
+caf&eacute;. He does, however, have a Dark Side and he showed it
+this week when he came up with the acronym TWEAKS (Takers Wanted --
+Effort And Knowledge Sought).</p>
+<p>TWEAKS is Leo's list of things that need doing for which he's
+soliciting volunteers. If you want to help with the Parrot effort
+without necessarily having to dive into some of the deeper, scary
+areas, you could do lots worse than take on one or another of the
+requirements on this list. If nothing else you'd earn the gratitude
+of our friendly neighbourhood patchmonster.</p>
+<p><a href='http://groups.google.com/groups?threadm=3F322129.7010503@nextra.at' target='_blank'>groups.google.com</a></p>
+<a name='Parrot gets a vital op'></a><h2>Parrot gets a vital op</h2>
+<p>Jos Visser sent in a vitally important patch to Parrot which added a
+new <code>fortytwo</code> op to Parrot. Nicholas Clark asked if it shouldn't
+really be the <code>what_do_you_get_if_you_multiply_six_by_nine</code> op. The
+thread went downhill from there.</p>
+<p>Parrot hackers are definitely worrying.</p>
+<p><a href='http://groups.google.com/groups?threadm=20030807152111.GB662@jadzia.josvisser.nl' target='_blank'>groups.google.com</a></p>
+<a name='QUERIES'></a><h2>QUERIES</h2>
+<p>Leo's Dark Side was on display again as he expanded QUERIES to
+&quot;Questions about Unanswered Elderly/Recent Issues Eventually Solvable&quot;
+and popped up a list of more or less Warnocked design issues. Dan came
+through with answers.</p>
+<p><a href='http://groups.google.com/groups?threadm=3F33681C.5030509@nextra.at' target='_blank'>groups.google.com</a></p>
+<a name='Resumable ops and exceptions'></a><h2>Resumable ops and exceptions</h2>
+<p>Jos Visser asked if it would be possible to control what happened when
+certain operators failed; whether they threw exceptions or just
+returned undef for instance. Leo thought this could be done by
+installing suitable exception handlers. Leo noted that internal
+exceptions should only really be thrown from within opcode
+implementations rather than from the functions they call.</p>
+<p><a href='http://groups.google.com/groups?threadm=20030808093217.GB21495@jadzia.josvisser.nl' target='_blank'>groups.google.com</a></p>
+<a name='assign opcodes'></a><h2><code>assign</code> opcodes</h2>
+<p>Following the earlier discussion of <code>set</code> and <code>assign</code> Leo has been
+working on making the <code>assign</code> op do the right thing. This sparked a
+little more discussion along the lines of 'what do <code>set</code> and <code>assign</code>
+imply in English anyway?'</p>
+<p><a href='http://groups.google.com/groups?threadm=3F33B0AD.6000909@nextra.at' target='_blank'>groups.google.com</a></p>
+<a name='Exec'></a><h2>Exec</h2>
+<p>Daniel Grunblatt checked in the latest version of Exec, his tool for
+using the JIT at compile time to generate native executables, which
+now passes all the tests. As Nicholas Clark said, &quot;Woohoo!&quot;. This
+means that Daniel has delivered all the deliverables for his Perl
+Foundation grant.</p>
+<p><a href='http://groups.google.com/groups?threadm=200308081348.17227.daniel@grunblatt.com.ar' target='_blank'>groups.google.com</a></p>
+<a name='Calling conventions for variable-length parameter lists'></a><h2>Calling conventions for variable-length parameter lists</h2>
+<p>TOGoS asked for some clarification on dealing with variable length
+parameter lists, especially when calling functions in an unprototyped
+fashion. Frankly, I'm not quite sure what the issue is, but Leo and
+Luke Palmer seemed to get it.</p>
+<p>It's my gut feeling that Perl 6 function implementations are going to
+end up with two different entry points, one for prototyped invocation
+and one for an unprototyped invocation which will take a single array
+argument, extract parameters from it as appropriate to the function's
+prototype, do any runtime argument checking and then make a tail call
+to the prototyped entry point.</p>
+<p><a href='http://groups.google.com/groups?threadm=20030808182947.8624.qmail@web41410.mail.yahoo.com' target='_blank'>groups.google.com</a></p>
+<a name='Why new_pad *INT*?'></a><h2>Why <code>new_pad *INT*</code>?</h2>
+<p>Michal Wallace asked for some clarification about <code>new_pad</code>, the
+opcode that creates a new lexical scratchpad. He thought that, 9
+times out of 10 you would want to create a new pad at the next lower
+depth from the current pad, but there's no way to automagically do
+that. Sean O'Rourke explained that, generally the compiler should
+keep track of the lexical depth of the current thing being compiled,
+so it shouldn't be a problem to use the right depth anyway.</p>
+<p>Those of us writing pure interpreters would still like to be able to
+do <code>new_pad -1</code>, but I think we'll have to implement it ourselves.</p>
+<p><a href='http://groups.google.com/groups?threadm=Pine.LNX.4.44.0308090437140.26046-100000@hydrogen.sabren.com' target='_blank'>groups.google.com</a></p>
+<a name='struct Parrot_Lexicals; ArrayHash'></a><h2>struct Parrot_Lexicals; ArrayHash</h2>
+<p>Leo commented that the current implementation of <b><i>find_lex(by_name)</i></b>
+does a linear scan over the list of lexical names. He thought that a
+better way would be to provide a list of lexicals plus a name hash
+where the hash values are indices into the list. He thought that such
+functionality might be handy as a general PMC, and proposed
+implementing a new PMC called ArrayHash, or SortedHash. Matt Fowles
+wondered what was wrong with simply using a hash, and Leo pointed out
+that some HLL compilers might well keep their own map of
+names-&gt;indices where known at compile time and use the numeric index
+directly.</p>
+<p><a href='http://groups.google.com/groups?threadm=3F34B374.9060309@nextra.at' target='_blank'>groups.google.com</a></p>
+<a name='Meanwhile in perl6-language'></a><h1>Meanwhile in perl6-language</h1>
+<p>Things were surprisingly quiet. Maybe everyone's taking time to
+digest the Exegesis. Or maybe the Exegesis was such a model of
+clarity that everyone understood it perfectly.</p>
+<a name='Macros and is parsed'></a><h2>Macros and is parsed</h2>
+<p>Brent Dax showed off an implementation of the <code>??::</code> operator (which
+actually turns out to be the <code>macro infix:?? (...) is parsed(...)</code>
+operator). Larry pointed out that it wasn't <i>quite</i> as simple as
+Brent had thought because of issues of precedence and making sure
+that any lexicals got declared in the appropriate scope.</p>
+<p><a href='http://groups.google.com/groups?threadm=000001c35a10$8d66b180$ac010a0a@laptop' target='_blank'>groups.google.com</a></p>
+<a name='Implicit parameter aliases'></a><h2>Implicit parameter aliases</h2>
+<p>Dave Whipp asked whether parameter names were taken into account
+during multiple dispatch, and whether the parameter names in a
+forward declaration had to agree with the names used when the sub was
+fully declared. Dan answered that parameter names aren't looked at
+during multidispatch, but there's been no answer on whether names
+have to agree between forward declarations and the implementation
+(but I'm guessing that they do).</p>
+<p><a href='http://groups.google.com/groups?threadm=20030805200222.21484.qmail@onion.perl.org' target='_blank'>groups.google.com</a></p>
+<a name='printf-like formatting in interpolated strings'></a><h2><code>printf</code>-like formatting in interpolated strings</h2>
+<p>Larry resurrected this old thread (from mid-June when he was
+indisposed) and then laid it to rest again with his usual style and
+grace. It's worth reading the whole thing I think, because it's a
+very succinct description of the kind of expressiveness and power
+that's inherent in what we already know about Perl 6.</p>
+<p><a href='http://groups.google.com/groups?threadm=20030809183029.GA24796@wall.org' target='_blank'>groups.google.com</a></p>
+<a name='I want a Ponie!'></a><h1>I want a Ponie!</h1>
+<p>I promise that, as development of Ponie (the port of Perl 5 to Parrot)
+accelerates you'll see a summary of Ponie activity in this summary as
+well. However, almost all the traffic on the <i><a href='http://search.cpan.org/perldoc?<a href='mailto:ponie-dev@perl.org'>ponie-dev@perl.org</a>'>p<a href='mailto:onie-dev@perl.org'>onie-dev@perl.org</a></a></i>
+mailing list has been about fighting Subversion. However, Arthur did
+post a mini status update at the end of July</p>
+<p><a href='http://groups.google.com/groups?threadm=3B4329F1-BDF1-11D7-8E43-000A95A2734C@fotango.com' target='_blank'>groups.google.com</a> -- Status report</p>
+<a name='Acknowledgements, Announcements and Apologies'></a><h1>Acknowledgements, Announcements and Apologies</h1>
+<p>So, the countdown to moving to the North East is under way. We've just
+had an offer accepted in principle on a house in Gateshead so we have
+got to get this one on the market (and sold) sharpish. What giddy fun!</p>
+<p>Meanwhile, is it just me, or do we know enough about Perl 6 now that
+we could actually start implementing stuff? Admittedly, it'll be lots
+easier when Damian finishes Perl6::Rules, but Parrot's looking mature
+enough to host most of the behaviour we've seen described. I'd start
+hacking myself but... well, see above.</p>
+<p>Check out <a href='http://www.bofh.org.uk/' target='_blank'>www.bofh.org.uk</a> for more of my
+writing.</p>
+<p>As ever, if you've appreciated this summary, please consider one or
+more of the following options:</p>
+<ul>
+<li><a name='Send money to the Perl Foundation at donate.perl-foundation.org/ and help support the ongoing development of Perl.'></a>Send money to the Perl Foundation at
+<a href='http://donate.perl-foundation.org/' target='_blank'>donate.perl-foundation.org</a> and help support the ongoing
+development of Perl.</li>
+<li><a name='Get involved in the Perl 6 process. The mailing lists are open to all. dev.perl.org/perl6/ and www.parrotcode.org/ are good starting points with links to the appropriate mailing lists.'></a>Get involved in the Perl 6 process. The mailing lists are open  to
+all. <a href='http://dev.perl.org/perl6/' target='_blank'>dev.perl.org</a> and <a href='http://www.parrotcode.org/' target='_blank'>www.parrotcode.org</a>
+are good starting points with links to the appropriate mailing lists.</li>
+<li><a name='Send feedback, flames, money, requests for consultancy, photographic and writing commissions, or offers on a four bedroomed, 400 year old house in Newark on Trent to p<a href='mailto:6summarizer@bofh.org.uk'>6summarizer@bofh.org.uk</a>'></a>Send feedback, flames, money, requests for consultancy, photographic
+and writing commissions, or offers on a four bedroomed, 400 year old
+house in Newark on Trent to <i><a href='http://search.cpan.org/perldoc?<a href='mailto:p6summarizer@bofh.org.uk'>p6summarizer@bofh.org.uk</a>'>p<a href='mailto:6summarizer@bofh.org.uk'>6summarizer@bofh.org.uk</a></a></i></li>
+</ul>
+</div>

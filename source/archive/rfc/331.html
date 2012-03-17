@@ -1,0 +1,157 @@
+[% setvar title Consolidate the $1 and C<\1> notations %]
+<h3>This file is part of the Perl 6 Archive</h3>
+    <p>To see what is currently happening visit <a href="http://www.perl6.org/">http://www.perl6.org/</a></p>
+<div class='pod'>
+<a name='TITLE'></a><h1>TITLE</h1>
+<p>Consolidate the $1 and <code>\1</code> notations</p>
+<a name='VERSION'></a><h1>VERSION</h1>
+<pre>  Maintainer: David Storrs &lt;<a href='mailto:dstorrs@dstorrs.com'>dstorrs@dstorrs.com</a>&gt;
+  Date: 28 Sep 2000
+  Last Modified: 30 Sep 2000
+  Mailing List: <a href='mailto:perl6-language-regex@perl.org'>perl6-language-regex@perl.org</a>
+  Number: 331
+  Version: 2
+  Status: Frozen</pre>
+<a name='ABSTRACT'></a><h1>ABSTRACT</h1>
+<p>Currently, <code>\1</code> and $1 have only slightly different meanings within a
+regex.  It is possible to consolidate them without losing any
+functionality and, in the process, we gain intuitiveness.</p>
+<a name='CHANGES'></a><h1>CHANGES</h1>
+<p>v1-&gt;v2:
+A major rewrite:</p>
+<ul>
+<li><a name='Reformatted the argument into &quot;The Problem&quot; and &quot;The Solution&quot; sections'></a>Reformatted the argument into &quot;The Problem&quot; and &quot;The Solution&quot; sections</li>
+<li><a name='Added &quot;Some Examples&quot; section'></a>Added &quot;Some Examples&quot; section</li>
+<li><a name='Added &quot;Why do this?&quot; section'></a>Added &quot;Why do this?&quot; section</li>
+<li><a name='Added &quot;P526 migration&quot; section'></a>Added &quot;P526 migration&quot; section</li>
+<li><a name='Proposed the @/ variable'></a>Proposed the @/ variable</li>
+<li><a name='Various trivial edits and typo-fixs'></a>Various trivial edits and typo-fixs</li>
+</ul>
+<a name='DESCRIPTION'></a><h1>DESCRIPTION</h1>
+<p>Note:  For convenience, I am going to talk about <code>\1</code> and $1 in this RFC.
+In actuality, these notations extend indefinitely:  <code>\1..\n</code> and
+<code>$1..$n</code>.  Take it as read that anything which applies to $1 also applies
+to <code>$2, $3</code>, etc.</p>
+<a name='The Problem'></a><h2>The Problem</h2>
+<p>In current versions of Perl, <code>\1</code> and <code>$1</code> mean different things.
+Specifically, <code>\1</code> means &quot;whatever was matched by the first set of
+grouping parens <i>in this regex match</i>.&quot;  $1 means &quot;whatever was matched
+by the first set of grouping parens <i>in the previously-run regex match</i>.&quot;
+For example:</p>
+<ul>
+<li><a name='/(foo)_$1_bar/'></a><code>/(foo)_$1_bar/</code></li>
+<li><a name='/(foo)_\1_bar/'></a><code>/(foo)_\1_bar/</code></li>
+</ul>
+<p>the second will match 'foo_foo_bar', while the first will match
+'foo_[SOMETHING]_bar' where [SOMETHING] is whatever was captured in the
+<b>previous</b> match...which could be a long, long way away, possibly even in
+some module that you didn't even realize you were including (because it
+was included by a module that was included by a module that was included
+by a...).</p>
+<p>The primary reason for this distinction is s///, in which the left hand
+side is a pattern while the right hand side is a string (assuming no 'e'
+modifier).  Therefore:</p>
+<ul>
+<li><a name='s/(foo)$1/$1bar/ # changes &quot;foo???&quot; to &quot;foobar&quot; where ??? is from the last match'></a><code>s/(foo)$1/$1bar/ # changes &quot;foo???&quot; to &quot;foobar&quot; where ??? is from the
+last match</code></li>
+<li><a name='s/(foo)\1/$1bar/ # changes &quot;foofoo&quot; to &quot;foobar&quot;'></a><code>s/(foo)\1/$1bar/ # changes &quot;foofoo&quot; to &quot;foobar&quot;</code></li>
+</ul>
+<p>Note that, in the first example, the two $1s refer to different things,
+whereas in the second example, $1 and <code>\1</code> refer to the same thing.  This
+is counterintuitive and non-Perlish; Perl should be intuitive and DWIMish.</p>
+<p>A separate, though less important, problem with the way backreferences are
+currently implemented is that it is difficult for a human to tell at a
+glance whether \10 means &quot;escape character 10&quot; or &quot;backreference 10&quot;...the
+only way to tell is to count the number of captured elements and see if
+there actually are ten of them, in which case \10 is a backreference and
+otherwise it is an escape character.  In general, this isn't a problem
+because most patterns don't have ten sets of capturing parens.</p>
+<a name='The Solution'></a><h2>The Solution</h2>
+<p>Ok, so the problem is that $1 and <code>\1</code> are counterintuitive.  How do we
+make them intuitive without losing any functionality?</p>
+<p>First, let's get rid of the <code>\1</code> form for backreferences.</p>
+<p>Second, let's say that $n refers to the nth captured subelement of the
+pattern match which occured in this <b>statement</b>--note that this is
+distinct from &quot;in this pattern match.&quot;  That means that, in
+<code>s/(foo)$1/$1bar/</code>, both $1s refer to the same thing (the string 'foo'),
+even though one of them occured inside a pattern and one occured inside a
+string.  (See note [1] in the IMPLEMENTATION section.)</p>
+<p>Third, let's create a new special variable, @/ (mnemonic: the / is the
+default delimiter for a pattern match; if the English module remains
+extant, then @/ could have the long name of @LAST_MATCH, but there are
+currently several threads concerning removal of the English module). Much
+like the current <code>$1, $2...</code> variables, this array will only be created
+(and hence, the speed price will only be paid), if you access its members.
+The 0th element of @/ will contain the qr()d form of the last pattern
+match, while successive elements refer to the captured subelements.</p>
+<p>Fourth, let's change when we update the variables which store the captures
+(the current <code>$1, $2</code>, etc).  @/ will only be updated when the entire
+statement which contains a pattern match has finished running (e.g., when
+the entire s/// is completed), rather than as soon as the pattern match is
+done (and therefore before the substitution happens).</p>
+<a name='Some Examples'></a><h2>Some Examples</h2>
+<ul>
+<li><a name='1 If you did the following:'></a>1
+If you did the following:</li>
+<p><code>&quot;Bilbo Baggins&quot; =~ /((\w+)\s+(\w+))/</code></p>
+<p>Then @/ would contain the following:</p>
+<p><code>$/[0]</code> the compiled equivalent of <code>/((\w+)\s+(\w+))/</code>,</p>
+<p><code>$/[1]</code> the string &quot;Bilbo Baggins&quot;</p>
+<p><code>$/[2]</code> the string &quot;Bilbo&quot;</p>
+<p><code>$/[3]</code> the string &quot;Baggins&quot;</p>
+<p>Note that after the match, <code>$/[1]</code>, <code>$/[2]</code>, and <code>$/[3]</code> contain
+exactly what <code>$1, $2</code>, and <code>$3</code> would contain with present-day syntax.
+Furthermore, the compiled form of the match is available so if you want to
+repeat the match later (or insert it into a larger regex), you can simply
+refer to it as $/[0].</p>
+<li><a name='2 With references to the previous regex being handled by the @/ variable, we are free to use $1 for the current statement only. Therefore:'></a>2
+With references to the previous regex being handled by the @/ variable, we
+are free to use $1 for the current statement only.  Therefore:</li>
+<p><code>s/(\w+)\s+$1/$1/ # eliminate doubled words</code>
+<code>print &quot;Found doubled word: $/[1]\n&quot;;</code></p>
+<p>Note that in the substitution, both of the $1's refer to the same thing,
+eliminating confusion.</p>
+<li><a name='3'></a>3</li>
+<p><code>$pal = m/((\w+)(?{ reverse $2 }))/g # locate first palindrome</code></p>
+<p><code>[@/ is effectively updated here]</code></p>
+<p><code>print pos();</code></p>
+<li><a name='4'></a>4</li>
+<p><code>@pals = m/((\w+)(?{ reverse $2 }))/g # locate all palindromes</code></p>
+<p>In this case, @/ would ideally only be updated for the last-matched
+palindrome.  I am not familiar with how the internals of /g work
+however--if it is implemented effectively as a loop, we might have to
+update @/ every time a match was found, which would be a tremendous speed
+penalty.  In this case, there should be a way to turn off storage to @/
+within the local block...perhaps a special value that it can be set to
+which serves as a &quot;don't do this&quot; flag.</p>
+<a name='Why do this?'></a><h2>Why do this?</h2>
+<p>This prime intent of this RFC is not to add, subtract, or change
+functionality.  Instead, the primary intent is to change the names of
+things which already exist inside Perl regexs.  Surely renaming things
+just for the sake of renaming them is a Bad Thing?</p>
+<p>Except that that isn't what's happening.  This RFC does <b>not</b> propose
+renaming things for the sake of renaming them.  It proposes regularizing a
+confusing set of syntax, increasing the intuitiveness of how
+backreferences in general and s/// in particular work, and adding a
+convenient bit of functionality in the $/[0] element.  As things stand,
+both \1 and $1 in s/(foo)\1_bar/$1_bar/ refer to the same thing, but they
+look different.  Under this RFC, they would refer to the same thing, and
+they would look the same.</p>
+<a name='IMPLEMENTATION'></a><h1>IMPLEMENTATION</h1>
+<p>[1] At the moment, perl does two passes when building a pattern match; the
+first pass interpolates in any variables that occur in the pattern, while
+the second compiles the pattern.  If this RFC is adopted, then perl must
+be smart enough not to interpolate any scalar variables whose names
+consist purely of digits.  This should not be difficult, nor should it
+break much existing user code, since the digit-only scalars are used by
+perl to store the results of pattern captures.</p>
+<a name='P526 migration'></a><h2>P526 migration</h2>
+<p>In general, whereever the P526 translator saw a $1 in a pattern or string,
+it would substitute it with $/[1]. The only exception to this would be
+when $1 was encountered on the RHS of an s///, in which case it would be
+left unchanged.</p>
+<a name='REFERENCES'></a><h1>REFERENCES</h1>
+<p>RFC 112: &quot;Assignment within a regex&quot;</p>
+<p>RFC 276: &quot;Localizing paren counts in qr()s&quot;  (tangential interest only)</p>
+<p>perlre manpage</p>
+</div>

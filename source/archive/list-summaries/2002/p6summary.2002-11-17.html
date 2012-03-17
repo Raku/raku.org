@@ -1,0 +1,294 @@
+[% setvar title The Perl 6 Summary for the week ending 20021117 %]
+<h3>This file is part of the Perl 6 Archive</h3>
+    <p>To see what is currently happening visit <a href="http://www.perl6.org/">http://www.perl6.org/</a></p>
+<div class='pod'>
+<a name='The Perl 6 Summary for the week ending 20021117'></a><h1>The Perl 6 Summary for the week ending 20021117</h1>
+<p>&quot;Oh! my ears and whiskers, I'm late!&quot;</p>
+<p>It's 0650, it's 20021120 and I've only just started writing the
+summary. Call me lazy, call me a shirker, call me anything you damn
+well please, just don't interrupt me while I'm writing this.</p>
+<p>Yup, it's past time for another peek into the lives of those strange
+beings we call the Perl 6 development community, starting off, as
+usual, with the perl6-internals crew.</p>
+<a name='Quick Roadmap'></a><h2>Quick Roadmap</h2>
+<p>Dan returned unscathed from this year's Lightweight Languages workshop
+and presented a short roadmap for the next few miles. Dan reckons that
+if we hit all those milestones we'll have a complete imperative
+core. Which will be nice.</p>
+<p><a href='http://groups.google.com/groups?threadm=a05200f02b9f4e530802a@' target='_blank'>groups.google.com</a>[63.120.19.221]</p>
+<a name='Branch Dump'></a><h2>Branch Dump</h2>
+<p>Michael Collins stuck his head above the parapet to report that using
+<code>branch</code> provoked a core dump on his Linux setup. It turned out to be
+a problem with his code. Dan debugged his code and offered a
+reasonably full explanation of how parrot's <code>branch</code> actually works
+(and why you should really use labels in hand written assembler.)
+Gopal V worried that allowing branches to non-instructions was unsafe
+and wondered if, at least, a <code>parrot -fverify</code> switch might be in
+order. Dan agreed, but his reasoning was somewhat different.</p>
+<p>Elsewhere in the thread Dan tells us that he wants safe interpreters
+to be as safe as a locked down VMS system, but he's unsure as to
+whether we'll reach that gaol. (Mmm... nice typo there Piers, leave
+it)</p>
+<p><a href='http://groups.google.com/groups?threadm=3dcfc66e.132f.0@bestweb.net' target='_blank'>groups.google.com</a></p>
+<p><a href='http://groups.google.com/groups?threadm=a05200f06b9f57e64129f@' target='_blank'>groups.google.com</a>[63.120.19.221]</p>
+<a name='Parrot BASIC 2'></a><h2>Parrot BASIC 2</h2>
+<p>Clinton A. Pierce announced his complete re-write of BASIC for Parrot,
+this time modelling his implementation on QuickBASIC. Here's a list of
+the new features, lifted from Clint's announcement:</p>
+<ul>
+<li><a name='Compiled directly to Parrot Assembly'></a>Compiled directly to Parrot Assembly</li>
+<li><a name='Interpreted'></a>Interpreted</li>
+<li><a name='Richer syntax than Parrot BASIC 1.0, which was based on GW-BASIC'></a>Richer syntax than Parrot BASIC 1.0, which was based on GW-BASIC</li>
+<li><a name='Much, much faster than Parrot BASIC 1.0'></a>Much, much faster than Parrot BASIC 1.0</li>
+<li><a name='Support for user defined types'></a>Support for user defined types</li>
+<li><a name='Support for variable scopes (but apparently, QuickBASIC scoping is 'bizarre')'></a>Support for variable scopes (but apparently, QuickBASIC scoping is
+'bizarre')</li>
+</ul>
+<p>Nobody said anything -- I think they were rendered
+speechless. However, I'd like to take the opportunity to use this
+platform to say &quot;Yay Clint!&quot;. This is superb news. Okay, so supporting
+BASIC wasn't exactly Parrot's initial goal, but it's great to see that
+a single hacker can implement such a complete language using Parrot.</p>
+<p><a href='http://groups.google.com/groups?threadm=5.1.0.14.2.20021112001018.01c272c0@www.geeksalad.org' target='_blank'>groups.google.com</a></p>
+<a name='scope and functions in languages/scheme'></a><h2>scope and functions in languages/scheme</h2>
+<p>Not to be outdone by Clint's BASIC implementation, J&uuml;rgen
+B&ouml;mmels has taken advantage of Jon Sillito's lexical scopes
+patch to add functions to scheme (before it was just scheme syntax,
+now it has some claim to being really scheme like). Bravo
+J&uuml;rgen!</p>
+<p><a href='http://groups.google.com/groups?threadm=rt-18379-41631.7.61250908467403@bugs6.perl.org' target='_blank'>groups.google.com</a></p>
+<a name='Leo T&ouml;tsch is the Patch Monster'></a><h2>Leo T&ouml;tsch is the Patch Monster</h2>
+<p>This week, Leo has been mostly:</p>
+<ul>
+<li><a name='Fixing JIT to make it restartable'></a>Fixing JIT to make it restartable</li>
+<li><a name='Fixing JIT to make it play well with Perl 6'></a>Fixing JIT to make it play well with Perl 6</li>
+<li><a name='Fixing JIT so you can see what's going on when you use gdb.'></a>Fixing JIT so you can see what's going on when you use gdb.</li>
+</ul>
+<p>And generally seeming to pop up with useful contributions in almost
+every thread. Where does he find the time?</p>
+<a name='Bootstrapping Perl 6'></a><h2>Bootstrapping Perl 6</h2>
+<p>Marius Nita asked about the Perl 6 compiler, wondering what language
+it'd be written in, Perl or C? Markus Laire thought it'd eventually
+get written in Perl 6 or Parrot `or something else which runs on
+parrot'. Gopal V worried about the bootstrapping problem and asked
+that the Perl 6 compiler be written in something other than Perl 6 in
+an attempt to avoid a `dependency hellhole'. Brent Dax pointed out
+that we're pretty much obliged to write Perl 6 in Perl in order to get
+the self modifying parser behaviour and noted that we'd ship it
+as bytecode. Nicholas Clark pointed out that, strictly, you can't
+build perl5 from scratch without an installation of perl5, but the
+p5porters get 'round the problem by shipping the generated headers as
+part of the perl5 tarball.</p>
+<p>Dan points out that the goal is for Parrot to require a C compiler and
+a platform shell or Make tool (either should do). Nicholas Clark
+attempted to kick off a variant of Monty Python's `Yorkshiremen' skit
+(&quot;Make tool? Luxury! We 'ad to make do wi' a console and switches!&quot;
+&quot;You were lucky! We used to 'ave to mek waves in' t'mercury delay line
+wi' us tongues!&quot;), reckoning that it should be possible to get by with
+just a C compiler and asked that we `archive this message and hold it
+against me when the time comes, and you're looking for someone to
+prove it by making it work'.</p>
+<p><a href='http://groups.google.com/groups?threadm=20021113004028.GA1013@cs.pdx.edu' target='_blank'>groups.google.com</a></p>
+<p><a href='http://groups.google.com/groups?threadm=20021113204703.GD287@Bagpuss.unfortu.net' target='_blank'>groups.google.com</a> -- Archive this message</p>
+<a name='Quick note on JIT bits'></a><h2>Quick note on JIT bits</h2>
+<p>Dan announced that he was about to `do exceptions' and wanted to give
+a heads up to everyone who does Odd Things (principally the
+JITterbugs). The rule appears to be `Don't monkey with the system
+stack'. Leopold T&ouml;tsch wondered if that was actually the issue
+Dan thought it was, but came up with a bunch of other issues to do
+with register allocation, both at the parrot level and the processor
+level. And then it all got too much for my brain to cope with.</p>
+<p><a href='http://groups.google.com/groups?threadm=a05200f05b9f86159d071@' target='_blank'>groups.google.com</a>[63.120.19.221]</p>
+<a name='Perl 6 test organization'></a><h2>Perl 6 test organization</h2>
+<p>Over in perl6-documentation, they're about to start producing Perl 6
+language tests, so chromatic posted Brent Dax's suggestion about how
+tests should be organized into sub directories. General response was
+favourable (the current <b><i>languages/perl6</i></b> tests are somewhat
+disorganized.)</p>
+<p><a href='http://groups.google.com/groups?threadm=20021115045916.80260.qmail@onion.perl.org' target='_blank'>groups.google.com</a></p>
+<a name='Meanwhile, in perl6-language'></a><h1>Meanwhile, in perl6-language</h1>
+<p>The language list was relatively quiet this week. The Operator thread
+seems to have reached a c&aelig;sura, but most of the current threads
+seem to have spun off from issues raised in that monster.</p>
+<a name='Unifying invocant and topic naming syntax'></a><h2>Unifying invocant and topic naming syntax</h2>
+<p>Discussion of ralph's proposals for changing the function declaration
+syntax continued. Damian doesn't like the proposed changes, and has
+been explaining to ralph why not. Nicholas Clark worries that a
+function being able to access its caller's topic is `an unrestricted
+licence to commit action at a distance' (he says that like it's a bad
+thing). Andrew Wilson pointed out that, unless you could access the
+caller's topic you wouldn't be able to prototype things like <code>print</code>
+(and if you can't get a prototype for something then you can't fully
+override it). Damian added that it's also what Perl 5 does (except
+Perl 5 does it without having the decency to declare anything)</p>
+<p><a href='http://groups.google.com/groups?threadm=3DCF7C60.50206@conway.org' target='_blank'>groups.google.com</a></p>
+<a name='Superpositions and Laziness'></a><h2>Superpositions and Laziness</h2>
+<p>I'm not entirely sure why a thread titled `Superpositions and
+Laziness' should contain discussion of whether one should have a
+`pure' property or a `cached' one. Or both.</p>
+<p>Meanwhile, in the `laziness' side of the thread, Piers Cawley saw fit
+to post a huge chunk of uncommented code which was described by Larry
+as `opaque, and not in a good way'. On rereading, I didn't think it
+was <i>that</i> bad.</p>
+<p>Larry also introduced the possibility of breaking the <code>operator:</code>
+method of declaring operators up into <code>prefix:</code>, <code>infix:</code>,
+<code>postfix:</code> and <code>circumfix:</code>.</p>
+<p><a href='http://groups.google.com/groups?threadm=84lm3y5wmd.fsf@despairon.bofh.org.uk' target='_blank'>groups.google.com</a></p>
+<p><a href='http://groups.google.com/groups?threadm=3DCB8249.9000904@conway.org' target='_blank'>groups.google.com</a></p>
+<p><a href='http://groups.google.com/groups?threadm=20021113192627.GD14308@wall.org' target='_blank'>groups.google.com</a></p>
+<a name='FMTWYENTK about :='></a><h2>FMTWYENTK about :=</h2>
+<p>Last week arcadi declined to expand `FMTWYENTK about :='. This week we
+discovered that it stands for `Far More Than What You Ever Needed To
+Know' (It was the `what' that foxed me).</p>
+<p>This week Damian supplied answers/clarifications. Next week, I'm
+hoping for a lovely, consolidated document.</p>
+<p><a href='http://groups.google.com/groups?threadm=3DCF951B.4090501@conway.org' target='_blank'>groups.google.com</a></p>
+<p><a href='http://homepages.tcp.co.uk/~nicholson/alice.html' target='_blank'>homepages.tcp.co.uk</a> -- Always worth a
+read</p>
+<a name='Continuations'></a><h2>Continuations</h2>
+<p>Given the subject of the last link, I find it entirely appropriate
+that the thread about coroutines and yield should be <i>called</i>
+`Continuations', but I freely admit to an odd sense of humour.</p>
+<p>It turns out that there are several different views as to what
+coroutines should do, a few of the alternatives were discussed. Damian
+thinks that the actual semantics chosen will probably have a good deal
+to do with how Perl 6 iterators work. Luke Palmer, whose name should
+live in infamy for this, declared that he was starting to like
+coroutines because `the elegantify stuff.'</p>
+<p><a href='http://groups.google.com/groups?threadm=PGM.20021112143024.21223.2680@edison.ioppublishing.com' target='_blank'>groups.google.com</a></p>
+<p><a href='http://groups.google.com/groups?threadm=a05200f00b9fc8c449310@' target='_blank'>groups.google.com</a>[63.120.19.221] -- Dan's expectations</p>
+<p><a href='http://groups.google.com/groups?threadm=3DD6FF0B.7010901@conway.org' target='_blank'>groups.google.com</a> -- Damian's initially preferred coroutines</p>
+<p><a href='http://groups.google.com/groups?threadm=003f01c28e30$e903a5e0$02001aac@t' target='_blank'>groups.google.com</a> -- `Pythonic' coroutines</p>
+<a name='More junctions (or, When junctions collapse)'></a><h2>More junctions (or, When junctions collapse)</h2>
+<p>Luke Palmer wondered about collapsing junctions. When a function
+collapses a junction, does the junction collapse everywhere, or would
+one have to make an explicit 'observation' to precipitate collapse?
+Damian offered a reasonably complete discussion of the various
+possibilities.</p>
+<p>I offer the following without comment:</p>
+<pre> When a junction hits a function and collapses down to one
+ will it propagate the changes through the runtime? Oh, what fun!</pre>
+<p><a href='http://groups.google.com/groups?threadm=20021113195049.88ECC2FD@babylonia.flatirons.org' target='_blank'>groups.google.com</a></p>
+<p><a href='http://groups.google.com/groups?threadm=3DD6DFBB.2000701@conway.org' target='_blank'>groups.google.com</a></p>
+<a name='Control Structures I, II and III'></a><h2>Control Structures I, II and III</h2>
+<p>Timothy S. Nelson's suggested new control structures got discussed
+this week. The general feeling seemed to be that what was proposed
+didn't really offer much that was desperately useful over and above
+the current control structures.</p>
+<p><a href='http://groups.google.com/groups?threadm=Pine.LNX.4.44.0211150640020.2626-100000@elphin.nelson.org.au' target='_blank'>groups.google.com</a></p>
+<p><a href='http://groups.google.com/groups?threadm=Pine.LNX.4.44.0211150705590.2626-100000@elphin.nelson.org.au' target='_blank'>groups.google.com</a></p>
+<p><a href='http://groups.google.com/groups?threadm=Pine.LNX.4.44.0211150738130.2626-100000@elphin.nelson.org.au' target='_blank'>groups.google.com</a></p>
+<a name='String concatenation operator'></a><h2>String concatenation operator</h2>
+<p>Andy Wardley wondered if we couldn't overload <code>+</code> to work as both
+numeric addition and string concatenation. Answer: No.</p>
+<p>Richard Proctor wondered if we couldn't get away with doing string
+concatenation by juxtaposition ( <code>&quot;string &quot; &quot;foo&quot;</code> evaluates to
+<code>&quot;string foo&quot;</code>.) Answer: No.</p>
+<p>Larry had wise words the on subject of juxtapositional operators.</p>
+<p><a href='http://groups.google.com/groups?threadm=20021114121947.GD90541@cat.ourshack.com' target='_blank'>groups.google.com</a></p>
+<p><a href='http://groups.google.com/groups?threadm=20021116054859.GA19489@wall.org' target='_blank'>groups.google.com</a></p>
+<a name='Meanwhile, over in perl6-documentation'></a><h1>Meanwhile, over in perl6-documentation</h1>
+<p>I'm still at something of a loss as to how to summarize this group
+effectively. Essentially the goal of the perl6-documentation list is
+to thrash out, in detail, the complete behaviour of Perl 6 and to
+produce tests and documentation which amount to a detailed spec. Their
+current project is `literal values', and the work is ongoing.</p>
+<p>There's been some debate as to documentation format of choice (current
+thinking is `POD with knobs'). Michael Lazzaro who, if he hasn't
+officially been named documentation pumpking is doing a damn good job
+as de facto `Bey of the docs' has posted a working outline for Section
+1 of the docs. Garrett Goebel appealed for some docs on writing good
+tests for languages, which kicked off some debate about how tests
+should communicate with the test harness. Angel Faus put up a first
+cut at the `literal values' subsection, and got a good amount of
+feedback. Dave Storrs took on the `glossary chap' role, and posted a
+taster.</p>
+<p>Dave is also the coordinator for `Contributor License Forms', which
+are rather important. Before you donate any docs to the Perl 6
+Documentation project you must fill in the form assigning the license
+to the Perl 6 project. Dave's post has the details.</p>
+<p>Can you tell it was getting late when I wrote this section?</p>
+<p><a href='http://groups.google.com/groups?threadm=68CCE3C1-F5A8-11D6-8B2E-00050245244A@cognitivity.com' target='_blank'>groups.google.com</a> -- Section 1
+outline</p>
+<p><a href='http://groups.google.com/groups?threadm=71BEC0D4E1DED3118F7A009027B12028010BE60C@EXCH_MISSION' target='_blank'>groups.google.com</a></p>
+<p><a href='http://groups.google.com/groups?threadm=200211122103.30313.afaus@corp.vlex.com' target='_blank'>groups.google.com</a> -- Literals, take 1</p>
+<p><a href='http://groups.google.com/groups?threadm=200211131926.06428.afaus@corp.vlex.com' target='_blank'>groups.google.com</a> -- Literals, take 2</p>
+<p><a href='http://groups.google.com/groups?threadm=200211141958.55257.afaus@corp.vlex.com' target='_blank'>groups.google.com</a> -- Numeric literals, take 1</p>
+<p><a href='http://groups.google.com/groups?threadm=20021116221125.B31709@megazone.bigpanda.com' target='_blank'>groups.google.com</a> -- Glossary</p>
+<p><a href='http://groups.google.com/groups?threadm=20021117013117.D33607@megazone.bigpanda.com' target='_blank'>groups.google.com</a> -- Contributor license forms</p>
+<a name='In Brief'></a><h1>In Brief</h1>
+<p>Clinton A Pierce had problems building under Win32 -- I'm not entirely
+sure the issue was resolved.</p>
+<p>Jerome Quelin, backed up by Leon Brocard (Yay! I was wondering how I
+was going to mention him this week) used his Befunge interpreter to
+find bugs in PerlArray and string_append.</p>
+<p>Daniel Grunblatt (or a better than reasonable facsimile) is back. This
+made Leopold T&ouml;tsch and Steve Fink happy. And we like it when
+they're happy. Welcome back Daniel.</p>
+<p>The 'very complete lexical scopes' patch finally got applied this
+week.</p>
+<p>Tim Bunce pointed us at CCured, which looks interesting:
+<a href='http://manju.cs.berkeley.edu/ccured/index.html' target='_blank'>manju.cs.berkeley.edu</a></p>
+<p>Jonathan Sillito offered a patch to turn parrot subs into closures.</p>
+<p>Arcadi wondered if sigils were user extensible. Answer: Yes, but not
+necessarily easily.</p>
+<a name='Who's who in Perl 6?'></a><h1>Who's who in Perl 6?</h1>
+<ul>
+<li><a name='Who are you?'></a>Who are you?</li>
+<p>Leopold T&ouml;tsch.  I'm an independent software developer, living in
+Austria (this is the country near Liechtenstein w/o kangaroos).</p>
+<li><a name='What do you do for/with Perl 6?'></a>What do you do for/with Perl 6?</li>
+<p>I'm digging around in Parrot's core, closing holes and pushing new
+ideas (or old ideas, which were already discussed before my time ;-).</p>
+<li><a name='Where are you coming from?'></a>Where are you coming from?</li>
+<p>I started working with computers in the late seventies (e.g. a hard
+disc driver for a 10 Meg disc under CP/M 3). Via 8080/Z80 assembler,
+Pascal, C, Perl 5 I finally arrived at Perl 6 development, where I
+made this run under 5.005.03. While submitting patches towards Perl 6,
+I realized that IMCC caused a lot of test failures, so I rewrote
+IMCC substantially and added the parrot engine. Running PBC inside
+IMCC demanded a bunch of patches to the Parrot core, so here I am.</p>
+<li><a name='When do you think Perl 6 will be released?'></a>When do you think Perl 6 will be released?</li>
+<p>Sept 16th, 2004</p>
+<li><a name='Why are you doing this?'></a>Why are you doing this?</li>
+<p>For fun, really a lot of.</p>
+<li><a name='You have 5 words. Describe yourself.'></a>You have 5 words. Describe yourself.</li>
+<p>Parrot for a faster live.</p>
+<li><a name='Do you have anything to declare?'></a>Do you have anything to declare?</li>
+<p>No customs here.</p>
+</ul>
+<a name='Acknowledgements, requests and the usual muttering'></a><h1>Acknowledgements, requests and the usual muttering</h1>
+<p>This summary was brought to you, late from the comforts of GNER's
+First Class carriages, and from Mary Branscombe and Simon Bisson's
+most excellent (if somewhat hard to stand up from) sofa. Distractions
+were provided by the Kiseido Go Server, XMAME, Mary &amp; Simon's DVD
+collection and a visit from Black Dog. Normal service will hopefully
+be resumed next week.</p>
+<p>Proofreading was once again down to Aspell and myself. We make a much
+better team than we did.</p>
+<p>A couple of months ago I said of Leo T&ouml;tsch that `he turned 44
+on the 16th of September 2002, so not only does he contribute really
+useful code, he makes Dan and I feel younger. Can this man do no
+wrong?' I seems he can't, he's even found time to contribute his
+answers for the summary questionnaire. Thanks Leo. Once more, if you
+participate in the lists and you've not sent me a set of answers I'd
+be really grateful if you'd send your answers to
+mailto:<a href='mailto:5Ws@bofh.org.uk'>5Ws@bofh.org.uk</a>, current names I'm targeting include Larry,
+chromatic, Steve Fink, Clint Pierce, Daves Whipp &amp; Storrs (Hmm... Now
+there's a name for a legal practice, 'Pierce, Whipp &amp; Fink') and
+anyone else named in a summary who hasn't sent me answers. As I used
+to say in my USENET days aTdHvAaNnKcSe.</p>
+<p>Now, I hope you're in good voice as we all join in the chorus:</p>
+<p>If you didn't like this summary, what are you doing still reading it?
+If you did like it, please consider one or both of the following
+options:</p>
+<ul>
+<li><a name='Send money to the Perl Foundation at donate.perl-foundation.org/ and help support the ongoing development of Perl 6.'></a>Send money to the Perl Foundation at
+<a href='http://donate.perl-foundation.org/' target='_blank'>donate.perl-foundation.org</a> and help support the ongoing
+development of Perl 6.</li>
+<li><a name='Send feedback, flames, money and/or a 1920s Vauxhall 30/98 to mailto:<a href='mailto:pdcawley@bofh.org.uk'>pdcawley@bofh.org.uk</a>'></a>Send feedback, flames, money and/or a 1920s Vauxhall 30/98 to
+mailto:<a href='mailto:pdcawley@bofh.org.uk'>pdcawley@bofh.org.uk</a></li>
+</ul>
+<p>The fee paid for publication of these summaries on perl.com is paid
+directly to the Perl Foundation.</p>
+</div>

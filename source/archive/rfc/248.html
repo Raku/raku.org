@@ -1,0 +1,79 @@
+[% setvar title enhanced groups in pack/unpack %]
+<h3>This file is part of the Perl 6 Archive</h3>
+    <p>To see what is currently happening visit <a href="http://www.perl6.org/">http://www.perl6.org/</a></p>
+<div class='pod'>
+<a name='TITLE'></a><h1>TITLE</h1>
+<p>enhanced groups in pack/unpack</p>
+<a name='VERSION'></a><h1>VERSION</h1>
+<pre>  Maintainer: Ilya Zakharevich &lt;<a href='mailto:ilya@math.ohio-state.edu'>ilya@math.ohio-state.edu</a>&gt;
+  Date: 16 September 2000
+  Mailing List: <a href='mailto:perl6-language-data@perl.org'>perl6-language-data@perl.org</a>
+  Number: 248
+  Version: 1
+  Status: Developing</pre>
+<a name='ABSTRACT'></a><h1>ABSTRACT</h1>
+<p>This RFC makes pack/unpack builtins able to handle non-flat lists.  Four
+additional action-types in TEMPLATES cover most paradigms in binary storage
+of data: data groups, required group headers, position-specific &quot;named&quot;
+data, arbitrary-order fields.</p>
+<a name='DESCRIPTION'></a><h1>DESCRIPTION</h1>
+<p>Currently pack() encodes data supplied in a flat list, and unpack() extracts
+data into a flat list.  This proposal introduces <i>marked groups</i> in TEMPLATES
+which allow to handle more complicated structured data.</p>
+<p>A <i>group</i> is introduced by a type <code>'g'</code> followed by matched parentheses.</p>
+<ul>
+<li><a name='g(TEMPLATE)'></a><code>g(TEMPLATE)</code></li>
+<p>behaves the same as the <code>(TEMPLATE)</code>-group.  (Syntactic sugar, optional);</p>
+<li><a name='g.(TEMPLATE) REST'></a><code>g.(TEMPLATE) REST</code></li>
+<p>&quot;lookahead&quot;.  On unpack(): stores a position in the string, extracts some
+substring using <code>TEMPLATE</code>, then restores the position and extract using
+REST.  On pack(): the inverse operation.</p>
+<p>For example, in <code>struct { short count, flags; char data[1];}</code> the <code>count</code>
+is not immediately preceeding <code>data</code>, thus one cannot use <code>n/a*</code> to extract
+the variable-length <code>data</code>.  But this works:</p>
+<pre>  ($flags, $data) = unpack &lt;&lt;EOP, $string
+    g.( x[n] n )	# Skip count, extract flags, return back
+    n x[n]		# extract count, skip flags
+    /a*			# extract the data using 'count'
+  EOP</pre>
+<li><a name='g[TEMPLATE]'></a><code>g[TEMPLATE]</code></li>
+<p>pack() expects the corresponding argument to be an array reference.
+<code>TEMPLATE</code> is applied to the data inside this array.  unpack() extracts
+data described by <code>TEMPLATE</code> and puts it into an array reference;</p>
+<li><a name='g{TEMPLATE}'></a><code>g{TEMPLATE}</code></li>
+<p>similar to <code>g[TEMPLATE]</code>, but for hash references.</p>
+<li><a name='g\(TEMPLATE)'></a><code>g\(TEMPLATE)</code></li>
+<p>similar to <code>g[TEMPLATE]</code>, but for scalar references.</p>
+<li><a name='K'></a><code>K</code></li>
+<p>&quot;Packed string contains less data than the Perl data.&quot;</p>
+<p>Should be used with a multiplier $LEN, as in <code>K[3]int</code>.  The following
+$LEN characters of the template form the &quot;key&quot; (as in Hollerit (sp?) code).
+For unpack() the &quot;key&quot; is put into the output list.  For pack(), if
+inside <code>g{TEMPLATE}</code>: use the value of the given key as the next data to
+pack:</p>
+<pre>  pack 'g{ K[3]int N K[4]char C }', $hashref</pre>
+<p>acts the same as</p>
+<pre>  pack 'g{ N C }', $hashref-&gt;{int}, $hashref-&gt;{char}</pre>
+<p>For pack() when not in <code>g{TEMPLATE}</code>: skip the following argument (and
+ignore the key!).  Optional: a <code>K!</code> variant: it is an error if
+the skipped argument does not coincide with the key.</p>
+<p>Check that the actions on pack() and unpack() are indeed inverse to each other!</p>
+<li><a name='k'></a><code>k</code></li>
+<p>&quot;Packed string contains more data than the Perl data.&quot;</p>
+<p>Opposite to <code>K</code>: the syntax is the same, but on pack() the key is used as
+if it were the next-argument-to-process.  On unpack() the next extracted
+value is not put in the output list.  This creates <code>&quot;list46789&quot;</code>:</p>
+<pre>  pack 'k[4]list A* g[ A/(A)* ]', [6..9]</pre>
+<p>Optional: a <code>k!</code> variant: it is an error if the skipped extracted data
+does not coincide with the key.</p>
+<p>(This is useful less often than <code>K</code>, but needed time to time.)</p>
+</ul>
+<a name='MIGRATION ISSUES'></a><h1>MIGRATION ISSUES</h1>
+<p>None.</p>
+<a name='IMPLEMENTATION'></a><h1>IMPLEMENTATION</h1>
+<p>Straightforward.</p>
+<a name='REFERENCES'></a><h1>REFERENCES</h1>
+<p>RFC 142: Enhanced Pack/Unpack</p>
+<p>RFC 246: pack/unpack uncontrovercial enhancements</p>
+<p>RFC 247: pack/unpack C-like enhancements</p>
+</div>

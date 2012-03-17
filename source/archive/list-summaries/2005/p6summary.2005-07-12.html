@@ -1,0 +1,135 @@
+[% setvar title Perl 6 Summary for 2005-07-05 through 2005-07-12 %]
+<h3>This file is part of the Perl 6 Archive</h3>
+    <p>To see what is currently happening visit <a href="http://www.perl6.org/">http://www.perl6.org/</a></p>
+<div class='pod'>
+<a name='Perl 6 Summary for 2005-07-05 through 2005-07-12'></a><h1>Perl 6 Summary for 2005-07-05 through 2005-07-12</h1>
+<p>All~</p>
+<p>Welcome to another summary from the frog house.  A house so green it can be seen from outerspace (according to google earth).</p>
+<a name='Perl 6 Compiler'></a><h2>Perl 6 Compiler</h2>
+<a name='Building Pugs Workaround'></a><h3>Building Pugs Workaround</h3>
+<p>Sam Vilain posted a useful work around to the error &quot;error: field `_crypt_struct' has incomplete type&quot; which occurs on some systems.  Fortunately, Salvador Ortiz Garcia found a fix.</p>
+<p><a href='http://groups-beta.google.com/group/perl.perl6.compiler/browse_frm/thread/970364a0f2f52b9e/3d87824ffe636644' target='_blank'>groups-beta.google.com</a>#3d87824ffe636644</p>
+<p><a href='http://groups-beta.google.com/group/perl.perl6.compiler/browse_frm/thread/e6246066a58d0751/ffcfa88d592a26c9' target='_blank'>groups-beta.google.com</a>#ffcfa88d592a26c9</p>
+<a name='Pugs, Pirate. Pirate, Pugs.'></a><h3>Pugs, Pirate. Pirate, Pugs.</h3>
+<p>Autrijus began plotting with the Pirate folks.  Thoughts include unifying PIL and PAST or possibly retargeting PIL to PAST.  Perhaps the result should be a more nautical dog... maybe schipperke.</p>
+<p><a href='http://groups-beta.google.com/group/perl.perl6.compiler/browse_frm/thread/49f0827f81def78d/b88e8886f14b55c7' target='_blank'>groups-beta.google.com</a>#b88e8886f14b55c7</p>
+<a name='Implicit Invocants and Pain'></a><h3>Implicit Invocants and Pain</h3>
+<p>Larry (as will be summarized later) ruled that <code> ./method </code> was gone.  he further ruled that <code> .method </code> would pitch fits at either compile or run time if <code> $_ =:= $?SELF </code> was false.  Autrijus found this quite difficult to implement.  Talk continues, my instincts tell me that this too will pass, although Larry assures us that it is absolutely permanent for at least a week.</p>
+<p><a href='http://groups-beta.google.com/group/perl.perl6.compiler/browse_frm/thread/cb4496b1e466142b/d6a35534fbc745aa' target='_blank'>groups-beta.google.com</a>#d6a35534fbc745aa</p>
+<a name='Parrot'></a><h2>Parrot</h2>
+<a name='Key Question'></a><h3>Key Question</h3>
+<p>Klass-Jan Stol found that using a assigning a floating point value to a key and then using it make parrot segfault.  Warnock applies.</p>
+<p><a href='http://groups-beta.google.com/group/perl.perl6.internals/browse_frm/thread/8c182587ef8cbc62/4c48cd30a6a3f878' target='_blank'>groups-beta.google.com</a>#4c48cd30a6a3f878</p>
+<a name='Parrot Copyrights'></a><h3>Parrot Copyrights</h3>
+<p>Allison Randal hinted that The Perl Foundation has almost finished hammering out some legal stuff and there will soon be sweeping changes throughout the repository addressing copyright issues.</p>
+<p><a href='http://groups-beta.google.com/group/perl.perl6.internals/browse_frm/thread/01fc3ff8a6203ea6/ae4374d359358914' target='_blank'>groups-beta.google.com</a>#ae4374d359358914</p>
+<a name='Character Classes in Globs'></a><h3>Character Classes in Globs</h3>
+<p>Will Coleda noted that Tcl would pass more tests if PGE supported characters classes in globs. Patrick, unable to resist the siren call of passing tests, implemented it.</p>
+<p><a href='http://groups-beta.google.com/group/perl.perl6.internals/browse_frm/thread/5e4230c5bcd0fc94/0bdb158c243fa88c' target='_blank'>groups-beta.google.com</a>#0bdb158c243fa88c</p>
+<a name='Amber for Parrot'></a><h3>Amber for Parrot</h3>
+<p>Roger Browne announced that he had succeed in extracting viable DNA from a Parrot encased in amber since the Jurasic age.  Either that or he release Amber version 0.2.2... not sure which.</p>
+<p><a href='http://groups-beta.google.com/group/perl.perl6.internals/browse_frm/thread/7f12c68f90744406/667e5992eeedcd29' target='_blank'>groups-beta.google.com</a>#667e5992eeedcd29</p>
+<a name='Leo's Branch'></a><h3>Leo's Branch</h3>
+<p>Leo has created a branch in SVN (branches/leo-ctx5) of his work implementing the new calling conventions.  This led to some discussion of how to deal with optional arguments.</p>
+<p><a href='http://groups-beta.google.com/group/perl.perl6.internals/browse_frm/thread/fb1b9a5072fcbc55/bf163135cb4a7a27' target='_blank'>groups-beta.google.com</a>#bf163135cb4a7a27</p>
+<p><a href='http://groups-beta.google.com/group/perl.perl6.internals/browse_frm/thread/621435fc758277c1/fa477ead1d6957e1' target='_blank'>groups-beta.google.com</a>#fa477ead1d6957e1</p>
+<a name='Leo's Branch Meets mod_parrot'></a><h3>Leo's Branch Meets mod_parrot</h3>
+<p>Jeff Horwitz posted some observations and troubles he was having with Leo's branch of new calling conventions.  Leo warned that the branch was still young, but would gladly take test cases.</p>
+<p><a href='http://groups-beta.google.com/group/perl.perl6.internals/browse_frm/thread/520665e89857bff8/24115e27fd5aeb37' target='_blank'>groups-beta.google.com</a>#24115e27fd5aeb37</p>
+<a name='Leo's Branch Meets PGE'></a><h3>Leo's Branch Meets PGE</h3>
+<p>After the initial discussion of optional parameter, Patrick updated the leo_ctx5 branch of PGE to the new calling conventions.  All tests pass.</p>
+<p><a href='http://groups-beta.google.com/group/perl.perl6.internals/browse_frm/thread/3de317517c40bfa3/157132eab2cbe703' target='_blank'>groups-beta.google.com</a>#157132eab2cbe703</p>
+<a name='Get onto the Bus'></a><h3>Get onto the Bus</h3>
+<p>Matt Diephouse found a Bus Error when running languages/tcl/examples/bench.tcl.  Warnock applies.</p>
+<p><a href='http://groups-beta.google.com/group/perl.perl6.internals/browse_frm/thread/4fe4d8d6b23aec8e/41f4834e16082655' target='_blank'>groups-beta.google.com</a>#41f4834e16082655</p>
+<a name='MinGW Patch Resurrection'></a><h3>MinGW Patch Resurrection</h3>
+<p>François Perrad resurected a patch from mid June with a set of action items.  Warnock applies.</p>
+<p><a href='http://groups-beta.google.com/group/perl.perl6.internals/browse_frm/thread/51ac75d80345b160/99254fc869fb1f97' target='_blank'>groups-beta.google.com</a>#99254fc869fb1f97</p>
+<a name='Scared Parrots Like Scheme'></a><h3>Scared Parrots Like Scheme</h3>
+<p>Joh Lenz posted an announcement that he had an alpha version of Chicken (a Scheme to C compiler) backending to Parrot.  Leo provided answers to some of his questions.</p>
+<p><a href='http://groups-beta.google.com/group/perl.perl6.internals/browse_frm/thread/e7f319f6edcee5fe/88e0bd3eb7606a57' target='_blank'>groups-beta.google.com</a>#88e0bd3eb7606a57</p>
+<a name='Bytecode vs PMCs'></a><h3>Bytecode vs PMCs</h3>
+<p>Matt Diephouse posted a list of questions about the place of PMCs.  Some of the core tradeoffs include: maintability, portability, optimization, duplicate implementations, and security.</p>
+<p><a href='http://groups-beta.google.com/group/perl.perl6.internals/browse_frm/thread/64ebf15daf416f4a/224e3552a6a356a0' target='_blank'>groups-beta.google.com</a>#224e3552a6a356a0</p>
+<a name='make svnclean'></a><h3>make svnclean</h3>
+<p>Leo pointed out that make svnclean got removed, but that he found it useful.  Chip suggested that it be renamed make svnclobber, as it does more than just clean.</p>
+<p><a href='http://groups-beta.google.com/group/perl.perl6.internals/browse_frm/thread/8bd8095c14224951/4b2a7f23442595b5' target='_blank'>groups-beta.google.com</a>#4b2a7f23442595b5</p>
+<a name='pmc2c.pl Bug'></a><h3>pmc2c.pl Bug</h3>
+<p>Nicholas Clark found a bug in the shortcut to avoid writing a pmc dump file.  Warnock applies.</p>
+<p><a href='http://groups-beta.google.com/group/perl.perl6.internals/browse_frm/thread/303a65c78710702d/d277f7d8ed2d9c1f' target='_blank'>groups-beta.google.com</a>#d277f7d8ed2d9c1f</p>
+<a name='Define &quot;cache&quot;'></a><h3>Define &quot;cache&quot;</h3>
+<p>Nicholas Clark suggested that it was probably not wise to #define &quot;cache&quot;.  So they removed it.</p>
+<p><a href='http://groups-beta.google.com/group/perl.perl6.internals/browse_frm/thread/a6ccdcd2d2f1979d/2628963df14329d6' target='_blank'>groups-beta.google.com</a>#2628963df14329d6</p>
+<a name='Parrots Getting Smarter'></a><h3>Parrots Getting Smarter</h3>
+<p>Leo pointed out that at least one parrot understood the concept of zero, putting it some distance ahead of romans when it comes to math.  Once the Parrots start to grow opposable thumbs, I will welcome our new Parrot overlords.</p>
+<p><a href='http://groups-beta.google.com/group/perl.perl6.internals/browse_frm/thread/36e9e7223850dcbe/c6e71a192649f4e8' target='_blank'>groups-beta.google.com</a>#c6e71a192649f4e8</p>
+<a name='Leo's Branch Meets Exceptions'></a><h3>Leo's Branch Meets Exceptions</h3>
+<p>Leo posted two suggestions for how the new calling conventions could interact with Exceptions.  Autrijus liked the one that unifies exception handlers with the rest of calls and returns.</p>
+<p><a href='http://groups-beta.google.com/group/perl.perl6.internals/browse_frm/thread/4762ca5b69bec1cd/e69e85ac96c3ed6f' target='_blank'>groups-beta.google.com</a>#e69e85ac96c3ed6f</p>
+<a name='Control Flow Graph Bugs'></a><h3>Control Flow Graph Bugs</h3>
+<p>Curtis Rawls noted what he thought might be a bug in the compute_dominators function.  Leo confirmed that it was likely a bug.  Later he posted a note saying he was working on a new implementation for some of the CFG algorithms.  He asked for a hand, but Warnock applied.  Actually, I think I have looked at that code before.  I would help be happy to take a look Curtis.</p>
+<p><a href='http://groups-beta.google.com/group/perl.perl6.internals/browse_frm/thread/7cdffa86f6f4ebb6/8ec31c6030b0950e' target='_blank'>groups-beta.google.com</a>#8ec31c6030b0950e</p>
+<a name='TODO: Steal Good Ideas from Dan'></a><h3>TODO: Steal Good Ideas from Dan</h3>
+<p>Will Coleda opened a ticket suggesting that we open tickets based on some of Dan's latest posts to Squaks of the Parrot.  Remember: &quot;talent immitates, but genius, genius steals&quot;.</p>
+<p><a href='http://groups-beta.google.com/group/perl.perl6.internals/browse_frm/thread/f5db2c4bec9b285f/4c502fffd9480eab' target='_blank'>groups-beta.google.com</a>#4c502fffd9480eab</p>
+<a name='Punie'></a><h3>Punie</h3>
+<p>Allison Randal wants to add Punie (a Perl 1 compiler) to svn.  Response was positive.</p>
+<p><a href='http://groups-beta.google.com/group/perl.perl6.internals/browse_frm/thread/fa0b911b26481df3/d3aa6dfdb0522d30' target='_blank'>groups-beta.google.com</a>#d3aa6dfdb0522d30</p>
+<a name='Mobilizing PM groups'></a><h3>Mobilizing PM groups</h3>
+<p>Will Coleda wondered if there had been any work mobilizing Perl Monger groups for the good of Parrot.  Maybe I should finally look up the Cambridge or Boston PM group...</p>
+<p><a href='http://groups-beta.google.com/group/perl.perl6.internals/browse_frm/thread/e09da82d02a0486a/7f74455bca561f06' target='_blank'>groups-beta.google.com</a>#7f74455bca561f06</p>
+<p><a href='http://groups-beta.google.com/group/perl.perl6.compiler/browse_frm/thread/8c891112534855f4/7ccbf32848c2e276' target='_blank'>groups-beta.google.com</a>#7ccbf32848c2e276</p>
+<a name='Perl 6 Language'></a><h2>Perl 6 Language</h2>
+<p>As usual in p6l land, there are a couple really long threads.  As usual in p6summarizer land, they will get short summaries.  Odd how that happens.</p>
+<a name='Conflicting Autogenerated Accessors'></a><h3>Conflicting Autogenerated Accessors</h3>
+<p>Last week, Stevan Little wondered what would happen with conflicting autogenerated accessor names.  Larry said they would carp as soon as they were discovered.</p>
+<p><a href='http://groups-beta.google.com/group/perl.perl6.language/browse_frm/thread/35bee7deb1a4defc/f959d1b2d0c37f34' target='_blank'>groups-beta.google.com</a>#f959d1b2d0c37f34</p>
+<a name='DBI v2'></a><h3>DBI v2</h3>
+<p>The first really long thread has to do with the next version of DBI.  I am not really a database person.  But apparently those who are have strong opinions.</p>
+<p><a href='http://groups-beta.google.com/group/perl.perl6.language/browse_frm/thread/d6ccf668de28e368/5556b425d916aada' target='_blank'>groups-beta.google.com</a>#5556b425d916aada</p>
+<p><a href='http://groups-beta.google.com/group/perl.perl6.language/browse_frm/thread/b8d9be2e31c02600/c43179f8586e8b72' target='_blank'>groups-beta.google.com</a>#c43179f8586e8b72</p>
+<a name='Time::Local'></a><h3>Time::Local</h3>
+<p>The next really long thread has to do with the next version of Time::Local.  I am not really a Time person.  But apparently those who are have strong opinions.</p>
+<p><a href='http://groups-beta.google.com/group/perl.perl6.language/browse_frm/thread/c19bea30514933f4/3b16c5e62f1cffbe' target='_blank'>groups-beta.google.com</a>#3b16c5e62f1cffbe</p>
+<a name='submethods'></a><h3>submethods</h3>
+<p>Stevan Little and Larry Wall talked about submethods, their purpose, and their interaction with the meta model.  I must say that I have only partially wrapped my head around metamodels at all.</p>
+<p><a href='http://groups-beta.google.com/group/perl.perl6.language/browse_frm/thread/7a159cc98802b975/7eb8b200aa302aac' target='_blank'>groups-beta.google.com</a>#7eb8b200aa302aac</p>
+<a name='SMD Considered Harmful?'></a><h3>SMD Considered Harmful?</h3>
+<p>Last week, Yuval Kogman conjectured that MMD should be the one true MD, as it allowed nifty extensibility.  This week Stuart Cook offered a sort of compromise.  I rather like Stuart's compromise.</p>
+<p><a href='http://groups-beta.google.com/group/perl.perl6.language/browse_frm/thread/f81ec2a928ff59b7/c89f2f00d5c263de' target='_blank'>groups-beta.google.com</a>#c89f2f00d5c263de</p>
+<a name='Dependency Injection'></a><h3>Dependency Injection</h3>
+<p>Piers wants to be able to have classes that inject themselves in correctly at use time based on what is actually used.  Larry commented, but one quote really caught my attention &quot;Globals are bad only if you use them to hold non-global values&quot;.  &lt;off topic&gt;There is an important lesson imbedded in that quote.  We really should learn rules not to follow them blindly, but so that we understand the spirit behind them and respect that instead.  Not that I have had screaming matches with any programmers who blindly eshew globals and goto's without understanding why... &lt;/off topic&gt; That was more of a rant then just off topic.  Oh well.</p>
+<p><a href='http://groups-beta.google.com/group/perl.perl6.language/browse_frm/thread/322560d7d27fb63c/7332b80612ba1300' target='_blank'>groups-beta.google.com</a>#7332b80612ba1300</p>
+<a name='File.seek Interface'></a><h3>File.seek Interface</h3>
+<p>Wolverian wondered what the seek interface would look like for handles.  Larry likes the idea of it working entirely through opaque position objects using <code>`</code> to specify units.</p>
+<p><a href='http://groups-beta.google.com/group/perl.perl6.language/browse_frm/thread/ab5aff3faacb3d55/0fabc28358cb62be' target='_blank'>groups-beta.google.com</a>#0fabc28358cb62be</p>
+<a name='Perl6/Perl5 ~ 82%'></a><h3>Perl6/Perl5 ~ 82%</h3>
+<p>Michael Hendricks noticed that (accrding to Text::TypingEffort).  Perl 6 requires 18% less effort than Perl 5.  He suggests that this is a bad thing for the communities wasteline.  I conjecture that perl developers will use the extra time they save for activities like running and canoeing and as a result will paradoxically lose weight from expending less effort at work.</p>
+<p><a href='http://groups-beta.google.com/group/perl.perl6.language/browse_frm/thread/efafd6d6e69625ad/4006f811870dbf22' target='_blank'>groups-beta.google.com</a>#4006f811870dbf22</p>
+<a name='Creating Value Types'></a><h3>Creating Value Types</h3>
+<p>Ingo Blechschmidt wondered how to create a value type.  Luke Palmer suggested using an <code> is value </code> trait.  He then went on to speculate about mutating value traits and COW semantics.  Larry though that perhaps an <code> is copy </code> trait was called for.  Oooh, a preposition at the end of a sentance, makes me want to occasionally split infinitives...</p>
+<p><a href='http://groups-beta.google.com/group/perl.perl6.language/browse_frm/thread/afe5ce7665d8c7cb/4d5909caa7ae0e1f' target='_blank'>groups-beta.google.com</a>#4d5909caa7ae0e1f</p>
+<a name='OO .isa'></a><h3>OO .isa</h3>
+<p>Ingo Blechschmidt viciously lied when claiming to post a &quot;quick&quot; isa question.  This quickly went the way of the meta object.  I think I mentioned my take on those earlier (powerful, but ow).</p>
+<p><a href='http://groups-beta.google.com/group/perl.perl6.language/browse_frm/thread/543393430f6292d0/525e5dfe05a1bd18' target='_blank'>groups-beta.google.com</a>#525e5dfe05a1bd18</p>
+<a name='Method Call on Invocant'></a><h3>Method Call on Invocant</h3>
+<p>The last really long thread has to do with the next chapter in the method call on self saga.  I am a bit of a method call on self person.  And apparently those who are have strong opinions.  Woth note this time is that Larry updated the current state of the world.  Now <code> ./method </code> is gone, and <code> .method </code> only works when <code> $_ =:= $?SELF </code>.</p>
+<p><a href='http://groups-beta.google.com/group/perl.perl6.language/browse_frm/thread/93f95d3dd9c36110/cd3de4e88dc2868d' target='_blank'>groups-beta.google.com</a>#cd3de4e88dc2868d</p>
+<a name='Use and Require Question'></a><h3>Use and Require Question</h3>
+<p>Ingo Blechschmidt wondered what use and require actually do.  Gall Yahas suggested they return the last thing in the used/required file.  Larry aggreed and held that they would also return the same thing.  He also warned that %INC would probably work differently in Perl6.</p>
+<p><a href='http://groups-beta.google.com/group/perl.perl6.language/browse_frm/thread/8c1270622f08e693/aad674b8d5e852ee' target='_blank'>groups-beta.google.com</a>#aad674b8d5e852ee</p>
+<a name='User Defined Infix'></a><h3>User Defined Infix</h3>
+<p>Autrijus wondered if an method <code> infix:&lt;===</code> &gt; would  eed to be marked as export for a script that <code>use</code>s it to get the method.  Larry explained that the method <code> infix:&lt;===</code> &gt; would be available by name, but would have to be marked as export for the syntactic sugar of <code> A === B </code> to work.</p>
+<p><a href='http://groups-beta.google.com/group/perl.perl6.language/browse_frm/thread/c4349076f6416aca/5a12927bc3af87d9' target='_blank'>groups-beta.google.com</a>#5a12927bc3af87d9</p>
+<a name='Hackathon Notes'></a><h3>Hackathon Notes</h3>
+<p>Autrijus posted a link to his hackathon notes.  This spawned several threads.  David Storrs tried to convince people to change subject lines, with limited success.  Much of the discussion focused on MMD and how confusing it was.  Damian Conway posted his set of 3 rules that would prevent AIs from harming humans and his set of 8 rules that would prevent MMDs from harming programmers.  Proving that MMDs are almost 3 times more dangerous than AIs.</p>
+<p><a href='http://groups-beta.google.com/group/perl.perl6.language/browse_frm/thread/c189bc6a1ff45b63/6930a91ec364db48' target='_blank'>groups-beta.google.com</a>#6930a91ec364db48</p>
+<a name='Raw Binary Data'></a><h3>Raw Binary Data</h3>
+<p>David Formosa wanted to play with raw binary data in Perl 6.  I try and avoid raw things except sushi.  Larry suggested that this would just be a string whose maximum abstraction level was set to bytes.</p>
+<p><a href='http://groups-beta.google.com/group/perl.perl6.language/browse_frm/thread/34204e4b08d29684/adb4216e9160ce7d' target='_blank'>groups-beta.google.com</a>#adb4216e9160ce7d</p>
+<a name='The usual footer'></a><h2>The usual footer</h2>
+<p>To post to any of these mailing lists please subscribe by sending email to &lt;<a href='mailto:perl6-internals-subscribe@perl.org'>perl6-internals-subscribe@perl.org</a>&gt;, &lt;<a href='mailto:perl6-language-subscribe@perl.org'>perl6-language-subscribe@perl.org</a>&gt;,  or &lt;<a href='mailto:perl6-compiler-subscribe@perl.org'>perl6-compiler-subscribe@perl.org</a>&gt;.  If you find these summaries useful or enjoyable, please consider contributing to the Perl Foundation to help support the development of Perl. You might also like to send feedback to <a href='mailto:ubermatt@gmail.com'>ubermatt@gmail.com</a></p>
+<p><a href='http://donate.perl-foundation.org/' target='_blank'>donate.perl-foundation.org</a> -- The Perl Foundation
+<a href='http://dev.perl.org/perl6/' target='_blank'>dev.perl.org</a> -- Perl 6 Development site
+<a href='http://planet.parrotcode.org/' target='_blank'>planet.parrotcode.org</a> -- Parrot Blog aggregator</p>
+</div>

@@ -1,0 +1,147 @@
+[% setvar title The Perl 6 summary for the week ending 20031207 %]
+<h3>This file is part of the Perl 6 Archive</h3>
+    <p>To see what is currently happening visit <a href="http://www.perl6.org/">http://www.perl6.org/</a></p>
+<div class='pod'>
+<a name='The Perl 6 summary for the week ending 20031207'></a><h1>The Perl 6 summary for the week ending 20031207</h1>
+<p>Another week, another late summary. Luckily it's been a quiet week so
+I should get this written faster than usual. As is traditional, we
+start with perl6-internals</p>
+<a name='Parrot build system tinkering'></a><h2>Parrot build system tinkering</h2>
+<p>Andy Dougherty and other discussed extending the Parrot build system
+to allow for building parrot itself outside the main source directory
+(useful when Parrot's mounted read only via NFS for example. It's not
+(quite) possible to do this just yet because of a couple of generated
+files in the IMCC tree. Leo suggested only generating those when
+<code>Configure.pl --maintainer</code> is run, on the grounds that a maintainer
+shouldn't be building from a read only source. Dan asked for a
+volunteer to fix things up.</p>
+<p><a href='http://groups.google.com/groups?selm=Pine.SOL.4.53.0312010940540.18708@maxwell.phys.lafayette.edu' target='_blank'>groups.google.com</a></p>
+<a name='Object stuff'></a><h2>Object stuff</h2>
+<p>I (and others I presume) got ready to do the &quot;Happy! Happy! Joy! Joy!&quot;
+dance of delight; this was the week that Parrot finally got
+objects. Or, as Dan described them, 'objects-ish'. Parrot now has
+single inheritance objects. They're not the final word on the matter,
+but it's definitely better than a poke in the eye with a sharp stick.</p>
+<p>Dan went on to discuss what needs to be done with them before we're
+ready for Parrot 0.1 (Objects are one of the criteria for making a
+point release).</p>
+<p>Dan then went rather quiet, apparently because he got mugged by flu,
+or something like it, and spent the rest of the week wishing he were
+dead.</p>
+<p>Meanwhile, Leo lived up to his Patchmonster nickname by checking in a
+bunch of object related stuff.</p>
+<p><a href='http://groups.google.com/groups?selm=a06010202bbf0fd3af8cc@' target='_blank'>groups.google.com</a>[10.0.1.2] -- Rumblings</p>
+<p><a href='http://groups.google.com/groups?selm=a06010216bbf259ac617f@' target='_blank'>groups.google.com</a>[10.0.1.2] -- Announcement</p>
+<p><a href='http://groups.google.com/groups?selm=a06010217bbf261e24e2a@' target='_blank'>groups.google.com</a>[10.0.1.2] -- The way forward</p>
+<p><a href='http://groups.google.com/groups?selm=a06010202bbf81f06483c@' target='_blank'>groups.google.com</a>[10.0.1.2] -- Dan gets mugged by flu</p>
+<p><a href='http://groups.google.com/groups?selm=3FD0AEE4.3000500@toetsch.at' target='_blank'>groups.google.com</a> -- Leo's patches</p>
+<a name='Raising exceptions'></a><h2>Raising exceptions</h2>
+<p>Cory Spencer wondered about 'proper exception raising' and wondered
+what the state of play was, and if there were any good examples. Leo
+T&ouml;tsch pointed him at <b><i>t/pmc/exception.t</i></b></p>
+<p><a href='http://groups.google.com/groups?selm=Pine.LNX.4.58.0312011749290.13872@okcomputer.antiflux.org' target='_blank'>groups.google.com</a></p>
+<a name='Compilation units and the boundaries of IMCC'></a><h2>Compilation units and the boundaries of IMCC</h2>
+<p>Pete Lomax had wondered about package/file local variables in
+IMCC. At the moment IMCC variables can't be file or package scoped,
+but Melvin Smith is working on it. As he said this, he asked for
+suggestions for other potential IMCC features. Cory Spencer wanted to
+be able to write</p>
+<pre>   if _some_test() goto LABEL</pre>
+<p>but that was vetoed by Dan (and Melvin) as being rather too high level
+for an intermediate language that's meant to be a compiler target.</p>
+<p><a href='http://groups.google.com/groups?selm=OF0DEFCC58.E6152282-ON87256DF0.000EABD7-85256DF0.000F20CF@us.ibm.com' target='_blank'>groups.google.com</a></p>
+<a name='String manipulation'></a><h2>String manipulation</h2>
+<p>Melvin Smith put forward a convincing argument that IMCC shouldn't
+concern itself with doing string interpolation as the expected
+behaviour is too 'high level language' dependent, but that Parrot
+should have a <code>printf</code>/<code>sprintf</code> equivalent, implemented in C for
+speed. Dan seemed to agree and reckoned it should be addressed as soon
+as objects were out of the way.</p>
+<p><a href='http://groups.google.com/groups?selm=5.1.1.6.2.20031201221202.0486c298@pop.mindspring.com' target='_blank'>groups.google.com</a></p>
+<a name='IMCC pending changes'></a><h2>IMCC pending changes</h2>
+<p>Melvin Smith posted a list of pending IMCC changes, most of which were
+concerned with tightening up IMCC behaviour (making it both stricter
+nd more forgiving...). Discussion ensued.</p>
+<p>A few days later, Melvin committed some of his changes.</p>
+<p><a href='http://groups.google.com/groups?selm=5.1.1.6.2.20031127001200.03ab8e18@pop.mindspring.com' target='_blank'>groups.google.com</a></p>
+<p><a href='http://groups.google.com/groups?selm=5.1.1.6.2.20031205013711.02105c98@pop.mindspring.com' target='_blank'>groups.google.com</a></p>
+<a name='PMC Compiler 2nd edition'></a><h2>PMC Compiler 2nd edition</h2>
+<p>Leo applied a 'really long pending patch' which should simplify
+upcoming vtable changes. Melvin wondered if the time had come to
+replace the existing <b><i>ops2c</i></b> and <b><i>pmc2c</i></b> with the newer
+versions. Leo thought that <b><i>pmc2c2</i></b> was definitely stable enough, but
+wasn't too sure about <b><i>ops2c2</i></b>. Jonathan Worthington pointed out a
+Win32 bug that was quickly fixed.</p>
+<p><a href='http://groups.google.com/groups?selm=3FCDB6A3.4010901@toetsch.at' target='_blank'>groups.google.com</a></p>
+<a name='get_pmc_keyed() in PerlString'></a><h2><code>get_pmc_keyed()</code> in PerlString</h2>
+<p>Sterling Hughes noted that, in PHP it's valid to index a string as if
+it were an array. He wondered it would be possible to implement
+<code>get_pmc_keyed()</code> on the PerlString vtable to allow for similar
+tricks with the standard string PMC. I'm confused as to what the
+decision was. I think Leo agreed that it was a good idea, but that it
+should probably be implemented in a new PMC for the time being...</p>
+<p><a href='http://groups.google.com/groups?selm=20031202200415.GA6856@bumblebury.com' target='_blank'>groups.google.com</a></p>
+<a name='Symbolic vs. Named variable register allocation'></a><h2>Symbolic vs. Named variable register allocation</h2>
+<p>Pete Lomax stumbled over a bug in IMCC's register allocation. Melvin
+thinks the problem is that much of IMCC's flow analysis code doesn't
+yet know about the Parrot Calling Conventions and went to have a look
+to see if there was a quick fix available.</p>
+<p><a href='http://groups.google.com/groups?selm=6mmrsvc93sqcctme5od66k30isn4j4ek4p@4ax.com' target='_blank'>groups.google.com</a></p>
+<a name='Testing for null'></a><h2>Testing for null</h2>
+<p>J&uuml;rgen B&ouml;mmels is working on having the Parrot IO system's
+<code>open</code> return a PMCNULL on failure instead of an invalid IO-Object
+(sounds like a good idea to me). The catch is, there doesn't seem to
+be any way for the bytecode to detect that this has happened. There
+was some debate about whether what J&uuml;rgen was doing was the
+right thing, or if we shouldn't introduce a new null.pmc, or some
+other possibility. The consensus in the end seemed to be that using
+PMCNULL was probably the way to go, but an appropriate test operator
+hadn't been finally decided upon (but <code>if_null</code> and <code>unless_null</code>
+are the front runners).</p>
+<p><a href='http://groups.google.com/groups?selm=m2y8tu0xjg.fsf@helium.physik.uni-kl.de' target='_blank'>groups.google.com</a></p>
+<a name='Determining PMC memory addresses'></a><h2>Determining PMC memory addresses</h2>
+<p>After last week's kerfuffle about the different types of equality Cory
+Spencer still needed a test for testing if two PMCs had the same
+address so he posted a patch to add an <code>eq_addr</code> opcode. Melvin Smith
+still wasn't sure that the name was quite right though and asked for a
+description of why Cory needed it (he needs it for implementing a Lisp
+interpreter).</p>
+<p><a href='http://groups.google.com/groups?selm=Pine.LNX.4.58.0312030915240.15127@okcomputer.antiflux.org' target='_blank'>groups.google.com</a></p>
+<a name='Fixing the Makefile dependencies'></a><h2>Fixing the Makefile dependencies</h2>
+<p>Harry the Surnameless has gone through the makefiles in search of the
+broken dependencies that meant that parallel makes didn't work and
+posted a patch. However, he worries that the patch may well introduce
+other problems.</p>
+<p><a href='http://groups.google.com/groups?selm=20031206200450.11483.qmail@onion.perl.org' target='_blank'>groups.google.com</a></p>
+<a name='Meanwhile in perl6-language'></a><h1>Meanwhile in perl6-language</h1>
+<p>The only game in town was the ongoing discussion of Properties, which
+morphed into a discussion of Larry's tantalizing role based OO
+formulation. People are generally impressed and excited by what Larry
+has so far revealed and, in the continuing absence of Apocalypse 12
+are speculating like mad. It's fascinating, but it's also next to
+impossible to summarize beyond saying &quot;People talked excitedly about
+OO&quot;.</p>
+<p>Oh yes, if you've not been following, <code>^op</code> (ie, the vector operators)
+has become <code> &gt;&gt;op&lt;&lt; </code> which is, if nothing else, a
+right swine to write in a POD C&lt;&gt; escape.</p>
+<p><a href='http://groups.google.com/groups?selm=9C375DDD9B669243A2D78FCD607E894003E4FD25@bremo-jg' target='_blank'>groups.google.com</a></p>
+<p><a href='http://groups.google.com/groups?selm=9C375DDD9B669243A2D78FCD607E894003E4FD37@bremo-jg' target='_blank'>groups.google.com</a></p>
+<a name='Acknowledgements, Apologies, Announcements'></a><h1>Acknowledgements, Apologies, Announcements</h1>
+<p>Nope, still no link shortening.</p>
+<p>Um... many apologies to Leon Brocard. Last week I stated that he'd
+become the new Pumpking for Perl 5.004 and would not be appearing as a
+running joke in these summaries until he relinquished the
+pumpkin. However, what I should have said is that he has become the
+new Pumpking for Perl 5.005_04 and will not be appearing as a running
+joke in these summaries until he relinquishes said pumpkin.</p>
+<p>Any suggestions that last week's mistake was deliberate so I could
+continue the joke for one more week are utterly without foundation.</p>
+<p>It was just an 'amusing' consequence of my stupidity, obviously.</p>
+<p>If you find these summaries useful or enjoyable, please consider
+contributing to the Perl Foundation to help support the Perl 6
+effort. I also welcome feedback at <i><a href='http://search.cpan.org/perldoc?<a href='mailto:p6summarizer@bofh.org.uk'>p6summarizer@bofh.org.uk</a>'>p<a href='mailto:6summarizer@bofh.org.uk'>6summarizer@bofh.org.uk</a></a></i> or at
+my website.</p>
+<p><a href='http://donate.perl-foundation.org/' target='_blank'>donate.perl-foundation.org</a> -- The Perl Foundation</p>
+<p><a href='http://dev.perl.org/perl6/' target='_blank'>dev.perl.org</a> -- Perl 6 Development site</p>
+<p><a href='http://www.bofh.org.uk:8080/' target='_blank'>www.bofh.org.uk</a> -- My website, &quot;Just a Summary&quot;</p>
+</div>

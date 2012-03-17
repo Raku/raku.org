@@ -1,0 +1,42 @@
+[% setvar title hashes should interpolate in double-quoted strings %]
+<h3>This file is part of the Perl 6 Archive</h3>
+    <p>To see what is currently happening visit <a href="http://www.perl6.org/">http://www.perl6.org/</a></p>
+<div class='pod'>
+<a name='TITLE'></a><h1>TITLE</h1>
+<p>hashes should interpolate in double-quoted strings</p>
+<a name='VERSION'></a><h1>VERSION</h1>
+<pre>  Maintainer: Nathan Torkington &lt;<a href='mailto:gnat@frii.com'>gnat@frii.com</a>&gt;
+  Date: 15 Sep 2000
+  Mailing List: <a href='mailto:perl6-language-data@perl.org'>perl6-language-data@perl.org</a>
+  Number: 237
+  Version: 1
+  Status: Developing</pre>
+<a name='ABSTRACT'></a><h1>ABSTRACT</h1>
+<p>&quot;%hash&quot; should expand to:</p>
+<pre>  join( $/, map { qq($_$&quot;$hash{$_}) } keys %hash )</pre>
+<a name='DESCRIPTION'></a><h1>DESCRIPTION</h1>
+<p>Hashes do not interpolate in double-quote context in perl5.  They
+should, because (a) scalars and arrays do, (b) it is a useful
+thing.</p>
+<p>The problem has always been: how to separate the keys and values?  I
+say use $&quot; (the value that gets put between array elements in
+double-quote interpolation) between key and value, and $/ between each
+hash record.</p>
+<p>A thorn is that $/ is the <b>input</b> record separator.  It seems wrong
+to use it for output.  But $\ is not set by default, and it seems
+unreasonable to have to set $\ (which affects the end of every print)
+just to interpolate hashes.  I didn't relish making yet another
+special variable just for this, though.</p>
+<p>When global variables like $&quot; and $/ go away, I imagine they'll be
+replaced with lexically-scoped variations.  This will work then, too.</p>
+<p>The big problem is that % is heavily used in double-quoted strings
+with printf.  I don't have a solution to this.  In the end, this may
+be <b>the</b> definitive reason why hashes do not interpolate.  And that's
+fine by me.</p>
+<a name='IMPLEMENTATION'></a><h1>IMPLEMENTATION</h1>
+<p>A simple change to the tokenizer.</p>
+<p>The perl526 translator could backslash every % in a double-quoted
+string.</p>
+<a name='REFERENCES'></a><h1>REFERENCES</h1>
+<p>None.</p>
+</div>

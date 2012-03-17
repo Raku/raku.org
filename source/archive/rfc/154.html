@@ -1,0 +1,101 @@
+[% setvar title Simple assignment lvalue subs should be on by default %]
+<h3>This file is part of the Perl 6 Archive</h3>
+    <p>To see what is currently happening visit <a href="http://www.perl6.org/">http://www.perl6.org/</a></p>
+<div class='pod'>
+<a name='TITLE'></a><h1>TITLE</h1>
+<p>Simple assignment lvalue subs should be on by default</p>
+<a name='VERSION'></a><h1>VERSION</h1>
+<pre>  Maintainer: Nathan Wiger &lt;<a href='mailto:nate@wiger.org'>nate@wiger.org</a>&gt;
+  Date: 24 Aug 2000
+  Last-Modified: 25 Sep 2000
+  Mailing List: <a href='mailto:perl6-language-subs@perl.org'>perl6-language-subs@perl.org</a>
+  Number: 154
+  Version: 2
+  Status: Frozen</pre>
+<a name='ABSTRACT'></a><h1>ABSTRACT</h1>
+<p>Currently, there are several competing RFC's for lvalue subs, all of
+which do things a little differently to please different groups.</p>
+<p>This RFC proposes a means by which they can mostly coexist peacefully,
+simply by making simple assignment-only lvalue subs the default.</p>
+<a name='NOTES ON FREEZE'></a><h1>NOTES ON FREEZE</h1>
+<p>Unfortunately, there was no chance for people to attempt to reach
+consensus on the complicated subject of lvalue subs. The author feels
+that this RFC has some nice syntactic advantages. However, implementing
+it would be &quot;tricky&quot;, to say the least, since it essentially requires a
+specialized fake-rvalue-context-bubble-inside-true-lvalue-context for
+the sub to be evaluated in. As such, it may not be feasible. However, if
+it were feasible it would be, in the author's opinion, really cool.</p>
+<a name='DESCRIPTION'></a><h1>DESCRIPTION</h1>
+<a name='Simple lvalue subs'></a><h2>Simple lvalue subs</h2>
+<p>RFC's 107 proposes a very simplistic lvalue sub mechanism which
+seeks to make lvalue and rvalue subs more or less directly equivalent.
+While nice, this is truly only suitable for assignment. Still, this
+approach provides powerful capabilities:</p>
+<pre>   $cgi-&gt;param($name) = @newval;
+   $oldpath = $tree-&gt;path('L','R') = 'R';
+   @document = ($title, $junk, $r-&gt;xml_extract) = &lt;STDIN&gt;;</pre>
+<p>Here, assignment can be used to dynamically call subs in lvalue and
+rvalue contexts, allowing powerful syntactic constructs. This presents
+functionality akin to tie, without all the unnecessary overhead or pain
+tie involves.</p>
+<p>This RFC proposes that this capability be on by default. No <code>:lvalue</code>
+constraint would be required. Instead, the sub would obey the <b>exact</b>
+same rules as an rvalue sub, including sub parameters, @_, scoping, and
+so forth:</p>
+<pre>   package CGI;
+   sub param ($var, @val) {
+       # do stuff
+   }
+
+   $r = new CGI;
+   $r-&gt;param($var, @val);      # ok
+   $r-&gt;param($var) = @val;     # ok too
+   $r-&gt;param = $var, @val;     # ok, but silly looking</pre>
+<p>The key to the proposal is this: lvalue and rvalue versions of a sub
+would work <i>identically</i>, and both would be enabled by default.
+<i>However</i>, assignment is the only valid operator for these default
+lvalue subs. Attempts to use other operators, such as ++ or s/// on
+these subs would yield an error like:</p>
+<pre>   Attempt to modify simple lvalue sub, only = is allowed</pre>
+<p>Even with this restriction, lvalue subs in this format give us lots of
+syntax advantages. As users, not only are we allowed to choose which
+form suits a given situation:</p>
+<pre>   $cgi-&gt;param($name) = split /\s+/, &quot;Nathan Wiger&quot;;
+   ($user, $r-&gt;uid('anon')) = @data;</pre>
+<p>But it also allows you to chain subs together, as you can do in Perl 5
+with basic data types and even tied variables:</p>
+<pre>   @htmldoc = ($title, $r-&gt;htmlify) = &lt;FILE&gt;;</pre>
+<p>If overused, this could be gross. However, if used properly this greatly
+increases the amount of Laziness and Impatience you can have as a Perl
+programmer. The above example would require at least 2-3 lines with
+several &quot;in-betweener&quot; variables in Perl 5. [1] As written, it's quite
+readable and obvious what it does.</p>
+<a name='Complex lvalue subs'></a><h2>Complex lvalue subs</h2>
+<p>Damian has an upcoming RFC on this topic, and it is being widely
+discussed. These complex lvalue subs should have several properties
+differentiating them from the simple lvalue subs described in this RFC:</p>
+<pre>   1. True lvalue scoping
+
+   2. Ability to accept any operation
+
+   3. Return an lvalue which is then evaluated like any
+      other lvalue</pre>
+<p>These complex subs are outside the scope of this RFC. However, these
+would be enabled with the <code>:lvalue</code> constraint, indicating that they
+are fundamentally different from rvalue subs.</p>
+<p>By using the <code>:lvalue</code> constraint on these fundamentally different
+subs, we can allow both the simple and complex lvalue subs to coexist.</p>
+<a name='IMPLEMENTATION'></a><h1>IMPLEMENTATION</h1>
+<p>Enable lvalue and rvalue versions of subs to be used interchangeably by
+default. <i>Everything</i> about the two (including scoping) should be
+identical.</p>
+<a name='MIGRATION'></a><h1>MIGRATION</h1>
+<p>None. This introduces new functionality, and since it does not require
+the use of an <code>:lvalue</code> constraint requires no code translation.</p>
+<a name='NOTES'></a><h1>NOTES</h1>
+<p>[1] Or unreadable syntactic sugar. Take your pick. Either way it's
+nastier than the example of chained lvalue subs presented.</p>
+<a name='REFERENCES'></a><h1>REFERENCES</h1>
+<p>RFC 107: lvalue subs should receive the rvalue as an argument</p>
+<p>RFC 57: Subroutine prototypes and parameters</p>
+</div>

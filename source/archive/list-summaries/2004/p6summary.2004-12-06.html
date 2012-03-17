@@ -1,0 +1,139 @@
+[% setvar title Perl 6 Summary for 2004-11-29 through 2004-12-06 %]
+<h3>This file is part of the Perl 6 Archive</h3>
+    <p>To see what is currently happening visit <a href="http://www.perl6.org/">http://www.perl6.org/</a></p>
+<div class='pod'>
+<a name='Perl 6 Summary for 2004-11-29 through 2004-12-06'></a><h1>Perl 6 Summary for 2004-11-29 through 2004-12-06</h1>
+<p>All~</p>
+<p>Last week I asked for help identifying the source of a quotation.  One friendly soul suggested Alan J. Perlis, but could not find an actual attribution.  It did lead me to find a very applicable (and in my mind funny) quote from Perlis, which I will now inflict upon you all, before your regularly scheduled summary:</p>
+<p>When someone says &quot;I want a programming language in which I need only say what I wish done,&quot; give him a lollipop.
+-Alan J. Perlis</p>
+<a name='Perl 6 Language'></a><h2>Perl 6 Language</h2>
+<a name='qq:i'></a><h3>qq:i</h3>
+<p>Jim Cromie wondered if there could be a qq:i which sometimes interpolates and sometimes doesn't depending on whether the variable had been previously defined.  There was some discussion which led to the conclusion that this was just asking for strange bugs.</p>
+<p><a href='http://groups-beta.google.com/group/perl.perl6.language/browse_frm/thread/b0aad9939bb2367a/1f29abcbe56bfbfe?_done=/group/perl.perl6.language/threads?gvc=2&' target='_blank'>groups-beta.google.com</a>&amp;_doneTitle=Back&amp;&amp;d#1f29abcbe56bfbfe</p>
+<a name='getters and setters'></a><h3>getters and setters</h3>
+<p>John Siracusa wanted to know if Perl 6 would allow one to expose a member variable to the outside world, but then later intercept assignments to it without actually having to switch to using getters and setters in all of the code that uses the variable.  The answer: yes, yes you can.</p>
+<p><a href='http://groups-beta.google.com/group/perl.perl6.language/browse_frm/thread/bdf375ee76730b63/5a9e80e5952d2d10?_done=/group/perl.perl6.language/threads?gvc=2&' target='_blank'>groups-beta.google.com</a>&amp;_doneTitle=Back&amp;&amp;d#5a9e80e5952d2d10</p>
+<a name='« foo &gt;&gt;'></a><h3>« foo &gt;&gt;</h3>
+<p>Richard Proctor asked if he could do &lt;&lt;list of words».  Juerd pointed out that this had already been asked. Which brings us to the fine point, ask not Larry for he will tell you both yes and no.  Although in this case I think he said, probably...</p>
+<p><a href='http://groups-beta.google.com/group/perl.perl6.language/browse_frm/thread/01d83e4f7124a967/fbcc955466c79c95?_done=/group/perl.perl6.language/threads?gvc=2&' target='_blank'>groups-beta.google.com</a>&amp;_doneTitle=Back&amp;&amp;d#fbcc955466c79c95</p>
+<a name='flipflop operator'></a><h3>flipflop operator</h3>
+<p>Juerd wondered about the fate of the flipflop.  Larry explained that while it had lost the election it was still going to work hard for you in the Senate.  Err, that's not quite right, he said that &quot;It's leaving syntactically but not semantically.&quot;, but the new syntax has not been specified...</p>
+<p><a href='http://groups-beta.google.com/group/perl.perl6.language/browse_frm/thread/d099f2399629373a/e35a284b1e68a454?_done=/group/perl.perl6.language/threads?gvc=2&' target='_blank'>groups-beta.google.com</a>&amp;_doneTitle=Back&amp;&amp;d#e35a284b1e68a454</p>
+<a name='temp $var'></a><h3>temp $var</h3>
+<p>Alexey Trofimenko wanted to know whether <code> temp </code> would preserve or destroy its old value.  Larry is leaning towards the Perl 5 semantics of destroying, I think.</p>
+<p><a href='http://groups-beta.google.com/group/perl.perl6.language/browse_frm/thread/4f047f2247f84647/5341da569ccf67dd?_done=/group/perl.perl6.language/threads?gvc=2&' target='_blank'>groups-beta.google.com</a>&amp;_doneTitle=Back&amp;&amp;d#5341da569ccf67dd</p>
+<a name='state vs my'></a><h3>state vs my</h3>
+<p>Alexey Trofimenko wondered how much advice about optimizing Ruby also applied to perl.  Unfortunately, he also misunderstood the <code> state </code> specifier.  The topic then quickly veered into what exactly <code> state </code> does.</p>
+<p><a href='http://groups-beta.google.com/group/perl.perl6.language/browse_frm/thread/878c8f7ddc47f6fd/b2febbdc269ea8e6?_done=/group/perl.perl6.language/threads?gvc=2&' target='_blank'>groups-beta.google.com</a>&amp;_doneTitle=Back&amp;&amp;d#b2febbdc269ea8e6</p>
+<a name='specifying a hash's key type'></a><h3>specifying a hash's key type</h3>
+<p>Abhijit Mahabal wanted to know if he could specify a hash's key type.  The answer is yes, but the exact syntax seems to be worth a discussion.  Luke Palmer, in his Mathematician's rage, attempted to shoot down any usage of Domain and Range, as they really should be Domain and Codomain.</p>
+<p><a href='http://groups-beta.google.com/group/perl.perl6.language/browse_frm/thread/0a68ecc0a9b5813b/6cceddfaac9b6a23?_done=/group/perl.perl6.language/threads?gvc=2&' target='_blank'>groups-beta.google.com</a>&amp;_doneTitle=Back&amp;&amp;d#6cceddfaac9b6a23</p>
+<p><a href='http://en.wikipedia.org/wiki/Range_(mathematics)' target='_blank'>en.wikipedia.org</a> -- wikipedia: range
+Range (mathematics) - Wikipedia, the free encyclopedia</p>
+<a name='container methods'></a><h3>container methods</h3>
+<p>Ashley Winters wants to have syntax for calling a method on the container object rather than the containee.  Luke Palmer agreed that this was problematic.  Larry appears to be in no hurry to add more operators for this one, yet.</p>
+<p><a href='http://groups-beta.google.com/group/perl.perl6.language/browse_frm/thread/5795b160190bea66/975ca916a337f524?_done=/group/perl.perl6.language/threads?gvc=2&' target='_blank'>groups-beta.google.com</a>&amp;_doneTitle=Back&amp;&amp;d#975ca916a337f524</p>
+<a name='slight discrepancy between synopses'></a><h3>slight discrepancy between synopses</h3>
+<p>Stéphane Payrard pointed out a small issue in some synopses.  Larry replied oops.</p>
+<p><a href='http://groups-beta.google.com/group/perl.perl6.language/browse_frm/thread/e831fbff7f4853f8/1e7c0a77327dbf88?_done=/group/perl.perl6.language/threads?gvc=2&' target='_blank'>groups-beta.google.com</a>&amp;_doneTitle=Back&amp;&amp;d#1e7c0a77327dbf88</p>
+<a name='arrays, lists, iterators, functions, coroutines, syntax'></a><h3>arrays, lists, iterators, functions, coroutines, syntax</h3>
+<p>Many people suggested many things about the best thing to replace the now missing <code> &lt;</code> &gt; op.  I think Larry is leaning towards adding a undare <code> = </code> op, which would do cool things.  I don't thing anything is final yet.</p>
+<p><a href='http://groups-beta.google.com/group/perl.perl6.language/browse_frm/thread/cbb53159bcaed4a7/1169615c9bfdc0e2?_done=/group/perl.perl6.language/threads?gvc=2&' target='_blank'>groups-beta.google.com</a>&amp;_doneTitle=Back&amp;&amp;d#1169615c9bfdc0e2 -- iterators as functions</p>
+<p><a href='http://groups-beta.google.com/group/perl.perl6.language/browse_frm/thread/257b8e0bbed541a8/93e0c356ddf3afcd?_done=/group/perl.perl6.language/threads?gvc=2&' target='_blank'>groups-beta.google.com</a>&amp;_doneTitle=Back&amp;&amp;d#93e0c356ddf3afcd -- unary <code> = </code> talk</p>
+<a name='Push/Pop/Pull/Monkey'></a><h3>Push/Pop/Pull/Monkey</h3>
+<p>Many folk voiced their dislike of shift and unshift.  I must agree with them, but they also suggested a great many alternatives, including pull/put, get/unget, and even getting rid of Push/Pop.  I must say that I really dislike that last idea, fortunately I am no alone.  Currently we are waiting for inspiration to strike.</p>
+<p><a href='http://groups-beta.google.com/group/perl.perl6.language/browse_frm/thread/257b8e0bbed541a8/93e0c356ddf3afcd?_done=/group/perl.perl6.language/threads?gvc=2&' target='_blank'>groups-beta.google.com</a>&amp;_doneTitle=Back&amp;&amp;d#93e0c356ddf3afcd</p>
+<a name='Topicalization'></a><h3>Topicalization</h3>
+<p>It was noticed that <code> for </code> might override one's topic at undesired times.  Larry rumminated about ways to solve this.</p>
+<p><a href='http://groups-beta.google.com/group/perl.perl6.language/browse_frm/thread/257b8e0bbed541a8/93e0c356ddf3afcd?_done=/group/perl.perl6.language/threads?gvc=2&' target='_blank'>groups-beta.google.com</a>&amp;_doneTitle=Back&amp;&amp;d#93e0c356ddf3afcd</p>
+<a name='Required Whitespace'></a><h3>Required Whitespace</h3>
+<p>Rod Adams does not like inconsistent whitespace rules.  Larry explained why the existing rules really were consistent.</p>
+<p><a href='http://groups-beta.google.com/group/perl.perl6.language/browse_frm/thread/257b8e0bbed541a8/93e0c356ddf3afcd?_done=/group/perl.perl6.language/threads?gvc=2&' target='_blank'>groups-beta.google.com</a>&amp;_doneTitle=Back&amp;&amp;d#93e0c356ddf3afcd</p>
+<a name='Perl 6 Compilers'></a><h2>Perl 6 Compilers</h2>
+<p>The lack of traffic on p6c has given me another space to abuse.  You should listen to &quot;Soul Coughing&quot;.  If you would like to join in the fun of abusing p6c, you should submit tests.  Nothing is more abusive then stress testing ;-)</p>
+<a name='Parrot'></a><h2>Parrot</h2>
+<a name='Tuning and Monitoring'></a><h3>Tuning and Monitoring</h3>
+<p>Matt S asked how much support for tuning and monitoring.  This week I exercise the awesome powers of the summarizer and invoke the mighty Warnock's Dilemnia.</p>
+<p><a href='http://groups-beta.google.com/group/perl.perl6.internals/browse_frm/thread/ab18b616e2a89b3b/6bedca9a038ed1d9?_done=/group/perl.perl6.internals/threads?start=30&order=recent&' target='_blank'>groups-beta.google.com</a>&amp;_doneTitle=Back&amp;&amp;d#6bedca9a038ed1d9</p>
+<a name='imcc.globals--'></a><h3>imcc.globals--</h3>
+<p>Leo removed some imcc globals.  Nice work.</p>
+<p><a href='http://groups-beta.google.com/group/perl.perl6.internals/browse_frm/thread/e6020b8ffabbad88/028cfc120dffd3a1?_done=/group/perl.perl6.internals?' target='_blank'>groups-beta.google.com</a>&amp;_doneTitle=Back+to+topics&amp;_doneTitle=Back&amp;&amp;d#028cfc120dffd3a1</p>
+<a name='ensure directories exist first'></a><h3>ensure directories exist first</h3>
+<p>Andy Dougherty fixed a problem with writing a file in a non-existant directory.  Leo applied the patch.</p>
+<p><a href='http://groups-beta.google.com/group/perl.perl6.internals/browse_frm/thread/a69db424446d8783/b7e77e4177a5e0b7?_done=/group/perl.perl6.internals?' target='_blank'>groups-beta.google.com</a>&amp;_doneTitle=Back+to+topics&amp;_doneTitle=Back&amp;&amp;d#b7e77e4177a5e0b7</p>
+<a name='Namespace-sub invocation'></a><h3>Namespace-sub invocation</h3>
+<p>Last week Luke Palmer wanted to know about calling subs in namespaces.  I posted Leo's answer, but Dan does not like it.  It should be a two step process.  First fetch, then invoke.</p>
+<p><a href='http://groups-beta.google.com/group/perl.perl6.internals/browse_frm/thread/7b48bde181d11a1a/5805eb2e5eb0bb02?_done=/group/perl.perl6.internals?' target='_blank'>groups-beta.google.com</a>&amp;_doneTitle=Back+to+topics&amp;_doneTitle=Back&amp;&amp;d#5805eb2e5eb0bb02</p>
+<a name='What is an opcode?'></a><h3>What is an opcode?</h3>
+<p>Thomas Seiler attempted to clear up some perceived confusion about what exactly an &quot;opcode&quot; is.  No responses...</p>
+<p><a href='http://groups-beta.google.com/group/perl.perl6.internals/browse_frm/thread/9f4ab6159579062e/34d31c62a32b54be?_done=/group/perl.perl6.internals?' target='_blank'>groups-beta.google.com</a>&amp;_doneTitle=Back+to+topics&amp;_doneTitle=Back&amp;&amp;d#34d31c62a32b54be</p>
+<a name='Lexicals, continuations, and register allocation'></a><h3>Lexicals, continuations, and register allocation</h3>
+<p>Dan voiced a final word in this long lived and lively thread, which kicked off several children.  Return Continuations (even once promoted) restore their registers.</p>
+<p><a href='http://groups-beta.google.com/group/perl.perl6.internals/browse_frm/thread/3a61fe5e97d17389/0603ff13ca52f0ff?_done=/group/perl.perl6.internals?' target='_blank'>groups-beta.google.com</a>&amp;_doneTitle=Back+to+topics&amp;_doneTitle=Back&amp;&amp;d#0603ff13ca52f0ff -- Dan's ruling</p>
+<p><a href='http://groups-beta.google.com/group/perl.perl6.internals/browse_frm/thread/214157bf29879710/4c15aa4a1f56c20a?_done=/group/perl.perl6.internals?' target='_blank'>groups-beta.google.com</a>&amp;_doneTitle=Back+to+topics&amp;_doneTitle=Back&amp;&amp;d#4c15aa4a1f56c20a -- the long and lively thread</p>
+<a name='keyword arguments'></a><h3>keyword arguments</h3>
+<p>Sam Ruby wondered how he out to handle keyword arguments to functions.  Dan admitted that this is complex and outlined the cheat he has been contemplating.  No one has either commented on or implemented it yet.</p>
+<p><a href='http://groups-beta.google.com/group/perl.perl6.internals/browse_frm/thread/092577189995ee1d/f22bdbb497de3975?_done=/group/perl.perl6.internals?' target='_blank'>groups-beta.google.com</a>&amp;_doneTitle=Back+to+topics&amp;_doneTitle=Back&amp;&amp;d#f22bdbb497de3975</p>
+<a name='What is and isn't up for grabs'></a><h3>What is and isn't up for grabs</h3>
+<p>Dan attempted to layout clear rules as to what things he would entertain until parrot was functionally complete.  Lets hope it sticks.</p>
+<p><a href='http://groups-beta.google.com/group/perl.perl6.internals/browse_frm/thread/168d0efbd0cfc1f4/b594c3a38848d19a?_done=/group/perl.perl6.internals?' target='_blank'>groups-beta.google.com</a>&amp;_doneTitle=Back+to+topics&amp;_doneTitle=Back&amp;&amp;d#b594c3a38848d19a</p>
+<a name='AST + COMPILE_IMMEDIATE == :-('></a><h3>AST + COMPILE_IMMEDIATE == :-(</h3>
+<p>Bernhard Schmalhofer provided a patch to fix some of the :-(.  Leo applied it.</p>
+<p><a href='http://groups-beta.google.com/group/perl.perl6.internals/browse_frm/thread/bea07c6bee8717aa/8a916b80e4dc4c20?_done=/group/perl.perl6.internals?' target='_blank'>groups-beta.google.com</a>&amp;_doneTitle=Back+to+topics&amp;_doneTitle=Back&amp;&amp;d#8a916b80e4dc4c20</p>
+<a name='t/dynclass/pybuiltin.t fails'></a><h3>t/dynclass/pybuiltin.t fails</h3>
+<p>Will added a BUG to RT for this.</p>
+<p><a href='http://groups-beta.google.com/group/perl.perl6.internals/browse_frm/thread/5b28ae722a86bc80/bc5bad4a9a843190?_done=/group/perl.perl6.internals?' target='_blank'>groups-beta.google.com</a>&amp;_doneTitle=Back+to+topics&amp;_doneTitle=Back&amp;&amp;d#bc5bad4a9a843190</p>
+<a name='benchmark tests'></a><h3>benchmark tests</h3>
+<p>Justin DeVuyst submitted a patch, which fell through the cracks, to make the benchmarks also be tests.  Fortunately Matt Diephouse rescued it from the cracks, and Leo applied it.</p>
+<p><a href='http://groups-beta.google.com/group/perl.perl6.internals/browse_frm/thread/59b554e4cd6200ca/6e273b614f34004a?_done=/group/perl.perl6.internals?' target='_blank'>groups-beta.google.com</a>&amp;_doneTitle=Back+to+topics&amp;_doneTitle=Back&amp;&amp;d#6e273b614f34004a</p>
+<a name='too many opcodes'></a><h3>too many opcodes</h3>
+<p>Leo voiced his opinion that there were too many opcodes and suggested a scheme for cutting down on them.  Dan corrected him that there were not too many.  Despite this surface disagreement, however, the spirit of Leo's complaint was addressed by Dan.  Thus, they can both be happy.</p>
+<p><a href='http://groups-beta.google.com/group/perl.perl6.internals/browse_frm/thread/a549937c1d815228/64547f8c695af32e?_done=/group/perl.perl6.internals?' target='_blank'>groups-beta.google.com</a>&amp;_doneTitle=Back+to+topics&amp;_doneTitle=Back&amp;&amp;d#64547f8c695af32e</p>
+<a name='C89 issues'></a><h3>C89 issues</h3>
+<p>There was a little confusion about whether or not variable declarations could follow code or not in C89.  The answer is not.</p>
+<p><a href='http://groups-beta.google.com/group/perl.perl6.internals/browse_frm/thread/98345a122be7a9e2/1bf9ebeca3e9fe3f?_done=/group/perl.perl6.internals?' target='_blank'>groups-beta.google.com</a>&amp;_doneTitle=Back+to+topics&amp;_doneTitle=Back&amp;&amp;d#1bf9ebeca3e9fe3f</p>
+<a name='perlhash iter busted'></a><h3>perlhash iter busted</h3>
+<p>Sam Ruby noticed that the perlhash iter did not work.  So he submitted a test case for it.  Leo fixed it (and presumably applied the test).</p>
+<p><a href='http://groups-beta.google.com/group/perl.perl6.internals/browse_frm/thread/acb11073ce7d12c2/b79d4f2f7409bbde?_done=/group/perl.perl6.internals?' target='_blank'>groups-beta.google.com</a>&amp;_doneTitle=Back+to+topics&amp;_doneTitle=Back&amp;&amp;d#b79d4f2f7409bbde</p>
+<a name='warnings cleanup'></a><h3>warnings cleanup</h3>
+<p>Garrett Rooney submitted a patch to fix some warnings.  Leo applied it.</p>
+<p><a href='http://groups-beta.google.com/group/perl.perl6.internals/browse_frm/thread/355b38da2a067793/4aec9b7ad3ac3aae?_done=/group/perl.perl6.internals?' target='_blank'>groups-beta.google.com</a>&amp;_doneTitle=Back+to+topics&amp;_doneTitle=Back&amp;&amp;d#4aec9b7ad3ac3aae</p>
+<a name='Objects, classes, metaclasses, and MMD dispatch'></a><h3>Objects, classes, metaclasses, and MMD dispatch</h3>
+<p>Dan's attempt to spec out objects from last week led to some discussion of MMD.  Leo suggested an implementation, and silence reigned.</p>
+<p><a href='http://groups-beta.google.com/group/perl.perl6.internals/browse_frm/thread/eb26d8206c8346d4/a59e8326a855b612?_done=/group/perl.perl6.internals?' target='_blank'>groups-beta.google.com</a>&amp;_doneTitle=Back+to+topics&amp;_doneTitle=Back&amp;&amp;d#a59e8326a855b612</p>
+<p><a href='http://groups-beta.google.com/group/perl.perl6.internals/browse_frm/thread/ebe0bd5533aa3655/2c13224380f7b64b?_done=/group/perl.perl6.internals?' target='_blank'>groups-beta.google.com</a>&amp;_doneTitle=Back+to+topics&amp;_doneTitle=Back&amp;&amp;d#2c13224380f7b64b -- more MMD stuff</p>
+<a name='more Tcl stuff'></a><h3>more Tcl stuff</h3>
+<p>Will added more new stuff to Tcl.  Yay, Will!</p>
+<p><a href='http://groups-beta.google.com/group/perl.perl6.internals/browse_frm/thread/98c099993a0ef979/873d4926bf1d80ef?_done=/group/perl.perl6.internals?' target='_blank'>groups-beta.google.com</a>&amp;_doneTitle=Back+to+topics&amp;_doneTitle=Back&amp;&amp;d#873d4926bf1d80ef</p>
+<a name='internal exception clean up'></a><h3>internal exception clean up</h3>
+<p>James deBoer submitted a patch that cleans up internal exception output.  Then later he submitted a second better version of the patch.  Warnock applies.</p>
+<p><a href='http://groups-beta.google.com/group/perl.perl6.internals/browse_frm/thread/7ebda933279848a8/9504b2207764af73?_done=/group/perl.perl6.internals?' target='_blank'>groups-beta.google.com</a>&amp;_doneTitle=Back+to+topics&amp;_doneTitle=Back&amp;&amp;d#9504b2207764af73</p>
+<a name='dynamic evaluation of PAST'></a><h3>dynamic evaluation of PAST</h3>
+<p>Bernhard Schmalhofer submitted a patch to add support for PAST dynamic evaluation.  Leo applied it.</p>
+<p><a href='http://groups-beta.google.com/group/perl.perl6.internals/browse_frm/thread/55da497e90c63c16/05d1c7ecf5d40021?_done=/group/perl.perl6.internals?' target='_blank'>groups-beta.google.com</a>&amp;_doneTitle=Back+to+topics&amp;_doneTitle=Back&amp;&amp;d#05d1c7ecf5d40021</p>
+<a name='Inline Caching'></a><h3>Inline Caching</h3>
+<p>Leo explained inline caches and why 19 out of 20 calls like them.  This led to his suggesting that some of the opcodes we have which get offsets from strings are a premature optimization.  This led to some discussion about whether or not what he suggested was in the Dan's earlier mandate.</p>
+<p><a href='http://groups-beta.google.com/group/perl.perl6.internals/browse_frm/thread/11bf7f5b99611372/a4b461185a77d149?_done=/group/perl.perl6.internals?' target='_blank'>groups-beta.google.com</a>&amp;_doneTitle=Back+to+topics&amp;_doneTitle=Back&amp;&amp;d#a4b461185a77d149 -- inline caching</p>
+<p><a href='http://groups-beta.google.com/group/perl.perl6.internals/browse_frm/thread/824cae85acf178d8/ce8deb56f8b293b4?_done=/group/perl.perl6.internals?' target='_blank'>groups-beta.google.com</a>&amp;_doneTitle=Back+to+topics&amp;_doneTitle=Back&amp;&amp;d#ce8deb56f8b293b4 -- Leo's suggestion</p>
+<a name='help target in make'></a><h3>help target in make</h3>
+<p>Bernhard Schmalhofer (whose name makes me very thankful for copy and paste) submitted a patch anding new help target to parrot/docs/Makefile.  Will appied it.</p>
+<p><a href='http://groups-beta.google.com/group/perl.perl6.internals/browse_frm/thread/9df1f9c203964ebd/881f8aef14e5bd29?_done=/group/perl.perl6.internals?' target='_blank'>groups-beta.google.com</a>&amp;_doneTitle=Back+to+topics&amp;_doneTitle=Back&amp;&amp;d#881f8aef14e5bd29</p>
+<a name='Parrot and Strong Types'></a><h3>Parrot and Strong Types</h3>
+<p>Cameron Zemek asked about supporting strongly typed languages on Parrot.  I got strong typing and static typing confused, fortunately Dan came to the rescue with a good explanation.  During the course of this thread, both Haskell on Parrot and Prolog on Parrot got suggested.  I like them both, a lot.</p>
+<p><a href='http://groups-beta.google.com/group/perl.perl6.internals/browse_frm/thread/77b5a3793a41a73c/1b4029708201449c?_done=/group/perl.perl6.internals?' target='_blank'>groups-beta.google.com</a>&amp;_doneTitle=Back+to+topics&amp;_doneTitle=Back&amp;&amp;d#1b4029708201449c -- original message</p>
+<p><a href='http://groups-beta.google.com/group/perl.perl6.internals/browse_frm/thread/77b5a3793a41a73c/1b4029708201449c?_done=/group/perl.perl6.internals?' target='_blank'>groups-beta.google.com</a>&amp;_doneTitle=Back+to+topics&amp;_doneTitle=Back&amp;&amp;d#1b4029708201449c -- Dan to the rescue</p>
+<a name='move libnci.def out of root dir'></a><h3>move libnci.def out of root dir</h3>
+<p>Mitchell ::mumble:: provided a patch to do the above some time ago.  Will rescued it and asked for a ruling.  The ruling is that it should be done.  I don't know if it WAS done, but it should be.</p>
+<p><a href='http://groups-beta.google.com/group/perl.perl6.internals/browse_frm/thread/40960c8b3e7d3f48/428b477f8cfdc896?_done=/group/perl.perl6.internals?' target='_blank'>groups-beta.google.com</a>&amp;_doneTitle=Back+to+topics&amp;_doneTitle=Back&amp;&amp;d#428b477f8cfdc896</p>
+<a name='Tru64 cc/ld issues'></a><h3>Tru64 cc/ld issues</h3>
+<p>Jarkko Hietaniemi posted a problem with building on Tru64.  Sam Ruby committed it.</p>
+<p><a href='http://groups-beta.google.com/group/perl.perl6.internals/browse_frm/thread/e668cb261aade149/e04b3c73c582e4f4?_done=/group/perl.perl6.internals?' target='_blank'>groups-beta.google.com</a>&amp;_doneTitle=Back+to+topics&amp;_doneTitle=Back&amp;&amp;d#e04b3c73c582e4f4</p>
+<a name='The usual footer'></a><h2>The usual footer</h2>
+<p>If you find these summaries useful or enjoyable, please consider
+contributing to the Perl Foundation to help support the development of
+Perl. You might also like to send feedback to <a href='mailto:ubermatt@gmail.com'>ubermatt@gmail.com</a></p>
+<p><a href='http://donate.perl-foundation.org/' target='_blank'>donate.perl-foundation.org</a> -- The Perl Foundation
+<a href='http://dev.perl.org/perl6/' target='_blank'>dev.perl.org</a> -- Perl 6 Development site
+<a href='http://planet.parrotcode.org/' target='_blank'>planet.parrotcode.org</a> -- Parrot Blog aggregator</p>
+</div>

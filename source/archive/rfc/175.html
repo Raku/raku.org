@@ -1,0 +1,105 @@
+[% setvar title Add C<list> keyword to force list context (like C<scalar>) %]
+<h3>This file is part of the Perl 6 Archive</h3>
+    <p>To see what is currently happening visit <a href="http://www.perl6.org/">http://www.perl6.org/</a></p>
+<div class='pod'>
+<a name='TITLE'></a><h1>TITLE</h1>
+<p>Add <code>list</code> keyword to force list context (like <code>scalar</code>)</p>
+<a name='VERSION'></a><h1>VERSION</h1>
+<pre>  Maintainer: Nathan Wiger &lt;<a href='mailto:nate@wiger.org'>nate@wiger.org</a>&gt;
+  Date: 29 Aug 2000
+  Last Modified: 11 Sep 2000
+  Mailing List: <a href='mailto:perl6-language@perl.org'>perl6-language@perl.org</a>
+  Number: 175
+  Version: 2
+  Status: Retracted</pre>
+<a name='ABSTRACT'></a><h1>ABSTRACT</h1>
+<p>Currently, we have a <code>scalar</code> keyword to force scalar context. However,
+we have no corresponding <code>list</code> keyword, leading to constructs like
+this:</p>
+<pre>   foo( () = bar() );     # force list context</pre>
+<p>Which are clumsy, at best. Do they work? Yes. Is it easily readable and
+maintainable code? Not really.</p>
+<p>This RFC proposes a new keyword, <code>list</code>, which forces list context.
+This means the above can simply be written as:</p>
+<pre>   foo(list bar());       # force list context</pre>
+<p>Which is consistent with similar uses of <code>scalar</code>, and also makes the
+code much more readable. This RFC does NOT propose any other keywords
+because they are unnecessary. All data types in Perl are built on lists
+and scalars.</p>
+<a name='NOTES ON RETRACTION'></a><h1>NOTES ON RETRACTION</h1>
+<p>On the surface makes sense. But in reality...Bad Idea.</p>
+<p><a href='http://www.mail-archive.com/perl6-language@perl.org/msg03404.html' target='_blank'>www.mail-archive.com</a>
+<a href='http://www.mail-archive.com/perl6-language@perl.org/msg03489.html' target='_blank'>www.mail-archive.com</a></p>
+<a name='DESCRIPTION'></a><h1>DESCRIPTION</h1>
+<a name='The Proposal'></a><h2>The Proposal</h2>
+<p>The purpose of this RFC is to increase clarity, make easy things easier,
+and make Perl contexts more accessible. It is not to supplant the
+current implicit typing methods, which are a beautiful thing.</p>
+<p>The new <code>list</code> context keyword makes things clearer and easier to
+understand in some situations, just like <code>scalar</code>:</p>
+<pre>   foo(list bar());         # easy
+   foo( () = bar() );       # not as easy
+
+   foo(bar());              # easy
+   foo(scalar bar());       # not as easy
+
+   $count = list split /!/; # easy
+   $count = () = split /!/; # not as easy
+
+   my($arg1) = func;        # easy
+   my $arg1 = list func;    # not as easy
+
+   my $num = @a;            # easy
+   my($num) = scalar @a;    # not as easy
+
+   my($nextvar) = scalar &lt;STDIN&gt;;   # Camel-3 p. 778, for clarity
+   my $nextvar = &lt;STDIN&gt;;   # implicit
+   </pre>
+<p>Here, <code>list</code> can be used to force list context, just like <code>scalar</code> can
+be used to force scalar context. And, as the Camel-3 example shows, it
+can be used for greater clarity if you so desire just like <code>scalar</code>.</p>
+<p>There are several arguments against <code>list</code>, so I'll spend the remainder
+of the RFC addressing them. There has already been a huge discussion on
+this as well; please see the REFERENCES for links to the thread.</p>
+<a name='Arguments Against'></a><h2>Arguments Against</h2>
+<a name='We don't need list, it's unnecessary'></a><h3>We don't need <code>list</code>, it's unnecessary</h3>
+<p>So is <code>scalar</code>. There are ways around using <code>scalar</code>, just as there
+are ways around using <code>list</code>. While they are not exactly analogous
+workarounds, there is still no real reason <code>scalar</code> is needed and
+<code>list</code> is not. Consider:</p>
+<pre>   $num = scalar @a;     # scalar explicit
+   $num = @a;            # scalar implicit
+   $num = list @a;       # list explicit
+   ($num) = @a;          # list implicit</pre>
+<p>We don't need 6 trigonometric functions, either - everything can be
+derived from <code>sin</code>. However, we support them to make easy things
+easier. The same philosophy should apply here.</p>
+<a name='What next, hash, boolean, and other keywords?'></a><h3>What next, <code>hash</code>, <code>boolean</code>, and other keywords?</h3>
+<p>No. Every Perl data type is built on either a <code>list</code> (arrays and
+hashes) or a <code>scalar</code> (scalars) context. Other contexts are not
+analogous or even closely related.</p>
+<a name='Forcing list context is not a common problem'></a><h3>Forcing <code>list</code> context is not a common problem</h3>
+<p>If it weren't, then it wouldn't have spawned a huge discussion already.
+Also, Perl books would not have to make special notes of how to
+artificially enforce <code>list</code> context with special constructs:</p>
+<pre>   () = funkshun();
+   $x = ( () = funk() );</pre>
+<p>Which could be easily rewritten as:</p>
+<pre>   list funkshun;
+   $x = (list funk);        # with one keyword, or...
+   $x = scalar list funk;   # can chain to make explicit</pre>
+<p>Thanks to the new <code>list</code> keyword.</p>
+<a name='The keyword list adds nothing new'></a><h3>The keyword <code>list</code> adds nothing new</h3>
+<p>Except clarity, simplicity, and consistency, without having to sacrifice
+any part of the existing language. If you don't like it, don't use it.</p>
+<a name='IMPLEMENTATION'></a><h1>IMPLEMENTATION</h1>
+<p>Hold on.</p>
+<a name='MIGRATION'></a><h1>MIGRATION</h1>
+<p>None. This adds new functionality.</p>
+<a name='REFERENCES'></a><h1>REFERENCES</h1>
+<p>Camel-3, p. 778 (The section on <code>scalar</code>)</p>
+<p>Thanks to Bart Lateur for his input</p>
+<p>There was an extensive, heated discussion between Tom C and myself on
+this topic. I will post a link to the email archive as a follow-up after
+this posts (it is not currently available on mail-archive.com).</p>
+</div>

@@ -1,0 +1,76 @@
+[% setvar title hooks in pack/unpack %]
+<h3>This file is part of the Perl 6 Archive</h3>
+    <p>To see what is currently happening visit <a href="http://www.perl6.org/">http://www.perl6.org/</a></p>
+<div class='pod'>
+<a name='TITLE'></a><h1>TITLE</h1>
+<p>hooks in pack/unpack</p>
+<a name='VERSION'></a><h1>VERSION</h1>
+<pre>  Maintainer: Ilya Zakharevich &lt;<a href='mailto:ilya@math.ohio-state.edu'>ilya@math.ohio-state.edu</a>&gt;
+  Date: 16 September 2000
+  Mailing List: <a href='mailto:perl6-language-data@perl.org'>perl6-language-data@perl.org</a>
+  Number: 250
+  Version: 1
+  Status: Developing</pre>
+<a name='ABSTRACT'></a><h1>ABSTRACT</h1>
+<p>How to specify pack()/unpack() user-recipes.</p>
+<a name='DESCRIPTION'></a><h1>DESCRIPTION</h1>
+<p>The following enhancement covers almost all the of the remaining ways
+to store binary data, but it is substantially higher on the &quot;bizzareness&quot;
+scale:</p>
+<p><code>'R[ID,TYPE]'</code> in a TEMPLATE: during unpack() extracts a value as TYPE
+and uses it to choose between several choices of templates. Behaves as
+if <code>R[ID,TYPE]</code> is replaced by the chosen template.  The templates to
+chose from are looked in/via the array/hash/subroutine referenced by
+<code>$unpack::recipes[ID]</code>.</p>
+<p>Similarly, <code>'R{ID,TYPE}'</code> uses <code>$unpack::recipes{ID}</code> instead.</p>
+<p>The returned template may be replaced by a reference to array of the form</p>
+<pre>  [TEMPLATE, \&amp;POSTPROCESS]</pre>
+<p>In such a case a value is extracted with TEMPLATE, then is postprocessed
+by calling <code>POSTPROCESS($extracted)</code>, the return value replaces the
+extracted value.</p>
+<p>Optional: one should be able to specify that some bits of the last
+extracted value which are ignored: <code>'R[ID,FROM..TO,TYPE]'</code> uses bits
+from FROM to TO (shifted right by FROM) as the index.  <code>'R[ID,mod,TYPE]'</code>
+uses the last extracted value modulo the length of the array referenced by
+$unpack::recipes[ID].</p>
+<p>This extracts UTF8 chars of up to 2-byte encoded length:</p>
+<pre>  sub utf8_2byte_postprocess { (($_[0] &amp; 0x1F00) &gt;&gt; 2) | ($_[0] &amp; 0x3F) }
+
+  local $unpack::recipes{UTF8} = [ 'C', [ 'n', \&amp;utf8_2byte_postprocess ] ];
+  $n = unpack 'R{UTF8,7..7,C}', $str;</pre>
+<p>Symmetrically, during pack() <code>'R[ID]'</code> etc. make ID lookup in %pack::recipes
+or @pack::recipes.  The resulting array/hash/subroutine reference is
+indexed-by/called-with the next argument to pack.  The result is appended
+to the target string.</p>
+<p>The symmetric example to the UTF8 example above:</p>
+<pre>  sub utf8_2byte_save {
+    return pack &quot;C&quot;, $_[0] if $_[0] &lt;= 127; 
+    pack 'n',  0x80C0 | (($_[0] &amp; 0x7C0)&lt;&lt;2) | ($_[0] &amp; 0x3F);
+  };
+
+  local $pack::recipes{UTF8} = \&amp;utf8_2byte_save;
+  $str = pack 'R{UTF8}', $n;</pre>
+<p>Optionally, to allow a usage of the same TEMPLATE during pack() and during
+unpack(), anything after the first comma in the argument to <code>'R'</code> is ignored:</p>
+<pre>  $str = pack 'R{UTF8}',       $n;
+  $str = pack 'R{UTF8,7:7,C}', $n;</pre>
+<p>are equivalent.</p>
+<p>The usage of pack() with <i>only one</i> <code>'R'</code> type inside is obviously an
+overkill, but it comes very handy if <code>'R'</code> is a part of a more complicated
+construct, as in</p>
+<pre>  $str = pack 'N/R{UTF8,7:7,C}', @array;</pre>
+<p>or</p>
+<pre>  $str = pack 'N/( \g[ N/R{UTF8,7:7,C} ] )', @array_of_arrays;</pre>
+<p>In addition to &quot;funny ways to encode simple data&quot;, this same proposal allows
+handling of streams which consist of repeated blocks of the form</p>
+<pre>  int type; union { struct type_0 t0; struct type_1 t1; ... }</pre>
+<p>as well as many other similar problems.</p>
+<a name='MIGRATION ISSUES'></a><h1>MIGRATION ISSUES</h1>
+<p>None.</p>
+<a name='IMPLEMENTATION'></a><h1>IMPLEMENTATION</h1>
+<p>Straightforward.</p>
+<a name='REFERENCES'></a><h1>REFERENCES</h1>
+<p>RFC 142: Enhanced Pack/Unpack</p>
+<p>RFC 246: pack/unpack uncontrovercial enhancements</p>
+<p>RFC 248: enhanced groups in pack/unpack</p>
+</div>

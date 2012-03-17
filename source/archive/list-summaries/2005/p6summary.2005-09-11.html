@@ -1,0 +1,253 @@
+[% setvar title The Perl 6 Summary from 2005-08-24 to 2005-09-11 %]
+<h3>This file is part of the Perl 6 Archive</h3>
+    <p>To see what is currently happening visit <a href="http://www.perl6.org/">http://www.perl6.org/</a></p>
+<div class='pod'>
+<a name='The Perl 6 Summary from 2005-08-24 to 2005-09-11'></a><h1>The Perl 6 Summary from 2005-08-24 to 2005-09-11</h1>
+<p>It's been a while hasn't it?</p>
+<p>We'll start as usual with perl6-compiler</p>
+<a name='This week in perl6-compiler'></a><h1>This week in perl6-compiler</h1>
+<a name='Changed ??:: to ??!! in Pugs'></a><h2>Changed <code>??::</code> to <code>??!!</code> in Pugs</h2>
+<p>Following discussion of the ternary operator in perl6-language, Benjamin Smith
+altered pugs to use the new <code>??!!</code> syntax.</p>
+<p><a href='http://groups.google.com/groups?threadm=20050908181747.GE21605@vtrl.co.uk' target='_blank'>groups.google.com</a></p>
+<a name='Meanwhile in perl6-internals'></a><h1>Meanwhile in perl6-internals</h1>
+<a name='Which 'English'?'></a><h2>Which 'English'?</h2>
+<p>Joshua Hoblitt posted a patch to <b><i>intro.pod</i></b> fixing a few typos and wondered
+whether the docs should be in British or American English. Apparently the Perl
+5 style rule is that British authors shouldn't be required to write American
+English, and vice versa, but that a consistent style within a document is
+preferred. The consensus so far seems to be &quot;Any documentation is good so write
+what's comfortable for you.&quot;</p>
+<p><a href='http://groups.google.com/groups?threadm=rt-3.0.11-37067-120223.16.8502778537115@perl.org' target='_blank'>groups.google.com</a></p>
+<a name='Meanwhile, at the test'></a><h2>Meanwhile, at the test</h2>
+<p>Warne just got Trescothick out. 109 for 4</p>
+<a name='Python PMCs'></a><h2>Python PMCs</h2>
+<p>Sam Ruby, Leo and Chip had a discussion of how to implement python semantics
+for parrot. I'm not sure I followed what was going on, but it looked like good
+'crunchy' stuff.</p>
+<p><a href='http://groups.google.com/groups?threadm=430BAE1D.7090406@intertwingly.net' target='_blank'>groups.google.com</a></p>
+<a name='Zcode interpreter release'></a><h2>Zcode interpreter release</h2>
+<p>Amir Karger announced that he'd adopted the Zcode interpreter that Leo posted
+in February (having, according to Amir, done the hard parts). Apparently
+there's 41 opcodes to do just to get version 3 of the Z-machine working, and
+then there's the problem of making Zops into loadable Parrot ops. He had a few
+problems with the test suite which got fixed in discussion.</p>
+<p><a href='http://groups.google.com/groups?threadm=d113603e0508231409574066c4@mail.gmail.com' target='_blank'>groups.google.com</a></p>
+<a name='Pirate refactoring report'></a><h2>Pirate refactoring report</h2>
+<p>Michal Wallace posted an update on Pirate (the python to parrot compiler). He
+and Curtis Hall have been taking advantage of a Google Summer of Code grant to
+refactor the (Curse! Now Flintoff's out. Caught &amp; bowled Warne for 8) current
+mess. Their first step was a generic transformation module which has
+apparently made life easier for the compiler module.</p>
+<p>They've also produced a plan in code for how they hope they'll have things
+working once the refactoring's finished and asked for comments. So far comments
+have not been forthcoming.</p>
+<p><a href='http://pirate.versionhost.com/viewcvs.cgi/pirate/toys/refactor.py?rev=HEAD' target='_blank'>pirate.versionhost.com</a>&amp;content-type=text/vnd.viewcvs-markup</p>
+<p><a href='http://groups.google.com/groups?threadm=Pine.LNX.4.62.0508242306300.2983@hydrogen.sabren.com' target='_blank'>groups.google.com</a></p>
+<a name='Tcl in the leo-ctx5 branch'></a><h2>Tcl in the <code>leo-ctx5</code> branch</h2>
+<p>Will Coleda's been having a crack at getting ParTcl working with the leo-ctx5
+branch and had a few problems. It turns out that he'd tickled a bug that Leo
+described as 'a bit non-trivial'. It took him a while, but it got fixed
+eventually (Over 10 days, but he did have the excuse of being at YAPC::Europe
+for a chunk of that time).</p>
+<p><a href='http://groups.google.com/groups?threadm=2A682CE6-D1F0-486F-A1C5-1E6E3C08D73C@coleda.com' target='_blank'>groups.google.com</a></p>
+<a name='Meanwhile at the Oval'></a><h2>Meanwhile at the Oval</h2>
+<p>They've gone in for lunch at 127 for 5. Hopefully I'll be able to get down to
+some summary writing without being on the edge of my seat for a while.</p>
+<a name='Branch Review'></a><h2>Branch Review</h2>
+<p>Chip posted a review of the <code>leo-ctx5</code> branch prior, describing it as &quot;A
+significant improvement.&quot; The body of the review covers user visible changes
+and a few niggles with the current state of the branch. Leo replied with a few
+questions and explanations.</p>
+<p><a href='http://groups.google.com/groups?threadm=20050829202726.GX1432@tytlal.topaz.cx' target='_blank'>groups.google.com</a></p>
+<a name='GMC release'></a><h2>GMC release</h2>
+<p>Nattfodd announced the 'release' of GMC, the generation garbage collector he's
+been working on as part of Google's Summer of Code. It's not quite bug free
+yet, but the SoC deadline was the 1st of September, so that's when it got
+released. Discussion ensued, hopefully helping to triangulate bugs.</p>
+<p><a href='http://groups.google.com/groups?threadm=4316374F.8070501@gmail.com' target='_blank'>groups.google.com</a></p>
+<a name='Call for B0rked'></a><h2>Call for B0rked</h2>
+<p>Following a discussion with Chip and Leo, chromatic posted a call for entries
+in a 'very specific TODO list'. A list of things that should work, but
+don't. He contributed a couple himself. Various other suggestions were offered.</p>
+<p><a href='http://groups.google.com/groups?threadm=1125529485.5131.332.camel@localhost' target='_blank'>groups.google.com</a></p>
+<a name='Optimizer Documentation'></a><h2>Optimizer Documentation</h2>
+<p>Curtis Rawls spent part of his Summer of Code project wishing there was better
+documentation of the Parrot optimizer. So he wrote some. Brent Royal-Gordon
+converted it to POD format, and Leo asked for someone to add it to the
+repository.</p>
+<p><a href='http://groups.google.com/groups?threadm=45ec99fc0509011744383d3b51@mail.gmail.com' target='_blank'>groups.google.com</a></p>
+<a name='HLL Namespace Design'></a><h2>HLL Namespace Design</h2>
+<p>Matt Diephouse posted a list of namespace features that he thinks are necessary
+to support all the target languages and asked for some comments. He got
+several, including one from Larry.</p>
+<p><a href='http://groups.google.com/groups?threadm=198c873805090510431ff7ff4@mail.gmail.com' target='_blank'>groups.google.com</a></p>
+<a name='Global Destruction'></a><h2>Global Destruction</h2>
+<p>Nicholas Clark had some questions about finalization and destruction in
+Parrot. In particular, he asked: &quot;Does parrot make any guarantee that all
+objects will be rendered down to bare memory before program exit&quot;. Leo answered
+and the answer was good enough for Ponie. Huzzah.</p>
+<p><a href='http://groups.google.com/groups?threadm=20050906160104.GB25110@plum.flirble.org' target='_blank'>groups.google.com</a></p>
+<a name='Meanwhile, at the Oval'></a><h1>Meanwhile, at the Oval</h1>
+<p>Ah... they're back on the pitch... I may be slowing down again...</p>
+<a name='Meanwhile, in perl6-language'></a><h1>Meanwhile, in perl6-language</h1>
+<a name='Demagicalizing Pairs'></a><h2>Demagicalizing Pairs</h2>
+<p>Discussion of Luke's proposal to demagicalize Pairs continued. It turns out
+that it's actually a discussion of how to do named argument calling...</p>
+<p><a href='http://groups.google.com/groups?threadm=7ca3f016050819033124215cc1@mail.gmail.com' target='_blank'>groups.google.com</a></p>
+<a name='~ and + vs. generic eq'></a><h2><code>~</code> and <code>+</code> vs. generic <code>eq</code></h2>
+<p>I don't know about you, but I'm starting to lose track of Perl 6's 'equality'
+tests. The latest discussion concerns the differences between <code>~~</code> and
+<code>eqv</code>. Damian pointed out that we currently stand at 6 different possible
+tests for 'equality' and wondered if that might not be slightly too many.</p>
+<p><a href='http://groups.google.com/groups?threadm=20050823233237.GA531@wall.org' target='_blank'>groups.google.com</a></p>
+<a name='Perl 6 code -- A possible compile, link, run cycle'></a><h2>Perl 6 code -- A possible compile, link, run cycle</h2>
+<p>Yuval Kogman thought it was time to think about how a the Perl 6 on Parrot
+linker might eventually look. So he did some thinking aloud. Discussion ensued,
+mostly related to the workings of <code>use</code> and other directives that can affect
+compilation semantics.</p>
+<p><a href='http://groups.google.com/groups?threadm=20050824131302.GN2318@woobling.org' target='_blank'>groups.google.com</a></p>
+<a name='Binding of array elements'></a><h2>Binding of array elements</h2>
+<p>Ingo Blechschmidt had some questions about the workings of the binding
+operator. He outlined a list of possibilities along with his understanding of
+the semantics. Yuval Kogman and TSa had some ideas, but nothing from @Larry yet.</p>
+<p><a href='http://groups.google.com/groups?threadm=deld7c$7o8$1@sea.gmane.org' target='_blank'>groups.google.com</a></p>
+<a name='Who is @Larry'></a><h2>Who is @Larry</h2>
+<p>Speaking of @Larry, Matt Fowles asked who comprises @Larry. According to
+Autrijus, <code>@Larry = «Larry Damian Chip Leo chromatic Allison Hugo Luke Nathan
+Dan»</code>, but I have the feeling Dan's retired.</p>
+<p><a href='http://groups.google.com/groups?threadm=f2601a7f05082518256db27728@mail.gmail.com' target='_blank'>groups.google.com</a></p>
+<a name='Does list construction create new containers?'></a><h2>Does list construction create new containers?</h2>
+<p>Continuing his investigations of semantics, Ingo Blechschmidt had some
+questions about the semantics of list construction. Yuval and Juerd had some
+suggested answers.</p>
+<p><a href='http://groups.google.com/groups?threadm=deq1di$ms1$1@sea.gmane.org' target='_blank'>groups.google.com</a></p>
+<a name='Using lists 'containing' arrays as lvalues'></a><h2>Using lists 'containing' arrays as lvalues</h2>
+<p>More questions from Ingo, more suggestions from Yuval and Thomas Sandlaß this
+time. There was even an answer from Larry.</p>
+<p><a href='http://groups.google.com/groups?threadm=deq768$557$1@sea.gmane.org' target='_blank'>groups.google.com</a></p>
+<a name='How do you say another_sub(@_) in perl 6?'></a><h2>How do you say <code>another_sub(@_)</code> in perl 6?</h2>
+<p>Yuval wondered how to pass arguments through from one sub to another in Perl
+6. My mailbox appears to be missing a few replies so I'm not entirely sure how
+the thread went. I don't think there was anything on the subject from @Larry
+though.</p>
+<p><a href='http://groups.google.com/groups?threadm=20050828085734.GB18271@woobling.org' target='_blank'>groups.google.com</a></p>
+<a name='User defined autovivification'></a><h2>User defined autovivification</h2>
+<p>Yuval Kogman thinks code like this is ugly:</p>
+<pre>  ($index_by_x{$thing-&gt;x_value} ||= Set::Object-&gt;new)-&gt;insert($thing);</pre>
+<p>Frankly, I agree with him (how could I not?)</p>
+<p>He suggested a couple of possible ways of avoiding such ugliness in Perl 6. My
+favourite was probably:</p>
+<pre>  my %hash will autovivify { Set::Object.new };</pre>
+<p>However, I'm not sure that this is something that needs to be in the language
+core; it seems to be the sort of thing that can be implemented reasonably
+simply in a CP6AN module.</p>
+<p><a href='http://groups.google.com/groups?threadm=20050828091347.GA19815@woobling.org' target='_blank'>groups.google.com</a></p>
+<a name='Manuthreading'></a><h2>Manuthreading</h2>
+<p>Luke is trying to get the useful:dangerous balance inherent in Junctions sorted
+out. To that end, he proposed a new way to do autothreading that doesn't use
+junctions at all. Discussion ensued, mostly to do with where to fit the
+semantics in the syntax.</p>
+<p><a href='http://groups.google.com/groups?threadm=7ca3f016050828024533982be6@mail.gmail.com' target='_blank'>groups.google.com</a></p>
+<a name='Operator sub names that are not special'></a><h2>Operator sub names that are not special</h2>
+<p>Luke tried to make people's heads hurt with this sample code:</p>
+<pre>    sub foo(&amp;infix:&lt;+&gt;) { 1 + 2 }
+    sub bar($a, $b) { say &quot;$a, $b&quot; }
+    foo(&amp;bar);   # &quot;1, 2&quot;</pre>
+<p>I think everyone but Yuval Kogman was too shocked to comment.</p>
+<p><a href='http://groups.google.com/groups?threadm=7ca3f01605083103566d48e505@mail.gmail.com' target='_blank'>groups.google.com</a></p>
+<a name='@array = $scalar'></a><h2><code>@array = $scalar</code></h2>
+<p>Ingo continued his mission to understand assignment semantics by asking about
+assigning a scalar to an array. The thread drifted slightly, moving onto
+consideration of such hypothetical(?) operators as <code>,=</code>, <code>&amp;=</code> and  <code>|=</code>. One
+of those is probably more hypothetical than the others.</p>
+<p><a href='http://groups.google.com/groups?threadm=loom.20050831T151914-777@post.gmane.org' target='_blank'>groups.google.com</a></p>
+<a name='no 6;'></a><h2><code>no 6;</code></h2>
+<p>Rafael Garcia-Suarez thought it would be useful to be able to put <code>no 6;</code> at
+the top of Perl 5 modules that it wouldn't make sense to port to Perl 6. In
+order for this to work effectively, he thought it would be best if Perl 6 would
+at least die correctly with a useful error message. He asked p6l for
+comments. Apart from asking if supporting <code>no 5</code> would mean we'd have to
+support Perl 4, there weren't any.</p>
+<p><a href='http://groups.google.com/groups?threadm=20050901182716.41f927a4@grubert.mandrakesoft.com' target='_blank'>groups.google.com</a></p>
+<a name='for $arrayref {...}'></a><h2><code>for $arrayref {...}</code></h2>
+<p>Another question from Ingo. Another answer from Juerd with commentary from Luke.</p>
+<p><a href='http://groups.google.com/groups?threadm=df7h9r$edv$1@sea.gmane.org' target='_blank'>groups.google.com</a></p>
+<a name='WWW::Kontent 0.02 is released'></a><h2>WWW::Kontent 0.02 is released</h2>
+<p>Another of our Summer of Code interns, Brent Royal-Gordon announced the 0.02
+release of WWW::Kontent, a content management system written in Perl 6 and
+executable in Pugs. As Brent says, it's not ready for production, but it seems
+to be ready for serious play. From the release notes:</p>
+<p>&quot;Part of the purpose of this project was to test Perl 6, and I'm happy to
+report that it passed with flying colors. Perl 6 feels like a much-enhanced
+Perl 5, with all the wrinkles removed and very few new ones added. It seems to
+be a very solid design, and is a joy to program in.&quot;</p>
+<p>I've been saying that this would be the case for ages now. It's good to see
+that Brent's experience here bears that out.</p>
+<p><a href='http://groups.google.com/groups?threadm=b8b9a51105090117383b80295@mail.gmail.com' target='_blank'>groups.google.com</a></p>
+<a name='&amp;multisub.arity'></a><h2><code>&amp;multisub.arity</code></h2>
+<p>And another question from Ingo. This time he wanted to know about the arity of
+multi subs. The discussion got rather complicated.</p>
+<p><a href='http://en.wikipedia.org/wiki/Arity' target='_blank'>en.wikipedia.org</a> - The meaning of arity</p>
+<p><a href='http://groups.google.com/groups?threadm=df9snn$jup$1@sea.gmane.org' target='_blank'>groups.google.com</a></p>
+<a name='Multi scoping'></a><h2>Multi scoping</h2>
+<p>Luke showed an example of a seemingly simple multi sub declaration that ended
+up creating an infinite loop. He asked for suggestions about fixing it. He and
+Yuval worked some stuff out.</p>
+<p><a href='http://groups.google.com/groups?threadm=7ca3f0160509040055234b361f@mail.gmail.com' target='_blank'>groups.google.com</a></p>
+<a name='Lambda Calculus in Perl 6'></a><h2>Lambda Calculus in Perl 6</h2>
+<p>Dan Kogai noted that its way easier to do Lambda Calculus things in Perl 6 than
+it was in Perl 5. He even went so far as to claim it was even easier than doing
+the same thing in Scheme.</p>
+<p><a href='http://groups.google.com/groups?threadm=A77477E9-C139-48D2-86C2-CE60842FA659@dan.co.jp' target='_blank'>groups.google.com</a></p>
+<a name='Changing ??::'></a><h2>Changing <code>??::</code></h2>
+<p>Thomas Sandlass thought that making <code>::</code> unambiguously be used as a symbolic
+sigil was worth changing the ternary operator to <code>??//</code>. Almost everyone
+agreed that replacing <code>::</code> wouldn't be a bad thing, but that <code>//</code> wasn't the
+right replacement. We ended up with the ternary operator becoming <code>??!!</code>.</p>
+<p><a href='http://groups.google.com/groups?threadm=8B2D97A317E8C9479E35FED99ADC3096CCC8C3@br2mex01.orthogon.com' target='_blank'>groups.google.com</a></p>
+<a name='\(...)'></a><h2><code>\(...)</code></h2>
+<p>Another of Ingo's questions, this time about the behaviour of <code>\(...)</code> spun
+off into a rather complicated discussion that I'm afraid I'm not going to
+attempt to summarise in more detail than that.</p>
+<p><a href='http://groups.google.com/groups?threadm=dfkkmh$q36$1@sea.gmane.org' target='_blank'>groups.google.com</a></p>
+<a name='Packages, Module and Classes'></a><h2>Packages, Module and Classes</h2>
+<p>Stevan Little is currently wrestling with the Pugs MetaModel and had some
+questions about the workings and interrelationships of Packages, Modules and
+Classes. He and Larry sorted things out.</p>
+<p><a href='http://groups.google.com/groups?threadm=5da944e30b1b7bfb094210bf33a9b0f3@iinteractive.com' target='_blank'>groups.google.com</a></p>
+<a name='Parsing indent-sensitive languages'></a><h2>Parsing indent-sensitive languages</h2>
+<p>Dave Whipp had some questions about parsing a Pythonesque language using Perl 6
+rules. Much discussion ensued with possible extensions to Perl 6 rules being
+suggested. Then Damian pointed out, with appropriate rules, that you don't need
+any extensions, you can parse such languages already.</p>
+<p><a href='http://groups.google.com/groups?threadm=20050908153724.21134.qmail@lists.develooper.com' target='_blank'>groups.google.com</a></p>
+<a name='Back at the Oval'></a><h2>Back at the Oval</h2>
+<p>McGrath just bowled Kevin Pietersen for 158. It's looking awfully like we've
+won The Ashes.</p>
+<a name='Item and slurpy'></a><h2>Item and slurpy</h2>
+<p>Juerd wondered if 'item context' and 'slurpy context' were official terms
+now. Larry thought not, preferring item and list context.</p>
+<p><a href='http://groups.google.com/groups?threadm=20050909223626.GQ7858@c4.convolution.nl' target='_blank'>groups.google.com</a></p>
+<a name='Sequence points, undefined behaviour'></a><h2>Sequence points, undefined behaviour</h2>
+<p>Nicholas Clark wondered if Perl 6 will have any documented notion of things
+like sequence points, undefined behaviour, etc. Will it fix the order in which
+function arguments are evaluated and all those other things it's useful to
+know. Warnock applies.</p>
+<p><a href='http://groups.google.com/groups?threadm=20050910112229.GB25158@plum.flirble.org' target='_blank'>groups.google.com</a></p>
+<a name='Acknowledgements, apologies and everything else'></a><h1>Acknowledgements, apologies and everything else</h1>
+<p>Ah... sorry for the lack of recent summaries. Sorry for being distracted by the
+cricket, but it's been a bit tense for most of the day.</p>
+<a name='Help Chip'></a><h2>Help Chip</h2>
+<p><a href='http://geeksunite.org/' target='_blank'>geeksunite.org</a> -- Chip still needs help.</p>
+<a name='The usual coda'></a><h2>The usual coda</h2>
+<p>If you find these summaries useful or enjoyable, please consider
+contributing to the Perl Foundation to help support the development of
+Perl.</p>
+<p><a href='http://donate.perl-foundation.org/' target='_blank'>donate.perl-foundation.org</a> -- The Perl Foundation</p>
+<p><a href='http://dev.perl.org/perl6/' target='_blank'>dev.perl.org</a> -- Perl 6 Development site</p>
+<p>Check out my website, it's lovely.</p>
+<p><a href='http://www.bofh.org.uk/' target='_blank'>www.bofh.org.uk</a></p>
+<p>Vaguely pretty photos by me can be found at:</p>
+<p><a href='http://www.flickr.com/photos/pdcawley' target='_blank'>www.flickr.com</a></p>
+</div>

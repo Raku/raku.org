@@ -1,0 +1,65 @@
+[% setvar title Fix iteration of nested hashes %]
+<h3>This file is part of the Perl 6 Archive</h3>
+    <p>To see what is currently happening visit <a href="http://www.perl6.org/">http://www.perl6.org/</a></p>
+<div class='pod'>
+<a name='TITLE'></a><h1>TITLE</h1>
+<p>Fix iteration of nested hashes</p>
+<a name='VERSION'></a><h1>VERSION</h1>
+<pre>  Maintainer: Damian Conway &lt;<a href='mailto:damian@conway.org'>damian@conway.org</a>&gt;
+  Date: 18 Sep 2000
+  Last Modified: 25 Sep 2000
+  Mailing List: <a href='mailto:perl6-language@perl.org'>perl6-language@perl.org</a>
+  Number: 255
+  Version: 3
+  Status: Retracted</pre>
+<a name='NOTE ON RETRACTION'></a><h1>NOTE ON RETRACTION</h1>
+<p>The thread:</p>
+<pre>	<a href='http://www.mail-archive.com/perl6-language@perl.org/index.html' target='_blank'>www.mail-archive.com</a>#04190</pre>
+<p>points out some serious problems that the proposal did
+not address. As I do not have time to find/invent good solutions, I
+am forced to withdraw the proposal.</p>
+<p>Anyone wishing to take up the cudgels against this annoying problem
+has my encouragement to pick whatever they like from the bones of this
+document.</p>
+<a name='ABSTRACT'></a><h1>ABSTRACT</h1>
+<p>This RFC proposes that the internal cursor iterated by the <code>each</code> function
+be stored in the pad of the block containing the <code>each</code>, rather than
+being stored within the hash being iterated.</p>
+<a name='DESCRIPTION'></a><h1>DESCRIPTION</h1>
+<p>Currently, nesting two <code>each</code> iterations on the same hash leads to
+unexpected behaviour, because both <code>each</code>s advance the same internal
+cursor within the hash. For example:</p>
+<pre>        %desc = ( blue  =&gt; &quot;moon&quot;,
+                  green =&gt; &quot;egg&quot;,
+                  red   =&gt; &quot;Baron&quot; );
+
+        while ( my ($key1,$value1) = each %desc )
+        {
+                while ( my ($key2,$value2) = each %desc )
+                {
+                        print &quot;$value2 is not $key1\n&quot;
+                                unless $key1 eq $key2;
+                }
+        }
+        print &quot;(finished)\n&quot;;</pre>
+<p>It is proposed that each <code>each</code> maintain its own cursor (stored in the pad
+of the block containing it) so that the above example DWIMs.</p>
+<a name='MIGRATION ISSUES'></a><h1>MIGRATION ISSUES</h1>
+<p>Minimal. No-one nests iterators now because it doesn't work.</p>
+<p>Usages such as:</p>
+<pre>	$x = each %hash;
+	$y = each %hash;
+	@z = each %hash;</pre>
+<p>would change their behaviour, but could be translated if p52p6 defined:</p>
+<pre>	sub p5_each(\%) { each %{$_[0]} }</pre>
+<p>and globally replaced each Perl 5 <code>each</code> by <code>p5_each</code>.</p>
+<p>There would not (necessarily) be any effect on the use of FIRSTKEY and NEXTKEY
+in tied hashes, since the compiler could still determine which should be
+called. However, tied hashes that use an internal cursor might behave
+differently, if nested.</p>
+<a name='IMPLEMENTATION'></a><h1>IMPLEMENTATION</h1>
+<p>Store the cursor in the pad of the block in which the <code>each</code> is defined,
+rather than within hash.</p>
+<a name='REFERENCES'></a><h1>REFERENCES</h1>
+<p>RFC 136: (Implementation of hash iterators) suggests separate iterators for <code>each</code> and <code>keys</code>/<code>values</code>.</p>
+</div>

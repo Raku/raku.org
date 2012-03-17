@@ -1,0 +1,196 @@
+[% setvar title Class Collections: Provide the ability to overload classes %]
+<h3>This file is part of the Perl 6 Archive</h3>
+    <p>To see what is currently happening visit <a href="http://www.perl6.org/">http://www.perl6.org/</a></p>
+<div class='pod'>
+<a name='TITLE'></a><h1>TITLE</h1>
+<p>Class Collections: Provide the ability to overload classes</p>
+<a name='VERSION'></a><h1>VERSION</h1>
+<pre>  Maintainer: Greg Williams &lt;<a href='mailto:greg@cnation.com'>greg@cnation.com</a>&gt;
+  Date: 17 Sep 2000
+  Last Modified: 1 Oct 2000
+  Mailing List: <a href='mailto:perl6-language-objects@perl.org'>perl6-language-objects@perl.org</a>
+  Number: 254
+  Version: 2
+  Status: Frozen</pre>
+<a name='ABSTRACT'></a><h1>ABSTRACT</h1>
+<p>Currently, class methods can be overloaded through sub-classing. This
+functionality is perhaps the most compelling aspect object oriented
+programming offers.  This mechanism allows one to extend the functionality
+of pre-existing code without significant copying or rewriting.  However,
+there exists situations in which it is desirable not to extend methods, but
+entire classes.</p>
+<p>It is proposed that classes be able to be grouped into collections.
+Collections would have the ability to inherit from other collections just
+as classes inherit from other classes.  A sub-collection would overload
+super-collection classes exactly like subclasses overload superclass
+methods.</p>
+<a name='NOTES ON FREEZE'></a><h1>NOTES ON FREEZE</h1>
+<p>There was very little discussion of this RFC.  Damian Conway was the single
+opponent to this RFC suggesting that the problem is better solved in other
+ways (see below).  Michael G Schwern noted that the DBI suffers from the
+problem described here (with respect to the interaction of DBI and
+DBI::st).  Nathan Wiger and David L. Nicol both seemed to support the idea
+of fixing this problem, both contemplating different ways to go about it.</p>
+<p>Although there has been little discussion about this RFC, and has neither
+ended in any agreement or strong conclusion, I am freezing the RFC so as
+not to lose it to the RFC deadline. I hope that after being reviewed by
+Larry Wall and others, it may be discussed in more depth at a later point
+in time.</p>
+<a name='DESCRIPTION'></a><h1>DESCRIPTION</h1>
+<p>In a typical HASA relationship, the method call to construct the
+encapsulated object must make the call against either a class name, or a
+scalar containing the class name.  In either case the name of the class
+must be known and hard coded in some part of the code.</p>
+<p>Consider two classes, Forest and Frog (both of which you found on CPAN).  A
+Forest object HASA Frog object.  The Frog object has a method <code>speak</code>
+which prints the noise a frog makes. The Forest object has a method
+<code>make_noise</code> which prints a noise you might hear in the forest (like a
+frog!):</p>
+<pre>     package Forest;
+     sub new {
+       my $class = shift;
+       my $frog = Frog-&gt;new;
+       return bless( { frog =&gt; $frog }, $class );
+     }
+
+     sub make_noise {
+       my $self = shift;
+       $self-&gt;{frog}-&gt;speak; # prints &quot;ribbit ribbit&quot;;
+     }
+
+     package Frog;
+     sub new {
+       my $class = shift;
+       return bless( {}, $class );
+     }
+
+     sub speak () { print &quot;ribbit ribbit&quot;; }
+     sub jump ();
+     sub croak (); # ;-)</pre>
+<p>In English this is fine, but now let's say you need the Forest class to
+work in Japanese as well (Japanese frogs 'kerokero', they don't 'ribbit').
+The Frog class is maintained by another developer however, and you'd rather
+not make changes to it directly.  You can subclass Frog and provide your
+own <code>speak</code> method like so:</p>
+<pre>     package Frog::Japanese;
+     @ISA = qw( Frog );
+     sub speak { print &quot;kerokero&quot;; }</pre>
+<p>Here's where the problem lies.  Even though we now have a subclass of Frog,
+the Forest class is still referencing the original Frog class and not
+Frog::Japanese.  In order for Forest to reference Frog::Japanese, you could
+edit the Forest class and change all occurances of Frog to Frog::Japanese,
+but that is probably not wise.  Firstly, although you may be using a
+relativly small subset of the features of Forest, the code may contain many
+references to the Frog class, each of which you must now change.  Secondly,
+and most importantly, by maintaining a locally modified version of Forest
+you make it difficult to upgrade Forest from CPAN in the future (this
+rationale just stopped you from making changes to the Frog class, after
+all).</p>
+<p>Assuming you did change your copy of Forest, you'd end up with a <code>new</code>
+constructor similar to this:</p>
+<pre>     package Forest;
+     sub new {
+       my $class = shift;
+       my $frog = Frog::Japanese-&gt;new;
+       return bless( { frog =&gt; $frog }, $class );
+     }</pre>
+<p>Now the Forest is specifically Japanese though, and can't be used in
+English anymore!  In perl 5, a logical solution is to subclass Forest for a
+specific locale, with each subclass specifying which language (class) to
+use:</p>
+<pre>     package Forest::Japanese;
+     @ISA = qw( Forest );
+     sub frog_class { 'Frog::Japanese' };
+
+     package Forest::English;
+     @ISA = qw( Forest );
+     sub frog_class { 'Frog' };
+
+     package Forest;
+     sub new {
+       my $class = shift;
+       my $frog = $class-&gt;frog_class-&gt;new;
+       return bless( { frog =&gt; $frog }, $class );
+     }</pre>
+<p>At this point, we must stop and question whether all this work should be
+necessary just to change one return value of one method.  A better solution
+(albeit not currently possible) would be to 'overload' the Frog class with
+a new Japanese version (also named 'Frog').  The Japanese version of the
+Frog class would inherit (in a slightly altered sense) everything but the
+<code>speak</code> method from the CPAN version of Frog, and all static calls to Frog
+methods would actually be made against the new Japanese version.</p>
+<p>It has been suggested that this RFC attempts to solve the problem in a less
+than ideal way.  For example, Damian Conway suggested solving the problem
+by either using delegation, or localizing code:</p>
+<pre>     my $forest = Forest-&gt;new();
+
+     if (can_see_Mt_Fuji()) {
+       local *Frog::speak = sub { &quot;kerokero&quot; };
+       print $forest-&gt;make_noise();    # &quot;kerokero&quot;
+     }
+
+     print $forest-&gt;make_noise();            # &quot;ribbit-ribbit&quot;</pre>
+<p>However, these approaches both seem less than optimal.  Delegation, even if
+sped up through compile time support (RFC 193), would require one to create
+a new class with with to delegate functionality to the Forest class.
+Localizing on the other hand requires that the programmer know and have the
+ability to localize (in this case, the Frog::speak method) in every
+location which would, however indirectly, call the changed method
+(Forest::make_noise).</p>
+<p>The programmer should not be required to circumvent the documented API of a
+module if the module's author will not support the desired changes.
+Certain changes, such as multi-lingual support for the Forest class, may
+conflict with the goals of the author for said module - this does not mean
+that a programmer desiring a multi-lingual Forest class should find it
+necessary to understand and circumvent the internals of the Forest class
+and all supporting classes (Frog).  Perl should provide a more elegant
+solution to this problem than localizing (which avoids the documented API
+and will suffer problems if the internals of the module change) or
+delegation (which requires at the very least additional code written which
+goes against Perl's philosophy of laziness).</p>
+<p>Another example of where this feature would be helpful is when a large
+number of classes inherit from a single superclass and it is desirable to
+extend said superclass without making modifications to any subclasses.
+This has tremendously powerful implications in the area of data inheritance
+as this would allow the addition of fields to a superclass through
+<i><a href='http://search.cpan.org/perldoc?fields'>fields</a></i> (or the feature of similar functionality in perl6) thus affecting
+all subclasses of that superclass.</p>
+<p>Therefore, it is proposed that a method of defining collections of classes
+be implemented.  A collection would encompass a set of classes that
+inherited from and referenced one another (most likely a full application
+or library).  By creating a new collection with only the classes you wish
+to change (such as a superclass) and having this new collection inherit
+from the base collection, classes will become able to overload other
+classes.</p>
+<p>I am unsure of what syntax this feature would employ, both in declaring
+membership of a collection, and in declaring inheritance from a collection.
+I can envision a pragma that might suffice:</p>
+<pre>     package Frog;
+     use collection member =&gt; 'Japanese'; #declares collection membership
+     use collection isa =&gt; 'BaseImplentation'; #declares collection inheritance</pre>
+<p>but am interested to hear suggestions for other ways this might be
+accomplished.</p>
+<p>I am unaware of any OO language that allows overloadable classes as
+described here, and have seen them described only once, but have run into
+many situations in which they would make sense.  I suggest this as a
+solution to the problem described here for perl 6.</p>
+<a name='IMPLEMENTATION'></a><h1>IMPLEMENTATION</h1>
+<p>Let it be said that I am not an internals person, nor do I claim to know
+enough about the current or planned perl internals to comment on this
+authoritatively.  However, there are two areas of concern I am aware of to
+which an implementation of class collections must direct its attention:</p>
+<ul>
+<li><a name='Class Names Would No Longer Be Unique'></a>Class Names Would No Longer Be Unique</li>
+<p>A namespace alone would no longer reference a unique stash, as many stashes
+might contain code and data for one namespace (such as 'Frog').  Therefore,
+a namespace and collection name pair would be needed to specify a unique
+stash.</p>
+<li><a name='Method Lookup'></a>Method Lookup</li>
+<p>Method lookups would need to examine the collection inheritance tree to
+determine which class (that is, in which collection) to dispatch method
+calls to.</p>
+</ul>
+<a name='REFERENCES'></a><h1>REFERENCES</h1>
+<p>Tim Sweeney, &quot;A Critical Look at Programming Languages&quot;
+<a href='http://www.gamespy.com/legacy/articles/devweek_b.shtm' target='_blank'>www.gamespy.com</a></p>
+</div>

@@ -1,0 +1,51 @@
+[% setvar title Global dynamic variables should remain the default %]
+<h3>This file is part of the Perl 6 Archive</h3>
+    <p>To see what is currently happening visit <a href="http://www.perl6.org/">http://www.perl6.org/</a></p>
+<div class='pod'>
+<a name='TITLE'></a><h1>TITLE</h1>
+<p>Global dynamic variables should remain the default</p>
+<a name='VERSION'></a><h1>VERSION</h1>
+<pre>  Maintainer: Nathan Wiger &lt;<a href='mailto:nate@wiger.org'>nate@wiger.org</a>&gt;
+  Date: 28 Sep 2000
+  Last Modified: 30 Sep 2000
+  Mailing List: <a href='mailto:perl6-language-strict@perl.org'>perl6-language-strict@perl.org</a>
+  Number: 330
+  Version: 2
+  Status: Frozen</pre>
+<a name='ABSTRACT'></a><h1>ABSTRACT</h1>
+<p>Several proposals try to automatically lexicalize variables by default.
+While this is a nice idea, it defeats the primary purpose of lexical
+variables: forced declaration and explicit scoping.</p>
+<p>Another proposal suggests that users should be forced to declare all
+variables with <code>my</code> explicitly. Blech. That doesn't make anything easy.
+Perl is not a B&amp;D language (by default, at least :).</p>
+<p>This proposal simply says that variable scoping rules should be the same
+in Perl 6 as they are currently.</p>
+<a name='DESCRIPTION'></a><h1>DESCRIPTION</h1>
+<p>Dynamics are bad in many circumstances. However, standardizing on
+anything else defeats one of the key purposes of Perl: quick and easy
+scripting. For fast scripts, lexical variables are a big burden.</p>
+<p><b>RFC 106</b> makes a good attempt at trying to make lexical variables the
+default, but unfortunately the only way to get them to work as flexibly
+as dynamics is to essentially make them into dynamics, as the &quot;liberal
+approach&quot; to scoping shows. For this reason, dynamics should remain the
+default and users can explicitly declare lexicals if they so desire.
+They could also use a pragma, such as <code>use scope</code> (<b>RFC 64</b>), to
+change the default scoping rules.</p>
+<p>One possibility that the author is willing to entertain is making
+variables dynamic, yet only accessible within a given package. However,
+Python, PHP, Tcl, and other languages have terrible, terrible problems
+with stuff like this, so it would have to be implemented <b>extremely</b>
+carefully. The fact that other languages are broken does not necessarily
+mean that Perl's implementation would have to be, however.</p>
+<a name='IMPLEMENTATION'></a><h1>IMPLEMENTATION</h1>
+<p>None. Things should stay the same.</p>
+<a name='MIGRATION'></a><h1>MIGRATION</h1>
+<p>See above.</p>
+<a name='REFERENCES'></a><h1>REFERENCES</h1>
+<p>RFC 106: Yet another lexical variable proposal: lexical variables made default without requiring strict 'vars'</p>
+<p>RFC 16: Keep default Perl free of constraints such as warnings and strict.</p>
+<p>RFC 28: Perl should stay Perl.</p>
+<p>RFC 64: New pragma 'scope' to change Perl's default scoping</p>
+<p>RFC 6: Lexical variables made default</p>
+</div>

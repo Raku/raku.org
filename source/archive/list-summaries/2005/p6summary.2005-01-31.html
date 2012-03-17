@@ -1,0 +1,104 @@
+[% setvar title Perl 6 Summary for 2005-01-18 through 2005-01-31 %]
+<h3>This file is part of the Perl 6 Archive</h3>
+    <p>To see what is currently happening visit <a href="http://www.perl6.org/">http://www.perl6.org/</a></p>
+<div class='pod'>
+<a name='Perl 6 Summary for 2005-01-18 through 2005-01-31'></a><h1>Perl 6 Summary for 2005-01-18 through 2005-01-31</h1>
+<p>All~</p>
+<p>Welcome to another double feature summary.  Sadly, this one was delayed because of an argument that I was/am having with my connection.  Fortunately, a generous neighbor has allowed me to use his connection for the time being.  So, with that random act of kindness in mind, I bring you</p>
+<a name='Perl 6 Language'></a><h2>Perl 6 Language</h2>
+<a name='Perl 6 on E'></a><h3>Perl 6 on E</h3>
+<p>Rich Morin wondered if features of the language E would be supported on Perl 6.  Larry told him that many would, and &quot;As a limiting case, you can always back out the entire Perl grammar and install the E grammar in its place&quot;.  This was left as an exercise for the reader.</p>
+<p><a href='http://groups-beta.google.com/group/perl.perl6.language/browse_frm/thread/d7b5679b0c32a7c7/f1f8012e39225a1e?_done=/group/perl.perl6.language?' target='_blank'>groups-beta.google.com</a>&amp;_doneTitle=Back+to+topics&amp;_doneTitle=Back&amp;&amp;d#f1f8012e39225a1e -- the thread</p>
+<p><a href='http://www.erights.org/' target='_blank'>www.erights.org</a> -- E's homepage</p>
+<a name='challenge the Palmer...'></a><h3>challenge the Palmer...</h3>
+<p>Luke Palmer produced answers to Austin Hastings's &quot;How do I&quot; questions.  Anyone else with such questions should send them to the list lest Luke's learnedness loses luster.</p>
+<p><a href='http://groups-beta.google.com/group/perl.perl6.language/browse_frm/thread/60003777d2b8df79/db70f9b005934bf8?_done=/group/perl.perl6.language?' target='_blank'>groups-beta.google.com</a>&amp;_doneTitle=Back+to+topics&amp;_doneTitle=Back&amp;&amp;d#db70f9b005934bf8</p>
+<a name='refactoring Perl automatically'></a><h3>refactoring Perl automatically</h3>
+<p>Matisse Enzer re-re-raised the thread on refactoring Perl.  This time he posted a link to EPIC an Eclipse plugin that uses Devel::Refactor.  Unfortunately, I think that he is still using the google groups interface to post the language.  I shall repeat, emails posted via google groups do NOT make it to the list itself.</p>
+<p><a href='http://groups-beta.google.com/group/perl.perl6.language/browse_frm/thread/d31481c114e88a11/8fde39f7f7418669?_done=/group/perl.perl6.language?' target='_blank'>groups-beta.google.com</a>&amp;_doneTitle=Back+to+topics&amp;_doneTitle=Back&amp;&amp;d#8fde39f7f7418669 -- thread
+<a href='http://e-p-i-c.sourceforge.net/' target='_blank'>e-p-i-c.sourceforge.net</a> -- EPIC
+<a href='http://e-p-i-c.sourceforge.net/' target='_blank'>e-p-i-c.sourceforge.net</a></p>
+<a name='loops, bare blocks, and my head hurts'></a><h3>loops, bare blocks, and my head hurts</h3>
+<p>Juerd wondered if last/redo could be used outside loops.  Larry provided the long answer.  The short answer is no, things act basically rationally so that return, next, and last all behave as expected.</p>
+<p><a href='http://groups-beta.google.com/group/perl.perl6.language/browse_frm/thread/c9f1db8d113c08d7/ae57551677fee394?_done=/group/perl.perl6.language?' target='_blank'>groups-beta.google.com</a>&amp;_doneTitle=Back+to+topics&amp;_doneTitle=Back&amp;&amp;d#ae57551677fee394</p>
+<a name='where without type'></a><h3>where without type</h3>
+<p>Juerd wondered if he could use a where clause with a type.  The answer is yes, as it will often be wanted to restrict values admitted to a multimethod.  This led me to the evil thought of putting side-effects in a where clause on several multi-methods and watching the pain of resolution cause very difficult to find bugs.  Sometime I think that my mind looks for nasty ways to write bad code a little too much.</p>
+<p><a href='http://groups-beta.google.com/group/perl.perl6.language/browse_frm/thread/4bcd12915cf71913/932c5f432a874044?_done=/group/perl.perl6.language?' target='_blank'>groups-beta.google.com</a>&amp;_doneTitle=Back+to+topics&amp;_doneTitle=Back&amp;&amp;d#932c5f432a874044</p>
+<a name='Autothreading'></a><h3>Autothreading</h3>
+<p>Luke Palmer posted his musing about autothreading.  I must say it looks powerful enough to blow off your entire lower body if you shoot yourself in the foot.</p>
+<p><a href='http://groups-beta.google.com/group/perl.perl6.language/browse_frm/thread/f64bc3b208a5cd06/a3d89cf334c4bc3d?_done=/group/perl.perl6.language?' target='_blank'>groups-beta.google.com</a>&amp;_doneTitle=Back+to+topics&amp;_doneTitle=Back&amp;&amp;d#a3d89cf334c4bc3d</p>
+<a name='Perl 6 Compiler'></a><h2>Perl 6 Compiler</h2>
+<a name='Pugs'></a><h3>Pugs</h3>
+<p>Not just ugly dogs anymore, they are also P6 interpreters written in Haskel.  Sounds really cool to me.</p>
+<p><a href='http://groups-beta.google.com/group/perl.perl6.compiler/browse_frm/thread/73a788c2ec58460a/5affb9601639f1dc?_done=/group/perl.perl6.compiler?' target='_blank'>groups-beta.google.com</a>&amp;_doneTitle=Back+to+topics&amp;_doneTitle=Back&amp;&amp;d#5affb9601639f1dc</p>
+<a name='Parrot'></a><h2>Parrot</h2>
+<a name='MMD and meta-stuff'></a><h3>MMD and meta-stuff</h3>
+<p>In a thread that was also posted to p6l (sorry about that), I attempt to explain how parrot object system is already very close to the Common Lisp Object System and why it should become even closer.  I am not sure if I succeeded or not.  My ability to express really abstract thoughts without a whiteboard is poor.</p>
+<p><a href='http://groups-beta.google.com/group/perl.perl6.internals/browse_frm/thread/2a32fa21e2795b7f/fd10f5769fb8ed39?_done=/group/perl.perl6.internals/threads?start=30&order=recent&' target='_blank'>groups-beta.google.com</a>&amp;_doneTitle=Back&amp;&amp;d#fd10f5769fb8ed39</p>
+<a name='RT clean up'></a><h3>RT clean up</h3>
+<p>Will Coleda has been putting an extensive amount of work into cleaning up part for public presentation with a focus on RT and organization.</p>
+<p><a href='http://groups-beta.google.com/group/perl.perl6.internals/browse_frm/thread/4c44bbf90d80f5be/d330d20d7fbb4f98?_done=/group/perl.perl6.internals/threads?start=30&order=recent&' target='_blank'>groups-beta.google.com</a>&amp;_doneTitle=Back&amp;&amp;d#d330d20d7fbb4f98 -- Hall of Shame 15308</p>
+<p><a href='http://groups-beta.google.com/group/perl.perl6.internals/browse_frm/thread/d73ecb43144bf1c3/ef842bfe48337d56?_done=/group/perl.perl6.internals/threads?start=0&order=recent&' target='_blank'>groups-beta.google.com</a>&amp;_doneTitle=Back&amp;&amp;d#ef842bfe48337d56  -- ROADMAP</p>
+<p><a href='http://groups-beta.google.com/group/perl.perl6.internals/browse_frm/thread/b6030eb1ad7e17fc/0c271841bb9d13aa?_done=/group/perl.perl6.internals/threads?start=0&order=recent&' target='_blank'>groups-beta.google.com</a>&amp;_doneTitle=Back&amp;&amp;d#0c271841bb9d13aa</p>
+<p><a href='http://groups-beta.google.com/group/perl.perl6.internals/browse_frm/thread/60a9499d6c16f549/b3e7ebc1fdf84037?_done=/group/perl.perl6.internals/threads?start=0&order=recent&' target='_blank'>groups-beta.google.com</a>&amp;_doneTitle=Back&amp;&amp;d#b3e7ebc1fdf84037</p>
+<p><a href='http://groups-beta.google.com/group/perl.perl6.internals/browse_frm/thread/01dc68b76c1a3fdb/6b53486ccdaace30?_done=/group/perl.perl6.internals/threads?start=0&order=recent&' target='_blank'>groups-beta.google.com</a>&amp;_doneTitle=Back&amp;&amp;d#6b53486ccdaace30</p>
+<p><a href='http://groups-beta.google.com/group/perl.perl6.internals/browse_frm/thread/aa8ace093539734a/85a56b74f76fe5f2?_done=/group/perl.perl6.internals/threads?start=0&order=recent&' target='_blank'>groups-beta.google.com</a>&amp;_doneTitle=Back&amp;&amp;d#85a56b74f76fe5f2</p>
+<p><a href='http://groups-beta.google.com/group/perl.perl6.internals/browse_frm/thread/7514a111da48066f/194155a5dcc8cf26?_done=/group/perl.perl6.internals/threads?start=0&order=recent&' target='_blank'>groups-beta.google.com</a>&amp;_doneTitle=Back&amp;&amp;d#194155a5dcc8cf26</p>
+<p><a href='http://groups-beta.google.com/group/perl.perl6.internals/browse_frm/thread/f8c104098d1c4933/7682c1f28ba3b1ff?_done=/group/perl.perl6.internals/threads?start=0&order=recent&' target='_blank'>groups-beta.google.com</a>&amp;_doneTitle=Back&amp;&amp;d#7682c1f28ba3b1ff</p>
+<p><a href='http://groups-beta.google.com/group/perl.perl6.internals/browse_frm/thread/04b2148ebfe3519d/fd0ba4de24afe5b2?_done=/group/perl.perl6.internals/threads?start=0&order=recent&' target='_blank'>groups-beta.google.com</a>&amp;_doneTitle=Back&amp;&amp;d#fd0ba4de24afe5b2</p>
+<p><a href='http://groups-beta.google.com/group/perl.perl6.internals/browse_frm/thread/2379054c59ab370b/7837975122e4358b?_done=/group/perl.perl6.internals/threads?start=0&order=recent&' target='_blank'>groups-beta.google.com</a>&amp;_doneTitle=Back&amp;&amp;d#7837975122e4358b</p>
+<p><a href='http://groups-beta.google.com/group/perl.perl6.internals/browse_frm/thread/f318d474dcb13e46/b3de9227d5e7c677?_done=/group/perl.perl6.internals/threads?start=0&order=recent&' target='_blank'>groups-beta.google.com</a>&amp;_doneTitle=Back&amp;&amp;d#b3de9227d5e7c677</p>
+<p><a href='http://groups-beta.google.com/group/perl.perl6.internals/browse_frm/thread/06f49e87762f6385/a376166a7cf944c8?_done=/group/perl.perl6.internals/threads?start=0&order=recent&' target='_blank'>groups-beta.google.com</a>&amp;_doneTitle=Back&amp;&amp;d#a376166a7cf944c8</p>
+<p><a href='http://groups-beta.google.com/group/perl.perl6.internals/browse_frm/thread/91c03af91ab5dddf/4058595f3045d8e5?_done=/group/perl.perl6.internals/threads?start=0&order=recent&' target='_blank'>groups-beta.google.com</a>&amp;_doneTitle=Back&amp;&amp;d#4058595f3045d8e5</p>
+<p><a href='http://groups-beta.google.com/group/perl.perl6.internals/browse_frm/thread/128cdb957dd589b9/a1fcc53d3e78895f?_done=/group/perl.perl6.internals/threads?start=0&order=recent&' target='_blank'>groups-beta.google.com</a>&amp;_doneTitle=Back&amp;&amp;d#a1fcc53d3e78895f</p>
+<p><a href='http://groups-beta.google.com/group/perl.perl6.internals/browse_frm/thread/99374098b34536b8/4ddf818e976d0783?_done=/group/perl.perl6.internals/threads?start=0&order=recent&' target='_blank'>groups-beta.google.com</a>&amp;_doneTitle=Back&amp;&amp;d#4ddf818e976d0783</p>
+<a name='argv[0]'></a><h3>argv[0]</h3>
+<p>Wukk (who is Will when I get off key) wants the name of the invoked executable.  Dan upped the anti by offering the full and base name variants of the interpreter, the program, and the invoked thing.</p>
+<p><a href='http://groups-beta.google.com/group/perl.perl6.internals/browse_frm/thread/5ac3f1c5375d5da5/6f67663f2c6f1245?_done=/group/perl.perl6.internals/threads?start=0&order=recent&' target='_blank'>groups-beta.google.com</a>&amp;_doneTitle=Back&amp;&amp;d#6f67663f2c6f1245</p>
+<a name='OSCON'></a><h3>OSCON</h3>
+<p>Robert Spier put out a call for OSCON proposals.</p>
+<p><a href='http://groups-beta.google.com/group/perl.perl6.internals/browse_frm/thread/f9ac71f8f3402597/46c18e5d2658e6cd?_done=/group/perl.perl6.internals/threads?start=0&order=recent&' target='_blank'>groups-beta.google.com</a>&amp;_doneTitle=Back&amp;&amp;d#46c18e5d2658e6cd</p>
+<a name='read and readline'></a><h3>read and readline</h3>
+<p>Matt Diephouse has been working on getting read and readline cleaned up.</p>
+<p><a href='http://groups-beta.google.com/group/perl.perl6.internals/browse_frm/thread/e458ecc388f0b0a7/534af68d76a393ff?_done=/group/perl.perl6.internals/threads?start=0&order=recent&' target='_blank'>groups-beta.google.com</a>&amp;_doneTitle=Back&amp;&amp;d#534af68d76a393ff -- RT ticket</p>
+<p><a href='http://groups-beta.google.com/group/perl.perl6.internals/browse_frm/thread/1725d504480fb0bf/ae8d0fcfbcef7b33?_done=/group/perl.perl6.internals/threads?start=0&order=recent&' target='_blank'>groups-beta.google.com</a>&amp;_doneTitle=Back&amp;&amp;d#ae8d0fcfbcef7b33 -- discussion</p>
+<p><a href='http://groups-beta.google.com/group/perl.perl6.internals/browse_frm/thread/14124ddc27011622/0bc232a97c300571?_done=/group/perl.perl6.internals/threads?start=0&order=recent&' target='_blank'>groups-beta.google.com</a>&amp;_doneTitle=Back&amp;&amp;d#0bc232a97c300571 -- partial resolution</p>
+<p><a href='http://groups-beta.google.com/group/perl.perl6.internals/browse_frm/thread/4c9d3f29c7ed75c8/ecd2934565627820?_done=/group/perl.perl6.internals/threads?start=0&order=recent&' target='_blank'>groups-beta.google.com</a>&amp;_doneTitle=Back&amp;&amp;d#ecd2934565627820  -- an offered patch</p>
+<a name='test_main.c'></a><h3>test_main.c</h3>
+<p>Bloves posted a patch updating test_main.c.  Unfortunately, it turns out that this file is obsolete and needs to be removed.</p>
+<p><a href='http://groups-beta.google.com/group/perl.perl6.internals/browse_frm/thread/358874c77dbe40f8/01806480a1ea7b6e?_done=/group/perl.perl6.internals/threads?start=0&order=recent&' target='_blank'>groups-beta.google.com</a>&amp;_doneTitle=Back&amp;&amp;d#01806480a1ea7b6e</p>
+<a name='MinGW support'></a><h3>MinGW support</h3>
+<p>François Perrad provided a patch to improve MinGW support.  Leo applied it.</p>
+<p><a href='http://groups-beta.google.com/group/perl.perl6.internals/browse_frm/thread/172d1adda7469e0d/95945ab76a0f38bf?_done=/group/perl.perl6.internals/threads?start=0&order=recent&' target='_blank'>groups-beta.google.com</a>&amp;_doneTitle=Back&amp;&amp;d#95945ab76a0f38bf</p>
+<a name='Compile problems'></a><h3>Compile problems</h3>
+<p>Will Coleda has a failing fresh build.  Warnock applies.</p>
+<p><a href='http://groups-beta.google.com/group/perl.perl6.internals/browse_frm/thread/7684b8c1d7e68372/ae4a0d585dd4dc48?_done=/group/perl.perl6.internals/threads?start=0&order=recent&' target='_blank'>groups-beta.google.com</a>&amp;_doneTitle=Back&amp;&amp;d#ae4a0d585dd4dc48</p>
+<a name='NCI improvements'></a><h3>NCI improvements</h3>
+<p>Bernhard Schmalhofer provided a patch improving NCI stuff.  Leo applied it.</p>
+<p><a href='http://groups-beta.google.com/group/perl.perl6.internals/browse_frm/thread/ab24fcf236379e61/438778ca1f18c3df?_done=/group/perl.perl6.internals/threads?start=0&order=recent&' target='_blank'>groups-beta.google.com</a>&amp;_doneTitle=Back&amp;&amp;d#438778ca1f18c3df</p>
+<a name='VS.NET 2003'></a><h3>VS.NET 2003</h3>
+<p>Sriram Krishnan fought through a build on VS.NET 2003.  He overcame problems and even posted a summary.  Unfortunately, he posted all of this to the google groups interface, as none of it made it back to the list.</p>
+<p><a href='http://groups-beta.google.com/group/perl.perl6.internals/browse_frm/thread/dd3cb5e94f1eb835/74b248bf61c2f1f6?_done=/group/perl.perl6.internals/threads?start=0&order=recent&' target='_blank'>groups-beta.google.com</a>&amp;_doneTitle=Back&amp;&amp;d#74b248bf61c2f1f6</p>
+<a name='dynclasses missing dependencies'></a><h3>dynclasses missing dependencies</h3>
+<p>Leo put out a request for fixes to the problem with dynclasses missing dependencies.</p>
+<p><a href='http://groups-beta.google.com/group/perl.perl6.internals/browse_frm/thread/b21ec6647812dbc0/6a4502bb3d5316a6?_done=/group/perl.perl6.internals/threads?start=0&order=recent&' target='_blank'>groups-beta.google.com</a>&amp;_doneTitle=Back&amp;&amp;d#6a4502bb3d5316a6</p>
+<a name='Generational GC'></a><h3>Generational GC</h3>
+<p>Leo has put in the first part of his Generational GC system.  It has bugs, but it is also cool.</p>
+<p><a href='http://groups-beta.google.com/group/perl.perl6.internals/browse_frm/thread/50e56319b876b08c/7904e9a0baf710a7?_done=/group/perl.perl6.internals/threads?start=0&order=recent&' target='_blank'>groups-beta.google.com</a>&amp;_doneTitle=Back&amp;&amp;d#7904e9a0baf710a7</p>
+<a name='preemptive multitasking via continuations'></a><h3>preemptive multitasking via continuations</h3>
+<p>Hugh Arnold wants to use timers and continuations to implement preemptive multitasking in a single threaded application.  He wants to know if Parrot will support it.  I think that the answer is yes.</p>
+<p><a href='http://groups-beta.google.com/group/perl.perl6.internals/browse_frm/thread/4d41960215df55fc/59fc22020073e94b?_done=/group/perl.perl6.internals/threads?start=0&order=recent&' target='_blank'>groups-beta.google.com</a>&amp;_doneTitle=Back&amp;&amp;d#59fc22020073e94b</p>
+<a name='bound methods, attribute lookup, and python'></a><h3>bound methods, attribute lookup, and python</h3>
+<p>Dan, Leo, and Sam have started to go round about how to implement method lookup and currying.  Best of luck all.</p>
+<p><a href='http://groups-beta.google.com/group/perl.perl6.internals/browse_frm/thread/c3549ba4ffce05e7/08173698a160df55?_done=/group/perl.perl6.internals/threads?start=0&order=recent&' target='_blank'>groups-beta.google.com</a>&amp;_doneTitle=Back&amp;&amp;d#08173698a160df55</p>
+<a name='lib/Make.pm'></a><h3>lib/Make.pm</h3>
+<p>Matt Diephouse noticed that lib/Make.pm is out of date and unneeded.  He asked that it be removed.</p>
+<p><a href='http://groups-beta.google.com/group/perl.perl6.internals/browse_frm/thread/87cf2d202be97b9b/e109174d6f56dfc4?_done=/group/perl.perl6.internals/threads?start=0&order=recent&' target='_blank'>groups-beta.google.com</a>&amp;_doneTitle=Back&amp;&amp;d#e109174d6f56dfc4</p>
+<a name='Interacting with the mailing lists'></a><h2>Interacting with the mailing lists</h2>
+<p>Someone suggested that I add a description of the preferred modality for interacting with the mailing lists summarized herein.  I think this is a good idea and will add it too the standard footer.</p>
+<a name='The usual footer'></a><h2>The usual footer</h2>
+<p>To post to any of these mailing lists please subscribe by sending email to &lt;<a href='mailto:perl6-internals-subscribe@perl.org'>perl6-internals-subscribe@perl.org</a>&gt;, &lt;<a href='mailto:perl6-language-subscribe@perl.org'>perl6-language-subscribe@perl.org</a>&gt;,  or &lt;<a href='mailto:perl6-compiler-subscribe@perl.org'>perl6-compiler-subscribe@perl.org</a>&gt;.  If you find these summaries useful or enjoyable, please consider contributing to the Perl Foundation to help support the development of Perl. You might also like to send feedback to <a href='mailto:ubermatt@gmail.com'>ubermatt@gmail.com</a></p>
+<p><a href='http://donate.perl-foundation.org/' target='_blank'>donate.perl-foundation.org</a> -- The Perl Foundation
+<a href='http://dev.perl.org/perl6/' target='_blank'>dev.perl.org</a> -- Perl 6 Development site
+<a href='http://planet.parrotcode.org/' target='_blank'>planet.parrotcode.org</a> -- Parrot Blog aggregator</p>
+</div>

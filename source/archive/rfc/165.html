@@ -1,0 +1,69 @@
+[% setvar title TITLE %]
+<h3>This file is part of the Perl 6 Archive</h3>
+    <p>To see what is currently happening visit <a href="http://www.perl6.org/">http://www.perl6.org/</a></p>
+<div class='pod'>
+<a name='TITLE'></a><h1>TITLE</h1>
+<p>Allow Varibles in tr///</p>
+<a name='VERSION'></a><h1>VERSION</h1>
+<pre>  Maintainer: Richard Proctor &lt;<a href='mailto:richard@waveney.org'>richard@waveney.org</a>&gt;
+  Date: 27 Aug 2000
+  Last Modified: 22 Sep 2000
+  Mailing List: <a href='mailto:perl6-language-regex@perl.org'>perl6-language-regex@perl.org</a>
+  Number: 165
+  Version: 3
+  Status: Frozen</pre>
+<a name='ABSTRACT'></a><h1>ABSTRACT</h1>
+<p>Allow variables in a tr///.  At present the only way to do a tr/$foo/$bar/
+is to wrap it up in an eval.  I dont like using evals for this sort of thing.</p>
+<a name='DESCRIPTION'></a><h1>DESCRIPTION</h1>
+<p>Suggested syntax: tr/$foo/$bar/e</p>
+<p>With a /e, tr will expand both the LHS and RHS of the translate function.
+Either or both could be variables. I am suggesting /e as it is sort of like
+/e for s///e.</p>
+<p>These words from MJD:</p>
+<p>The way tr/// works is that a 256-byte table is constructed at compile
+time that say for each input character what output character is
+produced.  Then when it's time to apply the tr/// to a string, Perl
+iterates over the string one character at a time, looks up each
+character in the table, and replaces it with the corresponding
+character from the table.</p>
+<p>With tr///e, you would have to generate the table at run-time.</p>
+<p>This would suggest that you want the same sorts of optimizations that
+Perl applies when it encounters a regex that contains variables:</p>
+<pre>        1. Perl should examine the strings to see if they have changed
+           since the last time it executed the code
+
+        2. It should rebuild the tables only if the strings changed
+
+        3. There should be a /o modifier that promises Perl that the
+           variables will never change.</pre>
+<p>The implementation could be analogous to the way m/.../o is
+implemented, with two separate op nodes: One that tells Perl
+'construct the tables' and one that tells Perl 'transform the
+string'.  The 'construct the tables' node would remove itself from the
+op tree if it saw that the tr//o modifier was used.</p>
+<p>Hugo wrote:
+&gt; Definitely. Should be easy to implement. There is a potential for
+&gt; confusion, since it makes the tr/ lists look even more like
+&gt; m/ and s/ patterns, but I think it can only be less confusion than
+&gt; the current state of affairs. It is tempting to make it the default,
+&gt; and have a flag to turn it off (or just backwhack the dagnabbed
+&gt; dollar), and auto-translation of existing scripts would be pretty
+&gt; easy, except that it would presumably fail exactly where people
+&gt; are using the current workaround, by way of eval.
+&gt;</p>
+<p>Comments by me:</p>
+<p>Therefore tr///o might be a good idea as well.</p>
+<p>If Hugo's idea of making this the normal behaviour, the problem of
+existing evals is avoided by p52p6 changing the eval to a perl5_eval
+which acts accordingly.  (One of MJD's ideas).</p>
+<a name='IMPLENTATION'></a><h1>IMPLENTATION</h1>
+<p>Hugo:  Should be easy to implement.</p>
+<p>Me: Should not be too complicated, this is just a case of doing existing
+things in a different context.</p>
+<a name='CHANGES'></a><h1>CHANGES</h1>
+<p>V2 - Added words from MJD and Hugo - This hopefully in a pre freeze state.</p>
+<p>V3 - re issued due to an error in posting V2 and now frozen</p>
+<a name='REFERENCES'></a><h1>REFERENCES</h1>
+<p>None yet.</p>
+</div>

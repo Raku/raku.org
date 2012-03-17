@@ -1,0 +1,51 @@
+[% setvar title MT-Safe Autovariables in perl 5.005 Threading %]
+<h3>This file is part of the Perl 6 Archive</h3>
+    <p>To see what is currently happening visit <a href="http://www.perl6.org/">http://www.perl6.org/</a></p>
+<div class='pod'>
+<a name='TITLE'></a><h1>TITLE</h1>
+<p>MT-Safe Autovariables in perl 5.005 Threading</p>
+<a name='VERSION'></a><h1>VERSION</h1>
+<pre>  Maintainer: Michael Maraist &lt;<a href='mailto:maraist@udel.edu'>maraist@udel.edu</a>&gt;
+  Date: 25 Sep 2000
+  Mailing List: <a href='mailto:perl6-internals@perl.org'>perl6-internals@perl.org</a>
+  Number: 293
+  Version: 1
+  Status: Developing</pre>
+<a name='ABSTRACT'></a><h1>ABSTRACT</h1>
+<p>There are currently two threading models in Perl.  The first was 5.005s
+true-threads.  This obviously caused problems for numerous modules (and
+programs alike).  It was later replaced by the &quot;virtual&quot; process, who's main
+benifit was to provide efficient forks through the use of spawning a
+perl-thread and seperating environment spaces..</p>
+<p>Perl5.005's Threading may go away, or it may continue in an experimental stage
+for a while.  At the very least, perl's threading provides an easy way to test
+CIS OS theory.  This RFC attempts to identify at least one existing
+implementation problem with 5.005 threads, that of auto-variables. To my
+understanding, there is only one copy of each auto-variable, and thus, multiple
+threads would have race conditions for them.</p>
+<a name='DESCRIPTION'></a><h1>DESCRIPTION</h1>
+<p>Make auto-variables in a threading environment &quot;thread-specific&quot;.  The current
+implementation of:</p>
+<pre> for my $i ( 0 .. 100000 ) { do something }</pre>
+<p>causes core dumps when there are race conditions.  It is my guess that the
+problem is because this produces a lazy iteration which unfortunately makes use
+of an auto-variable other than $i (above).  It is these sort of auto-vars
+(especially in light of lazy operators), that can cause race-conditions.</p>
+<p>Normally you would provide locks to protect such code, but it is not obvious to
+the developer that a simple for-loop using a lexical variable would even have a
+race condition.  Beyond that, it might be possible that the generation of such
+auto-vars might not be thread-safe.</p>
+<a name='IMPLEMENTATION'></a><h1>IMPLEMENTATION</h1>
+<p>For all auto-generated non-lexical meta-data, either apply a lock around usage,
+or make heavy use of thread-specific keys/variables.</p>
+<a name='REFERENCES'></a><h1>REFERENCES</h1>
+<p>RFC 185: Thread Programming Model</p>
+<p>perldoc Thread: 5.005 threading</p>
+<p>RFC 178: Lightweight Threads</p>
+<p>RFC 1: Implementation of Threads in Perl</p>
+<p>man perlop: foreach lazy iteration of 1..10</p>
+<p>RFC 24: Data types: Semi-finite (lazy) lists</p>
+<p>RFC 123: Builtin: lazy</p>
+<p>RFC 128: Subroutines: Extend subroutine contexts to include name parameters and lazy arguments</p>
+<p>RFC 285: Lazy Input</p>
+</div>

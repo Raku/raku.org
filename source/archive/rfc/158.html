@@ -1,0 +1,48 @@
+[% setvar title Regular Expression Special Variables %]
+<h3>This file is part of the Perl 6 Archive</h3>
+    <p>To see what is currently happening visit <a href="http://www.perl6.org/">http://www.perl6.org/</a></p>
+<div class='pod'>
+<a name='TITLE'></a><h1>TITLE</h1>
+<p>Regular Expression Special Variables</p>
+<a name='VERSION'></a><h1>VERSION</h1>
+<pre>  Maintainer: Uri Guttman &lt;<a href='mailto:uri@sysarch.com'>uri@sysarch.com</a>&gt;
+  Date: 25 Aug 2000
+  Last Modified: 22 Sep 2000
+  Mailing List: <a href='mailto:perl6-language-regex@perl.org'>perl6-language-regex@perl.org</a>
+  Number: 158
+  Version: 3
+  Status: Frozen
+  Frozen since: v2</pre>
+<a name='ABSTRACT'></a><h1>ABSTRACT</h1>
+<p>This RFC addresses ways to make the regex special variables $`, $&amp; and
+$' not be such pariahs like they are now.</p>
+<a name='CHANGES'></a><h1>CHANGES</h1>
+<p>I dropped the local scoping of $`, $&amp; and $' as they are already
+localized now.</p>
+<a name='DESCRIPTION'></a><h1>DESCRIPTION</h1>
+<p>$`, $&amp; and $' are useful variables which are never used by any
+experienced Perl hacker since they have well known problems with
+efficiency. Since they are globals, any use of them anywhere in your
+code forces all regexes to copy their data for potential later
+referencing by one of them. I will describe some ideas to make this
+issue go away and return these variables back into the toolbox where
+they belong.</p>
+<a name='IMPLEMENTATION'></a><h1>IMPLEMENTATION</h1>
+<p>The copy all regex data problem is solved by a new modifier k (for
+keep). This tells the regex to do the copy so the 3 vars will work
+properly. So you would use code like this:</p>
+<pre>	$str = 'prefoopost' ;
+
+	if ( $str =~ /foo/k ) {
+
+		print &quot;pre is [$`]\n&quot; ;
+		print &quot;match is [$&amp;]\n&quot; ;
+		print &quot;post is [$']\n&quot; ;
+	}</pre>
+<a name='IMPACT'></a><h1>IMPACT</h1>
+<p>None</p>
+<a name='UNKNOWNS'></a><h1>UNKNOWNS</h1>
+<p>None</p>
+<a name='REFERENCES'></a><h1>REFERENCES</h1>
+<p>None.</p>
+</div>

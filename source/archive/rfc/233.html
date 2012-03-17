@@ -1,0 +1,67 @@
+[% setvar title Replace Exporter by a better scaling mechanism %]
+<h3>This file is part of the Perl 6 Archive</h3>
+    <p>To see what is currently happening visit <a href="http://www.perl6.org/">http://www.perl6.org/</a></p>
+<div class='pod'>
+<a name='TITLE'></a><h1>TITLE</h1>
+<p>Replace Exporter by a better scaling mechanism</p>
+<a name='VERSION'></a><h1>VERSION</h1>
+<pre>  Maintainer: Ilya Zakharevich &lt;<a href='mailto:ilya@math.ohio-state.edu'>ilya@math.ohio-state.edu</a>&gt;
+  Date: 15 Sep 2000
+  Mailing List: <a href='mailto:perl6-stdlib@perl.org'>perl6-stdlib@perl.org</a>
+  Number: 233
+  Version: 1
+  Status: Developing</pre>
+<a name='ABSTRACT'></a><h1>ABSTRACT</h1>
+<p>This RFC proposes a minimal efficient well-scaling mechanism for exporting.
+Only export of subroutines and tags are supported by this mechanism.</p>
+<a name='DESCRIPTION'></a><h1>DESCRIPTION</h1>
+<p><code>Exporter</code> gives an enormous efficiency hit for modules with a large
+list of exportable symbols (but which are very small nevertheless, say,
+because everything is autoloaded).  It is supposed to be optimized for
+speed, with a lot of caching and keeping things close at hand.  However,
+all these actions are in fact only slowing things down, since they create
+a lot of code to compile, and a lot of data structures to maintain.</p>
+<p>In many cases the Exporter-support data creates up to 90% of memory overhead
+of the module (so may be supposed to provide a similar fraction of the load
+time overhead).</p>
+<p>Lessons learned:</p>
+<ul>
+<li><a name='instead of keeping a lot of arrays and a hash storing a lot of redundant data, store the information in a string, and use RExen to extract it from this string.'></a>instead of keeping a lot of arrays and a hash storing a lot of redundant data,
+store the information in a string, and use RExen to extract it from
+this string.</li>
+<p>This provides a crucial advantage in the memory footprint, and may provide
+speed advantages (maybe even if the module is imported from many times).</p>
+<p>This string may contain items of two kinds: symbols, and tag lists of the
+form <code>&quot;:tag[ :subtag1 :subtag2 symbol1 symbol2 ]&quot;</code>.  If symbols appears
+inside a tag, it need not be repeated again.  The default exporting list
+should be provided the same as the list for the <code>:DEFAULT</code> tag.</p>
+<li><a name='The symbols may be followed by the prototypes. Example:'></a>The symbols may be followed by the prototypes.  Example:</li>
+<pre>     ' :DEFAULT[:micro :mini additional_f(\%)] :micro[ func1($$) ]
+       :mini[ func2($) ] :extra[ func3() ] func4($) '</pre>
+<p>Having the prototypes in this list may be useful, since the same list
+may be used by the compile-time action of autoloading, reducing the
+overhead yet more.  (See RFC on flexible autoloading.)</p>
+<li><a name='The export string should be registered as the argument to the pragma. Example:'></a>The export string should be registered as the argument to the pragma.
+Example:</li>
+<pre>     use export q( func1($$) func2($) );	# No default</pre>
+<li><a name='The export list may be substituted by a subroutine reference which returns such a string (cached to avoid such a call for future exporting). Example:'></a>The export list may be substituted by a subroutine reference which returns
+such a string (cached to avoid such a call for future exporting).  Example:</li>
+<pre>     use export sub { local $/; my $l = &lt;DATA&gt;; eval 'use export $l'; $l };
+     ...
+     __DATA__
+     func1($$)
+     func2($)</pre>
+<p>This is desirable since the subroutine may be autoloaded (either explicitly,
+or as above), thus reducing yet more the overhead of import-less</p>
+<pre>     use Module ();</pre>
+<li><a name='export.pm should support only this barebone API. Anything hairer should be implicitly requested via a separate module (Export::Methods), so that the overhead of export.pm is as small as possible.'></a>export.pm should support only this barebone API.  Anything hairer
+should be implicitly requested via a separate module (Export::Methods),
+so that the overhead of export.pm is as small as possible.</li>
+</ul>
+<a name='MIGRATION ISSUES'></a><h1>MIGRATION ISSUES</h1>
+<p>None.</p>
+<a name='IMPLEMENTATION'></a><h1>IMPLEMENTATION</h1>
+<p>Straightforward.</p>
+<a name='REFERENCES'></a><h1>REFERENCES</h1>
+<p>None.</p>
+</div>

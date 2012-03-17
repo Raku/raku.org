@@ -1,0 +1,131 @@
+[% setvar title Optional 2nd argument to C<pop()> and C<shift()> %]
+<h3>This file is part of the Perl 6 Archive</h3>
+    <p>To see what is currently happening visit <a href="http://www.perl6.org/">http://www.perl6.org/</a></p>
+<div class='pod'>
+<a name='TITLE'></a><h1>TITLE</h1>
+<p>Optional 2nd argument to <code>pop()</code> and <code>shift()</code></p>
+<a name='VERSION'></a><h1>VERSION</h1>
+<pre>  Maintainer: Jonathan Scott Duff &lt;<a href='mailto:duff@pobox.com'>duff@pobox.com</a>&gt;
+  Date: 7 Aug 2000
+  Last Modified: 1 Sep 2000
+  Mailing List: <a href='mailto:perl6-language@perl.org'>perl6-language@perl.org</a>
+  Number: 56
+  Version: 3
+  Status: Developing</pre>
+<a name='ABSTRACT'></a><h1>ABSTRACT</h1>
+<p>The inverse operations to <code>pop()</code> and <code>shift()</code> both accept a LIST to
+&quot;add&quot; to an array, yet <code>pop()</code> and <code>shift()</code> only remove <b>one</b> element
+from an array.  In the interest of symmetry and TMTOWTDI, <code>pop()</code> and
+<code>shift</code> should allow the programmer to remove multiple items from an
+array.</p>
+<a name='DESCRIPTION'></a><h1>DESCRIPTION</h1>
+<p>The intent should be obvious, but I'll point it out anyway.</p>
+<a name='pop'></a><h2>pop</h2>
+<p>The documentation for Perl 5.6.0 states that pop has one of two forms:
+<code>pop ARRAY</code>, or just <code>pop</code>.  This RFC proposes that a third form be
+added to <code>pop()</code></p>
+<ul>
+<li><a name='pop ARRAY, EXPR'></a>pop ARRAY, EXPR</li>
+<p>EXPR would be evaluated to determine the number of elements to remove
+from the end of ARRAY and that number would be removed and returned.
+Thus <code>pop()</code> would be a more natural inverse to <code>push()</code> (If you can
+add multiple elements to an array with <code>push()</code>, why can't you remove
+multiple elements from an array with <code>pop</code>?)</p>
+</ul>
+<p>This functionality can currently be accomplished with <code>splice()</code>, but
+it is non-obvious that <code>splice()</code> should be the routine to call and
+the method isn't at all intuitive.  To &quot;pop&quot; the last $N items off of
+the end of an array using <code>splice()</code>, the call looks like this:</p>
+<pre>	splice @array, -$N;		# remove the last $N items</pre>
+<p>contrast to the more natural looking</p>
+<pre>	pop @array, $N;			# remove the last $N items</pre>
+<p>Aaron J Mackey &lt;<a href='mailto:ajm6q@virginia.edu'>ajm6q@virginia.edu</a>&gt; asked whether or not this should
+really be equivalent to:</p>
+<pre>	reverse splice @b, -$N; 	# As if we'd popped each individually</pre>
+<p>I think that the following should hold:</p>
+<pre>	@a = pop @b, $n;
+	push @b, @a;			# @b now in its original state.
+	</pre>
+<p>Thus, the 2 argument version of <code>pop()</code> should treat the <code>$N</code>
+elements as a group.</p>
+<a name='shift'></a><h2>shift</h2>
+<p>The semantics for <code>shift()</code> are similar to <code>pop()</code> except that it
+operates on the other end of the array.  <code>shift()</code> also suffers from
+the inability to shift more than one element from the array.  Just
+like <code>pop()</code>, the two forms of <code>shift()</code> are a <code>shift ARRAY</code>, and
+just plain <code>shift</code>.  This RFC proposes that a third form be added:</p>
+<ul>
+<li><a name='shift ARRAY, EXPR'></a>shift ARRAY, EXPR</li>
+<p>EXPR would be evaluated to determine the number of elements to remove
+from the beginning of ARRAY and that number would be removed and returned.
+Thus, <code>shift()</code> would be a more natural inverse to <code>unshift</code>.  (If
+you can add multiple elements to an array with <code>unshift()</code>, why can't
+you remove multiple elements with <code>shift()</code>?)</p>
+</ul>
+<p>As with <code>pop()</code> the proposed semantics can be accomplished with
+<code>splice()</code> and are just as un-intuitive:</p>
+<pre>	splice @array, 0, $N;		# remove the first $N elements</pre>
+<p>contrast to</p>
+<pre>	shift @array, $N;		# remove the first $N elements</pre>
+<p>Again, as with <code>pop()</code>, <code>shift()</code> should treat the first $N elements
+of the <code>@array</code> as a group so that the following holds:</p>
+<pre>	@a = shift @b, $N;		# remove the first $N elements
+	unshift @b, @a;			# put them back
+					# @b is unchanged</pre>
+<a name='Random examples'></a><h2>Random examples</h2>
+<pre>	@numbers = 1..10;
+	$ten = pop @numbers;		# still works
+	@popped = pop @numbers, 3;	# Take away 7, 8, 9
+	push @numbers, @popped;		# Put 'em back
+	@popped = pop @numbers, 0;	# Nothing happens
+	@popped = pop @numbers, 9;	# And then there were none.
+
+	@numbers = 1..10;
+	@popped = pop @numbers, 100;	# And then there were none but
+					# @popped only has 10 things
+
+	@numbers = 1..10;
+	$one = shift @numbers;		# still works
+	@shifted = shift @numbers, 3;	# Take away 2, 3, and 4
+	unshift @numbers, @shifted;	# Put 'em back
+	@shifted = shift @numbers, 0;	# Nothing happens
+	@shifted = shift @numbers, 9;	# And then there were none.
+
+	@numbers = 1..10;
+	@shifted = shift @numbers, 100;	# And then there were none but
+					# @shifted only has 10 things</pre>
+<a name='IMPLEMENTATION'></a><h1>IMPLEMENTATION</h1>
+<p>I don't know the gory details other than it should be possible.
+However, there is one implementation detail that occurs to me:
+What should happen when the expression given to <code>pop()</code>, or
+<code>shift()</code> evaluates to a negative number?  I see three options:</p>
+<pre>	1) Nothing.  We can only pop/shift positive amounts
+	2) Act as if the number were positive  (i.e. pop @array, abs(EXPR))
+	3) C&lt;pop()&gt; would then act as C&lt;shift()&gt; and C&lt;shift()&gt; would
+	   act as C&lt;pop()&gt;</pre>
+<p>I propose that option #3 be adopted since it seems the most Perlian
+and so far no one has disagreed.  :-)</p>
+<a name='MIGRATION'></a><h1>MIGRATION</h1>
+<p>Gisle Aas &lt;<a href='mailto:gisle@ActiveState.com'>gisle@ActiveState.com</a>&gt; mentioned that the behavior of code
+such as this:</p>
+<pre>	foo(pop @a, &quot;bar&quot;);</pre>
+<p>would be changed by this proposal and that the perl5 to perl6
+converter would need to handle this case.  Similar provisions would
+need to be made for the proposed 2-argument <code>shift()</code></p>
+<a name='ISSUES'></a><h1>ISSUES</h1>
+<p>Several people have commented on the proposed return values for the
+new forms of <code>shift</code> and <code>pop</code>.  The author of this RFC continues to
+maintain that the following identities should hold:</p>
+<pre>	push(@array, pop(@array, $N));		# @array is unchanged
+	unshift(@array, shift(@array, $N));	# @array is unchanged</pre>
+<a name='REFERENCES'></a><h1>REFERENCES</h1>
+<p>The Perl 5.6.0 documentation
+<i><a href='http://search.cpan.org/perldoc?perlfunc#pop'>&quot;pop&quot; in perlfunc</a></i>
+<i><a href='http://search.cpan.org/perldoc?perlfunc#shift'>&quot;shift&quot; in perlfunc</a></i>
+<i><a href='http://search.cpan.org/perldoc?perlfunc#splice'>&quot;splice&quot; in perlfunc</a></i></p>
+<p>Comments on return values
+<a href='http://www.mail-archive.com/perl6-language@perl.org/msg01306.html' target='_blank'>www.mail-archive.com</a>
+<a href='http://www.mail-archive.com/perl6-language@perl.org/msg02465.html' target='_blank'>www.mail-archive.com</a></p>
+<p>Perl5 -&gt; Perl6 translation issues
+<a href='http://www.mail-archive.com/perl6-language@perl.org/msg01328.html' target='_blank'>www.mail-archive.com</a></p>
+</div>

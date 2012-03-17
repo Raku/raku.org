@@ -1,0 +1,94 @@
+[% setvar title Form a documentation working group to edit, clean, and producedocumentation %]
+<h3>This file is part of the Perl 6 Archive</h3>
+    <p>To see what is currently happening visit <a href="http://www.perl6.org/">http://www.perl6.org/</a></p>
+<div class='pod'>
+<a name='TITLE'></a><h1>TITLE</h1>
+<p>Form a documentation working group to edit, clean, and produce
+documentation</p>
+<a name='VERSION'></a><h1>VERSION</h1>
+<pre>  Maintainer: Daniel Chetlin &lt;<a href='mailto:daniel@chetlin.com'>daniel@chetlin.com</a>&gt;
+  Date: 15 Sep 2000
+  Mailing List: <a href='mailto:perl6-meta@perl.org'>perl6-meta@perl.org</a>
+  Number: 240
+  Version: 1
+  Status: Developing</pre>
+<a name='ABSTRACT'></a><h1>ABSTRACT</h1>
+<p>The Perl documentation suite is one of the best things going for Perl.
+It is thorough, well-written, informative, and enjoyable.</p>
+<p>However, it was put together patchwork over a long period of time, and
+is extremely large and unwieldy. Some parts of the documentation have
+not been revised for years, even when they contain incorrect or outdated
+information.</p>
+<p>This RFC proposes a way to manage documentation for Perl6, as well as
+give the Perl5 docs a much needed spring cleaning.</p>
+<a name='DESCRIPTION'></a><h1>DESCRIPTION</h1>
+<p>The RFC process has brought out a large number of people who want to
+discuss and debate aspects of Perl. It is the goal of this RFC to
+propose a method of harnessing this interest for the good not only of
+Perl6, but of Perl5 as well.</p>
+<p>This proposed method is simple: a mailing list will be set up with an
+express purpose of editing, correcting, re-ordering, re-organizing, and
+expanding existing documentation.</p>
+<p>This mailing list will not relate to proposals to change Perl; it will
+deal with Perl's current behavior only. When there is more information
+about the changes from Perl5 to Perl6, the documentation mailing list
+will begin incorporating those changes into the documentation. Until
+then, however, there is still plenty of work to be done, and no reason
+that this work cannot begin immediately.</p>
+<p>The mailing list will concentrate on one .pod file at a time, devoting
+its entire collective energy on editing the .pod in question. The
+preferable way of submitting edits is via patches, but the mailing list
+chair will be responsible for incorporating edits that are submitted in
+other ways. After a reasonable amount of time, during which not only
+edits to the initial file, but also edits to the edits, are accepted,
+the mailing list chair will collect all changes into a master patch, and
+submit it to the perl5-porters mailing list for inclusion into the core.
+At that point, a new file will be selected for editing.</p>
+<p>Here is a sketch of how a typical editing period might go:</p>
+<ul>
+<li><a name='1'></a>1</li>
+<p>The mailing list chair selects a documentation file to be edited, and
+posts the most current version of this file to the list.</p>
+<li><a name='2'></a>2</li>
+<p>At that point, anything in the file is up for change, and editors will
+begin submitting patches or changes to the file.</p>
+<ul>
+<li><a name='For extremely minor changes (typos, word choice, etc.) it is acceptable for an editor to post that change without a patch. For example:'></a>For extremely minor changes (typos, word choice, etc.) it is acceptable
+for an editor to post that change without a patch. For example:</li>
+<pre>        On 15 September 2000, Daniel Chetlin wrote:
+        &gt; Currently up for editing: perlguts.pod
+        [snip]
+        &gt; These two functions check if a hash table
+        &gt; entry exists, and deletes it.
+
+        s/deletes it/delete an entry, respectively/</pre>
+<li><a name='For changes that alter a larger portion of the file without changing its general layout, a unified diff is best.'></a>For changes that alter a larger portion of the file without changing its
+general layout, a unified diff is best.</li>
+<li><a name='For massive changes, posting simply the entirety of the rewording can also be acceptable.'></a>For massive changes, posting simply the entirety of the rewording can
+also be acceptable.</li>
+</ul>
+<li><a name='3'></a>3</li>
+<p>The mailing list chair will be responsible for tracking all changes and
+recording them for the final product.</p>
+<li><a name='4'></a>4</li>
+<p>After a reasonable period of time, the mailing list chair will post the
+final version of the document. There will be a brief sanity check period
+wherein editors will confirm that their changes have been added and no
+new mistakes have been made.</p>
+<li><a name='5'></a>5</li>
+<p>Finally, the mailing list chair submits the modified file as a diff to
+the perl5-porters mailing list and begins the process anew with another
+file.</p>
+</ul>
+<p>While there is sure to be some discussion on this list (such as what
+files to work on and how to make certain changes), the main focus will
+be on <b>doing</b>, not talking.</p>
+<a name='IMPLEMENTATION'></a><h1>IMPLEMENTATION</h1>
+<p>Selection of a chair, creation of a list, and recruitment of interested
+parties is all that is required. The biggest win for this RFC is that it
+can be put into effect <b>now</b> and do some good not only for future Perl,
+but for current Perl as well.</p>
+<a name='REFERENCES'></a><h1>REFERENCES</h1>
+<p>The Perl documentation, as well as Tom Christiansen's excellent new
+perlman tools, which will be put through their paces by this proposal.</p>
+</div>

@@ -1,0 +1,86 @@
+[% setvar title Subroutines: Co-routines %]
+<h3>This file is part of the Perl 6 Archive</h3>
+    <p>To see what is currently happening visit <a href="http://www.perl6.org/">http://www.perl6.org/</a></p>
+<div class='pod'>
+<a name='TITLE'></a><h1>TITLE</h1>
+<p>Subroutines: Co-routines</p>
+<a name='VERSION'></a><h1>VERSION</h1>
+<pre>  Maintainer: Damian Conway &lt;<a href='mailto:damian@conway.org'>damian@conway.org</a>&gt;
+  Date: 4 Aug 2000
+  Last Modified: 18 Sep 2000
+  Number: 31
+  Version: 2
+  Mailing List: <a href='mailto:perl6-language-subs@perl.org'>perl6-language-subs@perl.org</a>
+  Status: Frozen</pre>
+<a name='ABSTRACT'></a><h1>ABSTRACT</h1>
+<p>This RFC proposes the addition of a new function return command:
+<code>yield</code>. Unlike <code>return</code>, <code>yield</code> preserves the execution state of
+the subroutine in which it's called, allowing the execution to be
+resumed at the following statement, next time the subroutine is called.
+It is also proposed that <code>yields</code> may nest, to simplify the
+construction of recursive co-routines and iterators.</p>
+<a name='BACKGROUND'></a><h1>BACKGROUND</h1>
+<p>Normally, when a subroutine returns, its execution terminates
+and it final context is completely lost. The next time the subroutine
+is invoked, it recommences executing from its first statement.</p>
+<p>In a coroutine, a value may be returned in such a way that the
+execution of the routine is <i>suspended</i>, along with all its
+local context. The next time the routine in invoked, its execution
+resumes from the statement after the previous point of return.</p>
+<a name='DESCRIPTION'></a><h1>DESCRIPTION</h1>
+<p>It is proposed to add a new control statement to Perl: <code>yield</code>.
+A <code>yield</code> acts very much like a <code>return</code> in that it terminates
+execution of the enclosing subroutine and returns a value to its calling
+context. However, when a value is <code>yield</code>'ed, the subroutine's execution
+is suspended in such a way that it resumes from the following statement
+next time the subroutine is invoked.</p>
+<p>Note that any subroutine containing a <code>yield</code> is implicitly a co-routine.
+There is no explicit keyword or attribute proposed.</p>
+<p>Coroutines make it very easy to implement generic parameteric closures
+and iterators:</p>
+<pre>        package Tree;
+
+        sub next_inorder ($self) {
+                yield $self-&gt;{left}-&gt;next_inorder if $self-&gt;{left};
+                yield $self;
+                yield $self-&gt;{right}-&gt;next_inorder if $self-&gt;{right};
+                return undef;
+        }
+
+
+        # and later...
+
+                while (my $node = $root-&gt;next_inorder()) {
+                        print $node-&gt;{data};
+                }</pre>
+<p>Note that the above example implies (correctly) that yielding a result
+which itself was yielded leaves the suspended execution of the
+subroutine at the same <code>yield</code> statement (<i>not</i> the following
+statement). Furthermore, yielding an <code>undef</code> is a no-op (i.e. it
+doesn't cause the subroutine to return, but passes control to the next
+statement).</p>
+<p>Note that the arguments of a co-routine are ignored when it is resumed.
+Hence:</p>
+<pre>        sub every_second ( @vals ) {
+                yield (splice @vals, 0, 2)[0]  while @vals;
+                return;
+        }</pre>
+<p>Another interesting application is to make a <code>map</code> block a coroutine,
+to allow it to process hashes in a natural manner. For example, instead
+of writing:</p>
+<pre>	@newhash{map {transform_key($_)} keys %oldhash} =
+		map {transform_val($_)} values %oldhash;</pre>
+<p>one could write:</p>
+<pre>	%newhash = map {yield transform_key($_); transform_val($_)} %oldhash;</pre>
+<p>This flattens the %oldhash to a sequence of key/value pairs. Then the
+first time the map block is called (i.e. on a key) it transforms the
+key and immediately yields it.  On the second iteration of the map,
+the block resumes after the <code>yield</code> and transforms the value.
+That normal return resets the block so that for the next
+iteration (another key) it applies the key transform and yields,
+then tranforms the second value, etc., etc.</p>
+<a name='IMPLEMENTATION'></a><h1>IMPLEMENTATION</h1>
+<p>Tricky.</p>
+<a name='REFERENCES'></a><h1>REFERENCES</h1>
+<p>None.</p>
+</div>

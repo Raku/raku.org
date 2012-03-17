@@ -1,0 +1,57 @@
+[% setvar title Remove socket functions from core %]
+<h3>This file is part of the Perl 6 Archive</h3>
+    <p>To see what is currently happening visit <a href="http://www.perl6.org/">http://www.perl6.org/</a></p>
+<div class='pod'>
+<a name='TITLE'></a><h1>TITLE</h1>
+<p>Remove socket functions from core</p>
+<a name='VERSION'></a><h1>VERSION</h1>
+<pre>  Maintainer: Stephen P. Potter &lt;<a href='mailto:spp@ds.net'>spp@ds.net</a>&gt;
+  Date: 24 Aug 2000
+  Mailing List: <a href='mailto:perl6-internals@perl.org'>perl6-internals@perl.org</a>
+  Number: 146
+  Version: 1
+  Status: Developing</pre>
+<a name='ABSTRACT'></a><h1>ABSTRACT</h1>
+<p>Move the socket functions (<code>accept</code>, <code>bind</code>, etc) from the core language
+to a loadable module.</p>
+<a name='DESCRIPTION'></a><h1>DESCRIPTION</h1>
+<p>Several of the socket functions have already started to migrate from the
+core to a module.  This RFC is proposing that all the socket functions should
+move to the Socket.pm module and require a &quot;use Socket;&quot; in order to function
+in perl 6.</p>
+<p>The specific functions that would be covered under this proposal are:</p>
+<ul>
+<li><a name=''></a></li>
+<p><code>accept</code></p>
+<li><a name=''></a></li>
+<p><code>bind</code></p>
+<li><a name=''></a></li>
+<p><code>connect</code></p>
+<li><a name=''></a></li>
+<p><code>getpeername</code></p>
+<li><a name=''></a></li>
+<p><code>getsockname</code></p>
+<li><a name=''></a></li>
+<p><code>getsockopt</code></p>
+<li><a name=''></a></li>
+<p><code>listen</code></p>
+<li><a name=''></a></li>
+<p><code>recv</code></p>
+<li><a name=''></a></li>
+<p><code>send</code></p>
+<li><a name=''></a></li>
+<p><code>setsockopt</code></p>
+<li><a name=''></a></li>
+<p><code>shutdown</code></p>
+<li><a name=''></a></li>
+<p><code>socket</code></p>
+<li><a name=''></a></li>
+<p><code>socketpair</code></p>
+</ul>
+<a name='IMPLEMENTATION'></a><h1>IMPLEMENTATION</h1>
+<p>Move code for socket functions to Socket.pm, requyire &quot;use Socket&quot; to
+enable use of socket functions.</p>
+<a name='REFERENCES'></a><h1>REFERENCES</h1>
+<p><i><a href='#the Socket module'>Socket.pm</a></i></p>
+<p><i><a href='http://search.cpan.org/perldoc?perlfunc'>perlfunc</a></i></p>
+</div>

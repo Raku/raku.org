@@ -1,0 +1,82 @@
+[% setvar title Access to optimisation information for regular expressions %]
+<h3>This file is part of the Perl 6 Archive</h3>
+    <p>To see what is currently happening visit <a href="http://www.perl6.org/">http://www.perl6.org/</a></p>
+<div class='pod'>
+<a name='TITLE'></a><h1>TITLE</h1>
+<p>Access to optimisation information for regular expressions</p>
+<a name='VERSION'></a><h1>VERSION</h1>
+<pre>  Maintainer: Hugo van der Sanden (<a href='mailto:hv@crypt0.demon.co.uk'>hv@crypt0.demon.co.uk</a>)
+  Date: 25 Sep 2000
+  Last Modified: 30 Sep 2000
+  Mailing List: <a href='mailto:perl6-language-regex@perl.org'>perl6-language-regex@perl.org</a>
+  Number: 317
+  Version: 2
+  Status: Frozen</pre>
+<a name='NOTES ON FREEZING'></a><h1>NOTES ON FREEZING</h1>
+<p>No comments to this except for a reference from RFC 72 (v4), which
+hopes that the concept will be extended to permit the caller to
+set study()-type information.</p>
+<p>If/when time permits I'll try a patch to perl5 to see how easy it
+is and to discover whether anyone other than Peter and I want it.</p>
+<a name='ABSTRACT'></a><h1>ABSTRACT</h1>
+<p>Currently you can see optimisation information for a regexp only
+by running with -Dr in a debugging perl and looking at STDERR.
+There should be an interface that allows us to read this information
+programmatically and possibly to alter it.</p>
+<a name='DESCRIPTION'></a><h1>DESCRIPTION</h1>
+<p>At its core, the regular expression matcher knows how to check
+whether a pattern matches a string starting at a particular location.
+When the regular expression is compiled, perl may also look for
+optimisation information that can be used to rule out some or all
+of the possible starting locations in advance.</p>
+<p>Currently you can find out about the optimisation information
+captured for a particular regexp only in a perl built with
+DEBUGGING, by turning on -Dr:</p>
+<pre>  % perl -Dr -e 'qr{test.*pattern}'
+  Compiling REx `test.*pattern'
+  size 8 first at 1
+  rarest char p at 0
+  rarest char s at 2
+     1: EXACT &lt;test&gt;(3)
+     3: STAR(5)
+     4:   REG_ANY(0)
+     5: EXACT &lt;pattern&gt;(8)
+     8: END(0)
+  anchored `test' at 0 floating `pattern' at 4..2147483647 (checking floating) minlen 11 
+  Omitting $` $&amp; $' support.
+  
+  EXECUTING...
+  
+  Freeing REx: `test.*pattern'
+  %</pre>
+<p>For some purposes it would help to be able to get at this information
+programmatically: the test suite could take advantage of this (to test
+that optimisations occur as expected), and it could also be useful for
+enhanced development tools, such as a graphical regexp debugger.</p>
+<p>Additionally there are times that the programmer is able to supply
+optimisation that the regexp engine cannot discover for itself. While
+we could consider making it possible to modify these values, it is
+important to remember that these are only hints: the regexp engine
+is free to ignore them. So there is a danger that people will misuse
+writable optimisation information to move part of the logic out of
+the regexp, and then blame us when it breaks.</p>
+<p>Suggested example usage:</p>
+<pre>  % perl -wl
+  use re;
+  $a = qr{test.*pattern};
+  print join ':', $a-&gt;fixed_string, $a-&gt;floating_string, $a-&gt;minlen;
+  __END__
+  test:pattern:11
+  %</pre>
+<p>.. but perhaps a single new method returning a hashref would be
+cleaner and more extensible:</p>
+<pre>  $opt = $a-&gt;optimisation;
+  print join ':', @$opt{qw/ fixed_string floating_string minlen /};</pre>
+<a name='IMPLEMENTATION'></a><h1>IMPLEMENTATION</h1>
+<p>Straightforward: add interface functions within the perl core to give
+access to read and/or write the optimisation values; add methods in
+re.pm that use XS code to reach the internal functions.</p>
+<a name='REFERENCES'></a><h1>REFERENCES</h1>
+<p>Prompted by discussion of RFC 72: The regexp engine should go backward
+as well as forward.</p>
+</div>

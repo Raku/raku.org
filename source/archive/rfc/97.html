@@ -1,0 +1,73 @@
+[% setvar title prototype-based method overloading %]
+<h3>This file is part of the Perl 6 Archive</h3>
+    <p>To see what is currently happening visit <a href="http://www.perl6.org/">http://www.perl6.org/</a></p>
+<div class='pod'>
+<a name='TITLE'></a><h1>TITLE</h1>
+<p>prototype-based method overloading</p>
+<a name='VERSION'></a><h1>VERSION</h1>
+<pre>  Maintainer: David Nicol &lt;<a href='mailto:perl6rfc@davidnicol.com'>perl6rfc@davidnicol.com</a>&gt;
+  Date: 13 Aug 2000
+  Last Modified: 29 Sep 2000
+  Mailing List: <a href='mailto:perl6-language-subs@perl.org'>perl6-language-subs@perl.org</a>
+  Number: 97 
+  Version: 2
+  Status: Frozen</pre>
+<a name='freeze notes (29 sep)'></a><h1>freeze notes (29 sep)</h1>
+<p>I believe several prototyping systems have been proposed,
+concerned with the exact nature of the parameter lists.  Since
+this RFC does not specify the mechanism for the declaration, beyond
+that it is a compatible superset of the current syntax, I believe
+we have compatability.</p>
+<a name='ABSTRACT'></a><h1>ABSTRACT</h1>
+<p>When I read the chapter on OO in the second edition camel book I
+was saddened that C++ style method overloading was not explicitly
+described.  Ever hopeful, I wrote some quick code that I hoped would
+do what I meant and discovered that it didn't.  This document is
+an attempt to remedy the situation.</p>
+<a name='SUMMARY'></a><h1>SUMMARY</h1>
+<pre>	$frog_t = qs(frog);
+	sub listargs($){ print &quot;One arg, $_[0]&quot;}
+	sub listargs($$){ print &quot;Two args, $_[0] and $[1]&quot;}
+	sub listargs($$frog_t){ print &quot;$_[0] and a frog $[1]&quot;}
+	sub listargs { throw argsyntax, &quot;odd arguments to listargs&quot; }
+
+	my $frog_t $k = new frog(type=&gt;tree);
+	listargs(&quot;franz&quot;,&quot;tree&quot;);	# prints &quot;Two args...&quot;
+	listargs(&quot;franz&quot;,$k);		# prints &quot;franz and ...&quot;
+	listargs($k,&quot;franz&quot;);		# throws an argsyntax error</pre>
+<a name='DESCRIPTION'></a><h1>DESCRIPTION</h1>
+<p>It it now possible to define two subroutines with the same
+name but different interfaces without error.  Perl will puzzle
+out which one to call in a given situation based on lexical
+information available in the program text.</p>
+<p>Defining two subroutines with both the same name and the same calling
+interface is undefined and may be an error.  This may change.</p>
+<p>No coercion protocol is defined at this time.
+This document will be updated as a protocol for coercing
+function calls with arguments that don't explicitly match is
+developed, such as having a method name (which is now
+distinct from a method, but still a strong grouping characteristic)
+have a &quot;coercion&quot; method associated with it which would
+indicate what to do if no prototypes matched.</p>
+<p>For now, for the greatest ease
+for implementors, calls to method <code>foo</code> that exactly match none of the
+prototypes of defined subroutines named <code>foo</code>
+will fall through to a <code>foo</code> with no prototype, should one exist.</p>
+<p>Programmers using this feature are advised to include a full coercion
+system into their unprototyped methods, when writing in a strongly typed
+environment.</p>
+<a name='IMPLEMENTATION'></a><h1>IMPLEMENTATION</h1>
+<p>At compile time, the keys in the big hash (be it global or per-package
+or per-class) that holds the mapping from the names of the classes
+to their coderefs is extended to include the prototype as part of the
+name of each method.  The nature of this extension is beyond the
+scope of this document.</p>
+<p>Perhaps the method is first looked up by name, and then further
+dispatch is done if needed.  This would exempt methods using &quot;relaxed
+perl5-ish semantics&quot; from any additional processing overhead.</p>
+<a name='REFERENCES'></a><h1>REFERENCES</h1>
+<p>RFC 57: Subroutine prototypes and parameters</p>
+<p>RFC 61: Interfaces for linking C objects into perlsubs</p>
+<p>RFC 75: structures and interface definitions</p>
+<p>camel book, 2nd ed.</p>
+</div>

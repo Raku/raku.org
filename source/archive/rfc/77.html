@@ -1,0 +1,90 @@
+[% setvar title Suggested isa() operator. %]
+<h3>This file is part of the Perl 6 Archive</h3>
+    <p>To see what is currently happening visit <a href="http://www.perl6.org/">http://www.perl6.org/</a></p>
+<div class='pod'>
+<a name='TITLE'></a><h1>TITLE</h1>
+<p>Suggested isa() operator.</p>
+<a name='VERSION'></a><h1>VERSION</h1>
+<pre>  Maintainer: James Mastros &lt;<a href='mailto:james@rtweb.net'>james@rtweb.net</a>&gt;
+  Date: 8 Aug 2000
+  Mailing List: <a href='mailto:perl6-language@perl.org'>perl6-language@perl.org</a>
+  Number: 77
+  Version: 1
+  Status: Developing</pre>
+<a name='ABSTRACT'></a><h1>ABSTRACT</h1>
+<p>Currently, there is no way to determine if a scalar holds something that
+could validly form a number/Boolean/etc.  This RFC seeks to remedy that.</p>
+<a name='DESCRIPTION'></a><h1>DESCRIPTION</h1>
+<p>The suggested semantics of the isa operator are as follows:</p>
+<ul>
+<li><a name='$result = isa($obj, $type);'></a>$result = isa($obj, $type);</li>
+<pre> TRUE VALUES:
+  $result = &quot;blessed&quot; if $obj is blessed into the package $type.
+  $result = &quot;inherits(n)&quot; if $obj is blessed into a package that ISA $type in the Nth degree.
+  $result = &quot;is a&quot; if $obj currently has a $type value associated with it.
+  $result = &quot;can be a&quot; if $obj could be promoted to a $type value.
+  $result = &quot;tied to a&quot; if $obj is tied to (something which inherits from) $type.</pre>
+<p>FALSE VALUES:
+$result = 0 if $obj is not a $type, but $type is a known package or basic type.
+$result = undef if $type is not a known package or basic type.</p>
+<pre> in all cases, if $type is a blessed ref, it should be taken as if ref($type)
+ had been specified.  An unholy ref is invalid for $type.</pre>
+</ul>
+<p>This is incompatible with UNIVERSAL::isa() in one case: if $obj is a
+string containing the name of a package, the current <code>UNIVERSAL::isa($obj,
+$type)</code> will do what the proposed <code>isa(bless(\0, $obj), $type)</code> would do.</p>
+<p>This, fortunately, would not be automatically convertible.  Therefore, it
+might
+be better to have the existing semantics apply to <code>isa($obj, $type)</code> when
+$obj holds the name of an existing package.  Unfortunately, this means that
+you cannot apply isa() to arbitrary strings in absolute safety.  FIXME.</p>
+<ul>
+<li><a name='@result = isa($obj, $type);'></a>@result = isa($obj, $type);</li>
+<p>@result is the lineage of $obj that leads to $type.  More exactly, it
+is a list such that <code>isa(bless(\0, $result[i]), $result[i-1]) =~
+s/^inherits/</code>.  (Hmm, perhaps things like that are a good argument for why
+isa should treat $obj=a package name specialy.)  Also, the list will always
+either be empty (if <code>scalar(isa($obj, $type))</code> is false), or will end in
+(the cannonical form, if there is some noncannonical form of package names
+or basic types).</p>
+<li><a name='$result = isa($obj);'></a>$result = isa($obj);</li>
+<p>$result is the basic type of $obj -- &quot;INTEGER&quot;, &quot;NUMBER&quot;, &quot;STRING&quot;, &quot;REF&quot;,
+&quot;FILEHANDLE&quot;, etc.  This is it's most specific IS_xOK() (or similar) type
+(INTEGER winning over NUMBER, which wins over STRING, FILEHANDLE winning
+over REF, if they end up being different basic types).  Note that this
+doesn't dereference $obj or give the type it is blessed into; ref() is for
+that.  (If you want to know the basic type of the object that it points to,
+even if it is blessed, see the next form.)</p>
+<li><a name='@result = isa($obj);'></a>@result = isa($obj);</li>
+<p>This will follow the chain of refs, giving a list of the packages, etc, of
+each, as well as going into lists and hashes.  For example:</p>
+<pre> my $foo = [14, &quot;21&quot;];
+ my $bar = bless (\$foo, &quot;Example::Package1&quot;);
+ my $baz = bless (\$bar, &quot;Example::Package2&quot;);
+
+ print Data::Dumper \(isa($baz));</pre>
+<p>Will print (assuming I got the parentheses right on that last line):</p>
+<pre> (&quot;Example::Package2&quot;, &quot;Example::Pacakge1&quot;, &quot;LIST&quot;, [&quot;INTEGER&quot;, &quot;STRING&quot;])</pre>
+<p>Note that the last element is a ref to the list that doing a list of
+scalar(isa($thingies)) on the thingy that has it's type mentioned in
+the -2th element. This has the possibility of producing very deep (even
+infinitely deep/self-referencing) lists, and should possibly be limited to
+the return of the scalar form, or omitted entirely.  However, completely
+eliminating it would mean that you couldn't find the types of a list of
+items by doing isa(\@list).  FIXME.</p>
+<p>Also, I'm not sure what to do about tied thingies, since things can be
+tied, blessed, and have subvalues all at the same time.  FIXME.</p>
+<p>This would have to stop somewhere with recursive and infinite (including
+non-terminating ties, infinite, and semi-finite lists/hashes) structures.
+FIXME.</p>
+<p>Note also that this has the list at the end returning the current basic type
+instead of the most specific possible basic type.  FIXME.</p>
+</ul>
+<a name='IMPLEMENTATION'></a><h1>IMPLEMENTATION</h1>
+<p>Hmm, it's natively (and naïveté) recursive.</p>
+<a name='UNRESOLVED ISSUES'></a><h1>UNRESOLVED ISSUES</h1>
+<p><code>m/FIXME/</code>.</p>
+<a name='REFERENCES'></a><h1>REFERENCES</h1>
+<p><i><a href='http://search.cpan.org/perldoc?UNIVERSAL'>UNIVERSAL</a></i> for UNIVERSAL::isa compatibility
+<i><a href='http://search.cpan.org/perldoc?ref'>ref</a></i></p>
+</div>

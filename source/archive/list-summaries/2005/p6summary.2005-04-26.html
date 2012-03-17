@@ -1,0 +1,247 @@
+[% setvar title The Perl 6 Summary for the week ending 2005-04-26 %]
+<h3>This file is part of the Perl 6 Archive</h3>
+    <p>To see what is currently happening visit <a href="http://www.perl6.org/">http://www.perl6.org/</a></p>
+<div class='pod'>
+<a name='The Perl 6 Summary for the week ending 2005-04-26'></a><h1>The Perl 6 Summary for the week ending 2005-04-26</h1>
+<p>It's my turn again. What fun.</p>
+<p>&quot;What,&quot; I hear you all ask, &quot;has been going on in the crazy mixed up world of
+Perl 6 design and development&quot;? Read this summary and, beginning with
+perl6-compiler, I shall tell you.</p>
+<a name='This week in perl6-compiler'></a><h1>This week in perl6-compiler</h1>
+<a name='Refactoring Test.pm'></a><h2>Refactoring Test.pm</h2>
+<p>Stevan Little had an idea while he was refactoring Test.pm. He wondered whether
+to get rid of the various <code>todo_*</code> functions in favour of just using a
+<b><i>t/force_todo</i></b> file. Which led him to wonder about doing away with
+<b><i>t/force_todo</i></b> in favour of a <code>force_todo()</code> function. He asked for opinions
+before he started making the change (which isn't exactly a refactoring).</p>
+<p>General opinion seemed favourable, though I confess I am perturbed by the
+proposed release trick of proclaiming all failures, whether expected or not, to
+be TODOs. The current system generates an explicit list of tests that are
+failing on 'core' systems. The proposed solution would seem to make all
+failures equal, so even unexpected 'platform' failures wouldn't be caught.</p>
+<p><a href='http://groups.google.com/groups?threadm=ffec23e5c25f0424eb0e39e9005d8169@iinteractive.com' target='_blank'>groups.google.com</a></p>
+<a name='Weird thing with say ++$'></a><h2>Weird thing with say ++$</h2>
+<p>What do you know, <code>say $i++, ++$i</code> behaves weirdly.</p>
+<p><a href='http://groups.google.com/groups?threadm=20050421083227.27464.qmail@lists.develooper.com' target='_blank'>groups.google.com</a></p>
+<a name='Pugs 6.2.1 released'></a><h2>Pugs 6.2.1 released</h2>
+<p>Autrijus announced the availability of Pugs 6.2.1 which comes complete with
+much shininess.</p>
+<p><a href='http://groups.google.com/groups?threadm=20050423225546.GA26560@aut.dyndns.org' target='_blank'>groups.google.com</a></p>
+<a name='This week in perl6-language'></a><h1>This week in perl6-language</h1>
+<a name='Parrot Common Lisp'></a><h2>Parrot Common Lisp</h2>
+<p>Cory Spencer's port of Common Lisp to Parrot was much admired (it's got some
+way to go before it's <i>really</i> Common Lisp, but it's a cracking start). Uwe
+Volker suggested porting emacs to it and was promptly accused of being Erik
+Naggum by Lars Balker Rasmussen.</p>
+<p>Cory acquired (or is acquiring) a committer bit.</p>
+<p><a href='http://groups.google.com/groups?threadm=Pine.LNX.4.62.0504141459030.32167@okcomputer.antiflux.org' target='_blank'>groups.google.com</a></p>
+<a name='State of the Tcl'></a><h2>State of the Tcl</h2>
+<p>Will Coleda gave the list a heads up on the state of ParTCL, the Parrot TCL
+port. It's still failing some tests, apparently because of GC issues.</p>
+<p>A few days later, these problems went away (we're not quite sure how though).</p>
+<p><a href='http://groups.google.com/groups?threadm=4265DCD4.5060708@coleda.com' target='_blank'>groups.google.com</a></p>
+<p><a href='http://groups.google.com/groups?threadm=426D8EFD.1020201@coleda.com' target='_blank'>groups.google.com</a></p>
+<a name='alarm() and later()'></a><h2><code>alarm()</code> and <code>later()</code></h2>
+<p>Leo stated that Parrot provides subsecond timer resolution as well as alarm
+callbacks and multiple timers. Hurrah!</p>
+<p><a href='http://groups.google.com/groups?threadm=200504200620.j3K6K4T02837@thu8.leo.home' target='_blank'>groups.google.com</a></p>
+<a name='RFC assign Px, Py'></a><h2>RFC <code>assign Px, Py</code></h2>
+<p>Leo posted a discussion of the semantics of <code>assign</code> and <code>set</code>, with a
+proposed change to PIR syntax. Warnock applies.</p>
+<p><a href='http://groups.google.com/groups?threadm=4268AD4F.2030708@toetsch.at' target='_blank'>groups.google.com</a></p>
+<a name='RFC unary operations'></a><h2>RFC unary operations</h2>
+<p>In another RFC, Leo discussed changes to Parrot's unary operators and proposed
+other changes.</p>
+<p><a href='http://groups.google.com/groups?threadm=42691D77.6060808@toetsch.at' target='_blank'>groups.google.com</a></p>
+<a name='One more MMD -- assignment'></a><h2>One more MMD -- assignment</h2>
+<p>Dan noted that he was writing a great deal of code in his <code>set_pmc</code> vtable
+methods that looked very MMD-like. He suggested that adding assignment to the
+list of MMD functions might be a good idea. Leo pointed him at his assignment
+RFC.</p>
+<p><a href='http://groups.google.com/groups?threadm=a06210215be8ed35f7f36@' target='_blank'>groups.google.com</a>[172.24.18.155]</p>
+<a name='Fun with morph()'></a><h2>Fun with <code>morph()</code></h2>
+<p>Nicholas Clark wondered about the responsibilities of the <code>morph</code> method with
+respect to handling <code>PMC_struct_val</code>. In the subsequent discussion it became
+apparent that <code>morph</code> can get complicated. Bob Rogers supplied a bunch of
+extra complications and wondered about the feasibility of making Parrot
+morph-free. Leo agreed that it seemed feasible and is probably a good idea.
+Another subthread made my head hurt -- I can understand this stuff much better
+when I'm sat 'round a table with people and we're kept supplied with drinks,
+notepaper and, in Leo's case, industrial quantities of
+tobacco. (Ah... YAPC::Paris!)</p>
+<p><a href='http://groups.google.com/groups?threadm=20050423220805.GQ57402@plum.flirble.org' target='_blank'>groups.google.com</a></p>
+<a name='Building an incomplete code generator into Parrot'></a><h2>Building an incomplete code generator into Parrot</h2>
+<p><a href='mailto:rocko@adampreble.com'>rocko@adampreble.com</a> (that's the only name I have) has started work on
+implementing a JIT backend for the AMD64 processor. He asked a few questions
+and Leo provided answers.</p>
+<p><a href='http://groups.google.com/groups?threadm=20050424011934.ey5ch49tavo08k0o@www.adampreble.com' target='_blank'>groups.google.com</a></p>
+<a name='Calling Convention Abstraction'></a><h2>Calling Convention Abstraction</h2>
+<p>This thread continues to rumble on. Leo said that what he wants is for
+the HLL folks to create a workable scheme for abstract and extendable calling
+conventions that could express all the various HLL specific semantics of
+function calling, pointing out that, unless we have this we can forget
+interoperability (or at least, easy interop).</p>
+<p><a href='http://groups.google.com/groups?threadm=426B5794.9010101@toetsch.at' target='_blank'>groups.google.com</a></p>
+<a name='Alpha development Box'></a><h2>Alpha development Box</h2>
+<p>Bob Rogers 'has' an Alpha development box that can be used for open source
+projects. He wondered if the Parrot project could make use of it, and if so
+what was the best way of doing this. Some discussion occurred on the list, but
+I assume (hope) more happened offline.</p>
+<p><a href='http://groups.google.com/groups?threadm=17004.19419.780341.502435@rgrjr.dyndns.org' target='_blank'>groups.google.com</a></p>
+<a name='Meanwhile, in perl6-language'></a><h1>Meanwhile, in perl6-language</h1>
+<a name='Calling junctions of closures'></a><h2>Calling junctions of closures</h2>
+<p>Brad Bowman wondered about calling junctions of closures. He guessed that the
+rule is &quot;call 'em all and return a similarly structured junction.&quot; but wasn't
+sure. Thomas Sandlaß wasn't so sure.</p>
+<p>My head hurts.</p>
+<p><a href='http://groups.google.com/groups?threadm=1113985623.1088.170.camel@oxum' target='_blank'>groups.google.com</a></p>
+<a name='{ =&gt; } autocomposition'></a><h2><code>{ =&gt; }</code> autocomposition</h2>
+<p>Autrijus asked about the following fragment:</p>
+<pre>    %ret = map { $_ =&gt; uc $_ }, split '', $text;</pre>
+<p>which gives Pugs a massive headache.</p>
+<p>&gt;From the ensuing discussion, it appears to cause Larry and Autrijus headaches
+too. Also, it turns out that Larry's Perl 5 to Perl 5 translator has both
+madprops and madskills. Hurrah! Darren Duncan suggested that</p>
+<pre>    %ret = map:{ $_ =&gt; uc $_ }, split '', $text;</pre>
+<p>should serve to say that the block is to be treated as a block rather than a
+hash constructor. He thought that that came from one of the synopses, but
+couldn't remember which.</p>
+<p>I wonder if</p>
+<pre>    %ret = map -&gt; {$_ =&gt; uc $_}, split '', $text; </pre>
+<p>wouldn't do the job. (Or did the syntax change on me when I wasn't looking?)</p>
+<p><a href='http://groups.google.com/groups?threadm=20050420143834.GA15699@aut.dyndns.org' target='_blank'>groups.google.com</a></p>
+<a name='Embedding languages in Perl 6'></a><h2>Embedding languages in Perl 6</h2>
+<p>BÁRTHÁZI András had some questions about introducing different parsing rules in
+the middle of a Perl 6 program. Larry's answer was, essentially &quot;All's fair if
+you predeclare&quot;, but with an interesting idea about using <code>`</code> as a way of
+introducing a 'self-terminating construct', so one could do:</p>
+<pre>   use XML;
+
+   $a = `&lt;elems&gt;&lt;elem&gt;Content #1&lt;/elem&gt;&lt;elem&gt;Content #2&lt;/elem&gt;&lt;/elems&gt;;</pre>
+<p>or</p>
+<pre>   use SQL;
+
+   $a = `select * from table`;</pre>
+<p>Various possibilities were discussed, but nothing got set in stone.</p>
+<p><a href='http://groups.google.com/groups?threadm=42667083.8060706@barthazi.hu' target='_blank'>groups.google.com</a></p>
+<a name='Closure/block/sub multiplier'></a><h2>Closure/block/sub multiplier</h2>
+<p>Matt Creenan wondered about doing <code>@names = &amp;get_next(...) XX 5;</code> (which,
+obviously, would call <code>&amp;get_next</code> five times and shove the results into
+<code>@names</code>). Juerd pointed out some subtleties to do with functions that return
+closures. Later in the thread he decided that he controlled both the horizontal
+and the vertical, with particular reference to redefining true, false and
+undef.</p>
+<p><a href='http://groups.google.com/groups?threadm=op.spjiubnq8hsiyb@codeslut' target='_blank'>groups.google.com</a></p>
+<a name='alarm() and later()'></a><h2><code>alarm()</code> and <code>later()</code></h2>
+<p>Remember the discussion of <code>alarm</code> and <code>later</code> in perl6-internals? It moved
+over to perl6-language. Larry agreed that Perl 6's time interfaces would
+favour floating point time values, but he wasn't quite sure if any of them
+would be called <code>alarm</code>. Discussion ensued, both on the topic and matters of
+naming style.</p>
+<p><a href='http://groups.google.com/groups?threadm=20050420171135.GD29671@wall.org' target='_blank'>groups.google.com</a></p>
+<a name='$?OS globals, etc'></a><h2>$?OS globals, etc</h2>
+<p>Scott McWhirter proposed making the various $?OS etc variables into attributes
+of some GLOBAL class. Larry thought it was a good idea, but wasn't sure it was
+entirely right as proposed; this area is still being designed.</p>
+<p><a href='http://groups.google.com/groups?threadm=4266B13E.7030106@kungfuftr.com' target='_blank'>groups.google.com</a></p>
+<a name='Parens vs. subroutine parameter'></a><h2>Parens vs. subroutine parameter</h2>
+<p>Autrijus had a question about how function signatures and various forms of
+paren magic interacted. He, Juerd and Larry thrashed things out.</p>
+<p><a href='http://groups.google.com/groups?threadm=20050420201951.GA22262@aut.dyndns.org' target='_blank'>groups.google.com</a></p>
+<a name='-Xs auto-(un)quoting'></a><h2><code>-X</code>s auto-(un)quoting</h2>
+<p>Michele Dondi had some questions/suggestions about the various file test
+operators. Larry answered and the thread spun off into a discussion of all
+sorts of aspects of these handy operators. Well, that was before it turned into
+a discussion of the semantic of &lt;.foo&gt;, or was that <code>^foo</code>, or maybe <code>_foo</code>,
+or possibly <code>....foo</code>. At this point, things got a little heated. There's no
+decision as yet (personally I'm a fan of the scheme as originally proposed;
+<code>.foo</code> calls the method foo on the current topic, whatever that may be. If you
+need to hang onto old topics, give them a name. I appear to be in something of
+a minority).</p>
+<p><a href='http://groups.google.com/groups?threadm=Pine.LNX.4.61.0504210953250.4902@rhum.pcteor1.mi.infn.it' target='_blank'>groups.google.com</a></p>
+<a name='Unify cwd'></a><h2>Unify cwd</h2>
+<p>It turns out that the 'current working directory' isn't as obvious as it
+sounds. It also turns out that Larry would like to be able to pretend that it
+is until it turns out not to be.</p>
+<p><a href='http://groups.google.com/groups?threadm=m27jiw4pju.fsf@phoenix.squirrel.nl' target='_blank'>groups.google.com</a></p>
+<a name='Blocks, continuations and eval'></a><h2>Blocks, continuations and <code>eval</code></h2>
+<p>When last we saw this thread, Larry had said that continuations would be
+available in Perl for people who ask specially, but wouldn't be left lying
+around in the open where 'some poor benighted pilgrim might trip over them
+unaware'. Wolverian asked what the interface would be. Larry thought it would
+probably start <code>use Continuations;</code>, or possibly <code>use CONTINUATIONS;</code>.</p>
+<p>The thread prompted Stéphane Payrard to ask about the possibility of some of
+the more 'out there' functional programming tricks making it into Perl 6. Once
+again, all's fair if you predeclare, but it looks like Perl 6 already has core
+access to some pretty out there stuff.</p>
+<p><a href='http://groups.google.com/groups?threadm=20050421133007.GA13496@sci.fi' target='_blank'>groups.google.com</a></p>
+<a name='Accepted abbreviations'></a><h2>Accepted abbreviations</h2>
+<p>Juerd wondered if we could compile a list of standard abbreviations for various
+terms so that they can be consistently applied. He kicked off with a list of
+his own. There was some discussion but I somehow doubt his list will be used
+rigorously.</p>
+<p><a href='http://groups.google.com/groups?threadm=20050422114626.GT19716@c4.convolution.nl' target='_blank'>groups.google.com</a></p>
+<a name='Thunking semantics of :='></a><h2>Thunking semantics of <code>:=</code></h2>
+<p>Once someone starts to implement a language, you get a wonderful driver for
+design decisions that need to be made and ambiguities to be ironed out. On this
+occasion, Autrijus needed some clarification of the semantics of the binding
+operator, <code>:=</code>. Ambiguities were ironed, and implementations were written (and
+yes, I <i>do</i> mean implementations).</p>
+<p><a href='http://groups.google.com/groups?threadm=20050423105104.GA18812@aut.dyndns.org' target='_blank'>groups.google.com</a></p>
+<a name='for all(@foo) {...}'></a><h2><code>for all(@foo) {...}</code></h2>
+<p>Brad Bowman had questions about the workings of <code>for all(@foo) {...}</code> based on
+S03. It turns out that the synopsis is wrong. Larry explained how it's supposed
+to work (which is how it already works in Pugs).</p>
+<p><a href='http://groups.google.com/groups?threadm=1114318936.4176.21.camel@oxum' target='_blank'>groups.google.com</a></p>
+<a name='Lazy Lists + Mutable Arrays + Garbage Collection'></a><h2>Lazy Lists + Mutable Arrays + Garbage Collection</h2>
+<p>Brad also had questions about the workings of lazy lists. In particular, he
+wondered about treating streams as mutable arrays. Warnock applies.</p>
+<p><a href='http://groups.google.com/groups?threadm=1114330227.4176.83.camel@oxum' target='_blank'>groups.google.com</a></p>
+<a name='map { $_ =&gt; uc $_ }, @foo again'></a><h2><code>map { $_ =&gt; uc $_ }, @foo</code> again</h2>
+<p>Autrijus proposed a cunning plan to deal with the ambiguities inherent in:</p>
+<pre>    map { $_ =&gt; uc $_ }, @foo;</pre>
+<p>by suggesting that using a block without the comma should force said block to
+be interpreted as a block rather than a hash constructor. Larry wasn't sure,
+arguing that it were best to disambiguate with something just before, or just
+inside the block (in the same way that pattern modifiers now go before the
+pattern).</p>
+<p><a href='http://groups.google.com/groups?threadm=20050424181326.GA41163@aut.dyndns.org' target='_blank'>groups.google.com</a></p>
+<a name='Passing hash to a sub expecting named params'></a><h2>Passing hash to a sub expecting named params</h2>
+<p>Carl Franks wondered if he could pass a splatted hash (<code>*%hash</code>) to a function
+that expects named arguments. Answer, yep.</p>
+<p><a href='http://groups.google.com/groups?threadm=4f352aae05042501144507f8ec@mail.gmail.com' target='_blank'>groups.google.com</a></p>
+<a name='Turning off warnings for a function's params?'></a><h2>Turning off warnings for a function's params?</h2>
+<p>David Storrs wanted to be able to turn off selectively turn off some warnings
+when he's testing. He asked how to go about doing it. Luke and Juerd provided
+some answers.</p>
+<p><a href='http://groups.google.com/groups?threadm=20050425025001.GA48670@megazone.bigpanda.com' target='_blank'>groups.google.com</a></p>
+<a name='How do I... tie hashes/arrays'></a><h2>How do I... tie hashes/arrays</h2>
+<p>Discussion of how to tie hashes and arrays continued.</p>
+<p><a href='http://groups.google.com/groups?threadm=426D1CF1.7070902@orthogon.com' target='_blank'>groups.google.com</a></p>
+<a name='Surprising consequences'></a><h2>Surprising consequences</h2>
+<p>Juerd worried that code like <code>if($foo) { say 'foo'}</code> would throw syntax
+errors. It turns out that one of his givens wasn't quite as given as he
+though. So it's not a syntax error.</p>
+<p><a href='http://groups.google.com/groups?threadm=20050425190549.GO26732@c4.convolution.nl' target='_blank'>groups.google.com</a></p>
+<a name='Calls and parens'></a><h2>Calls and parens</h2>
+<p>Juerd posted a set of examples of the new rules for parsing parentheses in
+function calls and asked which of his assumptions were wrong. Luke Palmer
+reassured him.</p>
+<p><a href='http://groups.google.com/groups?threadm=20050425193338.GQ26732@c4.convolution.nl' target='_blank'>groups.google.com</a></p>
+<a name='Context and index expressions'></a><h2>Context and index expressions</h2>
+<p>Autrijus posted a set of examples of array indexes and asked if he'd got all
+the contexts right. There was no answer at the time of writing.</p>
+<p><a href='http://groups.google.com/groups?threadm=20050425193344.GA62148@aut.dyndns.org' target='_blank'>groups.google.com</a></p>
+<a name='Hmm... still fun. I could get used to this.'></a><h1>Hmm... still fun. I could get used to this.</h1>
+<p>If you find these summaries useful or enjoyable, please consider
+contributing to the Perl Foundation to help support the development of
+Perl.</p>
+<p><a href='http://donate.perl-foundation.org/' target='_blank'>donate.perl-foundation.org</a> -- The Perl Foundation</p>
+<p><a href='http://dev.perl.org/perl6/' target='_blank'>dev.perl.org</a> -- Perl 6 Development site</p>
+<p>Or, you can check out my website. Maybe now I'm back writing stuff I'll start
+updating it.</p>
+<p><a href='http://www.bofh.org.uk/' target='_blank'>www.bofh.org.uk</a></p>
+<p>Vaguely pretty photos by me can be found at:</p>
+<p><a href='http://www.flickr.com/photos/pdcawley' target='_blank'>www.flickr.com</a></p>
+<p>See you all in a fortnight.</p>
+</div>

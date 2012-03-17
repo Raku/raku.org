@@ -1,0 +1,483 @@
+[% setvar title Lightweight Threads %]
+<h3>This file is part of the Perl 6 Archive</h3>
+    <p>To see what is currently happening visit <a href="http://www.perl6.org/">http://www.perl6.org/</a></p>
+<div class='pod'>
+<a name='TITLE'></a><h1>TITLE</h1>
+<p>Lightweight Threads</p>
+<a name='VERSION'></a><h1>VERSION</h1>
+<pre>  Maintainer: Steven McDougall &lt;<a href='mailto:swmcd@world.std.com'>swmcd@world.std.com</a>&gt;
+  Date: 30 Aug 2000
+  Last Modified: 26 Sep 2000
+  Mailing List: <a href='mailto:perl6-language-flow@perl.org'>perl6-language-flow@perl.org</a>
+  Number: 178
+  Version: 5
+  Status: Frozen</pre>
+<a name='ABSTRACT'></a><h1>ABSTRACT</h1>
+<p>A lightweight thread model for Perl.</p>
+<ul>
+<li><a name='All threads see the same compiled subroutines'></a>All threads see the same compiled subroutines</li>
+<li><a name='All threads share the same global variables'></a>All threads share the same global variables</li>
+<li><a name='Threads can create thread-local storage by localizing global variables'></a>Threads can create thread-local storage by <code>local</code>izing global variables</li>
+<li><a name='All threads share the same file-scoped lexicals'></a>All threads share the same file-scoped lexicals</li>
+<li><a name='Each thread gets its own copy of block-scoped lexicals upon execution of my'></a>Each thread gets its own copy of block-scoped lexicals upon execution
+of <code>my</code></li>
+<li><a name='Threads can share block-scoped lexicals by passing a reference to a lexical into a thread, by declaring one subroutine within the scope of another, or with closures.'></a>Threads can share block-scoped lexicals by passing a reference to a
+lexical into a thread, by declaring one subroutine within the scope of
+another, or with closures.</li>
+<li><a name='Open code can only be executed by a thread that compiles it'></a>Open code can only be executed by a thread that compiles it</li>
+<li><a name='The language guarantees atomic data access. Everything else is the user's problem.'></a>The language guarantees atomic data access. Everything else is the
+user's problem.</li>
+</ul>
+<ul>
+<li><a name='Perl'></a>Perl</li>
+<p>Swiss-army chain saw</p>
+<li><a name='Perl with threads'></a>Perl with threads</li>
+<p>juggling chain saws</p>
+</ul>
+<a name='CHANGES'></a><h1>CHANGES</h1>
+<a name='v5'></a><h2>v5</h2>
+<p>Frozen</p>
+<a name='v4'></a><h2>v4</h2>
+<ul>
+<li><a name='Traded in data coherence for &quot;Atomic data access&quot;. Added examples 16 and 17.'></a>Traded in data coherence for <i><a href='#Atomic data access'>&quot;Atomic data access&quot;</a></i>. Added examples 16 and
+17.</li>
+<li><a name='Traded in Primitive operations for Locking'></a>Traded in Primitive operations for <i><a href='http://search.cpan.org/perldoc?Locking'>Locking</a></i></li>
+<li><a name='Dropped &quot;local&quot; section'></a>Dropped <i><a href='#local'>&quot;local&quot;</a></i> section</li>
+<li><a name='Revised &quot;Performance&quot; section'></a>Revised <i><a href='#Performance'>&quot;Performance&quot;</a></i> section</li>
+</ul>
+<a name='v3'></a><h2>v3</h2>
+<ul>
+<li><a name='Simplified example 9'></a>Simplified example 9</li>
+<li><a name='Added &quot;Performance&quot; section'></a>Added <i><a href='#Performance'>&quot;Performance&quot;</a></i> section</li>
+</ul>
+<a name='v2'></a><h2>v2</h2>
+<ul>
+<li><a name='Added section on sharing block-scoped lexicals between threads'></a>Added section on sharing block-scoped lexicals between threads</li>
+<li><a name='Added examples 9, 10, and 11. (N.B. renumbered following examples)'></a>Added examples 9, 10, and 11. (N.B. renumbered following examples)</li>
+<li><a name='Fixed some typos'></a>Fixed some typos</li>
+</ul>
+<a name='FROZEN'></a><h1>FROZEN</h1>
+<p>There was substantial--if somewhat disjointed--discussion of thread
+models on perl6-internals. The consensus among those with internals
+experience is that this RFC shares too much data between threads, and
+that the CPU cost of acquiring a lock for every variable access will
+be prohibitive.</p>
+<p>Dan Sugalski discussed some of the tradeoffs and sketched an alternate
+threading model at</p>
+<pre>    <a href='http://www.mail-archive.com/perl6-internals@perl.org/msg01272.html' target='_blank'>www.mail-archive.com</a></pre>
+<p>however, this has not been submitted as an RFC.</p>
+<a name='DESCRIPTION'></a><h1>DESCRIPTION</h1>
+<p>The overriding design principle in this model is that there is one
+program executing in multiple threads. One body of code; one set of
+global variables; many threads of execution. I like this model because</p>
+<ul>
+<li><a name='I understand it'></a>I understand it</li>
+<li><a name='It does what I want'></a>It does what I want</li>
+<li><a name='I think it can be implemented'></a>I think it can be implemented</li>
+</ul>
+<a name='Notation'></a><h2>Notation</h2>
+<ul>
+<li><a name='main and spawned threads'></a><i>main</i> and <i>spawned</i> threads</li>
+<p>We'll call the first thread that executes in a program the <i>main</i>
+thread. It isn't distinguished in any other way. All other threads are
+called <i>spawned</i> threads.</p>
+<li><a name='open code'></a><i>open code</i></li>
+<p>Code that isn't contained in a BLOCK.</p>
+</ul>
+<p>Examples are written in Perl5, and use the thread programming model
+documented in <code>Thread.pm</code>. Discussions of performance and
+implementation is based on the Perl5 internals; obviously, these are
+subject to change.</p>
+<a name='All threads see the same compiled subroutines'></a><h2>All threads see the same compiled subroutines</h2>
+<p>Subroutines are typically defined during the initial compilation of a
+program. <code>use</code>, <code>require</code>, <code>do</code>, and <code>eval</code> can later define
+additional subroutines or redefine existing ones. Regardless, at any
+point in its execution, a program has one and only one collection of
+defined subroutines, and all threads see this collection.</p>
+<p>Example 1</p>
+<pre>    sub foo 	 { print 1 }
+    sub hack_foo { eval 'sub foo { print 2 }' }
+    foo();
+    Thread-&gt;new(\&amp;hack_foo)-&gt;join;
+    foo();</pre>
+<p>Output: 12. The main thread executes <code>foo</code>; the spawned thread
+redefines <code>foo</code>; the main thread executes the redefined subroutine.</p>
+<p>Example 2</p>
+<pre>    sub foo 	 { print 1 }
+    sub hack_foo { eval 'sub foo { print 2 }' }
+    foo();
+    Thread-&gt;new(\&amp;hack_foo);
+    foo();</pre>
+<p>Output: 11 or 12, according as the main thread does or does not make
+the second call to <code>foo()</code> before the spawned thread redefines it. If
+the user cares which happens first, then they are responsible for
+doing their own synchronization, for example, with <code>join</code>, as shown
+in Example 1.</p>
+<p>Code refs (like all Perl data objects) are reference counted. Threads
+increment the reference count upon entry to a subroutine, and
+decrement it upon exit. This ensures that the op tree won't be garbage
+collected while the thread is executing it.</p>
+<a name='All threads share the same global variables'></a><h2>All threads share the same global variables</h2>
+<p>Example 3</p>
+<pre>    #!/my/path/to/perl
+    $a = 1;
+    Thread-&gt;new(\&amp;foo)-&gt;join;
+    print $a;
+    
+    sub foo { $a++ }</pre>
+<p>Output: 2. <code>$a</code> is a global, and it is the <i>same</i> global in both the
+main thread and the spawned thread.</p>
+<a name='Threads can create thread-local storage by localizing global variables'></a><h2>Threads can create thread-local storage by <code>local</code>izing global
+variables</h2>
+<p>Example 4</p>
+<pre>    #!/my/path/to/perl
+    $a = 1;
+    Thread-&gt;new(\&amp;foo);
+    print $a;
+    
+    sub foo { local $a = 2 }</pre>
+<p>Output: 1. The spawned thread gets it's own copy of <code>$a</code>. The copy of
+<code>$a</code> in the main thread is unaffected. It doesn't matter whether the
+assignment in <code>foo</code> executes before or after the <code>print</code> in the main
+thread. It doesn't matter whether the copy of <code>$a</code> goes out of scope
+before or after the <code>print</code> executes.</p>
+<p>As in Perl5, <code>local</code>ized variables are visible to any subroutines
+called while they remain in scope.</p>
+<p>Example 5</p>
+<pre>    #!/my/path/to/perl
+    $a = 1;
+    Thread-&gt;new(\&amp;foo);
+    bar();
+    
+    sub foo 
+    { 
+    	local $a = 2;
+    	bar();
+    }
+    
+    sub bar { print $a }</pre>
+<p>Output: 12 or 21, depending on the order in which the calls to <code>bar</code>
+execute.</p>
+<p>Dynamic scopes are not inherited by spawned threads.</p>
+<p>Example 6</p>
+<pre>    #!/my/path/to/perl
+    $a = 1;
+    foo();
+         
+    sub foo 
+    { 
+    	local $a = 2;
+    	Thread-&gt;new(\&amp;bar)-&gt;join;
+    }
+    
+    sub bar { print $a }</pre>
+<p>Output: 1. The spawned thread sees the original value of <code>$a</code>.</p>
+<a name='All threads share the same file-scoped lexicals'></a><h2>All threads share the same file-scoped lexicals</h2>
+<p>Example 7</p>
+<pre>    #!/my/path/to/perl
+    my $a = 1;
+    Thread-&gt;new(\&amp;foo)-&gt;join;
+    print $a;
+    
+    sub foo { $a = 2 }</pre>
+<p>Output: 2. <code>$a</code> is a file-scoped lexical. It is the same variable in
+both the main thread and the spawned thread.</p>
+<a name='Each thread gets its own copy of block-scoped lexicals upon execution of my'></a><h2>Each thread gets its own copy of block-scoped lexicals upon
+execution of <code>my</code></h2>
+<p>Example 8</p>
+<pre>    #!/my/path/to/perl
+    foo();
+    Thread-&gt;new(\&amp;foo);
+    
+    sub foo 
+    {
+    	my $a = 1; 
+    	print $a++;
+    }</pre>
+<p>Output: 11. This result is guaranteed, even if the statements execute
+in this order</p>
+<pre>	Main thread	Spawned thread
+	my $a = 1;
+			my $a = 1;
+	print $a++;
+			print $a++</pre>
+<p><code>$a</code> is a block-scoped lexical variable. Every time a thread executes
+the <code>my</code>, a new variable is created, completely unrelated to any
+other variable in any thread.</p>
+<a name='Threads can share block-scoped lexicals'></a><h2>Threads can share block-scoped lexicals</h2>
+<p>By passing a reference into a threaded subroutine</p>
+<p>Example 9</p>
+<pre>    #!/my/path/to/perl
+    foo();
+
+    sub foo
+    {
+        my $a;
+	Thread-&gt;new(\&amp;bar, $a)-&gt;join;
+	$a++;
+	print $a;
+    }
+
+    sub bar { $_[0]++ }</pre>
+<p>Output: 2</p>
+<p>Example 10:</p>
+<p>By declaring one subroutine within the scope of another</p>
+<pre>    #!/my/path/to/perl
+    foo();
+
+    sub foo
+    {
+        my $a;
+	Thread-&gt;new(\&amp;bar)-&gt;join;
+	$a++;
+	print $a;
+
+	sub bar	{ $$a++ }
+    }</pre>
+<p>Output: 2</p>
+<p>Example 11:</p>
+<p>Using closures</p>
+<pre>    #!/my/path/to/perl
+    my $foo = foo_generator(1);
+    $foo-&gt;();
+    Thread-&gt;new($foo);
+
+    sub foo_generator 
+    { 
+	my $a = shift; 
+	sub { print $a++ } 
+    }</pre>
+<p>Output: 12</p>
+<a name='Open code can only be executed by a thread that compiles it'></a><h2>Open code can only be executed by a thread that compiles it</h2>
+<p>Threads execute BLOCKs</p>
+<pre>    new Thread \&amp;foo
+    new Thread sub { ... }
+    async          { ... }</pre>
+<p>This means that code that is not contained in a BLOCK can only be
+executed by a thread that compiles it.</p>
+<p>Example 12</p>
+<pre>    #!/my/path/to/perl
+    Thread-&gt;new(\&amp;foo)-&gt;join;
+    Thread-&gt;new(\&amp;foo)-&gt;join;
+    print $a;
+    
+    sub foo { require Bar; }
+
+    # Bar.pm
+    $a++;</pre>
+<p>Output: 1. <code>require</code> won't compile the same file twice, so the
+increment only executes in the first spawned thread.</p>
+<p>Example 13</p>
+<pre>    #!/my/path/to/perl
+    Thread-&gt;new(\&amp;foo)-&gt;join;
+    Thread-&gt;new(\&amp;foo)-&gt;join;
+    print $a;
+    
+    sub foo { do 'Bar.pm'; }
+
+    # Bar.pm
+    $a++;</pre>
+<p>Output: 2. <code>do</code> will compile the same file repeatedly, so the
+increment executes in both spawned threads.</p>
+<p>Example 14</p>
+<pre>    #!/my/path/to/perl
+    Thread-&gt;new(\&amp;foo)-&gt;join;
+    Thread-&gt;new(\&amp;foo)-&gt;join;
+    
+    sub foo { do 'Bar.pm'; }
+
+    # Bar.pm
+    my $a = 1;
+    print $a++;</pre>
+<p>Output: 11. The <code>my</code> creates a new file-scoped lexical each time it
+executes.</p>
+<p>Example 15</p>
+<pre>    #!/my/path/to/perl
+    $a++; 
+    async { do $0 } if $a &lt; 2;
+    print $a;</pre>
+<p>Output: 12 or 21. Evil, but straightforward. The main thread and the
+spawned thread both compile and execute the program.</p>
+<a name='Atomic data access'></a><h2>Atomic data access</h2>
+<p>The language guarantees atomic access to data values. Access to a data value
+means a fetch or a store.</p>
+<p>Example 16</p>
+<pre>    #!/my/path/to/perl
+    $a = 'abcd';
+    async { $a = 'wxyz' }
+    print $a;</pre>
+<p>Output: `abcd' or `wxyz'. Without atomic data access, the <code>print</code>
+statement might fetch <code>$a</code> while the <code>async</code> block is storing it.
+This could produce output like `wxcd', or crash the interpreter.</p>
+<p>Any serialization beyond atomic data access is the responsibility of
+the user.</p>
+<p>Example 17</p>
+<pre>    #!/my/path/to/perl
+    $a = 0;
+    $thread = new Thread \&amp;foo;
+    $a++;
+    $thread-&gt;join;
+    print $a;
+
+    sub foo { $a++ }</pre>
+<p>Output: 1 or 2. The output is 1 if the increment operations interleave
+like this</p>
+<pre>    Main thread		Spawned thread
+    fetch a
+			fetch a
+    add 1
+			add 1
+    store a
+			store a</pre>
+<a name='IMPLEMENTATION'></a><h1>IMPLEMENTATION</h1>
+<p>Perl6 could have either cooperative threads or preemptive threads.</p>
+<a name='Cooperative threads'></a><h2>Cooperative threads</h2>
+<p>RFC 47 proposes that &quot;there...be one event loop for all of Perl&quot;. This
+event loop would dispatch op codes, deliver signals, and invoke
+callbacks. It would be a natural extension of this architecture for
+the event loop to dispatch op codes for multiple threads of a Perl
+program.</p>
+<p>The big advantage of cooperative threads is that the Perl interpreter
+remains a single-threaded program. A Perl program may have many
+threads, but the interpreter has only one: it runs an event loop and
+it dispatches op codes. Because it is single-threaded, the interpreter
+is not subject to race conditions, and requires no synchronization
+code.</p>
+<p>Cooperative threads have several disadvantages</p>
+<ul>
+<li><a name='The interpreter has to do asynchronous I/O. But Perl6 may support asynchronous I/O per RFC 47, and the interpreter has an event loop to run the callbacks.'></a>The interpreter has to do asynchronous I/O. But Perl6 may support
+asynchronous I/O per RFC 47, and the interpreter has an event loop to
+run the callbacks.</li>
+<li><a name='The interpreter can't preempt XSUBs. But XSUBs don't have to be ill-behaved. The XS interface could expose a yield() call for XSUBs to call during time-consuming operations.'></a>The interpreter can't preempt XSUBs. But XSUBs don't <i>have</i> to be
+ill-behaved. The XS interface could expose a <code>yield()</code> call for XSUBs
+to call during time-consuming operations.</li>
+<li><a name='We don't get Symmetric MultiProcessing (SMP). No way around this one. Boo, Hiss.'></a>We don't get Symmetric MultiProcessing (SMP). No way around this one.
+Boo, Hiss.</li>
+</ul>
+<a name='Preemptive threads'></a><h2>Preemptive threads</h2>
+<p>The interpreter is implemented on top of a native threading package,
+such as PThreads. Each Perl thread runs in its own native thread. We
+get SMP, and we always get control back from XSUBs. (Although XSUBs
+can still crash the interpreter.)</p>
+<p>The big drawback of preemptive threads is that the interpreter itself
+becomes a multi-threaded program, with all attendant synchronization
+requirements. If Perl6 gets preemptive threads, expect race conditions
+to become the kind of ongoing headache that memory leaks were for
+Perl4 and Perl5.</p>
+<a name='Locking'></a><h2>Locking</h2>
+<p>If Perl6 implements preemptive threads, then the interpreter must lock
+variables to ensure atomic data access.</p>
+<pre>    Perl source		Implementation
+    $a = $b		lock   b
+			fetch  b
+    			unlock b
+			lock   a
+			store  a
+			unlock a
+		</pre>
+<a name='DISCUSSION'></a><h1>DISCUSSION</h1>
+<a name='Performance'></a><h2>Performance</h2>
+<p>Acquiring and releasing locks takes time. There is concern on
+perl6-language-flow and perl6-internals that threaded programs will
+run slowly if the interpreter must acquire a lock for every variable
+access.</p>
+<a name='Globals and Reentrancy'></a><h2>Globals and Reentrancy</h2>
+<p>RFC1 &quot;Implementation of Threads in Perl&quot; proposes that, by default,
+threads be isolated in separate data spaces.</p>
+<ul>
+<li><a name='Each thread gets its own copy of all global variables. A special stash named global:: provides shared storage between threads.'></a>Each thread gets its own copy of all global variables. A special stash
+named <code>global::</code> provides shared storage between threads.</li>
+<pre>    $a          # different in different threads
+    $global::a  # shared between different threads</pre>
+<li><a name='Each thread reuse's all its modules, so that it any module data can be reinitialized for that thread.'></a>Each thread re<code>use</code>'s all its modules, so that it any module data can
+be reinitialized for that thread.</li>
+</ul>
+<p>Discussion on perl6-language-flow has further suggested that each
+thread get its own copy of each lexical variable. A <code>:shared</code>
+attribute could be used to declare lexicals that are shared between
+threads.</p>
+<pre>    my $a           # different in different threads
+    my $a : shared  # shared between different threads</pre>
+<p>We'll call this an <i>isolated</i> data model. The rational for adopting
+an isolated data model is that it will make existing Perl5 modules
+reentrant.</p>
+<p>This RFC proposes that Perl not take any special steps to isolate
+threads in separate data spaces. Globals are shared unless localized,
+and file-scoped lexicals are shared unless a thread recompiles the
+file. We'll call this a <i>shared</i> data model.</p>
+<p>I prefer a shared data model because</p>
+<ul>
+<li><a name='It does what I want.'></a>It does what I want.</li>
+<li><a name='One of the goals of Perl6 is to get out from under the backwards compatibility constraints that have boxed in Perl5. Organizing the threading model around the need to make Perl5 modules reentrant seems inconsistent with this.'></a>One of the goals of Perl6 is to get out from under the backwards
+compatibility constraints that have boxed in Perl5. Organizing the
+threading model around the need to make Perl5 modules reentrant seems
+inconsistent with this.</li>
+<li><a name='The collection of Perl5 modules that an isolated data model can rescue from reentrancy problems may be vanishingly small; conversely, it may break modules that genuinely need global data.'></a>The collection of Perl5 modules that an isolated data model can rescue
+from reentrancy problems may be vanishingly small; conversely, it may
+break modules that genuinely need global data.</li>
+</ul>
+<p>This isn't something that we can argue about with thought experiments.
+The modules are out there on CPAN; we have to look and see how they
+behave. I took a quick stroll through the modules that are installed
+on my own system; here is a small, non-random sample of what I found.</p>
+<ul>
+<li><a name='Sys::Hostname'></a><code>Sys::Hostname</code></li>
+<p><code>Sys::Hostname</code> gets the system hostname and caches it in
+<code>$Sys::Hostname::host</code>. This works correctly in a shared data model,
+even without any synchronization mechanism. An isolated data model
+defeats the cache, forcing every thread to look up the hostname
+itself.</p>
+<li><a name='Set::IntSpan'></a><code>Set::IntSpan</code></li>
+<p>Set::IntSpan uses one global: <code>$Set::IntSpan::Empty_String</code>. All
+<code>Set::IntSpan</code> objects must see the same value for this global.
+Applications typically set this global once and then leave it
+untouched; methods in <code>Set::IntSpan</code> read it, but do not write it.
+This works correctly in a shared data model; it breaks in an isolated
+data model.</p>
+<li><a name='Time::Local'></a><code>Time::Local</code></li>
+<p>Time::Local caches the start times of months in
+<code>%Time::Local::cheat</code>. This works correctly in shared data model; an
+isolated data model defeats the cache.</p>
+<p>Some methods in <code>Time::Local</code> store temporary values in package
+globals, e.g. <code>$Time::Local::ym</code>. This works correctly in an isolated
+data model, and breaks in a shared data model.</p>
+<li><a name='File::Find'></a><code>File::Find</code></li>
+<p><code>File::Find</code> stores the name of the current file in
+<code>$File::Find::name</code>, and the current directory path in
+<code>$File::Find::path</code>. This works in an isolated data model, and breaks
+in a shared data model.</p>
+<p>However, <code>File::Find</code> also <code>cd</code>s to the directory where the current
+file is. This isn't reentrant, and it can't be made reentrant, because
+a process has only one CWD, which is shared by all threads. This means
+that the <code>File::Find</code> interface is intrinsically broken under
+threads.</p>
+<li><a name='Term::Complete'></a><code>Term::Complete</code></li>
+<p><code>Term::Complete</code> stores key codes in globals:
+<code>$Term::Complete::complete</code>, <code>$Term::Complete::kill</code>,
+<code>$Term::Complete::erase1</code>, and <code>$Term::Complete::erase2</code>. This is
+reentrant in an isolated data model, and not in a shared data model.</p>
+<p>However, <code>Term::Complete</code> isn't even reentrant <i>under Perl5</i>. If two
+different parts of an application both use <code>Term::Complete</code>, they
+don't need threads to fight over the values of its globals. I'm hard
+pressed to see that the design of Perl6 should be driven by the need
+to fix modules that are broken in Perl5.</p>
+</ul>
+<p>Again, this sample of modules isn't large, or random. But it does show
+that</p>
+<ul>
+<li><a name='globals don't necessarily cause concurrency problems'></a>globals don't necessarily cause concurrency problems</li>
+<li><a name='not all concurrency problems can be fixed with an isolated data model'></a>not all concurrency problems can be fixed with an isolated data model</li>
+</ul>
+<a name='Other concurrency mechanisms'></a><h2>Other concurrency mechanisms</h2>
+<p>RFCs 27 and 31 discuss coroutines. RFC 47 discusses asynchronous I/O.
+I'm happy to have other concurrency mechanisms in Perl, but I want
+threads, and I don't want to give up any features of threads on the
+grounds that you can do the same thing with some other concurrency
+mechanism.</p>
+<a name='REFERENCES'></a><h1>REFERENCES</h1>
+<p>RFC 1: Implementation of Threads in Perl</p>
+<p>RFC 27: Coroutines for Perl</p>
+<p>RFC 31: Subroutines: Co-routines</p>
+<p>RFC 47: Universal Asynchronous I/O</p>
+<p>RFC 185: Thread Programming Model</p>
+</div>

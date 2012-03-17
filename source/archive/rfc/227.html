@@ -1,0 +1,81 @@
+[% setvar title Extend the window to turn on taint mode %]
+<h3>This file is part of the Perl 6 Archive</h3>
+    <p>To see what is currently happening visit <a href="http://www.perl6.org/">http://www.perl6.org/</a></p>
+<div class='pod'>
+<a name='TITLE'></a><h1>TITLE</h1>
+<p>Extend the window to turn on taint mode</p>
+<a name='VERSION'></a><h1>VERSION</h1>
+<pre>  Maintainer: Adam Turoff &lt;<a href='mailto:ziggy@panix.com'>ziggy@panix.com</a>&gt;
+  Date: 14 Sep 2000
+  Last Modified: 18 Sep 2000
+  Mailing List: <a href='mailto:perl6-internals@perl.org'>perl6-internals@perl.org</a>
+  Number: 227
+  Version: 2
+  Status: Frozen</pre>
+<a name='ABSTRACT'></a><h1>ABSTRACT</h1>
+<p>Taint mode must be turned on when Perl is invoked.  This is frequently
+done using:</p>
+<pre>	perl -T foo.pl</pre>
+<p>or using a preamble like this:</p>
+<pre>	#!/usr/bin/perl -T</pre>
+<p>However, using the #! mechanism to turn on tainting causes
+problems with other perl idioms, such as:</p>
+<pre>	perl -c foo.pl</pre>
+<p>This dependency should be removed.</p>
+<a name='DESCRIPTION'></a><h1>DESCRIPTION</h1>
+<p>According to the perlrun manpage description of the -T
+runtime flag:</p>
+<pre>    [...] For security reasons, this option must be
+    seen by Perl quite early; usually this means it must
+    appear early on the command line or in the #! line
+    for systems which support that construct.</pre>
+<p>Perl complains when the -T flag is used with the #!
+mechanism, and perl is explicitly invoked on the
+commandline without the -T flag:</p>
+<pre>    $ cat foo.pl
+    #!/usr/bin/perl -T
+    print &quot;Success!\n&quot;;
+
+    $ perl foo.pl 
+    Too late for &quot;-T&quot; option at foo.pl line 1.
+
+    $ perl -c foo.pl
+    Too late for &quot;-T&quot; option at foo.pl line 1.
+
+    $ perl -Tc foo.pl
+    foo.pl syntax OK
+
+    $ perl -T foo.pl
+    Success!</pre>
+<p>This RFC proposes that when Perl is explicitly invoked
+on the commandline, and runs a script that contains the
+-T option on the #! line, Perl should just turn on
+taint mode and not complain about it.</p>
+<a name='NOTES ON FREEZE'></a><h1>NOTES ON FREEZE</h1>
+<p>No objections were raised on fixing the issue of fixing the order
+in which parameters are scanned from the commandline invocation
+of perl and the runtime flags found on the #! line.</p>
+<p>Discussion quickly came up with a series of improvements to the
+taint interface.  These issues could be generalized, and will wind
+up in a subsequent RFC.  None of these issues specifically impacts
+processing of the -T commandline option.</p>
+<a name='MIGRATION ISSUES'></a><h1>MIGRATION ISSUES</h1>
+<p>None.</p>
+<a name='IMPLEMENTATION'></a><h1>IMPLEMENTATION</h1>
+<p>Dan Sugalski came up with some interesting ideas of setting explicit
+precedences for each commandline option.  In this manner, the options
+specified on the commandline and in the #! line can be unified and
+processed in an intelligent, intuitive manner, regardless of how
+the internals are structured.</p>
+<p>A possible set of precedence rules might be:</p>
+<pre>	-D 
+	-M -T -U (load-time flags)
+	-c
+	-n -p  (run-time flags)
+	-d</pre>
+<a name='REFERENCES'></a><h1>REFERENCES</h1>
+<p>perlsec manpage</p>
+<p>perlrun manpage</p>
+<p>Dan Sugalski's thoughts on commandline switch precedence:
+<a href='http://www.mail-archive.com/perl6-internals@perl.org/msg01374.html' target='_blank'>www.mail-archive.com</a></p>
+</div>

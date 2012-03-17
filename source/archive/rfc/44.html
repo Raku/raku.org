@@ -1,0 +1,59 @@
+[% setvar title Bring Documentation Closer To Whatever It Documents %]
+<h3>This file is part of the Perl 6 Archive</h3>
+    <p>To see what is currently happening visit <a href="http://www.perl6.org/">http://www.perl6.org/</a></p>
+<div class='pod'>
+<a name='TITLE'></a><h1>TITLE</h1>
+<p>Bring Documentation Closer To Whatever It Documents</p>
+<a name='VERSION'></a><h1>VERSION</h1>
+<pre>  Maintainer: Jarkko Hietaniemi &lt;<a href='mailto:jhi@iki.fi'>jhi@iki.fi</a>&gt;
+  Date: 5 Aug 2000
+  Mailing List: <a href='mailto:perl6-language@perl.org'>perl6-language@perl.org</a>
+  Number: 44
+  Version: 1
+  Status: Developing</pre>
+<a name='ABSTRACT'></a><h1>ABSTRACT</h1>
+<p>The current pod has one serious problem: it is very weakly tied to the
+whatever it is documenting.  A human can make a good guess based on
+proximity and content but for more automatic document extraction the
+situation is hopeless.</p>
+<p>This RFC proposes some syntactical possibilities of binding the
+documentation to the things they try to document.</p>
+<a name='DESCRIPTION'></a><h1>DESCRIPTION</h1>
+<p>Both ways of binding the documentation to its main thing and
+retrieving the documentation are needed.  Below I propose some
+possible syntaxes.  The proposals are by no means definitive or final,
+but the key issue is that the documentation really must be visually
+close to its documentee.  Any other way is terminally doomed to
+failure because then the document and the documentee <b>will</b> drift out
+of sync.</p>
+<a name='DOCUMENTING A FUNCTION'></a><h2>DOCUMENTING A FUNCTION</h2>
+<pre>	sub foo &quot;Snarfle the bogogoozer.  The first argument is ...&quot; { ... }</pre>
+<a name='DOCUMENTING THE ARGUMENTS OF A FUNCTION'></a><h2>DOCUMENTING THE ARGUMENTS OF A FUNCTION</h2>
+<p>This example assumes a certain not-yet-existing-or-agreed upon syntax
+for &quot;true&quot; named parameters.  Pay no attention to details.</p>
+<pre>	sub foo (my $bogogoozer &quot;The victim.&quot;, my %options &quot;How to snarfle.&quot;)
+	{ ... }</pre>
+<a name='DOCUMENTING A LEXICAL VARIABLE'></a><h2>DOCUMENTING A LEXICAL VARIABLE</h2>
+<pre>	my $literal &quot;How seriously to take the proposal.&quot;;</pre>
+<a name='DOCUMENTING A PACKAGE VARIABLE'></a><h2>DOCUMENTING A PACKAGE VARIABLE</h2>
+<pre>	$debug_level = 0 &quot;The initial debug level is no debugging, or zero.&quot;;</pre>
+<a name='RETRIEVING THE DOCUMENTATION OF A FUNCTION'></a><h2>RETRIEVING THE DOCUMENTATION OF A FUNCTION</h2>
+<pre>    print &quot;This is how to snarfle a bogogoozer: &quot;, documentation(\&amp;foo), &quot;\n&quot;;</pre>
+<p>This would retrieve and output the string &quot;Snarfle the bogogoozer.
+The first argument is ...&quot;.</p>
+<a name='RETRIEVING THE DOCUMENTATION OF A VARIABLE'></a><h2>RETRIEVING THE DOCUMENTATION OF A VARIABLE</h2>
+<pre>    print &quot;This is how literally to take this proposal: &quot;,
+	  documentation(\$literal), &quot;\n&quot;;</pre>
+<a name='IMPLEMENTATION'></a><h1>IMPLEMENTATION</h1>
+<p>During parsing the documentation needs to be attached to the thing it
+belongs to.</p>
+<a name='FURTHER IDEAS'></a><h2>FURTHER IDEAS</h2>
+<p>If somebody wants to write documentation in several different
+languages (and encodings?)  a way to tag a piece of documentation with
+attributes would be desirable.</p>
+<p>Attributes on the documentation could also be used to differentiate
+the documentation to several different classes/types/levels.</p>
+<a name='REFERENCES'></a><h1>REFERENCES</h1>
+<pre>	
+	</pre>
+</div>

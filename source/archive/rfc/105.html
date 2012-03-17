@@ -1,0 +1,36 @@
+[% setvar title Remove "In string @ must be \@" fatal error %]
+<h3>This file is part of the Perl 6 Archive</h3>
+    <p>To see what is currently happening visit <a href="http://www.perl6.org/">http://www.perl6.org/</a></p>
+<div class='pod'>
+<a name='TITLE'></a><h1>TITLE</h1>
+<p>Remove &quot;In string @ must be \@&quot; fatal error</p>
+<a name='VERSION'></a><h1>VERSION</h1>
+<pre>  Maintainer: Nathan Wiger &lt;<a href='mailto:nate@wiger.org'>nate@wiger.org</a>&gt;
+  Date: 15 Aug 2000
+  Last-Modified: 16 Sep 2000
+  Mailing List: <a href='mailto:perl6-language@perl.org'>perl6-language@perl.org</a>
+  Number: 105
+  Version: 2
+  Status: Frozen</pre>
+<a name='ABSTRACT'></a><h1>ABSTRACT</h1>
+<p>Currently, if you write:</p>
+<pre>   $email = &quot;<a href='mailto:nate@wiger.org'>nate@wiger.org</a>&quot;;</pre>
+<p>You get a <b>fatal</b> error:</p>
+<pre>   In string, @wiger now must be written as \@wiger</pre>
+<p>This should be removed altogether in Perl 6.</p>
+<a name='DESCRIPTION'></a><h1>DESCRIPTION</h1>
+<p>This is something that was put in to catch Perl 4 to Perl 5 migration.
+Perl 6 shouldn't need it, and should just assume that &quot;@wiger&quot; is an
+array, even if it's unitialized. This is what it does for all the other
+data types.</p>
+<p>As Randal noted, this whole RFC is probably better phrased as:</p>
+<pre>   array interpolation should work exactly like scalar interpolation</pre>
+<p>And I agree.</p>
+<a name='MIGRATION'></a><h1>MIGRATION</h1>
+<p>People that are relying on this to catch sloppy coding should be beaten.</p>
+<a name='IMPLEMENTATION'></a><h1>IMPLEMENTATION</h1>
+<p>Remove the error altogether. Perl 5's been out for years.</p>
+<a name='REFERENCES'></a><h1>REFERENCES</h1>
+<p><a href='http://www.xray.mpe.mpg.de/mailing-lists/perl5-porters/1998-07/msg02150.html' target='_blank'>www.xray.mpe.mpg.de</a></p>
+<p>hfile//www.mail-archive.com/<a href='mailto:perl6-language@perl.org'>perl6-language@perl.org</a>/msg02231.html</p>
+</div>

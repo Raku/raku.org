@@ -1,0 +1,58 @@
+[% setvar title C<||> and C<&&> should propagate result context to both sides %]
+<h3>This file is part of the Perl 6 Archive</h3>
+    <p>To see what is currently happening visit <a href="http://www.perl6.org/">http://www.perl6.org/</a></p>
+<div class='pod'>
+<a name='TITLE'></a><h1>TITLE</h1>
+<p><code>||</code> and <code>&amp;&amp;</code> should propagate result context to both sides</p>
+<a name='VERSION'></a><h1>VERSION</h1>
+<pre>  Maintainer: Peter Scott &lt;<a href='mailto:peter@psdt.com'>peter@psdt.com</a>&gt;
+  Date: 5 Aug 2000
+  Last Modified: 29 Aug 2000
+  Mailing List: <a href='mailto:perl6-language@perl.org'>perl6-language@perl.org</a>
+  Number: 45
+  Version: 3
+  Status: Frozen</pre>
+<a name='ABSTRACT'></a><h1>ABSTRACT</h1>
+<p>Currently the expressions</p>
+<pre>       lvalue = expr_A || expr_B
+       lvalue = expr_A &amp;&amp; expr_B</pre>
+<p>evaluate <code>expr_A</code> in scalar context, regardless of the type of <code>lvalue</code>,
+only propagating list or scalar context to <code>expr_B</code>.  This proposal is
+that the context of <code>lvalue</code> should be propagated to <code>expr_A</code> as well.</p>
+<a name='DESCRIPTION'></a><h1>DESCRIPTION</h1>
+<p>It would be nice to be able to say</p>
+<pre>       @a = @b || @c</pre>
+<p>instead of having to resort to</p>
+<pre>       @a = @b ? @b : @c</pre>
+<p>The reason that it is not currently possible is that <code>@b</code> (or the list
+expression in its place) has to be evaluated in scalar context to determine
+whether to evaluate <code>@c</code>, and that propagating context to <code>@b</code> would
+require reevaluating it, which might have undesirable side effects (instead
+of <code>@b</code>, it might be <code>decrement_balance()</code>).</p>
+<p>Tom Christiansen pointed out that for consistency, both <code>||</code> and <code>&amp;&amp;</code> need to
+be changed, since in the latter case, if <code>@b</code> is empty, then <code>@a</code> will
+currently get the single element 0.  We want it to get an empty list.</p>
+<a name='IMPLEMENTATION'></a><h1>IMPLEMENTATION</h1>
+<p>It seems that it ought to be possible to evaluate something in a list
+context and test whether there are any entries in the resulting list
+without having to reevaluate the expression in a scalar context.  The
+work-around with the trinary operator also evaluates <code>@b</code> twice (which
+H.Merijn Brand pointed out could even be tied and hence evaluation not
+idempotent).</p>
+<p>It's true that we are evaluating something in list context and then applying
+a boolean interpretation to the result (empty list is false, otherwise true);
+in this case we are trading a lesser consistency (likely only to be
+appreciated by someone who's been thinking for a long time about contexts)
+for a greater one.</p>
+<a name='IMPACTS'></a><h1>IMPACTS</h1>
+<p><i><a href='#RFC 82'>&quot;RFC 82&quot;</a></i> would require a different interpretation, namely that the result
+would be the list formed by applying <code>&amp;&amp;</code> or <code>||</code> to each successive pair
+of elements in <code>@b</code> and <code>@c</code>.  This author likes the idea of certain
+component-wise operators, and appreciates the importance of consistency,
+but just can't see a component-wise interpretation of the logical operators
+being either useful or intuitive.</p>
+<a name='REFERENCES'></a><h1>REFERENCES</h1>
+<p><i><a href='http://search.cpan.org/perldoc?perlop#C-style Logical Or'>&quot;C-style Logical Or&quot; in perlop</a></i></p>
+<p>RFC 21: &quot;Replace <code>wantarray</code> with a generic <code>want</code> function&quot;</p>
+<p>RFC 82: &quot;Apply operators component-wise in a list context&quot;</p>
+</div>

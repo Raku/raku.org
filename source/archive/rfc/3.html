@@ -1,0 +1,54 @@
+[% setvar title messages.rfc - An RFC to discussing the wisdom of allowing run time errorand warning messages to be modified at run time %]
+<h3>This file is part of the Perl 6 Archive</h3>
+    <p>To see what is currently happening visit <a href="http://www.perl6.org/">http://www.perl6.org/</a></p>
+<div class='pod'>
+<a name='TITLE'></a><h1>TITLE</h1>
+<p>messages.rfc - An RFC to discussing the wisdom of allowing run time error
+and warning messages to be modified at run time</p>
+<a name='VERSION'></a><h1>VERSION</h1>
+<pre>  Maintainer: Corwin Brust &lt;<a href='mailto:cbrust@alldata.net'>cbrust@alldata.net</a>&gt;
+  Date: 1 Aug 2000
+  Mailing List: <a href='mailto:perl6-language@perl.org'>perl6-language@perl.org</a>
+  Number: 3
+  Version: 1
+  Status: Developing</pre>
+<a name='ABSTRACT'></a><h1>ABSTRACT</h1>
+<p>I'm probably wrong in this, but I rather think this one's explains it self.</p>
+<p>I want perl's error (and warning) messages to be specific to each program I
+write.</p>
+<a name='DESCRIPTION'></a><h1>DESCRIPTION</h1>
+<p>I have, and I cannot assume I am alone in this, spent a fair amount of time
+creating subroutines which trap various error responses from Perl, only to
+turn right around and 'die' with an error message of my own, differing only
+in the text shown when the program terminates.</p>
+<p>Wouldn't it be great if we could just reword the existing error messages on
+a per-script basis to be relevant to that program, and let Perl's normal
+error handling mechanism do the work of presenting the user with the bad
+news.</p>
+<a name='IMPLEMENTATION'></a><h1>IMPLEMENTATION</h1>
+<p>It seems, as of this writing, that the means for accessing Perl internal
+variables will not be as it has been.
+Any method of allowing for program writer defined messages would have to be
+closely time to whatever new mechanism we find agreeable. But...</p>
+<pre>  $perl::core::err{TYPE_MISMATCH} = {
+                                     fatal =&gt; 1,
+                                     handler =&gt; sub { 
+                                                      my $arg = shift; 
+                                                      my $func = shift;
+                                                      my $correct_type = shift;
+                                                      my $sent_type = shift;
+                                                      my $prog = shift;
+                                                      my $line = shift;
+                                                      my $near = shift;
+                                                      CORE::die(qq[Type of
+$arg to $func must be $correct_type (not $sent_type) at $prog line $line,
+$near\n]);
+                                                     },
+                                    }
+Where CORE::die is able to look for a true value in
+$perl::core::err{TYPE_MISMATCH}-&gt;{fatal} and either die or issue a warning
+as appropriate.</pre>
+<p>And, yeah, I'm sure there's a <b>better</b> way to implement this.  I hope,
+however, that I have shown such a thing can be done.</p>
+<a name='REFERENCES'></a><h1>REFERENCES</h1>
+</div>

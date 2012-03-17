@@ -1,0 +1,43 @@
+[% setvar title with takes a context %]
+<h3>This file is part of the Perl 6 Archive</h3>
+    <p>To see what is currently happening visit <a href="http://www.perl6.org/">http://www.perl6.org/</a></p>
+<div class='pod'>
+<a name='TITLE'></a><h1>TITLE</h1>
+<p>with takes a context</p>
+<a name='VERSION'></a><h1>VERSION</h1>
+<pre>  Maintainer: David Nicol &lt;<a href='mailto:perl6rfc@davidnicol.com'>perl6rfc@davidnicol.com</a>&gt;
+  Date: 28 Sep 2000
+  Mailing List: <a href='mailto:perl6-language@perl.org'>perl6-language@perl.org</a>
+  Number: 340
+  Version: 1
+  Status: Developing</pre>
+<a name='ABSTRACT'></a><h1>ABSTRACT</h1>
+<p>&quot;call frames&quot; become useful as objects.  The current one is always <code>with</code> with
+no argument and you can get into an arbitrary one by using <code>with $whatever
+BLOCK</code> in either forward or backward form, like <code>if</code>.</p>
+<a name='DESCRIPTION =item description by commented example'></a><h1>DESCRIPTION
+=item  description by commented example</h1>
+<pre>	sub A{
+		my $A = shift;
+		return with;
+	};
+
+	$context1 = A(3);
+	print &quot;$context1&quot;;		# something like CONTEXT(0XF0GD0G)
+        print &quot;$A&quot; with $context1;	# prints 3
+        with $context1{print &quot;$A&quot;};	# same thing</pre>
+<li><a name='coexistence w/ pascal-like with'></a>coexistence w/ pascal-like with</li>
+<p>The context-access <code>with</code> takes a scalar argument, the pascal-like with takes
+a hash.  If the pascal-like with is considered as describing aliases to defined
+variables, the two have deep similarities.</p>
+<li><a name='CONTEXT objects in other contexts'></a>CONTEXT objects in other contexts</li>
+<p>In an array context, one of these CONTEXT things will expand into key-value
+pairs if it can.</p>
+<li><a name='warning about memory leaks'></a>warning about memory leaks</li>
+<p>using <code>with</code> to store contexts may adversely affect memory recycling.</p>
+<a name='IMPLEMENTATION'></a><h1>IMPLEMENTATION</h1>
+<p>Perl5 has the hooks required to do this: the closure stuff.  This proposed
+<code>with</code> keyword makes access into such things more explicit.</p>
+<a name='REFERENCES'></a><h1>REFERENCES</h1>
+<p>None.</p>
+</div>

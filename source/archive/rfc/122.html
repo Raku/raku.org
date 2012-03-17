@@ -1,0 +1,64 @@
+[% setvar title types and structures %]
+<h3>This file is part of the Perl 6 Archive</h3>
+    <p>To see what is currently happening visit <a href="http://www.perl6.org/">http://www.perl6.org/</a></p>
+<div class='pod'>
+<a name='TITLE'></a><h1>TITLE</h1>
+<p>types and structures</p>
+<a name='VERSION'></a><h1>VERSION</h1>
+<pre>  Maintainer: David Nicol &lt;<a href='mailto:perl6rfc@davidnicol.com'>perl6rfc@davidnicol.com</a>&gt;
+  Date: 17 Aug 2000
+  Mailing List: <a href='mailto:perl6-language@perl.org'>perl6-language@perl.org</a>
+  Number: 122
+  Version: 1
+  Status: Developing</pre>
+<a name='ABSTRACT'></a><h1>ABSTRACT</h1>
+<p>We adopt C base types, and C structure syntax.</p>
+<a name='DESCRIPTION'></a><h1>DESCRIPTION</h1>
+<p>the C programming language has a flexible and efficient method
+of describing the hardware representation of packed data:  the
+<code>struct</code> keyword.</p>
+<p>C has several variable types: <code>int</code>, <code>float</code>, and <code>char</code>
+are the standard ones, and the &quot;derivative&quot; ones are <code>double</code>, <code>short</code>
+and any of the above prefixed with <code>unsigned</code>.</p>
+<p>Perl6 will use these types as well as the familiar perl types, which will
+all appear in packable defined types as a memory address pointer.</p>
+<p>The equivalent of C's <code>struct</code> keyword will be our qs{} structure quoting operator, which can take the same arguments as a <code>struct</code> block and produce
+an equivalent description (a &quot;type definition&quot;) of a block of memory, which
+is called a &quot;struct.&quot; (rather than a &quot;pseudohash&quot; which is something
+that acts very similar but has a different internal representation.)</p>
+<p>Or we could use the <code>struct</code> keyword as well, so that the C</p>
+<pre>
+	struct rec  
+	{    
+	    int a,b,c;    
+	    float d,e,f;  
+	}; 
+ 
+	struct rec r; </pre>
+<p>could become, in perl6</p>
+<pre>
+	# $rec =  qs 
+	$rec =  struct 
+	{    
+	    int a,b,c;    
+	    float d,e,f;  
+	}; 
+ 
+	my $rec $r_as_a_perl5_ref; 
+	my $rec %r_as_a_typed_perl6_hash; 
+	my $rec %r; # much tighter interface IMO: let the compiler
+		    # worry about what type it is</pre>
+<p>Perl structs appear in perl syntax as hashes with an ordered set of fixed
+keys, returning items of the type as defined in their type definitions: records
+of type $rec as defined above allow access to their internals via
+associative array syntax.  the C statement <code>r.a=5</code> gets replaced with
+a completely functionally equivalent <code>$r{a}=5</code></p>
+<a name='IMPLEMENTATION'></a><h1>IMPLEMENTATION</h1>
+<p>Conversion routines are defined between the SV and the base types,
+after that it's all bookkeeping.</p>
+<p><code>my</code> appears to be taking over a lot of <code>tie</code>'s duties.</p>
+<a name='REFERENCES'></a><h1>REFERENCES</h1>
+<p><a href='http://www.howstuffworks.com/c5.htm' target='_blank'>www.howstuffworks.com</a> for C structures</p>
+<p>RFC 61 (v2): Interfaces for linking C objects into perlsubs
+RFC 75 (v1): first class interface definitions</p>
+</div>

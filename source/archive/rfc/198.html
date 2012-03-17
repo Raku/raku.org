@@ -1,0 +1,143 @@
+[% setvar title TITLE %]
+<h3>This file is part of the Perl 6 Archive</h3>
+    <p>To see what is currently happening visit <a href="http://www.perl6.org/">http://www.perl6.org/</a></p>
+<div class='pod'>
+<a name='TITLE'></a><h1>TITLE</h1>
+<p>Boolean Regexes</p>
+<a name='VERSION'></a><h1>VERSION</h1>
+<pre>  Maintainer: Richard Proctor &lt;<a href='mailto:richard@waveney.org'>richard@waveney.org</a>&gt;
+  Date: 6 Sep 2000
+  Last Modified: 1 Oct 2000
+  Mailing List: <a href='mailto:perl6-language-regex@perl.org'>perl6-language-regex@perl.org</a>
+  Number: 198
+  Version: 3
+  Status: Frozen</pre>
+<a name='ABSTRACT'></a><h1>ABSTRACT</h1>
+<p>This is a development of the proposal for the &quot;not a pattern&quot; concept in RFC
+166 V1.  Looking deeper into the handling of advanced regexs, there are
+potential needs for many other concepts, to allow a regex to extract
+information directly from a complex file in one go, rather than a mixture
+of splits and nested regexes as is typically needed today.  With these
+parsing data should become easier (in some cases).</p>
+<a name='CHANGES'></a><h1>CHANGES</h1>
+<p>V2 - Changed the &quot;Fail Pattern&quot;, enhanced the wording for many things.</p>
+<p>V3 - Further clarifications</p>
+<a name='DESCRIPTION'></a><h1>DESCRIPTION</h1>
+<p>It would be nice (in my opinion) to be able to build more elaborate regexes
+allowing data to be mined out of a sting in one go.  These ideas allow
+you to apply several patterns to one substring (each must match), to
+fail a match from within, to look for patterns that do not contain other
+patterns, and to handle looking for cases such as (foo.*bar)|(bar.*foo) in
+a more general way of saying &quot;A substring that contains both foo and bar&quot;.</p>
+<p>These are ideas, at present with some proposed syntax.  The ideas are more
+important than the exact syntax at this stage.  This is very much work in
+progress.</p>
+<p>I have  called these boolean regexs as they bring the concepts of and (&amp;&amp;)
+or (||) and not(!) into the realm of regexes.</p>
+<p>Within a boolean regex (or the boolean part of a regex), several new
+symbols have meanings, and some have enhanced meanings.</p>
+<a name='The Ideas'></a><h2>The Ideas</h2>
+<p>Are these part of a boolean (?&amp;...) construct within an existing regex, or
+is the advanced syntax (and meaning of &amp;|!^$) invoked by a new flag such
+as /B?</p>
+<p>These can look like line noise so the use of white space with /x is used
+throughout, and it might be appropriate to enforce (or assume) /x within
+(&amp;...).</p>
+<p>I am not alone in wanting something like this, Ilya in a posting of
+lots of things he would like had :</p>
+<pre>   onion rings: (?&lt;&gt; A &lt;&gt; B &amp;! C &amp; D)  (substring matched by A
+				        such that B and D match against
+					it, but C does not, in B, C, D
+					\A and \z denote boundaries of
+				        what was matched by A);</pre>
+<p>Which is virtually identical in concept.</p>
+<a name='Boolean construct'></a><h3>Boolean construct</h3>
+<p>(?&amp;...) grabs a substring, and applies one or more tests to the substring.</p>
+<a name='Substring matching multiple patterns (&amp;&amp;)'></a><h3>Substring matching multiple patterns (&amp;&amp;)</h3>
+<p>(?&amp; pattern1 &amp;&amp; pattern2 &amp;&amp; pattern3 )</p>
+<p>A substring is definied that matches each pattern.</p>
+<p>For example, the first pattern may say specify a substring of at least
+30 chars, the next two have a foo and a bar.</p>
+<a name='Substring matching alternative patterns (||)'></a><h3>Substring matching alternative patterns (||)</h3>
+<p>(?&amp; pattern1 || pattern2 || pattern3)</p>
+<p>This is similar to the existing alternative syntax &quot;|&quot; but the
+alternatives to &quot;|&quot; behave as /^pattern$/ rather than /pattern/ (^ and $
+taken as refereing to the substring in this case - see below).</p>
+<p>(pattern1 || pattern2 || pattern3) can be mixed in with the &amp;&amp; case above to
+build up more advanced cases. &amp;&amp; and || operators can be nested with brackets
+in normal ways.</p>
+<a name='Brackets within boolean regexes'></a><h3>Brackets within boolean regexes</h3>
+<p>Within a complex boolean regex there are likely to be lots and lots of
+brackets to nest and control the behaviour of the regex.  Rather than having
+to sprinkle the regex with (?:) line noise, it would be nicer to just use
+ordinary brackets () and only support capturing of elements by using one of
+the (?$=) or (?%=) constructs that have been proposed elsewhere (RFC 112
+and RFC 150).  There might be some case for this as a general capability
+using some flag /b = brackets?</p>
+<a name='Substring not matching a pattern'></a><h3>Substring not matching a pattern</h3>
+<p>In RFC 166 I originally proposed (?^ pattern ).  This proposal replaces that.
+Though it could be used as well outside of the (?&amp;) construct.</p>
+<p>!pattern matches anything that does not match the pattern.  On its own it is
+not terribly useful, but in conjuction with &amp;&amp; and || one can do things
+such as /(?&amp; &lt;img &amp;&amp; ! alt=)/ ie does it have an image not have an alt.</p>
+<p>! is chosen as it has the same basic meaning outside of regexes.</p>
+<p>!pattern is a non greedy construct that matches any string/substring that
+does not match the pattern.</p>
+<a name='Meaning of $ and ^ inside a boolean regex'></a><h3>Meaning of $ and ^ inside a boolean regex</h3>
+<p>^ and $ are taken to mean the begining and end of the substring, not begining
+and and of the line/string from within a boolean regex.</p>
+<a name='Greediness'></a><h3>Greediness</h3>
+<p>Should the (?&amp;...) construct be greedy or nongreedy?  To some extent this
+depends on the elements it contains.  If all the matching set of patterns are
+greedy then it will be greedy, if they are not greedy then it will not be.
+This might or might be sufficient.</p>
+<p>If the situation is ambiguous (or might be) The boolean can be expresed as
+(?&amp;? ...) to force non greediness.</p>
+<a name='Delivering a substring to some code that generates a pass/fail'></a><h3>Delivering a substring to some code that generates a pass/fail</h3>
+<p>(?*{code}) delivers a substring to the code, which returns with success
+or failure.  The code sees the substring as $_.  This is not dependant on the
+Boolean regex concept and could be used for other things, though it is most
+useful in this context.</p>
+<p>This is sort of equivalent to (?: (.*)(??{$_ = $1; code})) ie it matches an
+arbitary long substring and deliveres it to the code.  But not dependant on
+how many brackets have been used already.  If expressed this way the code
+needs to deliver succes and failure.</p>
+<p>I am not sure how greedy the capture element should be.  ie if it should
+be (.*) or (.*?) or (.+) or (.+?)] but I think (.*) is suficient given
+that it may be bound by other regexes in a boolean
+context to reduce the context sufficiently.</p>
+<a name='A Failure Token'></a><h3>A Failure Token</h3>
+<p>\F if reached as part of a pattern is always a failure.  This can be used
+outside of the (?&amp; construct.  This is not dependant on the Boolean regex
+concept and could be used for other things.</p>
+<p>(In RFC 198 V1 this was proposed as (?F) but I think \F is more in keeping
+with existing and intended syntax.)</p>
+<p>There might be a case for a compilentary Success Token \T ?? though I am not
+sure it is needed.</p>
+<a name='Applications and examples'></a><h2>Applications and examples</h2>
+<p>Matching both foo and bar in a string.</p>
+<pre>	$string =~ /(?&amp; foo &amp;&amp; bar)/x;</pre>
+<p>Matching a string that does not contain baz that is at least 20 chars between
+foo and bar.</p>
+<pre>	$string =~ /foo (?&amp; .{20,} &amp;&amp; ! baz ) bar/x;</pre>
+<p>Does a html image have both an alt and a src, and what are they?</p>
+<pre>	$string =~ /&lt;img(?&amp; \s alt=(?$Alt=(&quot;.*?&quot;|\S*)) &amp;&amp;
+			    \s src=(?$Src=(&quot;.*?&quot;|\S*)) )&gt;/ix;</pre>
+<p>It might be possible to have a regex that simply matches valid perl6 out of
+this. (though it would be large...)!</p>
+<a name='IMPLENTATION'></a><h1>IMPLENTATION</h1>
+<p>Implementation detail is not appropriate for this stage in the devlopment
+of this RFC.  If the concepts gain approval then detailed implementation
+issues become relevant.</p>
+<p>There are two aspects to regexs - compiling and executing:</p>
+<p>Compiling of these extended forms should be relativly straight forward,
+but would need some extensions to recognise the regex as being within
+(?&amp;) state to handle the extended syntax.</p>
+<p>Executing - No thoughts at all at present.</p>
+<a name='REFERENCES'></a><h1>REFERENCES</h1>
+<p>RFC 166: Alternative lists and quoting of things</p>
+<p>RFC 112: Assignment within a regex</p>
+<p>RFC 150: Extend regex syntax to provide for return of a hash of matched subpatterns</p>
+<p>RFC 145: Brace-matching for Perl Regular Expressions
+(or at least the discussion that followed it)</p>
+</div>

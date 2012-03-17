@@ -1,0 +1,47 @@
+[% setvar title Add a "emit pod" runtime option to Perl %]
+<h3>This file is part of the Perl 6 Archive</h3>
+    <p>To see what is currently happening visit <a href="http://www.perl6.org/">http://www.perl6.org/</a></p>
+<div class='pod'>
+<a name='TITLE'></a><h1>TITLE</h1>
+<p>Add a &quot;emit pod&quot; runtime option to Perl</p>
+<a name='VERSION'></a><h1>VERSION</h1>
+<pre>  Maintainer: Adam Turoff &lt;<a href='mailto:ziggy@panix.com'>ziggy@panix.com</a>&gt;
+  Date: 24 Sep 2000
+  Last Modified: 26 Sep 2000
+  Mailing List: <a href='mailto:perl6-stdlib@perl.org'>perl6-stdlib@perl.org</a>
+  Number: 286
+  Version: 2
+  Status: Frozen</pre>
+<a name='ABSTRACT'></a><h1>ABSTRACT</h1>
+<p>It would be really handy if there were a core mechanism to emit the
+documentation embedded in a Perl program/module.</p>
+<a name='NOTES'></a><h1>NOTES</h1>
+<p>Not much discussion came out of this proposal.  John Porter mentioned
+that this would be trivial to implement, if RFC 79 is implemented.</p>
+<a name='DESCRIPTION'></a><h1>DESCRIPTION</h1>
+<p>Tom Christiansen proposed this in his perl6storm message:</p>
+<pre>	=item perl6storm #0004
+
+	Need perl to spit out pod/non-pod, like cc -E.  Pod is too hard to parse.
+	This would make catpod trivially implemented as a compiler filter.</pre>
+<p>This feature would be quite useful, aside from just Tom's example of 'catpod'.</p>
+<p>While RFC 79 proposes a much broader mechanism, this RFC proposes
+that Perl simply have three modes - one where POD is ignored and
+Perl code is analyzed and interpreted, one mode where Perl code
+is ignored and POD is emitted, and one mode where POD is ignored
+and Perl code is emitted without any parsing or interpretation.</p>
+<p>This RFC does not require RFC 79-style interleaved POD streams to
+be implemented.</p>
+<a name='IMPLEMENTATION'></a><h1>IMPLEMENTATION</h1>
+<p>Many options exist, including mucking around with the core to have a simple
+commandline flag (e.g. <code>perl -E</code>)</p>
+<p>The most sensible implementation would be to write a standard module
+that was a compiler backend, and invoked easliy, as in:</p>
+<pre>	perl -MPOD -e &quot;emit()&quot; *.pl *.pm t/*.t</pre>
+<p>Another option would be to tweak the parser to ignore Perl code and
+simply emit any POD it would otherwise ignore, as well as emit
+the Perl code it would otherwise process after ignoring POD as usual.</p>
+<a name='REFERENCES'></a><h1>REFERENCES</h1>
+<p>RFC 79:</p>
+<p>perl6storm</p>
+</div>

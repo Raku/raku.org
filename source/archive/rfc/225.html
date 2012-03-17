@@ -1,0 +1,82 @@
+[% setvar title Data: Superpositions %]
+<h3>This file is part of the Perl 6 Archive</h3>
+    <p>To see what is currently happening visit <a href="http://www.perl6.org/">http://www.perl6.org/</a></p>
+<div class='pod'>
+<a name='TITLE'></a><h1>TITLE</h1>
+<p>Data: Superpositions</p>
+<a name='VERSION'></a><h1>VERSION</h1>
+<pre>  Maintainer: Damian Conway &lt;<a href='mailto:damian@conway.org'>damian@conway.org</a>&gt;
+  Date: 14 Sep 2000
+  Last Modified: 18 Sep 2000
+  Mailing List: <a href='mailto:perl6-language-data@perl.org'>perl6-language-data@perl.org</a>
+  Number: 225
+  Version: 2
+  Status: Frozen</pre>
+<a name='ABSTRACT'></a><h1>ABSTRACT</h1>
+<p>This RFC (seriously) proposes Perl 6 provide <code>any</code> and <code>all</code> operators,
+and, thereby, conjunctive and disjunctive superpositional types.</p>
+<a name='DESCRIPTION'></a><h1>DESCRIPTION</h1>
+<p>The advantages and possibilities of superpositional programming were
+demonstrated in well-received presentations at both YAPC'19100 and TPC 4.0.</p>
+<p>It is proposed that the <code>any</code>, <code>all</code>, and <code>eigenstates</code> operators
+proposed in those talks be added to Perl 6. Adding them to the core is
+suggested because the use of superpositions changes the nature of
+subroutine and operator invocations that have superpositions as
+arguments. This is currently impossible to reproduce in a module.
+Furthermore, the fundamental utility of being able to write:</p>
+<pre>        if (any(@value) &lt; 10) { ... }</pre>
+<p>or:</p>
+<pre>        die unless all(@tests)-&gt;($data);</pre>
+<p>ought to be available to all Perl users.</p>
+<p>Inclusion in the core would also allow the current module-based pure Perl
+implementation to be greatly optimized (perhaps even parallelized on suitable
+SIMD or other multiprocessing platforms).</p>
+<p>A paper proposing the full semantics of superpositions (including their
+effect when used as subroutine arguments and operator operands) will soon
+be available from:</p>
+<pre>        <a href='http://www.csse.monash.edu.au/~damian/papers/' target='_blank'>www.csse.monash.edu.au</a>#Superpositions</pre>
+<a name='MIGRATION ISSUES'></a><h1>MIGRATION ISSUES</h1>
+<p>The &lt;any&gt; and &lt;all&gt; functions may collide with existing user-defined
+or module-exported subroutine names.</p>
+<a name='IMPLEMENTATION'></a><h1>IMPLEMENTATION</h1>
+<p>See the Quantum::Superpositions module.</p>
+<a name='REFERENCES'></a><h1>REFERENCES</h1>
+<pre> [1] Bohr, N., On the Constitution of Atoms and Molecules, Philosophical
+     Magazine, s.6, v.24, pp.1-25, 1913.
+
+ [2] Einstein, A., †ber einen die Erzeugung und Verwandlung des Lichtes
+     betreffenden heuristischen Gesichtspunkt (&quot;On a Heuristic Viewpoint
+     Concerning the Production and Transformation of Light&quot;), Annalen
+     der Physik, v.17, p.132-148, 1905.
+
+ [3] Lewis, G.N., The Conservation of Photons, Nature, v.118(2),
+     pp.874-875, 1926.
+
+ [4] Monroe, C., Meekhof, D.M., King, B.E., Itano, W.M. &amp; Wineland, D.J.
+     Demonstration of a Fundamental Quantum Logic Gate, Phys. Rev. Lett.
+     v.75, pp.4714-4717, 1995.
+
+ [7] Cirac, J.I. &amp; Zoller P., Quantum Computations with Cold Trapped
+     Ions, Phys. Rev. Lett. v.74, pp.4091-4096, 1995.
+
+ [8] Gershenfeld, N. &amp; Chuang, I. L. Bulk Spin-resonance Quantum
+     Computation, Science v.275, pp.350-356, 1997.
+
+ [9] Cory, D.G., Fahmy, A.F. &amp; Havel, T.F., Ensemble Quantum
+     Computing by NMR Spectroscopy, Proc. Natl Acad. Sci. USA 94,
+     pp.1634-1639, 1997.</pre>
+<p>[10] Deutsch, D. Quantum Theory, the Church-Turing Principle and the
+Universal Quantum Computer, Proc. R. Soc. Lond., v.A400,
+pp.97-117, 1985.</p>
+<p>[11] Deutsch, D. &amp; Jozsa, R., Rapid Solution of Problems by Quantum
+Computation, Proc. R. Soc. Lond., v.A439, pp. 553-558, 1992.</p>
+<p>[12] Shor, P. Algorithms for Quantum Computation: Discrete Logarithms
+and Factoring, Proc. 35th Symp. on Found'ns of Computer Science,
+pp. 124-134, 1994.</p>
+<p>[13] Grover, L.K., A Fast Quantum Mechanical Algorithm for Database
+Search, Proc. 28'th ACM Symp. on the Theory of Computing, pp.
+212-219, 1996.</p>
+<p>[14] Wallace, J., Quantum Computer Simulators - A Review, Technical
+Report 387, School of Engineering and Computer Science, University
+of Exeter, June 1999.</p>
+</div>

@@ -1,0 +1,58 @@
+[% setvar title Interpolation of subroutines %]
+<h3>This file is part of the Perl 6 Archive</h3>
+    <p>To see what is currently happening visit <a href="http://www.perl6.org/">http://www.perl6.org/</a></p>
+<div class='pod'>
+<a name='TITLE'></a><h1>TITLE</h1>
+<p>Interpolation of subroutines</p>
+<a name='VERSION'></a><h1>VERSION</h1>
+<pre>  Maintainer: Michael G Schwern &lt;<a href='mailto:schwern@pobox.com'>schwern@pobox.com</a>&gt;
+  Date: 17 Sep 2000
+  Mailing List: <a href='mailto:perl6-language@perl.org'>perl6-language@perl.org</a>
+  Number: 252
+  Version: 1
+  Status: Developing</pre>
+<a name='ABSTRACT'></a><h1>ABSTRACT</h1>
+<p>Subroutines calls should interpolate in double-quoted strings and similar
+contexts.</p>
+<pre>    print &quot;Sunset today is at &amp;sunset($date)&quot;;</pre>
+<p>interpolates to:</p>
+<pre>    print 'Sunset today is at '.sunset($date);</pre>
+<a name='DESCRIPTION'></a><h1>DESCRIPTION</h1>
+<p>Currently, subroutine calls cannot be placed directly into strings.  This can
+often complicate the generation of a string and place the code to generate
+pieces of it distant from where they are put together causing maintenance
+problems.  Also, with scalars, arrays, hashes and methods interpolating (or
+proposed to do so), users would expect subroutines to work.</p>
+<p>Work arounds are as RFC 222.</p>
+<p>Therefore, it is proposed that subroutine calls interpolate in double-quoted
+strings and similar constructs.</p>
+<pre>    print &quot;Sunset today is at &amp;sunset($date)&quot;;</pre>
+<p>should parse out as:</p>
+<pre>    print 'Sunset today is at '.sunset($date);</pre>
+<p>implementing DWIMness.  The &amp; is mandatory.  Parens are also mandatory if
+arguments are to be passed.</p>
+<p>Context and what to do with lists are as RFC 222.</p>
+<p>Argument passing is as RFC 222.</p>
+<a name='Whitespace'></a><h2>Whitespace</h2>
+<p>Whitespace between the &amp;, function name and opening paren should be disallowed
+when interpolated.  This will avoid many ambiguous cases.</p>
+<a name='MIGRATION'></a><h1>MIGRATION</h1>
+<p>s/&amp;/\\&amp;/g in double quoted strings.</p>
+<a name='CAVEATS'></a><h1>CAVEATS</h1>
+<p>&amp;foo() does not honor prototypes.  Should &quot;&amp;foo()&quot;?  The only thing keeping me
+from saying yes is the apparent inconsistency.</p>
+<p>Should the function not exist in the current scope, Perl will throw an
+exception/die as usual.</p>
+<p>This RFC is intended to generate discussion about the need and wisdom of
+allowing subroutine interpolation in strings.  Practical examples of code
+where this is useful as well as where this would be a hinderance are
+requested.  It is presented seperately because I expect much more discussion
+than RFC 222 and wish to keep the consideration of the two seperate.</p>
+<a name='IMPLEMENTATION'></a><h1>IMPLEMENTATION</h1>
+<p>The tokenizer can watch for /&amp;[A-Z_]\w*/i.  If followed by a '(', then the
+parsing becomes the same as for normal subroutine arguments.</p>
+<a name='REFERENCES'></a><h1>REFERENCES</h1>
+<p>RFC 222 - Interpolation of object method calls</p>
+<p>RFC 237 - Hashes should interpolate in double-quoted strings</p>
+<p>RFC 251 - Interpolation of class method calls</p>
+</div>

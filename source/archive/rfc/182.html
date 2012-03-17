@@ -1,0 +1,96 @@
+[% setvar title JART - Just Another Regression Test %]
+<h3>This file is part of the Perl 6 Archive</h3>
+    <p>To see what is currently happening visit <a href="http://www.perl6.org/">http://www.perl6.org/</a></p>
+<div class='pod'>
+<a name='TITLE'></a><h1>TITLE</h1>
+<p>JART - Just Another Regression Test</p>
+<a name='VERSION'></a><h1>VERSION</h1>
+<pre>  Maintainer: Michael G Schwern &lt;<a href='mailto:schwern@pobox.com'>schwern@pobox.com</a>&gt;
+  Date: 30 Aug 2000
+  Mailing List: <a href='mailto:perl-qa@perl.org'>perl-qa@perl.org</a>
+  Number: 182
+  Version: 1
+  Status: Developing</pre>
+<a name='ABSTRACT'></a><h1>ABSTRACT</h1>
+<p>Regression tests are often contrived and do not represent real world
+usage nor test features in combination.  JAPHs represent a repository
+of real world code which is simple to turn into regression tests.  Use
+JAPHs to test Perl!</p>
+<a name='DESCRIPTION'></a><h2>DESCRIPTION</h2>
+<p>Testing code is often contrived and incomplete.  Its often optimistic,
+simplistic and doesn't stress the program as much as real world code
+will.  It would be best to use real world code in our regression
+tests, but unfortunately it is difficult to collect code which is
+itself simple to test.  Complex tests which force interactions between
+features could be written with effort, but traditionally few have
+wanted to put in the effort on writing tests.</p>
+<p>So it would be wonderful to have a set of real world code which stresses all
+the features of Perl, but is also easy to test.  Fortunately we do.  JAPHs!
+Hundreds and hundreds and hundreds of freely available small bits of test code
+using almost the entire range of Perl and all with the same output!</p>
+<p>The main purpose of the JART is to test backwards compatibility and
+also to test existing perl features in combination with each other.</p>
+<a name='Process'></a><h2>Process</h2>
+<p>The process of converting a JAPH to a test is straight forward.</p>
+<ul>
+<li><a name='1 - Harvesting'></a>1 - Harvesting</li>
+<p>JAPHs can be actively collected from various sources: clp.misc
+archives, p5p archives, CPAN/misc/japhs, Abigail's hard drive,
+etc...  It shouldn't be terribly hard to write simple clients to pull
+JAPHs from the signatures of known authors.</p>
+<p>Also, it will be hoped that JAPH authors will submit their work
+directly to JART.</p>
+<p>JART need not be limited to JAPHs.  Any other eclectic code with
+predictable output could be used.  Obfuscated Perl Contest entries
+come immediately to mind.</p>
+<li><a name='2 - Auditing'></a>2 - Auditing</li>
+<p>Only certain JAPHs can be used for the JART and they will have to be
+audited.  There are three considerations: security, features
+and portability.</p>
+<p>Since the JART will be running as trusted code, it must be made sure
+that the JAPH doesn't do anything nasty to the system.  This includes
+writing files, opening sockets, spawning processes, etc...  Future
+versions of JART may run in a safe sand box making the security audit
+less important.</p>
+<p>Many JAPHs make use of undocumented features and subtle bugs in Perl.
+It must be made sure that the JAPHs used in JART rely only on
+documented features.  As a derivative benefit I'm sure we will
+discover many undocumented features which should be documented.  These
+will be reported back as patches to perl.</p>
+<p>Finally, JAPHs may rely on files, programs and features which are not
+portable.  These should be checked for and if found either the JAPH is
+rejected or it is only run on certain systems.</p>
+<p>This auditing is the most manpower and clue intensive part of the
+JART, and is aggravated by the inherently obfuscated nature of the
+code.  This is somewhat alleviated by the small size of the code.
+JAPHs which are collected will have to be audited.  JAPHs which are
+donated should come with an audit by the author.</p>
+<li><a name='3 - Add it'></a>3 - Add it</li>
+<p>Once a JAPH passes the audits it is made a part of the JART.  This
+entails adding it to the list of JAPHs and noting its expected output.</p>
+</ul>
+<a name='JAPH Archive'></a><h2>JAPH Archive</h2>
+<p>A pleasant consequence of gathering lots of JAPHs is that we're
+gathering lots of JAPHs!  This can be spun off into a nice, annotated
+JAPH archive for people who's lives aren't already weird enough.</p>
+<a name='IMPLEMENTATION'></a><h1>IMPLEMENTATION</h1>
+<p>JART will act like any other of Perl's regression tests, probably
+added to perl as t/JART.t.  It will run each JAPH and note its output and
+print the usual &quot;ok/not ok&quot;.</p>
+<p>The JAPHs will be organized one per file.  This avoids the issues of
+having to escape out characters in the JAPHs and getting spaces and
+the number of characters exactly right.  As the output of each JAPH is
+subtly different, each JAPH file will have an associated output file
+which contains the expected output of each JAPH.  This will all be
+tossed into one directory, probably t/JART/JAPHs/.</p>
+<p>A prototype implementation exists.</p>
+<p>Auditing will probably be done by simple way of a mailing list.  Newly
+arriving JAPHs will be posted and auditors (subscribers to the list)
+will perform audits at their leisure.  An incoming queue will also be
+maintained, accessible by auditors, to make sure things don't get lost
+in the noise.</p>
+<p>JAPH authors submitting their work will be given a questionnaire to
+fill out to allow them to conduct their own audit of their work.</p>
+<a name='REFERENCES'></a><h1>REFERENCES</h1>
+<p>None.</p>
+</div>

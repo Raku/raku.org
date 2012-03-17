@@ -1,0 +1,269 @@
+[% setvar title Perl6 Summary for week ending 20020707 %]
+<h3>This file is part of the Perl 6 Archive</h3>
+    <p>To see what is currently happening visit <a href="http://www.perl6.org/">http://www.perl6.org/</a></p>
+<div class='pod'>
+<a name='Perl6 Summary for week ending 20020707'></a><h1>Perl6 Summary for week ending 20020707</h1>
+<p>Hello, good evening and welcome to the third of my attempts to
+summarize the comings and goings in the world of Perl 6. When we last
+saw them our heroes were getting to grips with stack performance and
+having fun with the Perl 6 grammar.</p>
+<p>Let's see what they got up to this week...</p>
+<a name='PerlArray strange behaviour'></a><h2>PerlArray strange behaviour</h2>
+<p>At the end of last week, Josef Höök (the man whose name I have to cut
+and paste...) found some peculiarities when using negative indices
+with PerlArray objects in Parrot. Jeff (DrForr) explained that the
+problem arose from Josef using partially deprecated
+assembly syntax, and that he should use the new <code>set P0[-4], 1</code> type syntax
+instead; Leon Brocard (who <i>needs</i> nested datastructures) asked
+when we'd see support for <code>set P0[2], P2</code>.</p>
+<p><a href='http://archive.develooper.com/perl6-internals@perl.org/msg10668.html' target='_blank'>archive.develooper.com</a></p>
+<a name='Fun with the Perl6 Grammar'></a><h2>Fun with the Perl6 Grammar</h2>
+<p>The fun never stops at Sean O'Rourke's house as he released two
+versions of his Perl 6 grammar. Improvements include:</p>
+<ul>
+<li><a name='err and // have arrived.'></a><code>err</code> and <code>//</code> have arrived.</li>
+<li><a name='Topicalization'></a>Topicalization</li>
+<li><a name='$^foo variables (for subroutine creation)...'></a><code>$^foo</code> variables (for subroutine creation)...</li>
+<li><a name='loop(;;) { ... }'></a><code>loop(;;) { ... }</code></li>
+</ul>
+<p>Sean points out that it lacks any way of distinguishing between
+lvalues and rvalues, and that he's not even started to worry about
+Apocalypse 5.</p>
+<p>I (and I assume everyone else) was very impressed.</p>
+<p><a href='http://archive.develooper.com/perl6-internals@perl.org/msg10742.html' target='_blank'>archive.develooper.com</a></p>
+<a name='Stack performance (and other bits...)'></a><h2>Stack performance (and other bits...)</h2>
+<p>Tom Hughes patch from last week was well received and should be going
+in. However, Melvin Smith pointed out that it would probably be a
+good idea to apply a similar fix to register stacks. Tom and Melvin
+also noted that, currently, stack frames aren't handled by the Garbage
+Collector (which needs fixing for Coroutines and Continuations to work;
+see later for more about continuations...)</p>
+<p><a href='http://archive.develooper.com/perl6-internals@perl.org/msg10704.html' target='_blank'>archive.develooper.com</a></p>
+<a name='More on multidimensional arrays'></a><h2>More on multidimensional arrays</h2>
+<p>And on PMC instantiation. In the middle of the discussion about
+multidimensional arrays and how to implement them, Dan commented that
+&quot;It seems pretty obvious right from the start that we need some
+mechanism for passing parameters when creating new PMCs, something
+[...] that I've been ducking since I'm not quite sure how to do
+it. Time to stop ducking, I expect.&quot;</p>
+<p>If anyone has a room with a wraparound whiteboard (or a nice soft room
+with a wraparound sweater), Dan can be contacted via the list.</p>
+<p>In another PMC related question, Dan commented that we don't have a
+list of the minimally required PMCs, and dropped a massive hint that
+it'd be really good if someone would make such a list.</p>
+<p><a href='http://archive.develooper.com/perl6-internals@perl.org/msg10731.html' target='_blank'>archive.develooper.com</a></p>
+<a name='Reflexive threadnames...'></a><h2>Reflexive threadnames...</h2>
+<p>Some bloke called Piers Cawley posted a summary of the week's activity
+on the Perl 6 lists. Normally I wouldn't comment, but it actually
+kicked off a thread...</p>
+<a name='Ruby Iterators'></a><h2>Ruby Iterators</h2>
+<p>The summary prompted Erik Steven Harrison to clarify his question
+about ruby iterators and 'pass by name'. People understood it this
+time. In the thread we learned a little about the strangeness in some
+of Ruby's scoping rules, and Larry told us that Ruby is the reason he
+&quot;decided to keep 'my' explicit.&quot;</p>
+<p><a href='http://archive.develooper.com/perl6-internals@perl.org/msg10724.html' target='_blank'>archive.develooper.com</a></p>
+<a name='init_method_t for coroutines and subs'></a><h2>init_method_t for coroutines and subs</h2>
+<p>Josh Wilmes has been seeing a pile of compiler warnings about the init
+functions for parrotsub and parrotcode not matching the <code>init_method_t</code>
+type in the _vtable struct. The answer appears to be that PMC
+initialization is in flux at the moment. Initially Melvin Smith added
+an int argument to the function signature to allow for extra
+configuration, but that was removed because, although it addressed the
+issue, it didn't go far enough. Right now, Dan is trying to work out
+what <i>does</i> go far enough without (like Tom Lehrer) going too far.</p>
+<p><a href='http://archive.develooper.com/perl6-internals@perl.org/msg10743.html' target='_blank'>archive.develooper.com</a></p>
+<a name='Stack rework'></a><h2>Stack rework</h2>
+<p>Melvin Smith has modified the stack structures: stacks are no longer
+circular. This simplifies stack handling, GC tracing, and allows stack
+trees, which will hopefully make Copy on Write (COW) and continuations
+less expensive. Which is nice.</p>
+<p><a href='http://archive.develooper.com/perl6-internals@perl.org/msg10749.html' target='_blank'>archive.develooper.com</a></p>
+<a name='Parrot_Context'></a><h2>Parrot_Context</h2>
+<p>Continuing his march towards Coroutines and Continuations, Melvin
+Smith unveiled the Parrot_Context data structure. Jerome Voillon
+questioned the wisdom of a design that led to <code>memcpy</code>ing 2k for each
+co-routine call. In response, Dan pointed out that patches were
+welcome...</p>
+<p><a href='http://archive.develooper.com/perl6-internals@perl.org/msg10756.html' target='_blank'>archive.develooper.com</a></p>
+<a name='Having a COW'></a><h2>Having a COW</h2>
+<p>Markus Laire wondered what 'COW' meant. Aldo Calpini told him (it
+stands for Copy on Write), Nicholas Clark clarified, and Larry pointed
+out that &quot;It's a real win for regexes that want to map $1, $2,
+etc. onto an existing string.&quot;</p>
+<p><a href='http://archive.develooper.com/perl6-internals@perl.org/msg10756.html' target='_blank'>archive.develooper.com</a></p>
+<a name='Vtables and multimethod dispatch'></a><h2>Vtables and multimethod dispatch</h2>
+<p>Dan returned from YAPC fired up and ready to work on the extension
+mechanism, but before that &quot;we need a multimethod dispatch for vtable
+calls.&quot; Which means that &quot;we're going to have to do matrices (at
+least 2D matrices), class dependencies (so derived classes can
+inherit from parent classes so as not to leave gaps), and method
+registration at PMC load time.&quot;</p>
+<p>Most of which Dan had been hoping to avoid.</p>
+<p>Sean O'Rourke jokingly wondered if &quot;resolution based on distance in
+number-of-args dimensional type space is right out&quot; because it would
+give us bragging rights over the Java and Ruby people; Dan capped
+that by saying it wasn't ruled out.</p>
+<p>Mike Lambert cheered, and offered an overview of a couple of lookup
+methods. He also made some points
+about &quot;registering methods to be called that aren't in either PMC&quot; as
+a way of allowing for pluggable (say) maths libraries, which looks
+like an interesting idea from where I'm sitting.</p>
+<p><a href='http://archive.develooper.com/perl6-internals@perl.org/msg10780.html' target='_blank'>archive.develooper.com</a></p>
+<a name='Meanwhile over in perl6-language'></a><h2>Meanwhile over in perl6-language</h2>
+<p>Mike Schwern carried on the Ruby Iterators thread with an overview of
+Perl 6's different ways of creating subroutines with named arguments,
+a confirmation that yes, it would be possible to write Ruby Iterator
+type things in Perl 6. Luke Palmer agreed some more and Allison
+Randal (a new member of the Perl 6 core team) confirmed that idea further
+(with a small amount of clarification).</p>
+<p>We all wondered what a Jensen Machine is.</p>
+<p><a href='http://archive.develooper.com/perl6-language@perl.org/msg10196.html' target='_blank'>archive.develooper.com</a></p>
+<a name='What's new continued'></a><h2>What's new continued</h2>
+<p>I confess that when I contemplated summarizing this particular thread
+I found myself wondering 'How?'. Maybe the strain of this sort of
+thing was what led Bryan to quit. Anyhoo...</p>
+<p>Raptor attempted to summarize what's new in Perl 6 compared to Perl 5,
+or at least what's new in Apocalypses 1-&gt;4. Damian offered a bunch of
+comments and clarifications, as did Larry, and there was a discussion
+about the hyper operator, then about hypering constructors and/or the
+'.'  operator; Damian scared us by making Dobermans; Uri posted some
+syntactically correct Perl 6 (marked down for style though) and Ashley
+Winters did cunning things with the new Perl 6 <code>for</code> loop syntax and
+generally demonstrated a worryingly complete grasp of the language
+(he'll be writing a scheme interpreter in Perl 6 before long...).</p>
+<p>Your summarizer is left hoping that someone will incorporate the
+corrections and clarifications into a revised version of the original
+post which I can point you at next week...</p>
+<p><a href='http://archive.develooper.com/perl6-language@perl.org/msg10178.html' target='_blank'>archive.develooper.com</a></p>
+<a name='Regex syntax clarification'></a><h2>Regex syntax clarification</h2>
+<p>Ralph (surname unknown) asked some questions about the syntax for code that
+gets executed within a regex and wondered if it wasn't all a bit
+cryptic. Allison Randal claimed, and I think I agree, that it wasn't
+really cryptic, it was just a new set of mnemonics to learn. Anyway,
+if you want a more explicit syntax you can 'just' doctor the current
+grammar...</p>
+<p><a href='http://archive.develooper.com/perl6-language@perl.org/msg10180.html' target='_blank'>archive.develooper.com</a></p>
+<a name='The Jensen's Machine, generators and coroutines.'></a><h2>The Jensen's Machine, generators and coroutines.</h2>
+<p>At last, Thom Boyer informed us that Jensen's <i>Device</i> is a technique
+used to implement pass-by-name. He also gave us an example of why
+pass-by-name is, well, weird. He also wondered about Python-like
+generators. Peter Scott wondered in turn if they weren't just
+coroutines in a different guise (which they are). Larry confirmed that
+Parrot would definitely have Coroutines, but said that he was still
+thinking about precisely how they'd fit into Perl 6, saying &quot;we want
+fancy control structures to just kind of sneak into people's
+consciences, just as closures did in Perl 6. [...] It'd be really nice
+to find a way to explain continuations to people without inflicting
+the typical tortuous explanations on people who aren't interested in
+brain pretzels.&quot; He then offered a classically Larryesque explanation
+of continuations &quot;... most people think they understand time travel
+...&quot;, but you can read that in the original.</p>
+<p><a href='http://www.cs.rit.edu/~afb/20013/plc/slides/procedures-07.html:' target='_blank'>www.cs.rit.edu</a>
+Jensen's Device explained here...</p>
+<p><a href='http://archive.develooper.com/perl6-language@perl.org/msg10252.html' target='_blank'>archive.develooper.com</a>
+Larry explains continuations.</p>
+<a name='Speaking of continuations...'></a><h2>Speaking of continuations...</h2>
+<p>Piers Cawley asked about reflective capabilities when looking at code refs,
+suggesting a couple of methods <code>arity</code> and <code>prototype</code> which would
+allow one to grab information about the expectations of a subroutine,
+which would be very useful for people writing debuggers, refactoring
+browsers and other coding tools.</p>
+<p>He then spoiled everything by suggesting <code>$sub.current_continuation</code>
+(later retracted because it doesn't make much sense...) and
+<code>$sub.current_continuation($a_continuation)</code> (later expanded
+on). This scared Dan, but he didn't see why it couldn't be done, so
+Piers just got weirder and rode his &quot;I'd like to be able to do
+<code>caller(...).as_continuation</code>&quot; hobby horse again. Sean O'Rourke saw
+Piers's weirdness and raised, proposing
+<code>$current_block.push_continuation(any(*@some_ccs))</code> as a way of doing
+multithreading but I think (hope) he was joking about that, and went
+on to suggest a slightly less scary, but still weird
+<code>$block.as_continuation</code>. Dan got weirder still.</p>
+<p>Then Piers attempted to summarize the thread so far, retracting some
+things, showed how at least one of his proposals could be
+implemented with a 'simple' closure and showed (and explained) a
+simple example of continuation usage, along with a couple of examples
+that did the same thing more simply...</p>
+<p>Sean O'Rourke appeared to understand what was going on.</p>
+<p><a href='http://archive.develooper.com/perl6-language@perl.org/msg10198.html:' target='_blank'>archive.develooper.com</a>
+the initial, innocuous post in this thread.</p>
+<p><a href='http://archive.develooper.com/perl6-language@perl.org/msg10199.html:' target='_blank'>archive.develooper.com</a>
+and then it all goes spoggly.</p>
+<p><a href='http://archive.develooper.com/perl6-language@perl.org/msg10241.html:' target='_blank'>archive.develooper.com</a>
+Piers attempts to explain continuations.</p>
+<a name='Perl 6, the Good Parts Version'></a><h2>Perl 6, the Good Parts Version</h2>
+<p>Mike &quot;Inigo Montoya&quot; Schwern is hoping to be giving a talk with that
+title to the Scandinavian Conference on Object Orientation,
+so he posted his outline of what he's planning to talk
+about and asked for suggestions.</p>
+<p>There was then a small amount of debate about the difference between
+adverbs and adjectives, and a plea from Larry that we stop calling
+adjectives 'attributes' and to use 'properties' instead to avoid
+terminology collision with the OO meaning of attributes.</p>
+<p>Tim Bunce reckoned that the new regular expressions were a good
+thing. Piers wondered if you could implement a Prolog like language
+entirely within the regex engine. Erik Steven Harrison reckoned that
+new regexes wouldn't really sell; people already know that Perl does
+regexes better than anyone and the new parsing features would probably
+not be the sort of thing to persuade a Java user.</p>
+<p><a href='http://archive.develooper.com/perl6-language@perl.org/msg10202.html:' target='_blank'>archive.develooper.com</a>
+Thread root.</p>
+<a name='$RS paragraph mode is not going away'></a><h2>$RS paragraph mode is not going away</h2>
+<p>Trey Harris worried that the very lovely and worthwhile <code>$/ = ''</code> was
+going to stop working and made an impassioned plea to keep paragraph
+mode. Larry reassured him that paragraph mode would be kept, but was
+becoming a per filehandle property.</p>
+<p><a href='http://archive.develooper.com/perl6-language@perl.org/msg10245.html' target='_blank'>archive.develooper.com</a></p>
+<a name='In Brief'></a><h2>In Brief</h2>
+<p>Josh Wilmes wondered about XML. Nobody said anything.</p>
+<p>It was pointed out that <a href='http://www.perlcabal.com/' target='_blank'>www.perlcabal.com</a> returns a
+404. So, there's no cabal there then.</p>
+<p>Bill Atkins suggested using <code>has</code>, <code>have</code> and <code>are</code> instead of
+(or as well as) <code>is</code>. He also suggested that Perl 6 become more PHP
+like. He got pointed at previous discussions on this very subject
+(has/have/are) and was asked what was wrong with Mason/Template
+Toolkit.</p>
+<p><a href='http://archive.develooper.com/perl6-language@perl.org/msg10235.html' target='_blank'>archive.develooper.com</a>
+Ashley Winters wondered about infinite quantifiers and greediness in
+regular expressions. Larry did some thinking aloud on the subject and
+I think it was decided to stick with what we have...</p>
+<p>Dan pointed us all at
+<a href='http://developers.slashdot.org/article.pl?aid=02/07/07/1646247.' target='_blank'>developers.slashdot.org</a>
+Apparently some slashdotter wonders why Larry isn't contributing to
+Python development instead of redoing Perl. Ah... Slashdot.</p>
+<p><a href='http://archive.develooper.com/perl6-internals@perl.org/msg10774.html' target='_blank'>archive.develooper.com</a>
+Jeff has committed &quot;a primitive first cut of a new Make system&quot;, which
+looks interesting.</p>
+<p>A couple of weeks ago, Dan asked people to look into specs for various
+virtual machines, and the TCL machine was one of them. This week John
+Porter gave us an overview of how that worked, along with a list of
+ops and some explanation.</p>
+<p>Brian Wheeler ticked 'Three arg chopn' off the parrot TODO list, and
+Simon Glover wrote some tests for it.</p>
+<p>Dan took a moment to thank Bryan Warnock for his stalwart work on the
+earlier incarnation of the Perl 6 summary.</p>
+<p>Erik Kidder told us he planned to add the undocumented ops to the
+parrot assembly PDD and Dan asked him to hold off on that thought
+while he had a look at those ops.</p>
+<p>Dan says that Parrot_warn should handle a NULL interpreter by sending
+the error to the standard error location. Patches welcome.</p>
+<p>John Douglas pointed us all at
+<a href='http://www.complang.tuwien.ac.at/anton/vmgen/.' target='_blank'>www.complang.tuwien.ac.at</a></p>
+<p>The PMCs formerly known as ParrotPointer, ParrotSub and
+ParrotCoroutine are now known as Pointer, Sub and Coroutine.</p>
+<p>Leon and others are doing interesting things with imcc. I'm not
+entirely sure what imcc is. Kudos will be awarded to anyone who
+furnishes me with an explanation I can use in the next summary.</p>
+<a name='Acknowledgements'></a><h2>Acknowledgements</h2>
+<p>This summary was brought to you during the journey between Newark upon
+Trent and London. Thanks are due (for this week and last week and
+hopefully in time to come) to Pete Sergeant, proofreader
+extraordinaire. Any errors, omissions and <i>faux pas</i> are, of course
+all Pete's fault.</p>
+<p>If you have enjoyed reading this summary, or found it useful, drop me
+a line and let me know, feedback is great. If you think this is worth
+some of your hard earned cash, then visit
+<a href='http://donate.yetanother.org/' target='_blank'>donate.yetanother.org</a> and help to support Larry and Dan's
+work on Perl 6 and Parrot.</p>
+</div>

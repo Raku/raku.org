@@ -1,0 +1,127 @@
+[% setvar title Perl 6 Summary for the week ending 20030713 %]
+<h3>This file is part of the Perl 6 Archive</h3>
+    <p>To see what is currently happening visit <a href="http://www.perl6.org/">http://www.perl6.org/</a></p>
+<div class='pod'>
+<a name='Perl 6 Summary for the week ending 20030713'></a><h1>Perl 6 Summary for the week ending 20030713</h1>
+<p>Welcome once again to the Perl 6 Summary, in a week of major
+developments and tantalizing hints.</p>
+<p>Starting, as usual, with what's happening in perl6-internals</p>
+<a name='Targeting Parrot from GCC'></a><h2>Targeting Parrot from GCC</h2>
+<p>Discussion in the thread entitled 'WxWindows Support / Interfacing
+Libraries' centred on writing a Parrot backend to GCC. (No, I have no
+idea what that has to do with the thread subject.) Tupshin Harper, Leo
+T&ouml;tsch and Benjamin Goldberg discussed possibilities and
+potential pit/pratfalls. At one point, Tupshin suggested emulating a
+'more traditional stack-oriented processor' and I don't think he was
+joking...</p>
+<p><a href='http://groups.google.com/groups?threadm=3F0C7891.9060603@tupshin.com' target='_blank'>groups.google.com</a></p>
+<a name='Timely destruction and TRACE_SYSTEM_AREAS'></a><h2>Timely destruction and <code>TRACE_SYSTEM_AREAS</code></h2>
+<p>J&uuml;rgen B&ouml;mmels' rewrite of Parrot IO is causing some
+problems with the garbage collection (IO handles are the canonical
+examples of resources that need timely destruction).</p>
+<p>Leo tracked down the source of resource leak to a problem with handles
+being found on the C stack. J&uuml;rgen wasn't happy about this (he's
+not keen on the stack walking approach to garbage collection). He
+proposed that we get rid of the stack walk in favour of some other
+solution to the infant mortality problem and offered a few
+candidates. Leo said that he didn't like walking the C stack, going so
+far as to state that &quot;Timely destruction and solving infant mortality
+don't play together or are mutually exclusive - in the current
+approach.&quot; Dan hasn't commented on this yet.</p>
+<p><a href='http://groups.google.com/groups?threadm=200307070855.h678tU603505@thu8.leo.home' target='_blank'>groups.google.com</a></p>
+<a name='Parrot is not feature frozen'></a><h2>Parrot is not feature frozen</h2>
+<p>There was a certain amount of confusion as some old email with the
+subject 'Parrot is feature-frozen until Wednesday' made its way into a
+small number of inboxes sowing confusion as it went. Suffice to say,
+Parrot is not currently feature frozen, though Steve Fink did say that
+he was considering a point release once the imcc/parrot integration
+was complete. If Dan gets objects and exceptions finished, then it
+might even warrant a 0.1.0 version number rather than 0.0.11</p>
+<p><a href='http://groups.google.com/groups?threadm=200307071153.h67BrdD12034@thu8.leo.home' target='_blank'>groups.google.com</a></p>
+<a name='Perl* Abstraction'></a><h2>Perl* Abstraction</h2>
+<p>Luke Palmer has &quot;finally&quot; started to implement his Infinity PMC and
+has noticed a lot of redundant code in the Perl* classes. He also
+noticed that Parrot doesn't seem to have the distinction between
+container and value that has been confusing people on the language
+list.</p>
+<p><a href='http://groups.google.com/groups?threadm=ygche5yyspa.fsf@babylonia.flatirons.org' target='_blank'>groups.google.com</a></p>
+<a name='Fun with ParrotIO'></a><h2>Fun with ParrotIO</h2>
+<p>First, J&uuml;rgen B&ouml;mmels sent in a patch to excise integer
+file descriptors from Parrot except when they are managed via ParrotIO
+PMCs. Leo applied this.</p>
+<p>Clinton Pierce thought that this patch meant that a Win32 bug could be
+closed in the Parrot bug database. This sparked a discussion with Leo,
+and J&uuml;rgen, but I'm not entirely sure of the status of the bug...</p>
+<p><a href='http://groups.google.com/groups?threadm=rt-22899-60490.17.7794643303328@rt.perl.org' target='_blank'>groups.google.com</a></p>
+<p><a href='http://groups.google.com/groups?threadm=200307081114828.SM00133@localhost' target='_blank'>groups.google.com</a></p>
+<a name='Jako groks basic PMCs'></a><h2>Jako groks basic PMCs</h2>
+<p>Gregor N Purdy seems to have started working on Jako again, and
+checked in some changes allowing Jako to manipulate PMCs. People
+agreed that this was cool.</p>
+<p><a href='http://groups.google.com/groups?threadm=1057700664.16182.2.camel@borg.focusresearch.com' target='_blank'>groups.google.com</a></p>
+<a name='I want a Ponie!'></a><h2>I want a Ponie!</h2>
+<p>The <i><a href='http://search.cpan.org/perldoc?<a href='mailto:ponie-dev@perl.org'>ponie-dev@perl.org</a>'>p<a href='mailto:onie-dev@perl.org'>onie-dev@perl.org</a></a></i> mailing list was announced and I'll be
+summarizing it as of next week when I've joined, caught up, and
+generally recovered from America.</p>
+<p>What's Ponie? Ponie is 'Perl On New Internal Architecture' or, as
+Thomas Klausner put it, &quot;A version of Perl 5 that will run on Parrot&quot;,
+which was announced by Larry at his OSCON 'State of the Onion'
+address.</p>
+<p>Discussion of Ponie on the perl6-internals list centred on the &quot;What
+is ponie?&quot; question, with a certain amount of &quot;Why ponie-dev, not
+perl6-ponie?&quot; thrown in for good measure.</p>
+<p>Brian Ingerson announced that he'd set up a Ponie Wiki, Leon Brocard
+pointed at the use.perl story announcing Ponie, and your summarizer
+punted on writing a description of the project himself.</p>
+<p><a href='http://groups.google.com/groups?threadm=20030709175831.D52652-100000@onion.valueclick.com' target='_blank'>groups.google.com</a></p>
+<p><i><a href='#!dl/www.poniecode.org/'>&quot;!dl/<a href='http://www.poniecode.org/' target='_blank'>www.poniecode.org</a>&quot;</a></i> -- More on Ponie</p>
+<p><a href='http://ponie.kwiki.org/' target='_blank'>ponie.kwiki.org</a> -- Ingy's Ponie Wiki</p>
+<p><a href='http://use.perl.org/article.pl?sid=03/07/09/0237202' target='_blank'>use.perl.org</a> -- use.perl announcement</p>
+<a name='Exceptions!'></a><h2>Exceptions!</h2>
+<p>Leo T&ouml;tsch checked in the beginnings of an exceptions
+system. Then he checked in the beginnings of an events system.</p>
+<p><a href='http://groups.google.com/groups?threadm=3F0D414C.7070302@nextra.at' target='_blank'>groups.google.com</a></p>
+<p><a href='http://groups.google.com/groups?threadm=3F0EA7CA.7020404@nextra.at' target='_blank'>groups.google.com</a></p>
+<a name='Meanwhile, in perl6-language'></a><h1>Meanwhile, in perl6-language</h1>
+<p>There were all of 6 messages, all of them discussing the effects of
+aliasing an array slice.</p>
+<p><a href='http://groups.google.com/groups?threadm=20030707080359.A75579@megazone.bigpanda.com' target='_blank'>groups.google.com</a></p>
+<a name='Perl 6 Rules at OSCON'></a><h2>Perl 6 Rules at OSCON</h2>
+<p>No, wait, that should be Perl6::Rules.</p>
+<p>For his last talk at OSCON, Damian spoke about Perl6::Rules, his
+implementation of Perl 6's rules system in pure Perl 5. And oh boy was
+it tantalizing. He showed us something actually running a large chunk
+of Perl 6 matching semantics, complete with handy debugging
+information, diagnostic dumping and all the other useful stuff.</p>
+<p>When we were all gagging for him to release it to CPAN immediately, he
+told us that it wasn't finished yet; that he'd implemented it all
+during the week of OSCON, in 700 lines of code; that he was going on
+holiday for a month once he got home; and that the module would be
+completed and released to CPAN as time/money allowed and would be out
+by Christmas.</p>
+<p>He didn't say which Christmas.</p>
+<p>Trust me, we want this. A lot.</p>
+<a name='Acknowledgements, Announcements and Apologies'></a><h1>Acknowledgements, Announcements and Apologies</h1>
+<p>Hmm... this summary's later than last week's how did that happen?</p>
+<p>Thanks to Darren Stalder and Cindy Fry, our kind hosts in Seattle; to
+Shiro san for some fantastic sushi on Sunday night; to Jesse Broksmith
+and Melissa Cain for being our Seattle native guides; to Ward
+Cunningham for a lift in his Jeep and for just being Ward; and to
+Casey West for reasons I promised not to go into in the summary.</p>
+<p>For months now, I've been half joking about sending me jobs in the
+last little bit of this summary, but I really mean it now. If anyone's
+looking for an experienced OO Perl programmer and half experienced
+writer, I'm hunting work. Please get in touch at the address below.</p>
+<p>As ever, if you've appreciated this summary, please consider one or
+more of the following options:</p>
+<ul>
+<li><a name='Send money to the Perl Foundation at donate.perl-foundation.org/ and help support the ongoing development of Perl.'></a>Send money to the Perl Foundation at
+<a href='http://donate.perl-foundation.org/' target='_blank'>donate.perl-foundation.org</a> and help support the ongoing
+development of Perl.</li>
+<li><a name='Get involved in the Perl 6 process. The mailing lists are open to all. dev.perl.org/perl6/ and www.parrotcode.org/ are good starting points with links to the appropriate mailing lists.'></a>Get involved in the Perl 6 process. The mailing lists are open  to
+all. <a href='http://dev.perl.org/perl6/' target='_blank'>dev.perl.org</a> and <a href='http://www.parrotcode.org/' target='_blank'>www.parrotcode.org</a>
+are good starting points with links to the appropriate mailing lists.</li>
+<li><a name='Send feedback, flames, money, photographic and writing commissions, or a cute little iSight to p<a href='mailto:6summarizer@bofh.org.uk'>6summarizer@bofh.org.uk</a>.'></a>Send feedback, flames, money, photographic and writing commissions, or
+a cute little iSight to <i><a href='http://search.cpan.org/perldoc?<a href='mailto:p6summarizer@bofh.org.uk'>p6summarizer@bofh.org.uk</a>'>p<a href='mailto:6summarizer@bofh.org.uk'>6summarizer@bofh.org.uk</a></a></i>.</li>
+</ul>
+</div>

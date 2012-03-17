@@ -1,0 +1,44 @@
+[% setvar title No special UPPERCASE_NAME subroutines %]
+<h3>This file is part of the Perl 6 Archive</h3>
+    <p>To see what is currently happening visit <a href="http://www.perl6.org/">http://www.perl6.org/</a></p>
+<div class='pod'>
+<a name='TITLE'></a><h1>TITLE</h1>
+<p>No special UPPERCASE_NAME subroutines</p>
+<a name='VERSION'></a><h1>VERSION</h1>
+<pre>  Maintainer: Ilya Zakharevich &lt;<a href='mailto:ilya@math.ohio-state.edu'>ilya@math.ohio-state.edu</a>&gt;
+  Date: 15 Sep 2000
+  Mailing List: <a href='mailto:perl6-language@perl.org'>perl6-language@perl.org</a>
+  Number: 243
+  Version: 1
+  Status: Developing</pre>
+<a name='ABSTRACT'></a><h1>ABSTRACT</h1>
+<p>This RFC proposes that no subroutines with uppercased names should be
+special in Perl.</p>
+<a name='DESCRIPTION'></a><h1>DESCRIPTION</h1>
+<p>If some special action handler needs to be registered, this should be
+done not by using a special name, but by a pragma.</p>
+<pre>  use tie STORE =&gt; sub { ... };</pre>
+<p>not</p>
+<pre>  sub STORE { ... }</pre>
+<p>This would make declarations of handlers visually distinctive,
+would avoid prolifiration of hundreds of special names for handlers,
+would avoid conflicts with interfaces to external libraries which define
+a STORE() funcation etc.</p>
+<a name='MIGRATION ISSUES'></a><h1>MIGRATION ISSUES</h1>
+<p>Translate currently special names to the corresponding pragmas, as shown
+above.  (BEGIN/END etc. are proposed to drop <code>sub</code> in RFC68, so they are not
+covered by this RFC.)</p>
+<a name='IMPLEMENTATION'></a><h1>IMPLEMENTATION</h1>
+<p>This way to introduce the handlers is already used with overloading.  Keep
+in mind that the overhead of calling an overloaded method is 4..5 times
+lower than the overhead of calling the tie()d method (when the semantic
+is the same, for example, when comparing a scalar FETCH with the overloaded
+<code>'~'</code>.)</p>
+<p>Currently overloaded methods live in the symbol table, but are converted to
+not-completely-alphanumeric names.  A similar way may be used for other
+handlers introduced by pragmas, so they may continue to be inheritable if
+needed.  For example, the above subroutine for STORE may live under the name
+<code>'tie/STORE'</code>.</p>
+<a name='REFERENCES'></a><h1>REFERENCES</h1>
+<p>RFC 68 (v2): Eliminate the optional <code>sub</code> for <code>BEGIN</code> etc block declarations</p>
+</div>

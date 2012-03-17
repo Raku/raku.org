@@ -1,0 +1,195 @@
+[% setvar title The Artistic License Must Be Changed %]
+<h3>This file is part of the Perl 6 Archive</h3>
+    <p>To see what is currently happening visit <a href="http://www.perl6.org/">http://www.perl6.org/</a></p>
+<div class='pod'>
+<a name='TITLE'></a><h1>TITLE</h1>
+<p>The Artistic License Must Be Changed</p>
+<a name='VERSION'></a><h1>VERSION</h1>
+<pre>  Maintainer: Bradley M. Kuhn &lt;<a href='mailto:bkuhn@ebb.org'>bkuhn@ebb.org</a>&gt;
+  Date: 12 Sep 2000
+  Last Modified: 29 Sep 2000
+  Mailing List: <a href='mailto:perl6-licenses@perl.org'>perl6-licenses@perl.org</a>
+  Number: 211
+  Version: 2
+  Status: Frozen</pre>
+<a name='ABSTRACT'></a><h1>ABSTRACT</h1>
+<p>The Artistic License, as it currently stands, is legally ambiguous, and as a
+copyright license, it does not appear to legally achieve the goals set forth
+in the Preamble.  In addition, similar legal ambiguities in the license make
+it impossible for the Artistic License to be declared a free software
+license with complete certainty.  Many open source and free software
+organizations (such as OSI and the Debian Developers) that <i>have</i> accepted
+the license have done so only with the greatest trepidation.  Other
+organizations have sadly rejected the license entirely.</p>
+<p>Therefore, we must rewrite the Artistic License.</p>
+<p>In this RFC, a number of opinions on why the Artistic License is problematic
+are stated, and some common arguments from keeping the Artistic License as
+is are refuted.</p>
+<p>Finally, two separate paths for proceeding with changes to the Artistic
+License are proposed.</p>
+<a name='DESCRIPTION'></a><h1>DESCRIPTION</h1>
+<a name='The General Problem with the Artistic License'></a><h2>The General Problem with the Artistic License</h2>
+<p>The Artistic License does currently have some wording ambiguities that make
+it difficult for some lawyers to approve of it.  In addition, these legal
+ambiguities make it impossible to be sure that the Artistic License is
+unequivocally a free software license.  This has caused problems for various
+free software and open source entities who need to ensure clarity in
+licenses.</p>
+<p>Entities like the Open Source Initiative and Debian Developers (authors of
+Debian Free Software Guidelines) have long had some trepidation about
+accepting the Artistic License.  Some members of these groups only accepted
+the Artistic License with severe reservations.  In fact, some of these
+organizations have seriously considered removing the Artistic License from
+their list of approved licenses.</p>
+<p>Finally, while some legal departments appear to have accepted the Artistic
+License on face value, other lawyers feel that the Artistic License does not
+work well as a copyright license.</p>
+<a name='Specific Analyses of the Artistic License'></a><h2>Specific Analyses of the Artistic License</h2>
+<p>This section presents various analyses of the Artistic License that call for
+a change in the license.  Some of these analyses are new, and some are taken
+from historical opinions made by prominent members of our community.</p>
+<a name='Bruce Perens'></a><h3>Bruce Perens</h3>
+<p>Bruce Perens, while a member of Open Source Initiative (OSI), stated:</p>
+<p>&quot;It [the Artistic License] is, in my opinion, a sloppily-worded license, in
+that it makes requirements and then gives you loopholes that make it easy to
+bypass the requirements.</p>
+<p>Section 5 of the Artistic License prohibits sale of the software, yet allows
+an aggregate software distribution of more than one program to be sold. So,
+if you bundle an Artistic-licensed program with a 5-line hello-world.c, you
+can sell the bundle. This feature of the Artistic License was the sole cause
+of the &quot;aggregate&quot; loophole in paragraph 1 of the Open Source Definition. As
+use of the Artistic License wanes, we are considering removing the
+loophole. That would make the Artistic a non-Open-Source license. This isn't
+a step we would take lightly, and there will probably be more than a year of
+consideration and debate before it happens.</p>
+<p>The Artistic License requires you to make modifications free, but then gives
+you a loophole (in section 7) that allows you to take modifications private
+or even place parts of the Artistic-licensed program in the public domain!&quot;</p>
+<p>(Source: <b><i><a href='http://www.perens.com/OSD.html' target='_blank'>www.perens.com</a></i></b>)</p>
+<a name='Free Software Foundation'></a><h3>Free Software Foundation</h3>
+<p>The Free Software Foundation, who maintain a working definition of a free
+software, have not been able to declare the Artistic License as a free
+software license, due the ambiguities in the wording.  They state:</p>
+<p>&quot;We cannot say that this [the Artistic License] is a free software license
+because it is too vague; some passages are too clever for their own good,
+and their meaning is not clear.&quot;</p>
+<p>(Source: <b><i><a href='http://www.gnu.org/philosophy/license-list.html' target='_blank'>www.gnu.org</a></i></b>)</p>
+<a name='Comments From Lawyers'></a><h3>Comments From Lawyers</h3>
+<p>Comments concerning the current Artistic License are being solicited from
+Eben Moglen, a prominent law professor from Columbia University.  Comments
+from Eben, when available, will be included in future revisions of this RFC.</p>
+<p>Sadly, Eben was not able to find the time to comment on this RFC in time for
+the 1 October 2000 freezing deadline.</p>
+<p>No other comments from other lawyers were submitted; neither for nor against
+the Artistic License.</p>
+<a name='Bradley M. Kuhn'></a><h3>Bradley M. Kuhn</h3>
+<p>I also wrote my own assessment of the problems with the current Artistic
+License.</p>
+<p>It is clear to me that the Artistic License was intended to be a free
+software license.  However, there are problems with its wording that leave
+many ambiguities about what a redistributor can and cannot do.  Some of the
+passages have consequences that are not clear.  I will attempt to frame at
+least some of them.</p>
+<p>One problem is the definition of &quot;Reasonable Copying Fee&quot; given in the
+license.  It is possible the definition means: &quot;You can charge any amount as
+copying fee, if people will pay it&quot;.  If this interpretation is correct,
+there is no real legal limit on the fee at all.</p>
+<p>However, there is another interpretation that also seems legally valid.  The
+definition given of &quot;Reasonable Copying Fee&quot; could actually intend to place
+a limit on copying fees that prohibits charging enough to make a profit.
+So, if some entity were to sell a CD with Artistic-licensed software on it,
+that entity might be in violation of the license if they charge even $1 more
+than someone in &quot;the computing community at large&quot; thinks they should.</p>
+<p>Also, the definition of &quot;Freely Available&quot; is not completely clear, with
+regard to the charging of a &quot;handling fee&quot;.</p>
+<p>For example, if I were to press a CD of an Artistic-Licensed software
+program, and offer to give you a copy if you give me one dollar, would that
+be permitted or not?  Most people would call that charging a fee for the
+item, which is prohibited; but if I simply called it a &quot;handling fee&quot;, would
+that make it permitted?</p>
+<p>What if a large computer store wanted to distributed this same CD of
+Artistic-License software?  Would that be permitted, or prohibited?  In
+principle, nothing would stop a store from saying they are charging a
+&quot;handling fee&quot; for that item, but computer stores are not accustomed to
+doing this, and might have trouble reprogramming the cash register to print
+&quot;Handling Fee&quot; instead of &quot;Price&quot; for this particular CD.</p>
+<a name='What About Simply Contacting the Copyright Holder?'></a><h2>What About Simply Contacting the Copyright Holder?</h2>
+<p>Some have argued that Section (4d) of the Artistic License solves all the
+possible problems with the Artistic License, since anyone can contact the
+copyright holder for special arrangements.  Indeed, even without Section
+(4d), it is always the case under copyright law that the copyright holder
+has the right to relicense the work at will to anyone as long as the
+copyright remains valid.  So, some might argue: &quot;Why should we worry about
+confusions in the Artistic License, since everyone who gets a copy can just
+ask the copyright holder for special permission, and likely the copyright
+holder would give it anyway?&quot;</p>
+<p>The problem here, I believe, is one of scale.  Consider John Q. Hacker, who
+got a copy of thirty Artistic-licensed programs (each with a different
+copyright holder).  He got his copy of these programs on a CD, which he got
+from a local user group, who in turn got their first copy from a large
+redistributor of free software (such as CheapBytes).  CheapBytes got their
+copy directly from each author's website.</p>
+<p>Now, John Q. Hacker wants to run a side business installing these software
+programs for his clients, charging a &quot;copying fee&quot;.  He does not plan to
+modify the software at all, so he must only charge what the license calls a
+reasonable copying fee.</p>
+<p>He isn't able to justify his fee to the entire computing community at large,
+just to his client.  So, he's left with section (4d); he has to email each
+of the thirty copyright holders, and ask them for permission to do what he
+wants.  They will likely give it, but it is a lot of work for him to do
+that.</p>
+<p>Think back though, through all those copies before it got to John.  The
+local user group had the same problem, and they had to contact the same
+thirty copyright holders and ask the same questions, since, as fund-raising
+drive, they were charging their members a fee much greater than CheapBytes
+charged.  CheapBytes, for their part, had to also ask the same questions, so
+they could make a profit selling their CDs.</p>
+<p>That totals to the same question being asked ninety times.  Even if the
+answer was &quot;yes&quot; every time, that is still a lot of wasted effort, simply
+because some wording of the original license was confusing.</p>
+<a name='Dual Licensing and the Artistic License'></a><h2>Dual Licensing and the Artistic License</h2>
+<p>Some might argue that the Artistic License need not be changed, since, as
+Larry has stated that it is really intended for use as part of a dual
+licensing (Larry Wall, 21 August 2000).  So, some might argue: &quot;If the
+Artistic License is only intended to be used as a dual licensing scheme,
+what's the problem?&quot;</p>
+<p>The problem is that the authors of the Artistic License (be it this working
+group or Larry himself) can probably not reasonably control how the license
+will get used.  Indeed, consider the fact that many modules on CPAN, and
+even some files in the perl5 core are under Artistic-License-only, despite
+Larry's encouragements to use the Artistic License <i>only</i> as part of a
+dual-license scheme.</p>
+<p>I believe that we have a responsibility to make a sound, clear, concise
+software license that is easily dubbed free software and open source, and
+that does not cause headaches for redistributors.  The license should
+legally do what it says it does in the Preamble, without loopholes and
+without confusing language.</p>
+<p>This is important, because many people <i>are</i> seeking a license that
+achieves the goals stated in the Preamble of the Artistic License.  Sadly,
+the current Artistic License simply does not live up to the task.  So, it is
+worth fixing it, even if the intent is for it to be used in a dual-licensing
+scheme.</p>
+<a name='IMPLEMENTATION'></a><h1>IMPLEMENTATION</h1>
+<p>There are basically two approaches to repairing the problems in the Artistic
+License:</p>
+<ul>
+<li><a name=''></a></li>
+<p>Assume that the Artistic License correctly represents what is wanted, and
+simply fix the minor legal ambiguities and confusing language.</p>
+<li><a name=''></a></li>
+<p>Start from scratch, define what the Artistic License should have in it, and
+develop a completely new &quot;Artistic License: The Next Generation&quot; that
+corrects the problems.</p>
+</ul>
+<p>It is hoped that RFCs that use both approaches are published the Copyright
+and Licensing Working Group for Larry's perusal.  In either case, opinions
+from as many copyright attorneys as possible should be solicited so that we,
+as software hackers, don't miss any legal problems that the trained eye can
+spot more easily.</p>
+<a name='REFERENCES'></a><h1>REFERENCES</h1>
+<p><b><i><a href='http://www.perens.com/OSD.html' target='_blank'>www.perens.com</a></i></b></p>
+<p><b><i><a href='http://www.gnu.org/philosophy/license-list.html' target='_blank'>www.gnu.org</a></i></b></p>
+<p>Larry Wall, Email communication, Message
+&lt;<a href='mailto:200008211818.LAA22675@kiev.wall.org'>200008211818.LAA22675@kiev.wall.org</a>&gt; of 21 August 2000, posted to
+<a href='mailto:perl5-porters@perl.org.'>perl5-porters@perl.org.</a></p>
+</div>

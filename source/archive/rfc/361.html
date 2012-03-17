@@ -1,0 +1,86 @@
+[% setvar title Simplifying split() %]
+<h3>This file is part of the Perl 6 Archive</h3>
+    <p>To see what is currently happening visit <a href="http://www.perl6.org/">http://www.perl6.org/</a></p>
+<div class='pod'>
+<a name='TITLE'></a><h1>TITLE</h1>
+<p>Simplifying split()</p>
+<a name='VERSION'></a><h1>VERSION</h1>
+<pre>  Maintainer: Sean M. Burke &lt;<a href='mailto:sburke@cpan.org'>sburke@cpan.org</a>&gt;
+  Date: 30 Sep 2000
+  Mailing List: <a href='mailto:perl6-language@perl.org'>perl6-language@perl.org</a>
+  Number: 361
+  Version: 1
+  Status: Developing</pre>
+<a name='ABSTRACT'></a><h1>ABSTRACT</h1>
+<p>Perl 5's <code>split</code> function is messy, and should be simplified.</p>
+<a name='DESCRIPTION'></a><h1>DESCRIPTION</h1>
+<p>Perl 5 split does five things that I think are just annoying, and
+which I suggest be removed:</p>
+<ul>
+<li><a name='1. The first argument to split is currently interpreted as a regexp, regardless of whether or not it actually is one. (Yes, split '.', $foo doesn't split on dot -- it's currently the same an split /./, $foo.) I suggest that split be changed to treat only regexps as regexps, and everything else as literals.'></a>1. The first argument to split is currently interpreted as a
+regexp, regardless of whether or not it actually is one.  (Yes,
+<code>split '.', $foo</code> doesn't split on dot -- it's currently the same an
+<code>split /./, $foo</code>.)  I suggest that split be changed to treat only
+regexps as regexps, and everything else as literals.</li>
+<li><a name='2. Empty trailing fields are currently suppressed (although a -1 as the third argument disables this). I suggest that empty trailing fields be retained by default.'></a>2. Empty trailing fields are currently suppressed (although a
+-1 as the third argument disables this).  I suggest that empty trailing
+fields be retained by default.</li>
+<li><a name='3. When not in list context, split currently splits into @_. I suggest that this side-effect be removed.'></a>3. When not in list context, split currently splits into @_.  I
+suggest that this side-effect be removed.</li>
+<li><a name='4. split ?pat? in any context currently splits into @_. I suggest that this side-effect be removed.'></a>4. split ?pat? in any context currently splits into @_.  I suggest
+that this side-effect be removed.</li>
+<li><a name='5. split ' ' (but not split / /) currently splits on whitespace, but also removes leading empty fields. I suggest that this irregularity be removed.'></a>5. split ' ' (but not split / /) currently splits on whitespace,
+but also removes leading empty fields.  I suggest that this
+irregularity be removed.</li>
+</ul>
+<p>The last three of the above points speak for themselves.  I will focus
+on the first two.</p>
+<p>Most notably, I suggest that Perl 6 <code>split('|', ...)</code> should work as
+most people expect -- splitting on a literal bar.  (Under Perl 5,
+<code>split('|', ...)</code> is synonymous with <code>split(/|/, ...)</code> -- i.e.,
+split on nullstring or nullstring [sic].)</p>
+<p>So I suggest:</p>
+<pre>   Perl 5:  split /\|/, ...
+  be synonymous with (and be better written as)
+   Perl 6:  split '|', ...
+           # altho  split /\|/, $bar...  remains valid</pre>
+<p>And as to the second point, the removal of trailing blanks, I suggest:</p>
+<pre>   Perl 5:   @x = split /:/, $bar, -1;
+  be synonymous with
+   Perl 6:   @x = split ':', $bar;</pre>
+<p>If you want to remove trailing fields, under Perl 6 you should have to
+do it explicitly:</p>
+<pre>   Perl 5:   @x = split /:/, $bar;
+  be synonymous with
+   Perl 6:   @x = split ':', $bar;
+             while(@x and !length $x[-1]) { pop @x }</pre>
+<p>I believe that the current behavior of removing trailing empty fields is
+unintuitive and surprising to learners; nothing about the concept of
+splitting a string into a list suggests removing trailing empties.
+(Moreover, I find that when I need to remove empties, it's not just the
+trailing ones; so the current behavior is rarely just what I want.)</p>
+<a name='IMPLEMENTATION'></a><h1>IMPLEMENTATION</h1>
+<p>I'll leave the C-coding details to the usual, capable implementers.</p>
+<p>But I will note one minor complication with my first suggestion (that
+literals and regexps be distinguished).  Consider:</p>
+<pre>  Perl 6:   @x = split $foo, $bar;</pre>
+<p>I suggest that the correct approach is to treat $foo's value as a
+literal, unless it holds an object of class Regexp (or a class derived
+from it?), in which case it should be treated as if the above were:</p>
+<pre>  Perl 6:   @x = split qr/$foo/, $bar;</pre>
+<p>In other words, in such cases it is not possible to know at compile time
+whether a given &quot;split&quot; operator means literal-split or regexp-split.
+I note that such cases are rare.</p>
+<a name='ALTERNATIVE APPROACH'></a><h1>ALTERNATIVE APPROACH</h1>
+<p>In conclusion, I'll note that there is a conservative alternative
+approach possible: if any of the above features of Perl 5 split seem
+really worth keeping, my suggestion for a &quot;clean split&quot; can be
+implemented as a separate operator called, for example, &quot;cleave&quot;.</p>
+<p>(Consider the precedent of Perl 5 chomp being added alongside Perl 4
+chop, not replacing it.)</p>
+<p>I would consider this suboptimal, though; I think that an operator with
+as straightforward and intuitive a name as &quot;split&quot; should behave in a
+straightforward and intuitive way.</p>
+<a name='REFERENCES'></a><h1>REFERENCES</h1>
+<p>Nil.</p>
+</div>

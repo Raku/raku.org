@@ -1,0 +1,55 @@
+[% setvar title User-definable POD handling %]
+<h3>This file is part of the Perl 6 Archive</h3>
+    <p>To see what is currently happening visit <a href="http://www.perl6.org/">http://www.perl6.org/</a></p>
+<div class='pod'>
+<a name='TITLE'></a><h1>TITLE</h1>
+<p>User-definable POD handling</p>
+<a name='VERSION'></a><h1>VERSION</h1>
+<pre>  Maintainer: Simon Cozens &lt;<a href='mailto:simon@brecon.co.uk'>simon@brecon.co.uk</a>&gt;
+  Date: 25 Sep 2000
+  Mailing List: <a href='mailto:perl6-language@perl.org'>perl6-language@perl.org</a>
+  Number: 306
+  Version: 1
+  Status: Developing</pre>
+<a name='ABSTRACT'></a><h1>ABSTRACT</h1>
+<p>Make POD extensible by the new <code>=handle</code>, <code>=ignore</code> and <code>=define</code>
+commands.</p>
+<a name='DESCRIPTION'></a><h1>DESCRIPTION</h1>
+<p>One criticism of POD is that it's too restrictive. Three new pragmatic
+commands will make it arbitrarily user extensible.</p>
+<ul>
+<li><a name='=handle X as Y [for Z]'></a>=handle X as Y [for Z]</li>
+<p>Imagine, if you will, that POD formatters define routines. The
+<code>=handle</code> command maps pieces of POD to routines. For instance, if
+you're writing a book and you want the <code>Z&gt;&lt;</code> command to insert
+an index entry, you'd say something like:</p>
+<pre>    =handle Z&lt;&gt; as index</pre>
+<p>Of course, not all POD formatters should translate it like that. If they
+don't provide the <code>index</code> routine, then they should silently ignore the
+command. Alternatively, you may map the command to a routine when a
+certain formatter is run like this:</p>
+<pre>    =handle Z&lt;&gt; as index for tex</pre>
+<p>The &quot;X&quot; part of the above syntax may also be an equals-command, which
+could be used to pass physical markup information to the formatter:</p>
+<pre>    =handle =head1 as chapter for tex</pre>
+<p>You might want to take this to extremes, and pass parameters to the
+routine. I don't like this, though:</p>
+<pre>    =handle =head1 as h1 for HTML with font_size =&gt; 20, font =&gt; courier</pre>
+<li><a name='=ignore X [for Y]'></a>=ignore X [for Y]</li>
+<p>Tells the parser that certain POD constructs should not be processed by
+certain formatters:</p>
+<pre>    =ignore L&lt;&gt; for text</pre>
+<li><a name='=define X [for Y]'></a>=define X [for Y]</li>
+<p>Introduces a new construct to be mapped to a routine with <code>=handle</code>.
+This allows the parser to verify arbitrary extensions to POD.</p>
+<pre>    =define =head3
+    =handle =head3 as h3 for HTML
+    =handle =head3 as subsubsection for tex</pre>
+</ul>
+<a name='IMPLEMENTATION'></a><h1>IMPLEMENTATION</h1>
+<p><code>POD::Parser</code> will need to be extended to support these three commands;
+text which is found in a <code>=handle</code>d area should be passed to a routine
+in the formatter if one exists or passed through if one does not.</p>
+<a name='REFERENCES'></a><h1>REFERENCES</h1>
+<p>None</p>
+</div>

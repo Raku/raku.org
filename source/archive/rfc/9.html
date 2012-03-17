@@ -1,0 +1,96 @@
+[% setvar title Highlander Variable Types %]
+<h3>This file is part of the Perl 6 Archive</h3>
+    <p>To see what is currently happening visit <a href="http://www.perl6.org/">http://www.perl6.org/</a></p>
+<div class='pod'>
+<a name='TITLE'></a><h1>TITLE</h1>
+<p>Highlander Variable Types</p>
+<a name='VERSION'></a><h1>VERSION</h1>
+<pre>  Maintainer: Andy Wardley &lt;<a href='mailto:abw@kfs.org'>abw@kfs.org</a>&gt;
+  Date: 1 Aug 2000
+  Mailing List: <a href='mailto:perl6-language@perl.org'>perl6-language@perl.org</a>
+  Number: 9
+  Version: 1
+  Status: Developing</pre>
+<a name='ABSTRACT'></a><h1>ABSTRACT</h1>
+<p>Perl5 supports three distinct variable types for any given variable
+name corresponding to a scalar (<code>$var</code>), array (<code>@var</code>) and hash
+(<code>%var</code>).  This RFC proposes that only one type of variable should be
+defined for any given name.  Where an array or hash is defined
+(<code>@var</code> or <code>%var</code>), the equivalent scalar value (<code>$var</code>) would be
+an implicit reference to that array or hash array.  This would permit
+the rationalisation and simplification of the syntax required to
+access individual elements or slices of arrays and hash arrays, while
+remaining backwardly compatible with Perl5 syntax.  The only
+semantic difference would be that scripts could no longer rely on
+<code>$var</code>, <code>%var</code> and <code>@var</code> referencing different variables.</p>
+<a name='DESCRIPTION'></a><h1>DESCRIPTION</h1>
+<p>Perl5 supports three distinct variable types for any given variable
+name corresponding to a scalar (<code>$foo</code>), array (<code>@foo</code>) and hash
+(<code>%foo</code>).  Each of these may be defined and exists independantly of
+the others (NOTE: sub-routines, formats and I/O handles are outside
+the scope of this document).</p>
+<pre>    $foo =   'Hello World';
+    @foo = ( 'Hello', 'World' );
+    %foo = ( 'Hello' =&gt; 'World' );</pre>
+<p>When accessing variables, and in particular, elements or slices of
+lists or hash arrays, the <i>funny character</i> prefix is used to denote
+the multiplicity of the returned value(s); <code>$</code> = 'the', <code>@</code> =
+'these'.  Although it can be argued that this is logical and
+consistent (it is), it can also cause confusion because the prefix is
+used to denote what is returned, rather than indicating the variable
+from which the value(s) are retrieved.  For example:</p>
+<pre>    $foo[2];	           # third element of @foo, no relation to $foo
+    @foo{'bar', 'baz'};    # slice of %foo, no relation to @foo</pre>
+<p>In effect, it is the brackets <code>[]</code> that associate the variable name
+with the list type <code>@foo</code> and the braces <code>{}</code> that imply the hash
+type <code>%foo</code>.</p>
+<p>This RFC proposes that only one type of variable should be defined for
+any given name.  Where an array or hash is defined, the scalar value
+of the same name would implicitly contain a reference to that array
+or hash.  Thus there can be no confusion as to which of the variables
+is being accessed because &quot;there can be only one&quot;.</p>
+<pre>    @bar = ( 3, 5, 7 );    # $bar is implicitly \@bar
+    $bar = [ 3, 5, 7 ];    # same as above
+    $bar[2];               # third element of @bar, value 7               
+    $bar-&gt;[2];		   # same as above
+
+    %baz = ( a =&gt; 11 );	   # $baz is implicitly \%baz
+    $baz = { a =&gt; 11 };    # identical to above
+    $baz{ a };		   # 'a' entry of %baz, value 11
+    $baz-&gt;{ a };	   # same as above</pre>
+<p>The '-&gt;' would become redundant (but optional for backwards
+compatability), with an implicit dereference associated with every
+pair of braces or brackets.  In Perl 5, there is an implied '-&gt;'
+between every pair of adjacent braces or brackets but not the first,
+e.g.</p>
+<pre>    $wiz-&gt;[$x][$y][$z]    ===   $wiz-&gt;[$x]-&gt;[$y]-&gt;[$z]
+    $waz-&gt;{$x}{$y}{$z}    ===   $waz-&gt;{$x}-&gt;{$y}-&gt;{$z}</pre>
+<p>Under this proposal, the rule would apply to <i>all</i> cases and the
+above examples could be written as:</p>
+<pre>    $wiz[$x][$y][$z]
+    $waz{$x}{$y}{$z}</pre>
+<p>Array slices could be specified as either of the following:</p>
+<pre>    $bar[0..2];
+    @bar[0..2];</pre>
+<p>Similarly for hash slices:</p>
+<pre>    $baz{'a'..'c'};
+    %baz{'a'..'c'};        # for consistency (not sure about this)
+    @baz{'a'..'c'};        # for backwards compatability</pre>
+<p>In effect, all arrays and hashes are stored in <code>$var</code> as references to
+the same, with <code>@bar</code> and <code>%baz</code> being synonymous for the existing
+<code>@$bar</code> and <code>%$baz</code> constructs.</p>
+<a name='IMPLEMENTATION'></a><h1>IMPLEMENTATION</h1>
+<p>Everything depends on how the internals are reworked.</p>
+<a name='ISSUES'></a><h1>ISSUES</h1>
+<p>Sub-routines would not be affected by these changes, continuing to be
+referenced as <code>&amp;foo()</code> or <code>foo()</code>.</p>
+<p>Existing scripts can be automatically converted to preserve multiple
+variable semantics, e.g.</p>
+<pre>    $foo -&gt; $foo
+    %foo -&gt; $foo__hash
+    @foo -&gt; $foo__list</pre>
+<p>Internal multi-type variables would need renaming, e.g. @INC/%INC</p>
+<p>This RFC could do with a better title.</p>
+<a name='REFERENCES'></a><h1>REFERENCES</h1>
+<p>None yet.</p>
+</div>

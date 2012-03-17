@@ -1,0 +1,145 @@
+[% setvar title Examples encoded with %]
+<h3>This file is part of the Perl 6 Archive</h3>
+    <p>To see what is currently happening visit <a href="http://www.perl6.org/">http://www.perl6.org/</a></p>
+<div class='pod'>
+<a name='TITLE'></a><h1>TITLE</h1>
+<p>Examples encoded with =also for|begin|end POD commands</p>
+<a name='VERSION'></a><h1>VERSION</h1>
+<pre>  Maintainer: Barrie Slaymaker &lt;<a href='mailto:barries@slaysys.com'>barries@slaysys.com</a>&gt;
+  Date: 2 Aug 2000
+  Last Modified: 1 Oct 2000
+  Mailing List: <a href='mailto:perl-qa@perl.org'>perl-qa@perl.org</a>
+  Number: 11
+  Version: 2
+  Status: Frozen</pre>
+<a name='ABSTRACT'></a><h1>ABSTRACT</h1>
+<p><i>Note: written in the present tense, though =also, Pod::Tests, and
+pod2tests are not yet implemented</i>.</p>
+<p>The <code>=also for|begin|end</code> commands are shorthand having two copies
+of a section of POD (typically an example), one normal copy, and one
+delimited by <code>=for</code> or <code>=begin</code> ...<code>=end</code>.  This supports
+semi-literate programming techniques, allowing examples in POD to be
+extracted and tested.  It does not affect normal compilation of
+the source code, though older POD parsers may emit warnings.</p>
+<a name='DESCRIPTION'></a><h1>DESCRIPTION</h1>
+<p>Many existing programs and modules include POD examples demostrating
+how too use the command or API provided.  These examples are rarely
+tested or maintained, and can lead to lost time on the part of the
+module's or program's users.</p>
+<p>Extracting these examples using Pod::Tests (usually by running
+pod2tests) on the source file and emitting them as test scripts
+provides a service both to the POD user and to the code
+maintainer.</p>
+<p>The <code>=also</code> tag allows extractors like Pod::Tests to select
+exactly the same text that the POD user sees, so that the
+code maintainer can be sure that the documentation is at least
+partially correct.</p>
+<p>Technically, a feature like this could be used to support literate
+programming of a modules' source code, but that is not the intent
+of the <code>=also</code> tag.</p>
+<a name='Example'></a><h2>Example</h2>
+<p>The <code>=also</code> tag, in combination with special purpose parsers,
+allows a Pod::Parser based pod2text to process POD like:</p>
+<pre>  =item run
+
+  =for test run.t
+     #!perl -w
+     use Test ;
+     use IPC::Run qw( run ) ;
+     $cmd = $^X ;
+     @args = ( '-e', 'print &quot;hello world\n&quot;' ) ;
+     ( $in, $out, $err ) = ('') x 3 ;
+     plan tests =&gt; 2 ;
+
+  =also for test run.t
+     $r = run( [$cmd, @args], \$in, \$out, \$err ) ;
+
+  =for test run.t
+     ok( $out, &quot;hello world\n&quot; ) ;
+     ok( $err, &quot;&quot; ) ;
+
+  The run() method blah, blah, blah...
+
+  =cut
+
+  sub run {
+     ...
+  }</pre>
+<p>and provide output like:</p>
+<pre>    run
+    
+       $r = run( [$cmd, @args], \$in, \$out, \$err ) ;
+    
+    The run() method blah, blah, blah...
+    </pre>
+<p>.  It also allows pod2tests to process the same POD and produce a test
+script t/run.t containing code like</p>
+<pre>  #!perl -w
+     use Test ;
+     use IPC::Run qw( run ) ;
+     $cmd = $^X ;
+     @args = ( '-e', 'print &quot;hello world\n&quot;' ) ;
+     ( $in, $out, $err ) = ('') x 3 ;
+     plan tests =&gt; 2 ;
+     $r = run( [$cmd, @args], \$in, \$out, \$err ) ;
+     ok( $out, &quot;hello world\n&quot; ) ;
+     ok( $err, &quot;&quot; ) ;</pre>
+<p>The '#line' directives are not shown in this example script for clarity.</p>
+<a name='IMPLEMENTATION'></a><h1>IMPLEMENTATION</h1>
+<p>The <code>=also</code> command is implemented in Pod::Parser in a process
+called &quot;=also mangling&quot;. This process passes the
+marked regions to the Pod::Parser handlers twice, once in
+&quot;plain POD&quot; mode, which looks to the handlers exactly as
+though the lines
+beginning with <code>=also</code> weren't present, and then a second time
+in &quot;<code>=for</code>/<code>=begin</code>&quot; mode, as
+though they were enclosed by <code>=for</code>, <code>=begin</code>, and <code>=end</code>
+commands.</p>
+<p>This means that each paragraph marked as <code>=also for foo</code>
+results in two calls, the first to verbatim() or textblock(),
+and the second to command(), with a command value of '=for'.</p>
+<p>Paragraph sequences bounded by <code>=also begin foo</code> and <code>=also
+end foo</code> are passed when parsed to verbatim() or textblock()
+as they are parsed.</p>
+<p>They are also accumulated until the <code>=also end foo</code>
+tag is found.  The command() handler is then called with a
+command value of &quot;=begin&quot;, followed by a duplicate series
+of calls to verbatim() and textblock(), followed by a
+call to command() with a command value of &quot;=end&quot;.</p>
+<p>If needed at some future point, an option can be added to
+Pod::Parser to make it treat <code>=also</code> as a normal command,
+as can a &quot;mangle_also&quot; property to discover if <code>=also</code> mangling
+is supported (via can()) and  to query or set the mangling
+option.</p>
+<p>Pod::Parser based translators that generate documentation
+(all &quot;normal&quot; pod translators)
+ignore the second &quot;<code>=for</code>/<code>=begin</code>&quot; version of the <code>=also</code>
+paragraphs and only emit output for the &quot;as plain POD&quot; calls.
+See below for why using <code>=also</code> to direct paragraphs to such
+processors is a Bad Idea.</p>
+<p>Pod::Parser based processors that extract only those POD segments
+<code>=for</code> them ignore anything not intended for them, so they
+ignore the first &quot;plain POD&quot; set of calls generated by <code>=also</code>
+sections and only see the second &quot;<code>=for</code>/<code>=begin</code>&quot; version.</p>
+<p>This duplicitous subterfuge is a bit awkward, but it was designed
+to allow the &quot;=also&quot; command handling to be added only to Pod::Parser
+and to not affect existing parsers.</p>
+<a name='Compatibility with =for html, =for text, etc.'></a><h2>Compatibility with =for html, =for text, etc.</h2>
+<p>Using <code>=also</code> to flag sections for documentation translators is
+a mistake.  For example,
+a command <code>=also for html &lt;P&gt;blah</code> will cause POD to HTML
+translators to output something like &quot;&amp;lt;P&amp;gt;blah&lt;P&gt;blah&quot;,
+which makes for confusing reading.</p>
+<a name='Backwards Compatibility'></a><h2>Backwards Compatibility</h2>
+<p>Using the =also tag can cause older parser to emit &quot;unrecognized
+directive&quot; warnings and possibly may cause them to exit
+prematurely.</p>
+<p>The solution is to upgrade to Pod::Parser based translators if
+possible, or to ignore the warnings if not.  If the translator
+in question exits prematurely and an upgrade is not possible,
+it will need to be patched.</p>
+<a name='REFERENCES'></a><h1>REFERENCES</h1>
+<pre>  RFC ??: &quot;=for test and pod2test&quot;
+  perlpod manpage
+  Pod::Parser</pre>
+</div>

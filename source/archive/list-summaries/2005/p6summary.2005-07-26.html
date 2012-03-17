@@ -1,0 +1,115 @@
+[% setvar title Perl 6 Summary for 2005-07-19 through 2005-07-26 %]
+<h3>This file is part of the Perl 6 Archive</h3>
+    <p>To see what is currently happening visit <a href="http://www.perl6.org/">http://www.perl6.org/</a></p>
+<div class='pod'>
+<a name='Perl 6 Summary for 2005-07-19 through 2005-07-26'></a><h1>Perl 6 Summary for 2005-07-19 through 2005-07-26</h1>
+<p>All~</p>
+<p>Welcome to another Perl 6 Summary brought to you by microwaved chinese food and air conditioning.  I love the modern era.  Without further ado, I bring you</p>
+<a name='Perl 6 Compilers'></a><h2>Perl 6 Compilers</h2>
+<p>Grégoire Péan announed the release of PxPerl 5.8.7-3, allowing people who want to play with Pugs and Parrot on windows easy access.</p>
+<p><a href='http://groups-beta.google.com/group/perl.perl6.compiler/browse_frm/thread/72ef8db2a30decff/d6cdda584ed03036' target='_blank'>groups-beta.google.com</a>#d6cdda584ed03036</p>
+<a name='Test Report for Windows'></a><h3>Test Report for Windows</h3>
+<p>Ronald Hill reported some failing tests for Pugs on windows.  Fortunately, given Pugs's developement, there is a reasonable chance of these problems being fixed.  Unfortunately, given Pugs developement, no such information made it to the list.</p>
+<p><a href='http://groups-beta.google.com/group/perl.perl6.compiler/browse_frm/thread/59cbdc5407af6d1d/b5fab8f688683f68' target='_blank'>groups-beta.google.com</a>#b5fab8f688683f68</p>
+<a name='Parsing Perl6 Rules'></a><h3>Parsing Perl6 Rules</h3>
+<p>Nathan Gray wondered how Jeff Pinyan's parsing perl6 rules project was going.  Jeff said that it did not get very far, but he posted what he did have to <a href='http://feather.perl6.nl/~japhy/.' target='_blank'>feather.perl6.nl</a></p>
+<p><a href='http://groups-beta.google.com/group/perl.perl6.compiler/browse_frm/thread/b015b73040e20441/1468fa0cd2c60b47' target='_blank'>groups-beta.google.com</a>#1468fa0cd2c60b47</p>
+<a name='Pugs Problems'></a><h3>Pugs Problems</h3>
+<p>Vadim Konovalov was playing with slurp and found two problems.  Adriano Ferreira showed him how to work around slurp not accepting a <code>:raw</code> option.  Nobody commented on the peculariar <code>$*ARGS[0]</code> value when the argument is <code>-foobarfluffy</code>.</p>
+<p><a href='http://groups-beta.google.com/group/perl.perl6.compiler/browse_frm/thread/82ee149bb2d85bc1/4d1fcdb883424696' target='_blank'>groups-beta.google.com</a>#4d1fcdb883424696</p>
+<a name='Official Perl6 Rules Grammar'></a><h3>Official Perl6 Rules Grammar</h3>
+<p>Patrick announced an  &quot;official Perl 6 grammar&quot; whichi he would be mainting closely with PGE in Parrot.  It is incomplete at this point, but patches are most welcome.</p>
+<p><a href='http://groups-beta.google.com/group/perl.perl6.compiler/browse_frm/thread/0011d8b97dee7e89/55fb939f0dee60c2' target='_blank'>groups-beta.google.com</a>#55fb939f0dee60c2</p>
+<a name='PIL Nodes's Descriptions'></a><h3>PIL Nodes's Descriptions</h3>
+<p>Allison Randal posted a request for a clue batting, listing various types of nodes in PIL and explaining her guess at their descriptions.  Stuart Cook and Patrick both provided a little help, although not everything on her list was addressed.</p>
+<p><a href='http://groups-beta.google.com/group/perl.perl6.compiler/browse_frm/thread/e044f2bf561fe482/6bd06c83cd64f720' target='_blank'>groups-beta.google.com</a>#6bd06c83cd64f720</p>
+<a name='Perl 6 FAQ Patch'></a><h3>Perl 6 FAQ Patch</h3>
+<p>Autrijus provided a patch for the Perl 6 FAQ removing an outdated question.  Robert Spier applied the patch (modulo some confusion about staged vs live copies).</p>
+<p><a href='http://groups-beta.google.com/group/perl.perl6.compiler/browse_frm/thread/e390005d62b36314/1f78076fe32525de' target='_blank'>groups-beta.google.com</a>#1f78076fe32525de</p>
+<a name='Parrot'></a><h2>Parrot</h2>
+<a name='Opcode Optimizability'></a><h3>Opcode Optimizability</h3>
+<p>Curtis Rawls noted that it is often simpler from an optimizer writers standpoint to do constant folding and optimization on a smaller set of opcodes (just one variant add instead of five (seven if you count inc and dec)).  Leo explained that removing these opcodes isn't an option, but that a suggestion for compiler writers to only emit the more verbose codes could be added to the faq.</p>
+<p><a href='http://groups-beta.google.com/group/perl.perl6.internals/browse_frm/thread/9d51af690526ca50/7ce11972f9700fc4' target='_blank'>groups-beta.google.com</a>#7ce11972f9700fc4</p>
+<a name='Refcounting Hash'></a><h3>Refcounting Hash</h3>
+<p>Nicholas Clark wants to use a hash to hold reference counts for Ponie (something like dod_register_pmc in pmc.c), but he doesn't want to duplicate code.  Leo suggested that he move some of the code into a pmc and then switch the real registry to use that PMC.</p>
+<p><a href='http://groups-beta.google.com/group/perl.perl6.internals/browse_frm/thread/5c57948de0eb65d5/4524a529265756a1' target='_blank'>groups-beta.google.com</a>#4524a529265756a1</p>
+<a name='New PGE Test'></a><h3>New PGE Test</h3>
+<p>Mitchell N Charity submited a test for a &quot;large&quot; pugs grammar, which currently fails.  Patrick noted that the test like came from rx_grammar.pl in the Pugs distribution.  This probably led to his above addition of an &quot;Official Perl6 Rules Grammar&quot;.</p>
+<p><a href='http://groups-beta.google.com/group/perl.perl6.internals/browse_frm/thread/64c78fe69846258d/5be1667694bf333b' target='_blank'>groups-beta.google.com</a>#5be1667694bf333b</p>
+<a name='Jit Emit Help'></a><h3>Jit Emit Help</h3>
+<p>Adam Preble decided that he would play with an x86_64 code generator.  Unfortunately, he was hitting some stumbling blocks.  Leo offered to help him and provided pointers from #parrot.</p>
+<p><a href='http://groups-beta.google.com/group/perl.perl6.internals/browse_frm/thread/be7db5a4fa863bf4/e0016e90bd49ac12?utoken=2ft0QzcAAADWXQ4sS--whFjzzhFxvEM00gQo7AZl4XkybyOr3FDcx1wpJJKp5Fy_CeG7_g7HuOvyH7OCrUDUWaccdqfgXNOG' target='_blank'>groups-beta.google.com</a></p>
+<a name='Call Opcode Cleanup'></a><h3>Call Opcode Cleanup</h3>
+<p>Leo wants to cleanup some of the various invoke opcodes.  He posted a request for comment, but Warnock applies.  It seems that Leo's request for comments like this get Warnocked a lot...</p>
+<p><a href='http://groups-beta.google.com/group/perl.perl6.internals/browse_frm/thread/84a72c2aaf83c847/d2efb9430a077b30' target='_blank'>groups-beta.google.com</a>#d2efb9430a077b30</p>
+<p><a href='http://groups-beta.google.com/group/perl.perl6.internals/browse_frm/thread/84a72c2aaf83c847/d2efb9430a077b30' target='_blank'>groups-beta.google.com</a>#d2efb9430a077b30</p>
+<a name='spawnw Return Value'></a><h3><code>spawnw</code> Return Value</h3>
+<p>Jerry Gay opened a TODO ticket for switching spawnw to return something object like to wrap platform-specific oddities.  Prompted by Jonathan Worthington submitting a patch to make the spawnw tests pass on windows (which was applied).</p>
+<p><a href='http://groups-beta.google.com/group/perl.perl6.internals/browse_frm/thread/efb75561665e2c80/bb36e3935b3179ad' target='_blank'>groups-beta.google.com</a>#bb36e3935b3179ad -- Ticket</p>
+<p><a href='http://groups-beta.google.com/group/perl.perl6.internals/browse_frm/thread/b3b8c5aecdcc2354/759b9235518ec3e9' target='_blank'>groups-beta.google.com</a>#759b9235518ec3e9 -- TODO</p>
+<a name='Bugs in ops2vim.pl'></a><h3>Bugs in ops2vim.pl</h3>
+<p>Amir Karger noticed a bug in ops2vim.pl and suggested a fix.  Jerry Gay fixed it.</p>
+<p><a href='http://groups-beta.google.com/group/perl.perl6.internals/browse_frm/thread/1791b6c68817f702/6ba2941807f35823' target='_blank'>groups-beta.google.com</a>#6ba2941807f35823</p>
+<a name='Leo's Ctx Branch Tests'></a><h3>Leo's Ctx Branch Tests</h3>
+<p>Jerry Gay and Leo worked together to get his branch passing a few more tests on windows.  Nick Glencross wondered if the python dynclasses tests were being run too.  Jonathan Worthington explained that they were being skipped for the moment.</p>
+<p><a href='http://groups-beta.google.com/group/perl.perl6.internals/browse_frm/thread/3a36357193751b7c/f08ee194474ddbfe' target='_blank'>groups-beta.google.com</a>#f08ee194474ddbfe</p>
+<a name='Raised by the Aliens'></a><h3>Raised by the Aliens</h3>
+<p>Matt Diephouse was surprised to discover that you cannot use addparent with a PMC for either argument.  He suggested that this be made to work or officially documented.</p>
+<p><a href='http://groups-beta.google.com/group/perl.perl6.internals/browse_frm/thread/5e7adae80c68ae2c/0702375e91fd82a8' target='_blank'>groups-beta.google.com</a>#0702375e91fd82a8</p>
+<a name='Patches Accumulating'></a><h3>Patches Accumulating</h3>
+<p>Leo requested that people with commit bits pick up some of the patches that were building up as he was running a little low on tuits.</p>
+<p><a href='http://groups-beta.google.com/group/perl.perl6.internals/browse_frm/thread/571902f4a4f653f2/9e8223e529f9ba66' target='_blank'>groups-beta.google.com</a>#9e8223e529f9ba66</p>
+<a name='Dump CFG'></a><h3>Dump CFG</h3>
+<p>Curtis Rawls moved the dump_cfg call from reg_alloc.c to cfg.c.  Leo applied the patch.</p>
+<p><a href='http://groups-beta.google.com/group/perl.perl6.internals/browse_frm/thread/6ef439c886066b14/55e991eba8cdcd52' target='_blank'>groups-beta.google.com</a>#55e991eba8cdcd52</p>
+<a name='string_to_cstring leaks'></a><h3>string_to_cstring leaks</h3>
+<p>Jonathan Worthington plugged a few leaks caused by string_to_cstring.  Leo applied the patch.</p>
+<p><a href='http://groups-beta.google.com/group/perl.perl6.internals/browse_frm/thread/f1a4315013d4c915/672164862ef435bc' target='_blank'>groups-beta.google.com</a>#672164862ef435bc</p>
+<a name='Deleting Globals/Lexicals'></a><h3>Deleting Globals/Lexicals</h3>
+<p>Matt Diephouse noted that there was no way to delete globals or lexicals.  Leo posted one (untested) way to do it.</p>
+<p><a href='http://groups-beta.google.com/group/perl.perl6.internals/browse_frm/thread/e21b573a0ea70bde/65f90008008e2c3c' target='_blank'>groups-beta.google.com</a>#65f90008008e2c3c</p>
+<a name='Generating Win32 Executables'></a><h3>Generating Win32 Executables</h3>
+<p>Jonathan Worthington laid some ground work for generating executables on windows.  Leo applied the patch.</p>
+<p><a href='http://groups-beta.google.com/group/perl.perl6.internals/browse_frm/thread/6854673d53122c92/607b7bf7c9e361c8' target='_blank'>groups-beta.google.com</a>#607b7bf7c9e361c8</p>
+<a name='Library Loading on Win32'></a><h3>Library Loading on Win32</h3>
+<p>Jonathan Worthington beefed up the library searching logic in Parrot to be a little more Windowsy.  Leo applied the patch.</p>
+<p><a href='http://groups-beta.google.com/group/perl.perl6.internals/browse_frm/thread/f047dcf93759ecab/6e03ce901bb57ca5' target='_blank'>groups-beta.google.com</a>#6e03ce901bb57ca5</p>
+<a name='PBC Merge Utility'></a><h3>PBC Merge Utility</h3>
+<p>Leo posted a request for a utility that could merge several pbc files into one.</p>
+<p><a href='http://groups-beta.google.com/group/perl.perl6.internals/browse_frm/thread/8b4e5b0f87adba1d/57ed94ccb95085f8' target='_blank'>groups-beta.google.com</a>#57ed94ccb95085f8</p>
+<a name='Calling Super Methods'></a><h3>Calling Super Methods</h3>
+<p>Matt Diephouse noticed that there was no way to call the method from a super class.  Leo pointed out a way to do it by accessing the slots of the parent directly.</p>
+<p><a href='http://groups-beta.google.com/group/perl.perl6.internals/browse_frm/thread/2bf16c7f57ee1a2e/59ec396d410b5d29' target='_blank'>groups-beta.google.com</a>#59ec396d410b5d29</p>
+<a name='Cmd Buffer Reallocation'></a><h3>Cmd Buffer Reallocation</h3>
+<p>Greg Bacon fixed a bug in the reallocation of the cmd buffer on Win32.  Jonathan Worthington applied the patch.</p>
+<p><a href='http://groups-beta.google.com/group/perl.perl6.internals/browse_frm/thread/3b01415e4da2325f/20c2be9a86a7a693' target='_blank'>groups-beta.google.com</a>#20c2be9a86a7a693</p>
+<a name='Data::Dump(PGE)'></a><h3>Data::Dump(PGE)</h3>
+<p>Will Coleda added a TODO for making PGE's match objects compatible with Data::Dumper.</p>
+<p><a href='http://groups-beta.google.com/group/perl.perl6.internals/browse_frm/thread/d819d5808bcfa1e3/0c0ef49282c078e7' target='_blank'>groups-beta.google.com</a>#0c0ef49282c078e7</p>
+<a name='does Hash'></a><h3>does Hash</h3>
+<p>Will Coleda wants Data::Dumper to check if an object does Hash or Array and dump it thusly if no default dump is implemented.</p>
+<p><a href='http://groups-beta.google.com/group/perl.perl6.internals/browse_frm/thread/57829b80613a030f/eba85e09e75dd15e' target='_blank'>groups-beta.google.com</a>#eba85e09e75dd15e</p>
+<a name='rx.ops's future'></a><h3>rx.ops's future</h3>
+<p>Will Coleda wondered what the future of the rx ops. Brent 'Dax' Royal-Gordon, who wrote them, recons they are not long for this work.  He reckonned that the intstacks and the bitmap handling code might be worth saving.</p>
+<p><a href='http://groups-beta.google.com/group/perl.perl6.internals/browse_frm/thread/5087777195497561/6f8550b9c3e177b1' target='_blank'>groups-beta.google.com</a>#6f8550b9c3e177b1</p>
+<a name='Debugger - List breakpoints'></a><h3>Debugger - List breakpoints</h3>
+<p>Will Coleda noticed that the debugger was not quite compatible with perl's.  Leo replied that the debuggers whole command loop was a mess that required a turn of the crank.</p>
+<p><a href='http://groups-beta.google.com/group/perl.perl6.internals/browse_frm/thread/caf85c11387a0550/d8343c914258b2f4' target='_blank'>groups-beta.google.com</a>#d8343c914258b2f4</p>
+<a name='\u escape issues'></a><h3>\u escape issues</h3>
+<p>Will Coleda opened a ticket for some unicode escape issues.  Leo asked for a test case.</p>
+<p><a href='http://groups-beta.google.com/group/perl.perl6.internals/browse_frm/thread/c5fec6e374846f70/ea379969e2c28c73' target='_blank'>groups-beta.google.com</a>#ea379969e2c28c73</p>
+<a name='string -&gt; int conversions'></a><h3>string -&gt; int conversions</h3>
+<p>Matt Diephouse noticed that there was no opcode Octal and Hex conversions.  Leo suggested adding one of the form <code> set Ix, Sy, Ibase  # Ibase = 2..36 </code>.</p>
+<p><a href='http://groups-beta.google.com/group/perl.perl6.internals/browse_frm/thread/1460def887a4d5c6/2423989ff6a521de' target='_blank'>groups-beta.google.com</a>#2423989ff6a521de</p>
+<a name='Make make languages Failures Nonfatal'></a><h3>Make <code> make languages </code> Failures Nonfatal</h3>
+<p>Bernhard Schmalhofer suggested that <code> make languages </code> should not give up after the first failure, but should instead build the remaining languages.</p>
+<p><a href='http://groups-beta.google.com/group/perl.perl6.internals/browse_frm/thread/c471cd54c2f4d224/ef07478f722221f5' target='_blank'>groups-beta.google.com</a>#ef07478f722221f5</p>
+<a name='Dynclasses on Windows'></a><h3>Dynclasses on Windows</h3>
+<p>Nick Glencross and Jonathan Worthington discussed how to make dynclasses build on windows.</p>
+<p><a href='http://groups-beta.google.com/group/perl.perl6.internals/browse_frm/thread/2bf0400fe7338eef/5e293e31dfb2e70c' target='_blank'>groups-beta.google.com</a>#5e293e31dfb2e70c</p>
+<a name='Resizable*Array Allocation'></a><h3>Resizable*Array Allocation</h3>
+<p>Matt Fowles submitted a patch making all the various Resizeable*Array pmcs share their allocation strategy.  Bernhard Schmalhofer applied the patch.</p>
+<p><a href='http://groups-beta.google.com/group/perl.perl6.internals/browse_frm/thread/292d52cb41823a62/7b5c88c024a74769' target='_blank'>groups-beta.google.com</a>#7b5c88c024a74769</p>
+<a name='MMD Roundup - Take 2'></a><h3>MMD Roundup - Take 2</h3>
+<p>Nicholas Clark attempted to dewarnock a suggested change by Leo.  Unfortunately, his thoughts on the matter were &quot;this is really a call for the designer to make, isn't it?&quot;.  Leo suggested starting a WARNOCKED file for these thin</p>
+</div>

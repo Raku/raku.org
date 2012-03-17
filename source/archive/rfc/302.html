@@ -1,0 +1,34 @@
+[% setvar title Unrolling loops and tail recursion %]
+<h3>This file is part of the Perl 6 Archive</h3>
+    <p>To see what is currently happening visit <a href="http://www.perl6.org/">http://www.perl6.org/</a></p>
+<div class='pod'>
+<a name='TITLE'></a><h1>TITLE</h1>
+<p>Unrolling loops and tail recursion</p>
+<a name='VERSION'></a><h1>VERSION</h1>
+<pre>  Maintainer: Simon Cozens &lt;<a href='mailto:simon@brecon.co.uk'>simon@brecon.co.uk</a>&gt;
+  Date: 25 Sep 2000
+  Mailing List: <a href='mailto:perl6-internals@perl.org'>perl6-internals@perl.org</a>
+  Number: 302
+  Version: 1
+  Status: Developing</pre>
+<a name='ABSTRACT'></a><h1>ABSTRACT</h1>
+<p>Implement loop unrolling and tail recursion elimination as optional
+optimisations.</p>
+<a name='DESCRIPTION'></a><h1>DESCRIPTION</h1>
+<p>Tail recursion elimination is something which has been on the todo for a
+long time, but I think nobody's done it because it's really really hard.
+I'd suggest</p>
+<pre>    use optimize 'recursion';</pre>
+<p>would be a natural syntax, if <code>less</code> turns into <code>optimize</code>.</p>
+<p>Unrolling of loops is something that becomes important for compiling to
+standalone executables; I think</p>
+<pre>    use optimize 'unroll-loops';</pre>
+<p>would be the way to signify that. If we have a standalone compiler, I'd
+suggest the cc-style <code>-f...</code> command-line options.</p>
+<a name='IMPLEMENTATION'></a><h1>IMPLEMENTATION</h1>
+<p>I have no idea how to implement tail recursion elimination, and I'd
+dearly love to learn. Unrolling loops with constant indices shouldn't be
+too hard.</p>
+<a name='REFERENCES'></a><h1>REFERENCES</h1>
+<p>RFC 303: Keep <code>use less</code>, but make it work.</p>
+</div>
