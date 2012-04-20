@@ -11,7 +11,7 @@ Here are some guidelines that you should respect when changing this site:
 
   * Be nice.
 
-  * Don't hesitate to link to pages you wrote youself, if they are helpful to
+  * Don't hesitate to link to pages you wrote yourself, if they are helpful to
     a broader Perl 6 audience.
 
   * If you have a Perl 6 blog, get it included in the planetsix.perl.org feed
@@ -26,8 +26,8 @@ Here are some guidelines that you should respect when changing this site:
     to badly broken browsers. IE6 still needs to be considered (2009-07).
     IE5.5 and below can be ignored.
 
-  * We spell "Perl 6" consistently with a non-breaking space. If you don't have
-    already, go get an editor with decent Unicode support.
+  * We spell "Perl 6" consistently with a non-breaking space. If you don't
+    already have one, go get an editor with decent Unicode support.
 
   * Speaking of which, all pages are served as UTF-8.
 
