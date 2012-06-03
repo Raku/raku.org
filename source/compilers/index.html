@@ -11,100 +11,98 @@
     are multiple compilers for the language.</p>
 </div>
 
-<div id="main">
-    <div id="compilers" class="box">
-	<h3>Compilers</h3>
-	<ul>
-	    <li>
-		<a href="http://rakudo.org/">Rakudo</a> is copyrighted by the Perl
-		Foundation, was born and raised in the <a href="http://www.parrot.org/">
-		Parrot virtual machine</a>, and is actively developed
-		<a href="http://github.com/rakudo/rakudo">here</a>. <a
-		href="http://rakudo.org/how-to-get-rakudo">Download or compile
-		Rakudo</a>.
-	    </li>
+<!-- Three-column CSS magic -->
+<div id="col1">
+    <h3>Compilers</h3>
+    <ul>
+        <li>
+        <a href="http://rakudo.org/">Rakudo</a> is copyrighted by the Perl
+        Foundation, was born and raised in the <a href="http://www.parrot.org/">
+        Parrot virtual machine</a>, and is actively developed
+        <a href="http://github.com/rakudo/rakudo">here</a>. <a
+        href="http://rakudo.org/how-to-get-rakudo">Download or compile
+        Rakudo</a>.
+        </li>
 
-	    <li>
-		<a href="http://github.com/sorear/niecza">Niecza</a> is a compiler
-		targetting the Common Language Runtime (.NET and Mono).  Its goal
-		is to explore the static aspects of Perl 6 and the possibilities
-		for compile-time optimization.
-	    </li>
+        <li>
+        <a href="http://github.com/sorear/niecza">Niecza</a> is a compiler
+        targetting the Common Language Runtime (.NET and Mono).  Its goal
+        is to explore the static aspects of Perl 6 and the possibilities
+        for compile-time optimization.
+        </li>
 
-	    <li>
-		<a href="/compilers/std-viv">STD</a>
-		is Larry Wall's reference implementation of the Perl 6 grammar,
-		parser generator, and some of the semantic verifier. STD is an
-		abbreviation of "Standard", as in "Perl6.0.0-STD". It is written in
-		Perl 6, transliterated into Perl 5 by viv.
-		It is also used by
-		various phases of several other compilers (mildew, perlito, elf).
-	    </li>
+        <li>
+        <a href="/compilers/std-viv">STD</a>
+        is Larry Wall's reference implementation of the Perl 6 grammar,
+        parser generator, and some of the semantic verifier. STD is an
+        abbreviation of "Standard", as in "Perl6.0.0-STD". It is written in
+        Perl 6, transliterated into Perl 5 by viv.
+        It is also used by
+        various phases of several other compilers (mildew, perlito, elf).
+        </li>
 
-	    <li>
-		<a href="/compilers/std-viv">viv</a> ("vi" to "v", 6 to 5)
-		is a compiler that uses STD as its front-end. STD itself uses viv to
-		build. It is actively developed along with STD.
-	    </li>
+        <li>
+        <a href="/compilers/std-viv">viv</a> ("vi" to "v", 6 to 5)
+        is a compiler that uses STD as its front-end. STD itself uses viv to
+        build. It is actively developed along with STD.
+        </li>
+        <li>
+        <a href="http://www.perlito.org/">Perlito</a>, also known as MiniPerl6,
+        is a subset of Perl 6, designed as a light bootstrapping language.
+        You can <a href="http://www.perlito.org/js">try it online</a>. It is
+        actively developed <a href="http://github.com/fglock/Perlito/">here</a>.
+        </li>
 
-	    <li>
-		<a href="http://www.perlito.org/">Perlito</a>, also known as MiniPerl6,
-		is a subset of Perl 6, designed as a light bootstrapping language.
-		You can <a href="http://www.perlito.org/js">try it online</a>. It is
-		actively developed <a href="http://github.com/fglock/Perlito/">here</a>.
-	    </li>
+        <li>
+        <a href="http://github.com/masak/yapsi">Yapsi</a> is Yet Another
+        Perl Six Implementation, an implementation of a Perl 6
+        compiler-and-runtime in Perl 6.  Yapsi issues monthly releases
+        and is actively developed.
+        </li>
 
-	    <li>
-		<a href="http://github.com/masak/yapsi">Yapsi</a> is Yet Another
-		Perl Six Implementation, an implementation of a Perl 6
-		compiler-and-runtime in Perl 6.  Yapsi issues monthly releases
-		and is actively developed.
-	    </li>
+        <li>
+        <a
+        href="http://github.com/diakopter/sprixel">Sprixel</a> was a
+        Perl 6 compiler targetting the Common Language Runtime (.NET
+        and Mono).  It has a storied history (many total rewrites), but it
+        intended to implement a small strongly/natively-typed
+        functional-programming subset of Perl 6 ("perlesque"), but
+        specifically the flavor of Perl 6 used by STD, to facilitate
+        quick bootstrapping of the official STD grammar and Cursor parser
+        engine to the CLR.  It is no longer actively developed.
+        </li>
 
-	    <li>
-		<a
-		href="http://github.com/diakopter/sprixel">Sprixel</a> was a
-		Perl 6 compiler targetting the Common Language Runtime (.NET
-		and Mono).  It has a storied history (many total rewrites), but it
-		intended to implement a small strongly/natively-typed
-		functional-programming subset of Perl 6 ("perlesque"), but
-		specifically the flavor of Perl 6 used by STD, to facilitate
-		quick bootstrapping of the official STD grammar and Cursor parser
-		engine to the CLR.  It is no longer actively developed.
-	    </li>
+        <li>
+        <a href="http://pugscode.org/">Pugs</a> is written in Haskell.
+        Maintenance releases for successive versions of ghc are published to
+        <a href="http://hackage.haskell.org/package/Pugs">Hackage</a>.
+        The most recent (6.2.13.20110519 as of this writing (2011-07-27)) was
+        released 2011-05-19.
+        </li>
+    </ul>
+</div>
 
-	    <li>
-		<a href="http://pugscode.org/">Pugs</a> is written in Haskell.
-		Maintenance releases for successive versions of ghc are published to
-		<a href="http://hackage.haskell.org/package/Pugs">Hackage</a>.
-		The most recent (6.2.13.20110519 as of this writing (2011-07-27)) was
-		released 2011-05-19.
-	    </li>
-	</ul>
-    </div>
+<div id="features" class="wide box">
+<h3>Feature matrix</h3>
+<p>To see which compilers implement which Perl 6 features, please see
+  our <a href="/compilers/features">feature comparison matrix</a>.</p>
+</div>
 
-    <div id="features" class="box">
-	<h3>Feature matrix</h3>
-	<p>To see which compilers implement which Perl 6 features, please see
-	  our <a href="/compilers/features">feature comparison matrix</a>.</p>
-    </div>
+<div id="supplementals" class="wide box">
+<h3>Supplementals</h3>
+<ul>
+    <li>
+    <a
+    href="http://use.perl.org/~JonathanWorthington/journal/39530">Blizkost</a>
+    is a Perl 5 bridge for Parrot, making Perl 5 code available from
+    Rakudo and other parrot-based compilers.
+    </li>
 
-    <div id="supplementals" class="box">
-	<h3>Supplementals</h3>
-	<ul>
-	    <li>
-		<a
-		href="http://use.perl.org/~JonathanWorthington/journal/39530">Blizkost</a>
-		is a Perl 5 bridge for Parrot, making Perl 5 code available from
-		Rakudo and other parrot-based compilers.
-	    </li>
+    <li>
+    <a
+    href="http://github.com/rakudo/rakudo/tree/nom/src/core/">Rakudo's
+    setting library</a>
+    </li>
 
-	    <li>
-		<a
-		href="http://github.com/rakudo/rakudo/tree/nom/src/core/">Rakudo's
-		setting library</a>
-	    </li>
-
-	</ul>
-    </div>
+</ul>
 </div>

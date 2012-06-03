@@ -100,6 +100,12 @@ div a:hover, #header a:hover {
     float: left;
 }
 
+.wide {
+    width: 23em;
+    margin: 0 0 1em;
+    float: right;
+}
+
 #col1, #col2 {
     width: 23em;
     padding: 1em 2em 1em 2em;
