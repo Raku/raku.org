@@ -27,11 +27,12 @@ h4 {
     font-weight: bold;
     -moz-box-shadow: 5px 5px 10px #888;
     -webkit-box-shadow: 5px 5px 10px #888;
+    box-shadow: 5px 5px 10px #888;
     border: 0.2em solid #63a4ff;
     background: #80b5ff;
-    border-radius: 1em;
     -moz-border-radius: 1em;
     -webkit-border-radius: 1em;
+    border-radius: 1em;
     position: relative;
     padding: 0em 1em 0em 1em;
 }
@@ -84,6 +85,7 @@ div a:hover, #header a:hover {
     color: #000000;
     -moz-box-shadow: 5px 5px 10px #888;
     -webkit-box-shadow: 5px 5px 10px #888;
+    box-shadow: 5px 5px 10px #888;
     -moz-border-radius: 1em;
     -webkit-border-radius: 1em;
     border-radius: 1em;
@@ -132,6 +134,7 @@ div a:hover, #header a:hover {
     border: 2px solid white;
     -moz-box-shadow: 5px 5px 10px white;
     -webkit-box-shadow: 5px 5px 10px white;
+    box-shadow: 5px 5px 10px white;
 }
 
 #nav-home {
@@ -179,8 +182,10 @@ li {
     padding:   1ex;
     -moz-border-radius: 0.5ex;
     -webkit-border-radius: 0.5ex;
+    border-radius: 0.5ex;
     -moz-box-shadow: 5px 5px 10px #888;
     -webkit-box-shadow: 5px 5px 10px #888;
+    box-shadow: 5px 5px 10px #888;
 }
 
 #navigation li a {
