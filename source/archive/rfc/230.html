@@ -1,0 +1,730 @@
+<?xml version="1.0" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>TITLE</title>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<link rev="made" href="mailto:root@localhost" />
+</head>
+
+<body style="background-color: white">
+
+
+<!-- INDEX BEGIN -->
+<div name="index">
+<p><a name="__index__"></a></p>
+
+<ul>
+
+	<li><a href="#title">TITLE</a></li>
+	<li><a href="#version">VERSION</a></li>
+	<li><a href="#abstract">ABSTRACT</a></li>
+	<li><a href="#description">DESCRIPTION</a></li>
+	<ul>
+
+		<li><a href="#the_format__format_function">The <code>Format::format</code> function</a></li>
+		<ul>
+
+			<li><a href="#multi_line_filling">Multi-line filling</a></li>
+			<li><a href="#hyphenation_and_line_breaking">Hyphenation and line-breaking</a></li>
+			<li><a href="#controlling_line_filling">Controlling line filling</a></li>
+			<li><a href="#a_note_about_format_options">A note about <code>format</code> options</a></li>
+			<li><a href="#how_format_consumes_strings">How <code>format</code> consumes strings</a></li>
+			<li><a href="#numerical_formatting">Numerical formatting</a></li>
+			<li><a href="#filling_block_fields_with_lists_of_values">Filling block fields with lists of values</a></li>
+			<li><a href="#headers__footers__and_pages">Headers, footers, and pages</a></li>
+			<li><a href="#lexically_permanent_options">Lexically permanent options</a></li>
+			<li><a href="#format_examples"><code>format</code> examples</a></li>
+		</ul>
+
+	</ul>
+
+	<li><a href="#migration_issues">MIGRATION ISSUES</a></li>
+	<li><a href="#implementation">IMPLEMENTATION</a></li>
+	<li><a href="#references">REFERENCES</a></li>
+</ul>
+
+<hr name="index" />
+</div>
+<!-- INDEX END -->
+
+<p>
+</p>
+<h1><a name="title">TITLE</a></h1>
+<p>Replace <code>format</code> built-in with <code>format</code> function</p>
+<p>
+</p>
+<hr />
+<h1><a name="version">VERSION</a></h1>
+<pre>
+  Maintainer: Damian Conway &lt;damian@conway.org&gt;
+  Date: 15 Sep 2000
+  Last Modified: 20 Sep 2000
+  Mailing List: perl6-language@perl.org
+  Number: 230
+  Version: 3
+  Status: Frozen</pre>
+<p>
+</p>
+<hr />
+<h1><a name="abstract">ABSTRACT</a></h1>
+<p>This RFC proposes that Perl's existing <code>format</code> mechanism be replaced
+with a standard module based on parts of the Text::Autoformat module.</p>
+<p>
+</p>
+<hr />
+<h1><a name="description">DESCRIPTION</a></h1>
+<p>I can never remember how formats work. The specification syntax is confusing
+to me. And I usually don't want the formatted text going straight down some
+magical output stream.</p>
+<p>It all came to a head when I was building Text::Autoformat. The smart text
+recognition was easy -- trying to do the final formatting with <code>formline</code>
+and $^A was just too painful.</p>
+<p>So I created the <code>Text::Autoformat::form</code> subroutine. It uses a template
+specification than fits my brain better, it's deeply DWIMical, it's highly
+configurable, and it's re-entrant (so you can use a <code>form</code> to format
+another <code>form</code>'s headers and footers, for example).</p>
+<p>I propose that the existing <code>format</code> mechanism be removed from Perl 6
+and be replaced with an add-in function from a standard module (based on
+the semantics of <code>Text::Autoformat::form</code>) as described in 
+the following sections.</p>
+<p>
+</p>
+<h2><a name="the_format__format_function">The <code>Format::format</code> function</a></h2>
+<p>The function itself would be called <code>format</code> and would be 
+imported with a <code>use Format</code> call.</p>
+<p>It takes a format (or &quot;picture&quot; or &quot;template&quot;) string followed by one or
+more replacement values. It then interpolates those values into each picture
+string, and either:</p>
+<ul>
+<li>
+<pre>
+        returns the result as a single multi-line string (in a scalar context)</pre>
+</li>
+<li>
+<pre>
+        returns the result as a list of single-line strings (in a list context)</pre>
+</li>
+</ul>
+<p>In a void context, format would emit a warning: &quot;Useless use of format
+in void context&quot;.</p>
+<p>A picture string consists of sequences of the following characters:</p>
+<dl>
+<dt><strong><a name="________" class="item">&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;</a></strong></dt>
+
+<dd>
+<p>Left-justified field indicator. A series of two or more sequential &lt;'s
+specify a left-justified field to be filled by a subsequent value.</p>
+</dd>
+<dt><strong><a name="________" class="item">&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;</a></strong></dt>
+
+<dd>
+<p>Right-justified field indicator. A series of two or more sequential &gt;'s
+specify a right-justified field to be filled by a subsequent value.</p>
+</dd>
+<dt><strong><a name="________" class="item">^^^^^^^^</a></strong></dt>
+
+<dd>
+<p>Centre-justified field indicator. A series of two or more sequential ^'s
+specify a centred field to be filled by a subsequent value.</p>
+</dd>
+<dt><strong><a name="________" class="item">&gt;&gt;&gt;.&lt;&lt;&lt;&lt;</a></strong></dt>
+
+<dd>
+<p>A numerically formatted field with the specified number of digits to
+either side of the decimal place. See <a href="#numerical_formatting">Numerical formatting</a> below.</p>
+</dd>
+<dt><strong><a name="________" class="item">[[[[[[[[</a></strong></dt>
+
+<dd>
+<p>Left-justified block field indicator.
+Just like a &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt; field, except it repeats as required on subsequent
+lines. See below.</p>
+</dd>
+<dt><strong><a name="________" class="item">]]]]]]]]</a></strong></dt>
+
+<dd>
+<p>Right-justified block field indicator.
+Just like a &gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt; field, except it repeats as required on subsequent
+lines. See below.</p>
+</dd>
+<dt><strong><a name="________" class="item">||||||||</a></strong></dt>
+
+<dd>
+<p>Centre-justified block field indicator.
+Just like a ^^^^^^^^ field, except it repeats as required on subsequent
+lines. See below.</p>
+</dd>
+<dt><strong><a name="________" class="item">]]].[[[[</a></strong></dt>
+
+<dd>
+<p>A numerically formatted block field with the specified number of digits to
+either side of the decimal place.
+Just like a &gt;&gt;&gt;.&lt;&lt;&lt;&lt; field, except it repeats as required on
+subsequent lines. See below.</p>
+</dd>
+<dt><strong><a name="_" class="item">~</a></strong></dt>
+
+<dd>
+<p>A single character field. Interpolates a single character from a subsequent
+data value. Repeats on subsequent lines as required.</p>
+</dd>
+<dt><strong><a name="_0" class="item">\0</a></strong></dt>
+
+<dd>
+<p>A zero-width field separator. A null character in the template field is
+ignored (i.e. <em>not</em> included in the formatted text). This allows two
+fields to be adjacent. For example: &quot;[[[[[[[[[[[\0[[[[[[[[[[[&quot;. To put a
+literal &quot;\0&quot; in a formatted text, use a '~' field and pass it the
+data string &quot;\0&quot;.</p>
+</dd>
+<dt><strong><a name="_" class="item">\</a></strong></dt>
+
+<dd>
+<p>Literal escape of next character (e.g. <code>\~</code> is formatted as a literal '~',
+not a one character wide field).</p>
+</dd>
+<dt><strong><a name="any_other_character" class="item">Any other character</a></strong></dt>
+
+<dd>
+<p>That literal character.</p>
+</dd>
+</dl>
+<p>Hence a typical use of <code>format</code> might look like this:</p>
+<pre>
+        $formatted = format &quot;&lt;[[[[[[[[[[[[[[[[&gt;    &gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&quot;,
+                               $aphorism,          &quot;page $page_num&quot;;</pre>
+<p>and might produce an output like this:</p>
+<pre>
+        &lt;Like a camel    &gt;            page 123
+        &lt;through the eye &gt;
+        &lt;of a needle, so &gt;
+        &lt;are the days of &gt;
+        &lt;our lives       &gt;</pre>
+<p>Note that, because every field (except a <a href="#_"><code>~</code></a> field) must be at least
+two characters wide, the single <code>&lt;</code> and <code>&gt;</code> brackets in the
+format string are correctly interpreted as literals.</p>
+<p>
+</p>
+<h3><a name="multi_line_filling">Multi-line filling</a></h3>
+<p>As the previous example indicates, any line with a block field continues
+interpolation of that field on subsequent lines until all block fields
+in the format have consumed all their data. Non-block fields on these
+lines are replaced by the appropriate number of spaces.</p>
+<p>For example:</p>
+<pre>
+        $title = &quot;On The Evil That Is Spam&quot;;
+        $text1 = &quot;How many times have you longed to smash...&quot;;
+        $text2 = &quot;...the bedevilment that is spam?&quot;;</pre>
+<pre>
+        print format &quot;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;   [[[[[[[[[[[[[[[   [[[[[[[[[[&quot;,
+                      $title,       $text1,           $text2;</pre>
+<pre>
+        # prints:
+        #
+        #             On The Evil   How many times    ...the be- 
+        #                           have you longed   devilment
+        #                           to smash...       that is
+        #                                             spam</pre>
+<p>
+</p>
+<h3><a name="hyphenation_and_line_breaking">Hyphenation and line-breaking</a></h3>
+<p>As the previous example indicates, within a block field, words are
+wrapped whole, unless they will not fit into the field at all, in which
+case they are broken and hyphenated. Simple hyphenation is
+used (i.e. break at the <em>N-1</em>th character and insert a '-'), unless a
+suitable alternative subroutine is specified instead.</p>
+<p>Words will not be broken if the break would leave less than 2 characters
+of the word on the current line. This minimum can be varied by setting the
+'minbreak' option to some positive numeric value. This value indicates
+the minumum total broken characters (<em>including</em> hyphens) that must be
+left on the current line.</p>
+<p>Alternative word breaking subroutines can be specified using the &quot;break&quot;
+option in a configuration hash. For example:</p>
+<pre>
+        print format { break =&gt; \&amp;my_line_breaker },
+                     $template,
+                     @data;</pre>
+<p><code>format</code> expects any user-defined line-breaking subroutine to take three
+arguments (the string to be broken, the maximum permissible length of
+the initial section, and the total width of the field being filled).
+The subroutine must return a list of two strings: the initial
+(broken) section of the word, and the remainder of the string
+respectively).</p>
+<p>For example:</p>
+<pre>
+        sub tilde_break = sub($$$)
+        {
+                (substr($_[0],0,$_[1]-1).'~', substr($_[0],$_[1]-1));
+        }</pre>
+<pre>
+        print format { break =&gt; \&amp;tilde_break },
+                     $template,
+                     @data;</pre>
+<p>This causes '~' to be used as the hyphenation character.</p>
+<p>The standard Format.pm module provides two exportable functions to
+simplify the use of variant hyphenation schemes.</p>
+<p>The exportable function <code>Format::break_with</code> takes a single string
+argument and returns a reference to a sub which hyphenates with that
+string. Hence the previous example could be rewritten:</p>
+<pre>
+        use Format qw( break_wrap );</pre>
+<pre>
+        print format { break =&gt; break_with('~') },
+                     $template,
+                     @data;</pre>
+<p>The exportable function <code>Format::break_TeX</code> takes an optional argument
+specifying a TeX hyphenation file and returns a reference to a sub which
+hyphenates using Jan Pazdziora's TeX::Hyphen module (assuming it is
+installed). For example:</p>
+<pre>
+        use Format qw( break_TeX );</pre>
+<pre>
+        print format { break =&gt; break_TeX(&quot;lithuanian.hy&quot;) }
+                     $template,
+                     @data;</pre>
+<p>Note that in the previous examples there is no leading '\&amp;' before
+<code>break_with</code> or <code>break_TeX</code>, since each is being directly <em>called</em>,
+arther than referred to. They each return a reference to some other
+suitable word-breaking subroutine.</p>
+<p>Specifying <code>{break =</code> undef}&gt; reverts <code>format</code> to its default line-breaking
+behaviour (see <a href="#a_note_about_c_format__options">A note about <code>format</code> options</a> and <a href="#lexically_permanent_options">Lexically permanent options</a> below).</p>
+<p>The Format.pm module might also provide other predefined breaking
+subroutines; for example, to cope with localization and two-byte
+character issues such as those addressed by existing modifications to
+the Perl 5 <code>format</code> mechanism in JPerl.</p>
+<p>
+</p>
+<h3><a name="controlling_line_filling">Controlling line filling</a></h3>
+<p><code>format</code> preserves the original whitespace (including newlines) from an
+interpolated string, unless called with certain options.</p>
+<p>The &quot;squeeze&quot; option (when specified with a true value) causes any
+interpolated sequence of spaces and/or tabs (but not newlines) to be
+replaced with a single space.</p>
+<p>The &quot;fill&quot; option independently causes newlines to be &quot;squeezed&quot;.</p>
+<p>Hence:</p>
+<pre>
+        $frmt = &quot;# [[[[[[[[[[[[[[[[[[[[[&quot;;
+        $data = &quot;h  e\t \tl lo\nworld\t\t\t\t\t&quot;;</pre>
+<pre>
+        print format $frmt, $data;
+        # h  e            l lo
+        # world</pre>
+<pre>
+        print format {squeeze=&gt;1}, $frmt, $data;
+        # h e l lo
+        # world</pre>
+<pre>
+        print format {fill=&gt;1}, $frmt, $data;
+        # h  e            l lo world</pre>
+<pre>
+        print format {squeeze=&gt;1, fill=&gt;1}, $frmt, $data;
+        # h e l lo world</pre>
+<p>Whether or not filling or squeezing is in effect, <code>format</code> can also be
+directed to trim any extra whitespace from the <em>end</em> of each line it
+formats, using the &quot;trim&quot; option. If this option is specified with a
+true value, every line returned by <code>format</code> will automatically have the
+substitution <code>s/[ \t]+$//gm</code> applied to it.</p>
+<p>Hence:</p>
+<pre>
+        print length format &quot;[[[[[[[[[[&quot;, &quot;short&quot;;
+        # 11</pre>
+<pre>
+        print length format {trim=&gt;1}, &quot;[[[[[[[[[[&quot;, &quot;short&quot;;
+        # 6</pre>
+<p>
+</p>
+<h3><a name="a_note_about_format_options">A note about <code>format</code> options</a></h3>
+<p>Like templates and data, option sets (passed via hash references) can
+be interleaved within a single <code>format</code> call.</p>
+<p>For example, to leave the text in $quote unsqueezed, unfilled, and
+unhyphenated, whilst squeezing, filling, and hyphenating the text in
+$intro and $commentary:</p>
+<pre>
+        print format
+                { squeeze=&gt;1, fill=&gt;1, break=&gt;Format::break_TeX },
+                '[[[[[[[[[[[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]]]]]]]]]]]',
+                $intro,
+                { squeeze=&gt;0, fill=&gt;0, break=&gt;undef },
+                '     &gt; [[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[',
+                $quote,
+                { squeeze=&gt;1, fill=&gt;1, break=&gt;Format::break_TeX },
+                '[[[[[[[[[[[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]]]]]]]]]]]',
+                $commentary;</pre>
+<p>or, more cleanly:</p>
+<pre>
+        $TIDY = { squeeze=&gt;1, fill=&gt;1, break=&gt;Format::break_TeX };
+        $RAW  = { squeeze=&gt;0, fill=&gt;0, break=&gt;undef };</pre>
+<pre>
+        print format
+                $TIDY, '[[[[[[[[[[[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]]]]]]]]]]]',
+                        $intro,
+                $RAW,  '     &gt; [[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[',
+                               $quote;
+                $TIDY, '[[[[[[[[[[[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]]]]]]]]]]]',
+                        $commentary;</pre>
+<p>Note that -- in <code>Text::Autoformat::form</code> -- changes in options cannot
+currently be made <em>between</em> interpolated data arguments (i.e. they
+apply to the next complete interpolation template and all the data
+interpolated into it).</p>
+<p>However, the ability to apply options to a single interpolated
+field might be a useful feature in the proposed <code>Format::format</code>. For
+example, to create two columns where the left column is (only) filled and
+the right is (only) squeezed:</p>
+<pre>
+        print format
+                '[[[[[[[[[[[[[[[[[[[    [[[[[[[[[[[[[[[[[[[',
+                { squeeze=&gt;0, fill=&gt;1 }, $column1_text,
+                { squeeze=&gt;1, fill=&gt;0 }, $column2_text;</pre>
+<p>
+</p>
+<h3><a name="how_format_consumes_strings">How <code>format</code> consumes strings</a></h3>
+<p>Within a single call to <code>format</code> fields consume data
+text as they format it, so the following:</p>
+<pre>
+        $text = &quot;a line of text to be formatted over three lines&quot;;
+        print format &quot;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;\n  &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;\n    &lt;&lt;&lt;&lt;&lt;&lt;\n&quot;,
+                      $text,        $text,        $text;</pre>
+<p>produces:</p>
+<pre>
+        a line of
+          text to
+            be fo-</pre>
+<p>not:</p>
+<pre>
+        a line of
+          a line 
+            a line</pre>
+<p>To achieve the latter effect, the variable arguments must be converted 
+to independent literals (by double-quoted interpolation):</p>
+<pre>
+        print format &quot;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;\n  &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;\n    &lt;&lt;&lt;&lt;&lt;&lt;\n&quot;,
+                     &quot;$text&quot;,      &quot;$text&quot;,      &quot;$text&quot;;</pre>
+<p>Although values passed from variable arguments are progressively consumed
+<em>within</em> <code>format</code>, the values of the original variables passed to <code>format</code>
+are <em>not</em> altered. In other words, internally <code>format</code> operates on a
+copy of each variable's string. Hence:</p>
+<pre>
+        print format &quot;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;\n  &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;\n    &lt;&lt;&lt;&lt;&lt;&lt;\n&quot;,
+                      $text,        $text,        $text;
+        print $text, &quot;\n&quot;;</pre>
+<p>will print:</p>
+<pre>
+        a line of
+          text to
+            be fo-
+        a line of text to be formatted over three lines</pre>
+<p>To cause <code>format</code> to <em>visibly</em> consume the values of the original
+variables passed to it, they must be passed as references. Thus:</p>
+<pre>
+        print format &quot;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;\n  &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;\n    &lt;&lt;&lt;&lt;&lt;&lt;\n&quot;,
+                      \$text,       \$text,       \$text;
+        print $text, &quot;\n&quot;;</pre>
+<p>will print:</p>
+<pre>
+        a line of
+          text to
+            be fo-
+        rmatted over three lines</pre>
+<p>Note that, for safety, the &quot;non-consuming&quot; behaviour takes precedence,
+so if a variable is passed to <code>format</code> both by reference <em>and</em> by value,
+its final value will be unchanged.</p>
+<p>
+</p>
+<h3><a name="numerical_formatting">Numerical formatting</a></h3>
+<p>The &quot;&gt;&gt;&gt;.&lt;&lt;&lt;&quot; and &quot;]]].[[[&quot; field specifiers may be used to format
+numeric values about a fixed decimal place marker. For example:</p>
+<pre>
+        print format '(&gt;&gt;&gt;&gt;&gt;.&lt;&lt;)', &lt;&lt;EONUMS;
+           1
+           1.0
+           1.001
+           1.009
+           123.456
+           1234567
+           one two
+        EONUMS</pre>
+<p>would print:</p>
+<pre>
+
+        (    1.0 )
+        (    1.0 )
+        (    1.00)
+        (    1.01)
+        (  123.46)
+        (#####.##)
+        (?????.??)
+        (?????.??)</pre>
+<p>Fractions are rounded (a la <code>sprintf</code>) to the specified number of
+places after the decimal, but only the minimal number of significant
+digits are shown.  That's why, in the above example, 1 and 1.0 are
+formatted as &quot;1.0&quot;, whilst 1.001 is formatted as &quot;1.00&quot;.</p>
+<p>It is possible to specify that the <em>maximal</em> number of decimal places
+always be used, by giving the configuration option 'numeric' the value
+'AllPlaces'. For example:</p>
+<pre>
+        print format { numeric =&gt; 'AllPlaces' },
+                     '(&gt;&gt;&gt;&gt;&gt;.&lt;&lt;)', &lt;&lt;'EONUMS';
+           1
+           1.0
+        EONUMS</pre>
+<p>would print:</p>
+<pre>
+
+        (    1.00)
+        (    1.00)</pre>
+<p>Note that although decimal digits are rounded to fit the specified width, the
+integral part of a number is never modified. If there are not enough places
+before the decimal place to represent the number, the entire number is 
+replaced with hashes.</p>
+<p>If a <em>non-numeric</em> sequence is passed as data for a numeric field, it is
+formatted as a series of question marks. This querulous behaviour can be
+changed by giving the configuration option 'numeric' the value 'SkipNaN',
+in which case, any invalid numeric data is simply ignored. For example:</p>
+<pre>
+        print format { numeric =&gt; 'SkipNaN' },
+                     '(&gt;&gt;&gt;&gt;&gt;.&lt;&lt;)',
+                     &lt;&lt;EONUMS;
+           1
+           two three
+           4
+        EONUMS</pre>
+<p>would print:</p>
+<pre>
+
+        (    1.0 )
+        (    4.0 )</pre>
+<p>Other values for the &quot;numeric&quot; option might also be provided, such as:</p>
+<dl>
+<dt><strong><a name="commas" class="item">'Commas'</a></strong></dt>
+
+<dd>
+<p>Locale-sensitive commification of numbers. For example</p>
+<pre>
+        print format {numeric=&gt;'Commas'},
+                     ']]]]]]]]].[',
+                     [100,1000,10000,1000000,10000000];</pre>
+<pre>
+        #       100.0
+        #     1,000.0
+        #    10,000.0
+        # 1,000,000.0
+        # #########.#</pre>
+</dd>
+<dt><strong><a name="currency" class="item">'Currency'</a></strong></dt>
+
+<dd>
+<p>Cause the locale's currency sign to be properly inserted as part of each
+interpolation. This option would also imply 'AllPlaces'. For example:</p>
+<pre>
+        print format {numeric=&gt;'Currency'},
+                     ']]]]].[[',
+                     [1,100,1000,10000];</pre>
+<pre>
+        #    $1.00
+        #  $100.00
+        # $1000.00
+        # #####.##</pre>
+</dd>
+<dt><strong><a name="fill" class="item">'Fill(<em>char</em>)'</a></strong></dt>
+
+<dd>
+<p>Use the specified character as the fill character, rather than spaces.
+For example:</p>
+<pre>
+        print format {numeric=&gt;'Fill(*)'},
+                     ']]]]].[[[[',
+                     [1,10.01,100.001,1000.0001,10000.00001],
+                     {numeric=&gt;'Fill(+)'},
+                     ']]]]].[[[[',
+                     [10,100,10000];</pre>
+<pre>
+        # ****1.0***
+        # ***10.01**
+        # **100.001*
+        # *1000.0001
+        # 10000.0000
+        # +++10.0+++
+        # ++100.0+++
+        # 10000.0+++</pre>
+</dd>
+</dl>
+<p>
+</p>
+<h3><a name="filling_block_fields_with_lists_of_values">Filling block fields with lists of values</a></h3>
+<p>If the data provided for a particular field is an array reference,
+then <code>format</code> automatically joins the elements of the array into a single
+string, separating each element with a newline character. As a result, a
+call like this:</p>
+<pre>
+        @values = qw( 1 10 100 1000 );
+        print format &quot;(]]]].[[)&quot;, \@values;</pre>
+<p>will print out</p>
+<pre>
+         (   1.00)
+         (  10.00)
+         ( 100.00)
+         (1000.00)</pre>
+<p>as might be expected.</p>
+<p>Note that, because arrays must be passed using a reference, their
+original contents are consumed by <code>format</code>, just like the contents of
+scalars passed by reference.</p>
+<p>To avoid having an array consumed by <code>format</code>, pass it as an anonymous
+array:</p>
+<pre>
+        print format &quot;(]]]].[[)&quot;, [@values];</pre>
+<p>
+</p>
+<h3><a name="headers__footers__and_pages">Headers, footers, and pages</a></h3>
+<p>The <code>format</code> subroutine can also insert headers, footers, and page-feeds
+as it formats. These features are controlled by the &quot;pagenum&quot;, &quot;pagelen&quot;,
+&quot;header&quot;, &quot;footer&quot;, and &quot;pagefeed&quot; options.</p>
+<p>The &quot;pagenum&quot; option takes a scalar value or a reference to a scalar
+variable and starts page numbering at that value. If a reference to a
+scalar variable is specified, the value of that variable is updated as
+the formatting proceeds, so that the next page number is available in
+the variable after formatting. This can be useful for multi-part reports.</p>
+<p>The &quot;pagelen&quot; option specifies the total number of lines in a page
+(including headers and footers, but <em>not</em> page-feeds).</p>
+<p>If the &quot;header&quot; option is specified with a string value, that string is
+used as the header of every page generated. If it is specified as a reference
+to a subroutine, that subroutine is called at the start of every page and
+its return value used as the header string. When called, the subroutine is
+passed the current page number.</p>
+<p>Likewise, if the &quot;footer&quot; option is specified with a string value, that
+string is used as the footer of every page generated. If it is specified
+as a reference to a subroutine, that subroutine is called at the <em>start</em>
+of every page and its return value used as the footer string. When called,
+the footer subroutine is passed the current page number.</p>
+<p>Both the header and footer options can -- alternatively -- be
+specified as hash references. In this case the hash entries for the keys
+&quot;left&quot;, &quot;centre&quot; (or &quot;center&quot;), and &quot;right&quot; specify what is to appear
+on the left, centre, and right of the header/footer. The entry for the
+key &quot;width&quot; specifies how wide the footer is to be. The &quot;left&quot;,
+&quot;centre&quot;, and &quot;right&quot; values may be literal strings or subroutines
+(just as a normal header/footer specification may be.) See the second
+example below.</p>
+<p>The &quot;pagefeed&quot; option acts in exactly the same way as &quot;header&quot; and
+&quot;footer&quot;, using a literal string or a subroutine to produce a pagefeed
+string (but not necessarily &quot;\014&quot;), which is appended after the footer.
+Note however that the pagefeed is not counted as part of the page length,
+nor can it be specified as a left-centre-right hash.</p>
+<p>The header, footer, and pagefeed page components are recomputed at the
+start of each new page, before the page contents are formatted
+(recomputing the header and footer makes it possible to determine
+how many lines of data to format so as to adhere to the specified
+page length).</p>
+<p>When the call to <code>format</code> is complete and the data has been fully formatted,
+the footer subroutine is called one last time, with an extra argument of 1.
+The string returned by this final call is used as the final footer.</p>
+<p>So for example, a series of 60-line pages with appropriate headers and
+footers might be formatted like so:</p>
+<pre>
+        print format
+                { header =&gt; sub { &quot;Page $_[0]\n\n&quot; },
+                  footer =&gt; sub { return &quot;&quot; if $_[1];
+                                  &quot;-&quot;x50.&quot;\n&quot;.format &quot;&gt;&quot;x50&quot;, &quot;...&quot;.($_[0]+1);
+                                },
+                  pagefeed =&gt; &quot;\n\n&quot;,
+                  pagelen  =&gt; 60
+                },
+                $template,
+                @data;</pre>
+<p>Note the recursive use of <code>format</code> within the &quot;footer&quot; option.</p>
+<p>As a second example, to set up headers and footers such that the running
+head is right justified in the header and the page number (starting at 7)
+is centred in the footer:</p>
+<pre>
+        print format
+                { header =&gt; { right =&gt; &quot;Running head&quot; },
+                  footer =&gt; { centre =&gt; sub { &quot;Page $_[0]&quot; } },
+                  pagelen  =&gt; 60,
+                  pagenum  =&gt; 7,
+                },
+                $template,
+                @data;</pre>
+<p>
+</p>
+<h3><a name="lexically_permanent_options">Lexically permanent options</a></h3>
+<p>If <code>use Format</code> is called with a hash reference as an argument, the
+entries of that hash specify options that are to be made the defaults
+until the end of the current lexical scope. For example, to cause
+<code>format</code> to always squeeze and trim whitespace but respect newlines,
+the following line would be placed at the start of the source file:</p>
+<pre>
+        use Format { squeeze=&gt;1, fill=&gt;0, trim=&gt;1 };</pre>
+<p>With these defaults in effect, filling could be turned on and trimming disabled
+within a particular subroutine like so:</p>
+<pre>
+        sub particular {
+                use Format { fill =&gt; 1, trim =&gt; 0 };</pre>
+<pre>
+                # do filled, untrimmed formatting here</pre>
+<pre>
+        } # format's defaults revert to previous values at end of scope</pre>
+<p>
+</p>
+<h3><a name="format_examples"><code>format</code> examples</a></h3>
+<p>As an example of the use of <code>format</code>, the following:</p>
+<pre>
+        $count = 1;
+        $text = &quot;A big long piece of text to be formatted exquisitely&quot;;</pre>
+<pre>
+        print format q{
+                ||||  &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;
+                ----------------
+                ^^^^  ]]]]]]]]]]\|
+                                =
+                ]]].[[[
+                
+        }, $count, $text, $count+11, $text, &quot;123 123.4\n123.456789&quot;;</pre>
+<p>produces the following output:</p>
+<pre>
+                 1    A big long
+                ----------------
+                 12     piece of|
+                      text to be|
+                       formatted|
+                      exquisite-|
+                              ly|
+                                =
+                123.0
+                123.4
+                123.456</pre>
+<p>Alternatively, picture strings and replacement values can be interleaved.
+For example:</p>
+<pre>
+        $report = format
+                'Name           Rank    Serial Number',
+                '====           ====    =============',
+                '&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;  ^^^^    &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;',
+                 $name,         $rank,  $serial_number,
+                ''
+                'Age    Sex     Description',
+                '===    ===     =====================',
+                '^^^    ^^^     [[[[[[[[[[[]]]]]]]]]]',
+                 $age,  $sex,   $description;</pre>
+<p>
+</p>
+<hr />
+<h1><a name="migration_issues">MIGRATION ISSUES</a></h1>
+<p>Non-trivial, but do-able.</p>
+<p>I also intend to extract <code>Text::Autoformat::form</code> from Text::Autoformat
+and create a new Perl 5 module: Text::Reformat.pm. This would provide
+the same functionality (and a migration path) for Perl 5 users.</p>
+<p>
+</p>
+<hr />
+<h1><a name="implementation">IMPLEMENTATION</a></h1>
+<p>See Text::Autoformat module.</p>
+<p>The proposed built-in/add-in ought to be reimplemented in C for speed,
+with Text::Autoformat::form (or Text::Reformat::format) as a reference.</p>
+<p>
+</p>
+<hr />
+<h1><a name="references">REFERENCES</a></h1>
+<p>None.</p>
+
+</body>
+
+</html>
