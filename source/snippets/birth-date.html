@@ -1,0 +1,16 @@
+<pre>[% syntax perl6 %]
+my $birth-date-string = prompt "When were you born (yyyy-mm-dd)?";
+my $birth-date = Date.new($birth-date-string);
+
+my $today = Date.today;
+my $age = $today.year - $birth-date.year;
+
+# But your birthday this year may not have been yet
+if $today.day-of-year < $birth-date.day-of-year {
+    $age--;
+}
+
+say "You are $age years old!";
+[% endsyntax %]</pre>
+[% option no-header %][% option no-footer %]
+
