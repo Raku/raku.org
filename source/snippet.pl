@@ -15,8 +15,8 @@ my $fn = @files[rand @files];
 
 open my $file, '<:raw', "$dir$fn"
     or die "Cannot open '$dir$fn' for reading: $!";
-binmode $fn;
-print while <$fn>;
+binmode $file;
+print while <$file>;
 close $file;
 
 
