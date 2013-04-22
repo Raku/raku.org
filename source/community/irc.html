@@ -69,14 +69,15 @@
             Tracks karma, implements 'seen', and has a few more useful
             features.
         </dd>
-        <dt>p6eval</dt>
+        <dt>camelia</dt>
         <dd>
             Perl 6 code evaluation bot. We use this for live testing of code
             that may be of interest to others; it chats back to the channel.
-            <code>perl6: my $a;</code> will result in a test against several
-            Perl 6 compilers (elf, mildew, mildew-js, pugs, rakudo, sprixel),
-            <code>nqp: say('foo')</code> tests nqp-rx, <code>std: my $a</code>
-            will parse the expression with STD.pm.
+            <code>perl6: my $a;</code> will result in a test against 
+            latest revisions of rakudo and niecza, 
+            <code>nqp: say('foo')</code> tests nqp, 
+            <code>std: my $a</code> parses the expression using STD.pm6.
+            For other compilers, try "camelia: help".
         </dd>
         <dt>phenny</dt>
         <dd>
