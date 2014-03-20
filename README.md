@@ -23,7 +23,7 @@ Here are some guidelines that you should respect when changing this site:
       - user resizes window
 
   * Test any layout changes on browsershots.org, with particular consideration
-    to badly broken browsers. IE6 still needs to be considered (2009-07).
+    to badly broken browsers. IE8 still needs to be considered (2014-03).
     IE5.5 and below can be ignored.
 
   * We spell "Perl 6" consistently with a non-breaking space. If you don't
