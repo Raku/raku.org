@@ -6,10 +6,11 @@
 <head>
     <title>[% readvar title %]</title>
     [% ifvar more_header %] [% readvar more_header %] [%endifvar%]
-    <link rel="icon" href="/favicon.ico" />
-    <style type="text/css">
+    <link rel="icon" href="/favicon.ico" type="favicon.ico" />
+    <link href="/favicon.ico" rel="shortcut icon" type="image/x-icon" />
+    <style>
         @import url("/style.css");
-        [% ifvar sitecss %][% readvar sitecsss %][% endifvar %]
+        [% ifvar sitecss %][% readvar sitecss %][% endifvar %]
     </style>
 </head>
 <body>
