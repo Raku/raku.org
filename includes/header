@@ -8,7 +8,7 @@
 <head>
     <title>[% readvar title %]</title>
     [% ifvar more_header %] [% readvar more_header %] [%endifvar%]
-    <link rel="icon" href="/favicon.ico" type="favicon.ico" />
+    <link rel="icon" href="/favicon.ico" />
     <style type="text/css">
         @import url("/style.css");
         [% ifvar sitecss %][% readvar sitecsss %][% endifvar %]
