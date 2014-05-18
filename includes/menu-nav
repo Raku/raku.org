@@ -1,4 +1,4 @@
-<div id="navigation">
+<nav id="navigation">
     <ul>
         [% item home      <li id="nav-home"     {{ class="active"}}><a href="/">Home</a></li> %]
         [% item community <li id="nav-community"{{ class="active"}}><a href="/community/">Community</a></li> %]
@@ -8,6 +8,6 @@
         [% item fun       <li id="nav-fun"      {{ class="active"}}><a href="/fun/">Fun</a></li>             %]
         [% item whatever  <li id="nav-whatever" {{ class="active"}}><a href="/whatever/">Whatever</a></li>   %]
     </ul>
-</div>
+</nav>
 
 [% comment vim: set tw=0 ft=html : %]

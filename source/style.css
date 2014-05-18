@@ -11,7 +11,7 @@ h4 {
     margin-bottom: 0.5em;
 }
 
-.box h4 a {
+section h4 a {
     text-decoration: none;
     border-bottom:   none;
 }
@@ -23,7 +23,7 @@ h4 {
     max-width: 100%;
 }
 
-#header, #subpage-header {
+header {
     font-weight: bold;
     -moz-box-shadow: 5px 5px 10px #888;
     -webkit-box-shadow: 5px 5px 10px #888;
@@ -37,7 +37,7 @@ h4 {
     padding: 0em 1em 0em 1em;
 }
 
-#header {
+#welcome-header {
     margin: 0px 0px 3em 0px;
     min-height: 200px;
 }
@@ -47,7 +47,7 @@ h4 {
     min-height: 120px;
 }
 
-#header img, #subpage-header img {
+header img {
     float: right;
     position: relative;
     top: -1.5em;
@@ -57,31 +57,32 @@ h4 {
 }
 
 
-#header a {
+#welcome-header a {
     font-weight: bold;
     text-decoration: none;
     color: #ffffff;
     border-bottom: 1px dotted #ffffff;
 }
 
-#header a.header-black-link {
+#welcome-header a.header-black-link {
     color: #000;
     border-bottom: 1px dotted #000;
 }
 
-div a {
+/* These two were previously "div a", but the entire page is in a wrapper div already. */
+a {
     text-decoration: none;
     font-weight: bold;
     color: #000000;
     border-bottom: 1px dotted #000000;
 }
 
-div a:hover, #header a:hover {
+a:hover {
     text-decoration: underline;
     border-bottom: none;
 }
 
-.box, #col1, #col2 {
+section, #col1, #col2 {
     color: #000000;
     -moz-box-shadow: 5px 5px 10px #888;
     -webkit-box-shadow: 5px 5px 10px #888;
@@ -92,7 +93,7 @@ div a:hover, #header a:hover {
     border: 0.2em solid #dddddd;
 }
 
-.box {
+section {
     width: 15em;
     height: 10em;
     margin: 0.5em;
@@ -119,7 +120,7 @@ div a:hover, #header a:hover {
     float: right;
 }
 
-.box ul {
+section ul {
     font: 9pt sans-serif;
     line-height: 130%;
 }
@@ -167,7 +168,7 @@ li {
     margin-bottom: 0.5em;
 }
 
-#footer {
+footer {
     clear: both;
     font-size: 90%;
     padding: 2.5em 2em 0px 2em;
@@ -292,7 +293,7 @@ dl#botlist dd {
 div.autosize {
     display: table; width: 1px;
 }
-div.autosize > div {
+div.autosize > * {
     display: table-cell;
 }
 
