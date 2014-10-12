@@ -26,8 +26,9 @@ Here are some guidelines that you should respect when changing this site:
     to badly broken browsers. IE8 still needs to be considered (2014-03).
     IE7 and below can be ignored.
 
-  * We spell "Perl 6" consistently with a non-breaking space. If you don't
-    already have one, go get an editor with decent Unicode support.
+  * We spell "Perl 6" consistently with a
+    [non-breaking space](https://en.wikipedia.org/wiki/Non-breaking_space#Keyboard_entry_methods).
+    If you don't already have one, go get an editor with decent Unicode support.
 
   * Speaking of which, all pages are served as UTF-8.
 
