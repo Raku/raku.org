@@ -60,6 +60,13 @@
         <a href="http://hackage.haskell.org/package/Pugs">published</a> to Hackage.
         </dd></p>
     </dl>
+
+    <hr/>
+
+    <p><strong><a href="https://github.com/perl6/nqp/">NQP</a></strong>
+    (Not Quite Perl) is <em>not</em> a Perl 6 compiler. NQP a small subset of Perl 6 
+    used as a foundational tool to help write compilers and libraries.
+    </p>
 </div>
 
 <section id="features" class="wide">
@@ -83,13 +90,16 @@
     <a
     href="http://use.perl.org/_JonathanWorthington/journal/39530.html">Blizkost</a>
     is a Perl 5 bridge for Parrot, making Perl 5 code available from
-    Rakudo and other parrot-based compilers.
+    Rakudo and other parrot-based compilers. (Mostly superseded by Inline::Perl5.)
     </li>
 
     <li>
     <a
     href="http://github.com/rakudo/rakudo/tree/nom/src/core/">Rakudo's
-    setting library</a>
+    setting library</a> which defines all of the classes, routines, and terms
+    available when your script starts. In Perl 5 parlance, it's roughly all the
+    things you can see in perlfunc, perlop, etc. This part of Perl&nbsp;6 is
+    mostly written in Perl&nbsp;6 (and NQP).
     </li>
 
 </ul>
