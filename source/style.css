@@ -125,7 +125,7 @@ section ul {
     line-height: 130%;
 }
 
-#community, #stuff, #nav-community, #nav-docs, #col1 {
+#community, #stuff, #nav-community, #nav-docs, #nav-faq, #col1 {
     background: #c0e472;
     border-color: #8bc313;
 }
@@ -176,10 +176,8 @@ footer {
 
 .bold { font-weight: bold; }
 
-#navigation {
-    padding-left: auto;
-    padding-right: auto;
-    width: 50em;
+#navigation ul {
+    text-align: center;
 }
 
 #navigation li
