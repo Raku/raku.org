@@ -4,4 +4,4 @@
 
 Synopsis 13: Overloading
 
-This document is now maintained in the pugs repository.  See L<http://perlcabal.org/syn/>.
+This document is now maintained in the pugs repository.  See L<http://design.perl6.org/>.
