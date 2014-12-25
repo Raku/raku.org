@@ -6,6 +6,7 @@
 <head>
     <title>[% readvar title %]</title>
     [% ifvar more_header %] [% readvar more_header %] [%endifvar%]
+    <meta name=viewport content="width=device-width, initial-scale=1">
     <link href="/favicon.ico" rel="shortcut icon" type="image/x-icon" />
     <style>
         @import url("/style.css");
