@@ -2,7 +2,7 @@
     <ul>
         [% item home      <li id="nav-home"     {{ class="active"}}><a href="/">Home</a></li> %]
         [% item community <li id="nav-community"{{ class="active"}}><a href="/community/">Community</a></li> %]
-        [% item specs     <li id="nav-specs"    {{ class="active"}}><a href="/specification/">Specification</a></li> %]
+        [% item specs     <li id="nav-specs"    {{ class="active"}}><a href="/specification/">Design</a></li> %]
         [% item compilers <li id="nav-compilers"{{ class="active"}}><a href="/compilers/">Compilers</a></li> %]
         [% item docs      <li id="nav-docs"     {{ class="active"}}><a href="/documentation/">Documentation</a></li> %]
         [% item fun       <li id="nav-fun"      {{ class="active"}}><a href="/fun/">Fun</a></li>             %]
