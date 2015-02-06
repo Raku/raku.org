@@ -23,9 +23,9 @@ Here are some guidelines that you should respect when changing this site:
       - user's viewport is small (e.g. 800x600)
       - user resizes window
 
-  * Test any layout changes on browsershots.org, with particular consideration
-    to badly broken browsers. IE8 still needs to be considered (2014-03).
-    IE7 and below can be ignored.
+  * Test any layout changes on [browsershots.org](http://browsershots.org),
+    with particular consideration to badly broken browsers. IE8 still needs
+    to be considered (2014-03). IE7 and below can be ignored.
 
   * We spell "Perl 6" consistently with a
     [non-breaking space](https://en.wikipedia.org/wiki/Non-breaking_space#Keyboard_entry_methods).
