@@ -33,7 +33,7 @@ Here are some guidelines that you should respect when changing this site:
 
   * Speaking of which, all pages are served as UTF-8.
 
-  * If you create a new page, please link to the URL without the
+  * If you create a new page, please link to the URL *without* the
     ".html" extension.
 
 To run this site locally, install mowyw (`cpanm App::Mowyw Text::VimColor`) then:
@@ -41,5 +41,5 @@ To run this site locally, install mowyw (`cpanm App::Mowyw Text::VimColor`) then
     mowyw
     plackup app.psgi
 
-This populates the ./online folder, and launches a local web server for
+This populates the `./online` folder, and launches a local web server for
 testing, e.g. http://localhost:5000/index.html
