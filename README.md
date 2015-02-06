@@ -2,7 +2,8 @@ This is the source code for <http://perl6.org/>.
 
 It is rendered with [mowyw](http://perlgeek.de/en/software/mowyw)
 every 15 minutes, so updates to the repository should also result in
-an update of perl6.org. If not, talk to moritz on #perl6.
+an update of perl6.org. If not, talk to moritz on
+[#perl6](irc://irc.freenode.net/perl6).
 
 Here are some guidelines that you should respect when changing this site:
 
@@ -15,7 +16,7 @@ Here are some guidelines that you should respect when changing this site:
     a broader Perl 6 audience.
 
   * If you have a Perl 6 blog, get it included in the planetsix.perl.org feed
-    instead. Talk to \[Coke\] on #perl6.
+    instead. Talk to \[Coke\] on [#perl6](irc://irc.freenode.net/perl6).
 
   * If you intend to change the layout, consider what happens when:
 
