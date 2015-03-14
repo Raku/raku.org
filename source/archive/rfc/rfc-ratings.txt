@@ -1,0 +1,1266 @@
+G = Good idea
+C = Cultural
+Y = Yeah, but...
+R = Rejected
+M = Modules Will Happen
+W = Withdrawn
+B = Bypassed by Breakthrough
+
+
+Y!  1 Implementation of Threads in Perl
+	Should be designed in from the start.
+	Principle: Plan to know more someday.
+
+M   2 Request For New Pragma: Implicit
+	Poor man's ';' monad for a print operator.
+
+G   3 messages.rfc - An RFC to discussing the wisdom of allowing run time error and warning messages to be modified at run time
+	No mechanism proposed.
+
+Y   4 type inference
+	We don't want fall into the trap of forcing the user to be as smart as the type inferencer.
+
+G!  5 Multiline Comments for Perl.
+	We combined this with internal comment syntax.
+	Principle: Kill two birds with one stone.
+
+G!  6 Lexical variables made default
+	Proposal to make 'strict vars' the default.
+	(Confuses dynamic with localized globals.)
+	Principle: Pick the right default.
+
+G!  7 Higher resolution time values
+	Time should be based on a "real" type, not integers.
+	Principle: Think ahead.
+
+B   8 The AUTOLOAD subroutine should be able to decline a request
+	Should work more like a list of handlers that can defer to next.
+
+R!  9 Highlander Variable Types
+	Suggests we essentially ignore the sigil for identity of variables.
+	Instead, we chose to make invariant sigils part of the name because the
+	sigils imply important intrinsic behaviors.  Plus we like namespaces.
+	Principle: Don't plan to confuse things without a really good reason.
+
+W!  10 Filehandles should use C<*> as a type prefix if typeglobs are eliminated.
+	Retracted because filehandles are normal objects now.
+	Also, this would be incompatible with our current use of * for Whatever.
+	Instead of a sigil we mostly rely on case conventions (and OO) for types.
+	Principle: There are not enough sigils to classify everything.
+
+M!  11 Examples encoded with =also for|begin|end POD commands
+	Pod has moved more towards introspection for dual-use purposes.
+	Princple: Substitute strong features for weak ones.
+
+R   12 variable usage warnings
+	Too much compile-time guessing proposed, and confuses assignment with definition.
+	We do know if something is declared but not used, and we do catch use of uninitialized values.
+
+G   13 The Copyright and Licensing Working Group
+
+Y!  14 Modify open() to support FileObjects and Extensibility
+	Returning filehandles is good.
+	(Additional extensibility is reinventing OO poorly.)
+	Principle: Don't reinvent OO poorly.
+
+R!  15 Stronger typing through tie.
+	We now regard tie as an obstacle to optimization, and use gradual typing instead.
+	Principle: Late binding sometimes causes your program to be late.
+
+R!  16 Keep default Perl free of constraints such as warnings and strict.
+	Making 'my' vars the default seems to work out better for anything larger than -e.
+	Principle: People really get attached to their preferred methods of sloppy thinking.
+
+B!  17 Organization and Rationalization of Perl State Variables
+	Proposes reorganization of all the punctuational variables.
+	Misses the notion that most of these values are simply object attributes.
+	Principle: Hang things on the right peg—and if there isn't one, install one.
+
+B!  18 Immediate subroutines
+	Macros (especially hygienic macros) are a more powerful concept that encompasses
+	the idea of immediate subroutines.
+	Principle: Don't just do the first thing that occurs to you.
+
+G   19 Rename the C<local> operator
+	We renamed it to 'temp'.
+
+M   20 Overloadable && and ||
+	This is now generally viewed as the job of grammatical categories tied with macros that know
+	how to parse special categories, such as thunking operators.
+
+R   21 Subroutines: Replace C<wantarray> with a generic C<want> function
+	Perl 6 chooses to defer context evaluation until binding, which precludes knowing context beforehand.
+
+G   22 Control flow: Builtin switch statement
+	But with different syntax and semantics.
+
+G   23 Higher order functions
+	A much simpler form of placeholders was adopted that always scopes to the surrounding braces.
+
+G!  24 Data types: Semi-finite (lazy) lists
+	Though, can't omit args in Perl 6 just because you don't like 'em...
+	Principle: Self-clocking code.
+
+G!  25 Operators: Multiway comparisons
+	We even combined precedence levels to make this work with equality.
+	Principle: Question authority.
+
+G!  26 Named operators versus functions
+	Proposes to put named operators and functions in the same namespace.
+	In Perl 6 we go further: all operators and methods are just functions in disguise.
+	Built-in stuff just happens to come from the "setting", a lexical scope outside your program.
+	Principle: Fundamental unifications don't have to hurt.
+
+G!  27 Coroutines for Perl
+	Becomes gather/take in Perl 6.
+	But instead of special-purpose pipelines we implement pervasive laziness.
+	Also, don't need the sub form when you can just embed a gather in a normal
+	function and return a lazy list.
+	Principle: Sometimes it's worth making a feature pervasive.
+
+Y!  28 Perl should stay Perl.
+	Interestingly, in order to fix all the other problems, we've embraced every one of
+	the specified attractive nuisances.  :-)
+	That being said, Perl 6 is still Perl in how it works linguistically.
+	Principle: Sometimes you have to retarget your principles to a deeper level.
+
+G   29 unlink() should be left alone
+	We didn't rename unlink, and yes, it's really easy to alias it if you want.
+
+G!  30 STDIN, STDOUT, STDERR, ARGV, and DATA should become scalars
+	In fact, they even have a twigil now, e.g. $*IN.
+	Principle: Avoid lists of exceptions.
+
+R   31 Subroutines: Co-routines
+	Laziness reinvented poorly, and no need to tie the idea to subs.
+
+G!  32 A method of allowing foreign objects in perl
+	But extended into a full metamodel supporting representational polymorphism.
+	Principle: If you're gonna generalize, do it hard.
+
+G!  33 Eliminate bareword filehandles.
+	OK, gone.  Though oddly, it's now possible declare them as sigilless variables.
+	Principle: Sometimes the critters sneak back in by the back door.
+
+Y!  34 Angle brackets should not be used for file globbing
+	Yeah, but we also no longer use angle brackets for input either.
+	Principle: If you're going to reduce the power of a construct, maybe remove it instead.
+
+Y   35 A proposed internal base format for perl variables
+	This mutated into Parrot's PMC model, with mixed results.
+
+G   36 Structured Internal Representation of Filenames
+	Is more or less the IO::Path type now.
+
+G!  37 Positional Return Lists Considered Harmful
+	Not against returning lists, but against doing so when returning an object makes more sense
+	Of course, in Perl 6, everything is an object including returned lists.
+	Printciple: Don't use positions where names are better.
+
+G   38 Standardise Handling Of Abnormal Numbers Like Infinities And NaNs
+	We don't yet go as far as to have bignums though.
+
+M   39 Perl should have a print operator
+	The proposed circumfix:« > < » is really ugly, and we don't like inside-out brackets much.
+	It would inhibit accurate reporting of an infix where a term is expected.
+
+G!  40 Module Scope Control
+	Proposed syntax is bogus; we fixed this by making exports lexical by default.
+	(Globals can always be aliased explicitly.)
+	Principle: Choose the right default.
+
+W   41 Request For New Pragma: Implicit (Retired: See RFC 2)
+
+M   42 Request For New Pragma: Shell
+	The desire was for lexically scoped hacks, which P6 supports better than P5.
+
+G!  43 Integrate BigInts (and BigRats) Support Tightly With The Basic Scalars
+	They're so integrated we don't even need a BitInt type.
+	Principle: Remove artificial discontinuities.
+
+G   44 Bring Documentation Closer To Whatever It Documents
+	Largely supported now with smart pod comments.
+
+G   45 C<||> and C<&&> should propagate result context to both sides
+	We made @a = @b || @c work right.
+	More generally, any object can report its own boolean value without information loss.
+
+W   46 Use features of portable, free compilers and libraries
+
+B   47 Universal Asynchronous I/O
+	Now largely handled by promises, channels, schedulers, and supplies.
+
+Y   48 Replace localtime() and gmtime() with date() and utcdate()
+	We've cleaned up the time functions, but not like this.
+
+G   49 Objects should have builtin stringifying STRING method
+	Mechanism is rather different, since P5-style overloading doesn't exist in P6.
+
+M   50 BiDirectional Support in PERL
+	This is really more of a rendering library issue.
+
+R   51 Angle brackets should accept filenames and lists
+	Speculation on extending a syntax we removed instead.
+
+W   52 List context return from filesystem functions
+	Nevertheless, this does indicate some singular/plural difficulties in P5.
+
+R   53 (v10): Built-ins: Merge and generalize C<index> and C<rindex>
+	This duplicates regex functionality and doesn't allow for overlap.
+
+B!  54 Operators: Polymorphic comparisons
+	Overloading == to be generic.
+	We chose instead to add a new rank of generic operators instead.
+	Principle: Stick with operator-rich philosophy.
+
+G   55 Compilation: Remove requirement for final true value in require-d and do-ed files
+
+R!  56 Optional 2nd argument to C<pop()> and C<shift()>
+	The few places this is needed, splice works fine.  Plus we mostly avoid destructive
+	readouts these days, especially since we allow multiple non-destructive loop variables.
+	Principle: Sometimes one way to do it is enough.
+
+G   57 Subroutine prototypes and parameters
+	More or less what we did.  We went with pair notation for named args, however.
+
+B   58 C<chomp()> changes.
+	Proposes making chomp return special boolean value in loop context.
+	Since lines are autochomped now, and generally read from a 'for' rather than a 'while', this is moot.
+
+R   59 Proposal to utilize C<*> as the prefix to magic subroutines
+	Proposes *BEGIN, *END and such.
+	These constructs are no longer considered subroutines, but are simply statement prefixes.
+	All-caps still works fine for indicating non-inline execution.  Plus we used the * for something else.
+
+G   60 Safe Signals
+	Signals, to the extent they are available on a given VM, are handled via reactive programming (supplies).
+
+Y   61 Interfaces for linking C objects into perlsubs
+	Proposes ways to link in .o files.
+	Most VMs don't appreciate linking directly to C code, and we need to be portable to VMs.
+	Hence our native interfaces these days are aimed at linking to shared libraries instead.
+
+M   62 Wildcards for multiple module imports
+	However, Java has already proved this is a bad idea.
+
+W   63 Exception handling syntax
+	Merged into RFC 88.
+
+R!  64 New pragma 'scope' to change Perl's default scoping
+	Various proposals for autodeclaration hacks.
+	Largely superseded by making strict vars the default.
+	Principle: Do-What-I-Mean autodeclarations too often don't.
+
+M   65 Add change bar functionality to pod
+	Change bars are so 20th century.
+
+R   66 Shell Style Redirection
+	Overload < and > for redirection.  Unspecified how many other shell shenanigans to support.
+	No great need to build this in, and if we did so, we'd probably use feed operators instead.
+
+B   67 Deep Copying, aka, cloning around.
+	Attempt to specify deep copy semantics.
+	This is largly superseded by hyper operator semantics.
+
+G!  68 Eliminate the optional C<sub> for C<BEGIN> etc block declarations
+	Done; these are now statement prefixes, and the blocks are optional.
+	Principle: Grammatical categories for precedence droppers.
+
+G   69 Standardize input record separator (for portability)
+	\n now matches any common separator, and input line processors do as well.
+
+B   70 Allow exception-based error-reporting.
+	Proposes making core routines wrappable by Fatal.
+	Superseded by exception and failure mechanisms, which obviate the need to wrap.
+
+Y   71 Legacy Perl $pkg'var should die
+	Yeah, but we now allow ' and - as characters between two otherwise normal identifiers.
+	They are simply considered part of the name, and do not function as package separators.
+
+G!  72 Variable-length lookbehind.
+	Lookbehind by reversing the order of matching.
+	We implemented this, but it turns out we almost never use lookbehind, because it often violates
+	the principle of one-pass parsing.  Sometimes we use & instead, which is more declarative.
+	Principle: One-pass parsing.
+
+G!  73 All Perl core functions should return objects
+	In fact, pretty much everything is an object in Perl 6,
+	even the things you maybe aren't thinking of as objects.
+	Even native values will autobox to objects at need.
+	Principle: "Everything is an object" doesn't mean it's all method calls.
+
+R   74 Proposal to rename C<import> and C<unimport>
+	'import' is now a keyword, and is executed inline (albeit at BEGIN time), so doesn't deserve uppercase.
+	And 'unimport' is of much less import now that most imports are lexical.
+
+R   75 structures and interface definitions
+	Mixes together various concepts with a low-power syntax proposal.
+
+G!  76 Builtin: reduce
+	Works much as specified here, but with different closure syntax.
+	We don't use it much because of reduction metaoperator tends to be more readable.
+	Principle: Sometimes it's worthwhile to provide more than one way to do it.
+
+B   77 Suggested isa() operator.
+	Specifies an overloaded function to do anything vaguely related to inheritance.
+	Superseded by the MOP.  Perl 6 has cleaner ways to do all these things.
+
+G   78 Improved Module Versioning And Searching
+	An omnibus proposal with many fine ideas and lot of ignorable details.
+	A lot of this ended up in S11.
+
+Y   79 The Predefined POD Streams are C<perl>, C<data>, and C<doc>
+	Defines the code as just another intertwined document.
+	We kept the idea that data can just be a pod stream.
+
+G   80 Exception objects and classes for builtins
+	Apart from minor details, this idea was adopted.
+
+G   81 Lazily evaluated list generation functions
+	Ideas largely accepted but with different, more flexible, syntax.
+
+B   82 Arrays: Apply operators element-wise in a list context
+	Explicit metaoperators make the intent clear, and provide for both lazy (zip) and eager (hyper) semantics.
+	Hypers also allow finer control of what to do with structures of differing size.
+
+Y   83 Make constants look like variables
+	We have a special declaration syntax as requested, but it does not care whether you use a sigil or not.
+
+G   84 Replace => (stringifying comma) with => (pair constructor)
+	Adopted (but without the weird comparison semantics proposed).
+
+Y!  85 All perl generated errors should have a unique identifier
+	The RFC itself discusses a unique identity rather than identifier.
+	Exception classes are deemed to convey sufficient identity without an arbitrary identifier,
+	especially given the possibility of interrogating the text for finer shades of meaning.
+	Principle: Don't multiply entities without reason.
+
+B   86 IPC Mailboxes for Threads and Signals
+	Assumes we're using process-weight threads that must use sockets or shared memory.
+	We now think in terms of promises, channels, supplies, and schedulers.  Other
+	protocols such as JSON are now used over sockets.
+
+G   87 Timers and Timeouts
+	Ideas adopted, but via promises and supply schedulers.
+
+B!  88 Omnibus Structured Exception/Error Handling Mechanism
+	Our current exception mechanism accomplishes similar goals while not
+	    requiring various contortions required in P5, such as magical lexical scoping.
+	Instead we can put the CATCH inside the block being tried to do scoping normally.
+	We avoid the forest of nested try blocks by assuming the surrounding block is a try.
+	We also allow for resumable exceptions by not unwinding while propagating.
+	Stack snapshotting need not be provided since those primitives are available before unwind.
+	CATCH topicalizes on the exception and then we use "when" smartmatching so we don't
+	    need to reinvent switches poorly to match exceptions.
+	Since a CATCH is itself a topicalizer, unhandled exceptions are easily detected and propagated.
+	We decouple the restoring of invariants from try; any block can restore invariants with LEAVE or UNDO.
+	We also decouple eval from try now, and spell it EVAL to avoid confusion with P5's eval.
+	We have a failure model that automatically fatalizes unchecked errors lazily.
+	The problem of "next" from a handler is not a problem because it's just another kind of exception.
+	We avoid data structures such as the proposed %@ that would have to be cleared on every operation.
+	No artificial severity is provided (unless you count whether the exception is resumable).
+	Principle: No battle plan survives first contact with the enemy, or the second, or the third...
+
+B!  89 Controllable Data Typing
+	A proposed way to limit allomorphic types, since much P5 confusion arised from that.
+	We decided it was better if an object has only one type, and pretends to be allomorphic.
+	It's okay for the user to be confused, but not for the computer to be confused.
+	(We do still allow allomorphism via composition or multiple inheritance where it's unavoidable.)
+	Principle: There are always tradeoffs.
+
+Y   90 Arrays: merge() and unmerge()
+	Supplanted by zip operators for merging and by multi-arg binding and rotors for unmerging
+
+G   91 Arrays: part and flatten
+	Except now they are called rotors and lol/tree.
+
+Y!  92 Extensible Meta-Object Protocol
+	User-definable dispatcher hooks, basically, and keep all the OO stuff looking the same.
+	But we ended up with a much more powerful MOP in Perl 6, with user-modifiable dispatchers,
+	metaclasses, policies, and representations.  The entire MOP is bootstrapped in itself.
+	And of course our OO interface looks rather different now.
+	Principle: Sometimes it's better to leave where you are and approach the design from the correct end.
+
+Y!  93 Regex: Support for incremental pattern matching
+	We've specced something that should act like lazy strings, but nobody's implemented it yet.
+	Principle: Good ideas go nowhere without a champion.
+
+G   94 Rename @ARGV to @ARGS
+	Except it's @*ARGS because it's global.
+
+B   95 Object Classes
+	Proposes a class keyword that modifies how 'our' and 'my' are interpreted as a wrapper
+	for Class::Struct, but otherwise suffers from lack of a MOP.
+	We instead ended up with a 'has' declarator for instance declarations, and a true MOP.
+
+W   96 A Base Class for Exception Objects
+
+B   97 prototype-based method overloading
+	We now have full signatures, and multiple dispatch for both subs and methods.
+
+R!  98 context-based method overloading
+	Turns out that, since Perl 6 does context binding lazily, overloading on return type would require time travel.
+	Principle: You can't be both eager and lazy simultaneously.
+
+R   99 Standardize ALL Perl platforms on UNIX epoch
+	Turns out you don't really need an epoch for a sufficiently opaque type for time, as long as you can provide
+	appropriate translation between the opaque type and any culturally relative way of representing time.
+	Perl 6 time is defined as opaque Instant values that are entirely ignorant of culture.  Only modules
+	like DateTime need to be aware of the internals of the Instant type.
+
+M   100 Embed full URI support into Perl
+
+M   101 Apache-like Event and Dispatch Handlers
+	There are several ways to support this via wrapping, multiple dispatch, or derived handler classes,
+	any of which can claim a call or defer to another handler.
+
+G   102 Inline Comments for Perl.
+	We combined this with multi-line comments.
+
+W   103 Fix C<$pkg::$var> precedence issues with parsing of C<::>
+	However, we did introduce a generic symbolic lookup syntax with ::()
+
+B   104 Backtracking
+	Choice points are generated via lazy lists, and evaluated for success using andthen/orelse.
+
+Y   105 Remove "In string @ must be \@" fatal error
+	But we also removed the interpolation that was confusing people.  Interpolating @foo now requires [] after.
+
+R   106 Yet another lexical variable proposal: lexical variables made default without requiring strict 'vars'
+	We don't like autodeclaration of lexicals, and dynamic variables now work entirely differently.
+
+R   107 lvalue subs should receive the rvalue as an argument
+	We think the purpose of an lvalue sub is to establish the identity of a container, not to fill the container,
+	which may happen later.
+
+R   108 Scope of Polymorphic References and Objects
+	We took an entirely different approach based on signature matching.
+
+W   109 Less line noise - let's get rid of @%
+
+R   110 counting matches
+	There are several ways to express this now, and optimizers are getting smarter.
+
+R   111 Here Docs Terminators (Was Whitespace and Here Docs)
+	We allow whitespace before terminator, but we don't ignore it; we use it for indent.
+	We don't make ; a special case after the terminator.
+
+B   112 Assignment within a regex
+	We now have full Match objects with both positional and named capture to handle any amount of nesting.
+
+W   113 Better constants and constant folding
+
+R!  114 Perl resource configuration
+	We'd really like to know which language we're running at the top of a program.
+	Explicit use of mutable rc files is allowed; implicit is not.  We don't need to get rc envy.
+	Principle: Intentional genericity is good, but accidental genericity is bad.
+
+G   115 Overloadable parentheses for objects
+	Defined as postcircumfix:<( )> in Perl 6.
+
+Y   116 Efficient numerics with perl
+	We have a good start on compact numeric storage, including complex,
+	but we're still waiting for a champion to implement the multidimensional parts of S09.
+
+W   117 Perl syntax support for ranges
+
+R   118 lvalue subs: parameters, explicit assignment, and wantarray() changes
+	Lvalue subs should simply return lvalues.
+
+B   119 Object neutral error handling via exceptions
+	See discussion under rfc 88.
+
+R!  120 Implicit counter in for statements, possibly $#.
+	However, what we ended up with is like the proposed alternative #2.
+	Principle: Don't punish the innocent with the guilty.
+
+R   121 linkable output mode
+	Proposal to produce .o and .h files for linking to C code.
+	We are moving instead toward a VM-centric world where most linking is with shared libs.
+
+R   122 types and structures
+	Proposal to use C types and structs.
+	We did not feel it was necessary to reproduce the ill-definedness of the C type system,
+	so most native types can be qualified with their size in bits.  We can use Perl 6 classes
+	containing native attributes to implement structs via representational polymorphism.
+
+G   123 Builtin: lazy
+	Except we made laziness the default, so the 'lazy' statement prefix is really only
+	useful for turning off the default sinking of a for loop.  Since laziness is default,
+	the onus is instead on the users of eager/hyper/race lists to mark them as eager/hyper/race.
+
+M   124 Sort order for any hash
+	Too much overhead to enforce on every hash by default.
+
+G   125 Components in the Perl Core Should Have Well-Defined APIs and Behavior
+	Essentially this falls out of having a decent enough type system to do multiple dispatch.
+
+G   126 Ensuring Perl's object-oriented future
+	Yes, OO is now easy and pervasive in Perl 6 without being oppressive.
+
+R   127 Sane resolution to large function returns
+	We can't use 'want'-based solutions in a lazy language.
+
+Y   128 Subroutines: Extend subroutine contexts to include name parameters and lazy arguments
+	A grabbag of proposed features related to parameter declarations, most of which have not stood the test of time.
+	We did end up with named parameters, though.
+
+R   129 Replace default filehandle/select with $DEFOUT, $DEFERR, $DEFIN
+	Instead we banished the notion of default filehandles along with select.
+	Some of this can instead be handled by dynamically scoping $*IN, $*OUT, and $ERR.
+
+Y   130 Transaction-enabled variables for Perl6
+	We do have the 'let' variant of 'temp' now, but most of the other proposed stuff is experimental
+	or otherwise belongs in modules.
+
+G   131 Internal String Storage to be Opaque
+	In fact, we want to work mostlyat the abstraction level of graphemes, not memory units.
+
+G   132 Subroutines should be able to return an lvalue
+	Except we use 'return-rw' now.  Or just mark the sub as 'rw'.
+	Either just disables the normal decontainerization of the return value.
+
+R   133 Alternate Syntax for variable names
+	Still like sigils, especially when they allow for a twigil namespace.
+	(That being said, you can declare sigilless variables if you like.)
+
+B!  134 Alternative array and hash slicing
+	Presents a real problem, but we blew way past in solving it
+	in terms of sigil invariance and consistent referentiality.
+	A subscript is now just a single-element slice, so the notations are unified.
+	Principle: Unifications can simplify things, sometimes at little cost.
+
+R   135 Require explicit m on matches, even with ?? and // as delimiters.
+	Self clocking code is more important than making it easy to write tokenizers.
+
+Y   136 Implementation of hash iterators
+	We made the hash iterators external as suggested.
+	We don't bother to try to manage changing hashes while iterating.
+	That's now considered a "Doctor, It Hurts When I Do This".
+	Principle: DIHWIDT
+
+B   137 Overview: Perl OO should I<not> be fundamentally changed.
+	We rejected the fundamental idea that all objects are represented as hashes,
+	and chose representational polymorphism instead, mediated by a MOP.
+	That being said, many ideas from here ended up in the new model anyway.
+
+W   138 Eliminate =~ operator.
+
+R!  139 Allow Calling Any Function With A Syntax Like s///
+	Just way too much ambiguity for very little semantic power.
+	Principle: Save your money for power tools.
+
+Y!  140 One Should Not Get Away With Ignoring System Call Errors
+	We can make failures lazy instead of using a pragma.
+	Principle: Premature failure is a kind of premature optimization.
+
+G   141 This Is The Last Major Revision
+	Well, we'd like to think so.
+
+M   142 Enhanced Pack/Unpack
+	Mainly an enhanced syntax that could compile down to the terser form.
+
+M   143 Case ignoring eq and cmp operators
+	One can add operator variants with adverbs already.  But there are many different kinds
+	of canonicalization possible, not just case folding, and we aren't in the business of
+	supplying operators for all possible combinations of those.
+
+Y   144 Behavior of empty regex should be simple
+	Yes, but the simple thing it should do is not compile, since it's often a mistake.
+
+R!  145 Brace-matching for Perl Regular Expressions
+	This should be done with grammar rules as Perl 6's grammar does.
+	These rules should differentiate quotes from nestable brackets.
+	Also, adding more \m\M sequences is not readable.
+	Principle: Don't buy that special tool you see on TV.
+
+R   146 Remove socket functions from core
+	Sockets seem to be pretty universal these days.
+
+W   147 Split Scalars and Objects/References into Two Types
+	We ended up making everything/nothing a reference, anyway.
+
+G   148 Arrays: Add reshape() for multi-dimensional array reshaping =head1 VERSION =head1 VERSION [HTML]
+	We'll need something like this when S09 is finally implemented.
+
+R   149 Lvalue subroutines: implicit and explicit assignment
+	Proposal to always return lazily, so anything is potentially an lvalue.  A "return by name", as it were.
+	This would result in surprising behavior, and not give the optimizer anything to work with for many returned values.
+	Decontainerizing return values is what is expected most of the time.
+
+B   150 Extend regex syntax to provide for return of a hash of matched subpatterns
+	Good idea, but we now have Match objects that can behave as hashes when that's useful.
+
+G   151 Merge C<$!>, C<$^E>, C<$@> and C<$?>
+	Now we just have $!.
+
+G!  152 Replace invocant in @_ with self() builtin
+	We now have a 'self' that is parsed as a term, not as a function, since you can't parameterize it.
+	The RFC argues against the 'use invocant' pragma.
+	Principle: Easy things should be easy, and hard things should be possible.
+
+R   153 New pragma 'autoload' to load functions and modules on-demand
+	Lazy 'use' doesn't work very well when importation is lexical,
+	for the same reason that autodeclaration of lexicals doesn't work well.
+
+R   154 Simple assignment lvalue subs should be on by default
+	Value return (decontainerization) is a saner default, especially with the modern emphasis on FP principles.
+
+R!  155 Remove mathematic and trigonomic functions from core binary
+	Basic math should just exist, not be considered a specialty.  Modules are for non-universal ideas.
+	The argument that it's necessary to reduce core size is not really adequate;
+	only the names need to be in the core, and the functions themselves could be loaded lazily.
+	Principle: The identity is most important part of the API; the implementation isn't.
+
+B   156 Replace first match function (C<?...?>) with a flag to the match command.
+	We now have state variables and once blocks that solve these kinds of problems more generally.
+
+G   157 Delete C<dbmopen> and C<dbmclose> commands.
+	Long gone.
+
+B   158 Regular Expression Special Variables
+	Match objects with memory of the original string solve the non-locality problem of $` and $'.
+
+B   159 True Polymorphic Objects
+	Kind of what we did, but the overloading proposal is completely bypassed by multiple dispatch.
+
+Y   160 Function-call named parameters (with compiler optimizations)
+	Sure, but the proposed use of routine traits to define signatures is pretty gross.
+
+G   161 Everything in Perl becomes an object.
+	Agree with the basic idea 100%, though syntax has changed with less concern for backward compatility.
+	(The suggestion of pragmatically overriding a basic type like Scalar seems like a Really Bad Idea.)
+
+Y!  162 Heredoc contents
+	We ended up with option 'e', remove whitespace corresponding to the terminator's indent.
+	However, we simply made that the default, rather than defining "extended heredocs", since
+	the degenerate case of no indent is just the old semantics.
+	Oh, and heredoc syntax changed from <<"END" to q:to/END/.
+	Principle: The degenerate case is often useful.
+
+B!  163 Objects: Autoaccessors for object data structures
+	Proposes attributes on hash entries for access control.
+	We now have special attribute declarators.
+	Principle: Operational definitions are often weaker than declarative definitions.
+
+Y   164 Replace =~, !~, m//, s///, and tr// with match(), subst(), and trade()
+	We added those methods, and replaced =~ with ~~, but we still have the sugary forms.
+
+Y   165 Allow Varibles in tr///
+	We have ways of passing translation tables to .trans now.  Plus there's always EVAL.
+
+B!  166 Alternative lists and quoting of things
+	We accomplished both of these goals, but not by introducing more special syntax.
+	We simply stopped treating regexes like strings and started parsing them as a real language.
+	Arrays naturally map to alternation, and the default flipped so that $foo is matched literally.
+	(Also fixes the \1 vs $1 problem.)
+	Principle: Little languages don't have to violate one-pass parsing.
+
+B!  167 Simplify C<do BLOCK> Syntax
+	We fixed the problem of requiring semicolon on some final braces but not others.
+	Dropping 'do' is not an option however, since it is significant semantically.
+	We do allow dropping the curlies now, though, on most statement prefixes such as 'do'.
+	Principle: Band-aids won't regrow your limbs.
+
+G   168 Built-in functions should be functions
+	Indeed, "everything is a function" in Perl 6, including built-ins and operators.
+	Even methods are functions that are just dispatched differently.
+	We do still have some keywords though.
+
+W   169 Proposed syntax for matrix element access and slicing.
+
+R   170 Generalize =~ to a special "apply-to" assignment operator
+	A proposal for a funny-looking method call syntax, basically.
+
+W   171 my Dog $spot should call a constructor implicitly
+
+G   172 Precompiled Perl scripts.
+	Support varies from backend to backend, of course,
+
+Y   173 Allow multiple loop variables in foreach statements
+	But by swapping the order, the syntax now falls naturally out of our lambda syntax.
+
+Y   174 Improved parsing and flexibility of indirect object syntax
+	The ambiguity in P5 was really a self-clocking issue.  We solved this by introducing a colon.
+
+G   175 Add C<list> keyword to force list context (like C<scalar>)
+	We have a list function now, despite this RFC having been retracted.  :)
+
+B   176 subroutine / generic entity documentation
+	Yes in principle, but solved much differently now with introspection and optional pod annotations.
+
+R   177 A Natural Syntax Extension For Chained References (aka Multidimensional Arrays/Hashes)
+	Proposal for a multidimensional subscript notation.  We ended up with something different.
+
+R   178 Lightweight Threads
+	Too much data sharing, though we do have the notion that lexical variables within the
+	thread are automatically thread local, and dynamic variables, being lexicals now, work
+	well with that.
+
+Y!  179 More functions from set theory to manipulate arrays
+	We have the set operators, but sets really aren't anything like arrays.
+	They're much more like hashes, actually.
+	Principle: Watch out for XY problems.
+
+C!  180 Object Class hooks into C<printf>
+	Principle: Larry is not omniscient.
+
+G   181 Formats out of core / New format syntax
+	Gone these many years.
+
+Y   182 JART - Just Another Regression Test
+	We try to use some real-world code in our regression tests, but we aren't backward compatible with most JAPHs.
+
+M   183 "=for testing" - Embedded tests
+	Pod has modules too, and we should use it.
+
+G   184 Perl should support an interactive mode.
+	We have a REPL now, though it could still use improvement.
+
+R   185 Thread Programming Model
+	A set of basic tools, but not composable.  We now use promises, channels, and supplies, which compose nicely.
+
+M   186 Standard support for opening i/o handles on scalars and arrays-of-scalars arrays-of-scalars
+	The IO api is all OO, so this stuff is very easy to emulate nowadays.
+
+B   187 Objects : Mandatory and enhanced second argument to C<bless>
+	It never occurred to people that the correct fix was to reverse the args and turn bless into a method
+	where the invocant is what is doing the blessing of another object.
+
+R   188 Objects : Private keys and methods
+	Operational privacy primitives.  We chose declarative instead.
+
+G   189 Objects : Hierarchical calls to initializers and destructors
+	Largely adopted, except for REBUILD.
+
+B   190 Objects : NEXT pseudoclass for method redispatch
+	All dispatchers now use nextsame, nextwith, callsame, callwith, and lastcall.
+
+Y   191 smart container slicing
+	We do allow a WhateverCode as a subscript in support of *-1, but there isn't a lot of call for pattern matching keys.
+	Allowing general smartmatch would be far too ambiguous to make the common case efficient.
+
+R   192 Undef values ne value
+	The use of an undefined value where a defined one is expected is very likely an error.
+
+Y   193 Objects : Core support for method delegation
+	But with its own syntax, not via pragma abuse.
+
+G   194 Standardise Function Pre- and Post-Handling
+	We have ENTER and LEAVE phasers now.  You can also wrap Routines (but not Blocks).
+
+R   195 Retire chop().
+	There are still occasional uses for it where it is much more readable than substr.  It now returns the chopped string though.
+
+G!  196 More direct syntax for hashes
+	Hashes are now objects, and are more directly accessed as requested.
+	Iterators are now considered to be independent of hashes, and so are reset by abandonment.
+	There is now a .pairs method that produces values sortable on the key.
+	Principle: Sometimes generalizing is cheaper than specializing.
+
+R!  197 Numeric Value Ranges In Regular Expressions
+	Low luminance solution to number matching.
+	Numbers should be matched by grammar subrules, generally.
+	Principle: Conserve your brackets.
+
+B   198 Boolean Regexes
+	Submatches with logic.  A lot of this can be done with P6 regexes, but by and large subrules work better for parsing.
+
+G   199 Short-circuiting built-in functions and user-defined subroutines (or "Allowing built-in functions to use loop blocks")
+	You can "next" and "last" within grep and map.
+
+B   200 Objects: Revamp tie to support extensibility (Massive tie changes)
+	We no longer tie.  We do much weirder things now.
+
+R   201 hash slicing
+	Is now easy to grep .pairs.
+
+G   202 Arrays: Overview of multidimensional array RFCs (RFC 203 through RFC 207)
+
+Y   203 Arrays: Notation for declaring and creating arrays
+	Shapes are now declared as: my int @a[3,3]
+
+Y   204 Arrays: Use list reference for multidimensional array access
+	But NYI.
+
+R   205 Arrays: New operator ';' for creating array slices
+	But we use ';' for dimension separation in subscripts.  Use X for cartesian products.
+
+R   206 Arrays: @#arr for getting the dimensions of an array
+	$#foo no longer exists, so we won't base @# on it.  Use .shape method.
+
+Y   207 Arrays: Efficient Array Loops
+	Something like this is specced in S02.  But NYI.
+
+M   208 crypt() default salt
+	Perl 6 doesn't have provide crypt.
+
+G   209 Fuller integer support in Perl.
+	But we just have int32 types and such.  No pragmas to set default, at least by default.
+
+G   210 Data/Binary Dumping and Freezing
+	Supported internally, but differently on each VM.
+
+C   211 The Artistic License Must Be Changed
+
+R   212 Make length(@array) work
+	The word "length" is banned.  However, arrays now have a .elems method.
+
+R   213 rindex and index should return true/false values
+	The defined distinction is sufficient, given that these are not commonly used anymore.
+
+G   214 Emit warnings and errors based on unoptimized code
+
+R   215 More defaulting to $_
+	We chose less defaulting, but made it easy to call methods via .foo syntax.
+
+G   216 POD should tolerate white space.
+
+M   217 POD needs a reorder command.
+
+G   218 C<my Dog $spot> is just an assertion
+
+W   219 Perl6's License Should Be a Minor Bugfix of Perl5's License
+
+M   220 wait() and waitpid() should return false on failure
+	We don't support wait currently in core since it's not portable.
+
+Y   221 system() should return useful values
+	There is no system(); we now use run() or shell() which return usefulish values.
+
+G   222 Interpolation of object method calls
+	Any term expression starting with a sigil and ending with bracketing characters will now interpolate,
+	as long as it is extended only with postfixes at methodcall precedence.
+
+R   223 Objects: C<use invocant> pragma
+	You can rename the invocant by explicit declaration in a method signature.
+	Otherwise, it's 'self'.  (That being said, it's trivial to write a macro to alias self.)
+	Principle: Pragmas are like vice grips: they're the wrong tool for any job, but they'll do any job.
+
+B   224 Objects : Rationalizing C<ref>, C<attribute::reftype>, and C<builtin:blessed>
+	We don't even have ref anymore, but all this info is provided by the MOP.
+
+G   225 Data: Superpositions
+	But we call them "junctions" now.  And we really discourage people from asking for eigenstates.  Use sets if you want sets.
+
+G   226 Selective interpolation in single quotish context.
+	But we use \qq[] and such now.
+
+R   227 Extend the window to turn on taint mode
+	In fact, we can't support tainting efficiently on some VMs, so it's basically NYI.
+
+Y   228 Add memoize into the standard library
+	We now have the 'is cached' trait on routines.
+
+R   229 Variable interpolation on demand.
+	There's always EVAL for these marginal cases.
+
+M   230 Replace C<format> built-in with C<format> function
+	When's the last time you printed to a line printer?
+
+Y   231 Data: Multi-dimensional arrays/hashes and slices
+	Basic syntax is close to what we have specced, but NYI.
+
+B   232 Replace AUTOLOAD by a more flexible mechanism
+
+B   233 Replace Exporter by a better scaling mechanism
+
+B   234 Data: overloading via the SECOND operand if needed
+	Replaced entire overloading mechanism with multiple dispatch.
+
+B   235 Data: sprintf() with overloaded objects
+
+B   236 Change the way $SIG{__WARN__} and $SIG{__DIE__} are used
+	We do not currently have warn or die hooks, apart from normal exception handlers.
+	One could conceivably wrap die() and warn() though.
+
+Y   237 hashes should interpolate in double-quoted strings
+	But not without the {}.
+
+G   238 length(@ary) deserves a warning
+	No, it deserves a fatal error.
+
+R   239 IO: Standardization of Perl IO Functions to use Indirect Objects
+	Nobody seems to like IOIO.  STD parses indirect objects but rakudo doesn't yet.
+
+C   240 Form a documentation working group to edit, clean, and produce documentation
+
+G   241 Pseudo-hashes must die!
+	RIP.
+
+B   242 No overloading of f($arg) basing on ref($arg)
+	There are no references (or everything is a reference), so this is moot.
+
+Y   243 No special UPPERCASE_NAME subroutines
+	We still have such names, but they are not subs.  We call them phasers now, and the parse as statement prefixes.
+
+B   244 Method calls should not suffer from the action on a distance
+	Different parser, different method syntax, cleaner lexical scoping.
+
+W   245 Add new C<empty> keyword to DWIM for clearing values
+
+Y   246 pack/unpack uncontrovercial enhancements
+
+B   247 pack/unpack C-like enhancements
+	More likely through representational polymorphism of a normal class/struct, then compilation to a pack template.
+
+B   248 enhanced groups in pack/unpack
+
+B   249 Use pack/unpack for marshalling
+
+B   250 hooks in pack/unpack
+
+R   251 Interpolation of class method calls
+	Interpolation requries a sigil (or curlies).
+
+G   252 Interpolation of subroutines
+	Works, parens required.
+
+B   253 UNIVERSAL::require()
+	We don't have UNIVERSAL anymore.
+
+Y   254 Class Collections: Provide the ability to overload classes
+	Virtual class names were specced, but are NYI.  It's possible roles are a better solution.
+
+G   255 Fix iteration of nested hashes
+	Iterators are now independent of hashes.
+
+G   256 Objects : Native support for multimethods
+	Albeit with many tweaks to the model and syntax.
+
+B   257 UNIVERSAL::import()
+	We don't have UNIVERSAL anymore.
+
+G   258 Distinguish packed data from printable strings
+	Binary and encoded text are now stored in blobs and bufs.  Str types are reserved for human readable text.
+
+R   259 Builtins : Make use of hashref context for garrulous builtins
+	Reinvents OO poorly.
+	Context is now lazy, so want-based solutions won't work.
+
+C   260 More modules
+	Instead, we will have a distribution model like Linux.
+
+Y   261 Pattern matching on perl values
+	Smartmatching does some of this; signature matching does more.
+
+R   262 Index Attribute
+	Use .kv or .pairs if you need the index.
+
+W   263 Add null() keyword and fundamental data type
+
+R   264 Provide a standard module to simplify the creation of source filters
+	Source filters are gone along with all other multi-pass cruft.  We use real one-pass parsers now.
+
+B   265 Interface polymorphism considered lovely
+	We now use roles to do this.
+
+G   266 Any scalar can be a hash key
+	As long as you declare it: my %hash{Any} or some other suitable type.
+
+G   267 Eliminate dump() function
+
+M   268 Keyed arrays
+	Proposal for hybrid hash/arrays.  See also S09 for data structures that provide both [] and {}.
+
+W   269 Perl should not abort when a required file yields a false value
+
+M   270 Replace XS with the C<Inline> module as the standard way to extend Perl.
+	We now have a native interface for most of this stuff.
+
+Y   271 Subroutines : Pre- and post- handlers for subroutines
+	Rather than separate pre and post, we have generic .wrap which can emulate either using 'callsame' or 'callwith'.
+	(Pre handlers could of course use 'nextsame' or 'nextwith' instead.)
+	Argument and return values are now handled universally as Capture and Parcel objects.
+
+Y   272 Arrays: transpose()
+	But NYI.
+
+R   273 Internal representation of Pseudo-hashes using attributes.
+	No pseudo-hashes.
+
+B   274 Generalised Additions to Regexs
+	Regexes have been entirely redesigned with different syntax and other extension mechanisms.
+
+M   275 New 'tristate' pragma to allow undef to take on NULL semantics
+
+G   276 Localising Paren Counts in qr()s.
+	Naturally falls out of the P6 regex redesign.
+
+B   277 Method calls SHOULD suffer from ambiguity by default
+	The ambiguity no longer arises; P6 has no barewords.
+
+B   278 Additions to 'use strict' to fix syntactic ambiguities
+	Perl 6 does not have these ambiguities.
+
+B   279 my() syntax extensions and attribute declarations
+	Similar ideas in applying the types and the traits we allow on declared items and parameters.
+
+R!  280 Tweak POD's CE<lt>E<gt>
+	Proposal to allow C// (choose your own quotes) in addition to C<>.
+	Too many things start off with single capital letters followed by punctuation.
+	People write the darndest things, "Section C.24.ii" and such.
+	Principle: People are like sheep, and will wander out any open gate.
+
+C   281 The Perl 6 Development Log
+
+G   282 Open-ended slices
+	Only we use @thingy[3..*] for open-ended ranges now.
+
+R!  283 C<tr///> in array context should return a histogram
+	Nowadays, likelier to use .comb and .classify for this.
+	Principle: YAGNI.
+
+R   284 Change C<$SIG{__WARN__}> and C<$SIG{__DIE__}> to magic subs
+	We don't have hooks for those things.  You can wrap die and warn if you really need to.
+	But mostly we just write exception handlers now.
+
+G!  285 Lazy Input / Context-sensitive Input
+	my ($a,$b,$c) = $*IN.lines; # only reads three lines due to laziness
+	Principle: Major features should fix lots of things.
+
+G   286 Add a "emit pod" runtime option to Perl
+	Indeed, we now have the --doc option.
+
+G   287 Improve Perl Persistance
+	Mostly done, except for the hardest bits.  How do you persist a filehandle?
+
+M   288 First-Class CGI Support
+	CGI is soooo 20th century...
+
+M   289 Generate module dependencies easily
+
+M   290 Better english names for -X
+	Once you know you have an IO object, the short names make much more sense as methods.
+	We can also stack them in smartmatches: $*HANDLE ~~ :r & :x
+
+Y   291 Detecting Perl Core Modules Should Be Easy
+	Source is derivable by introspection now, but we try to make
+	this distinction unimportant.  Either you have a module already,
+	or you download it.  The term "core" is relatively meaningless.
+
+M   292 Extensions to the perl debugger
+	In fact, our current debugger is just a module.
+
+B   293 MT-Safe Autovariables in perl 5.005 Threading
+	Auto variables are not globally cached in Perl 6, so the situation doesn't arise.
+
+R   294 Internally, data is stored as UTF8
+	Actually, it should be in NFG.
+
+Y   295 Normalisation and C<unicode::exact>
+	NFG handles normalization, but pragmas are the wrong approach to exact matching.
+	This should be controlled through the type system.
+
+R   296 Getting Data Into Unicode Is Not Our Problem
+	Not a Perlish attitude.  We're supposed to help people get their job done.
+
+B   297 Attributes for compiler hints
+	Proposes types that are ignored by the Perl interpreter.
+	We have gradual typing, which can also be used for C-level hints.
+
+Y   298 Make subroutines' prototypes accessible from Perl
+	Signatures are available by introspection, but factoring out common subsignatures
+	would probably be in the realm of macros.
+
+R   299 C<@STACK> - a modifyable C<caller()>
+	Just say no.
+
+R   300 C<use unicode::representation> and C<no unicode>
+	Unicode pragmas are not in vogue.  Mostly we try to use the type system now.
+
+G   301 Cache byte-compiled programs and modules
+	Okay.  A bit VM-specific though.
+
+Y   302 Unrolling loops and tail recursion
+	This is mostly something for the optimizer to decide.
+
+Y   303 Keep C<use less>, but make it work.
+	But we need to know where the optimizer can't figure it out for itself first.
+
+B   304 C<sort> algorithm to be selectable at compile time
+	Any built-in can be overridden within a lexical scope.
+
+R   305 C<$^C> should be true when compiling
+	Don't even have the variable now.
+
+M   306 User-definable POD handling
+	Pod supports a module system now.
+
+W   307 PRAYER - what gets said when you C<bless> something
+
+R   308 Ban Perl hooks into regexes
+	All languages are dialects of Perl now, so it doesn't matter.
+
+R   309 Allow keywords in sub prototypes
+	Signatures are the wrong place to define grammar rules.  We will eventually
+	support 'is parsed' on macros though, as well as user-defined slangs.
+
+Y   310 Ordered bytecode
+	Suggests pipelining the just-in-time reading of bytecode while start execution.
+	Better might be demand paging the bytecode if it's directly interpretable.
+
+Y   311 Line Disciplines
+	These days, this approach seems like reinventing OO poorly.
+
+R   312 Unicode Combinatorix
+	We'll use the type system, not pragmas.
+
+G   313 Perl 6 should support I18N and L10N
+	NYI, needs a champion.
+
+B   314 A parser is a many-layered thing
+	A proposal for...a hand-wavey bootstrap.
+	A lot of water under that bridge since then...
+
+R   315 Kick out all ops - libprt
+	The setting should be thought of as a constant set of names;
+	the definitions may be brought in lazily.
+
+R   316 Regex modifier for support of chunk processing and prefix matching
+	This is inside out; the regex matcher should simply be able to request more input
+	without worrying about suspending and resuming.
+
+B   317 Access to optimisation information for regular expressions
+	We have such a different regex engine now that this is now either trivial or impossible.
+
+B   318 Handling environment setting in extension modules
+	The environment now comes though a dynamically scoped %*ENV variable, so any dynamic call's effects
+	may be isolated from the rest of the program.
+
+R   319 Transparently integrate C<tie>
+	We killed tie completely.  Use the MOP now.
+
+Y   320 Allow grouping of -X file tests and add C<filetest> builtin
+	But grouping is done with junctions of smartmatch pairs now.
+
+B   321 Common Callback API for all AIO calls.
+	Now handled with promises, channels, and supplies.
+
+Y   322 Abstract Internals String Interaction
+	But wchar_t is not the answer.
+
+Y   323 Perl's embedding API should be simple
+	But meshing GC implementations is hard.  Needs a champion.
+
+Y   324 Extend AUTOLOAD functionality to AUTOGLOB
+	Specced but NYI.
+
+Y   325 POD and comments handling in perl
+	Proposal for optional # before the = for visual clarity.
+	We do have some pod-related comments, but primarily to get them close to the things they're describing.
+
+R   326 Symbols, symbols everywhere
+	Bare symbols are not actually very user-friendly.  That's not
+	to say that the optimizer can't use the technique internally.
+	In fact, objects have a unique identity already, so any object
+	can serve as a kind of symbol.
+
+R   327 C<\v> for Vertical Tab
+	When's the last time you printed on a line printer?
+
+R   328 Single quotes don't interpolate \' and \\
+	We do have a perfect quote syntax instead, Q/foo/ or ｢bar｣.
+
+B   329 C<use syntax>
+	We'll have slangs, sure 'nuff.
+
+R   330 Global dynamic variables should remain the default
+	Global dynamic variables are a big reason why threading is so hard in P5.
+
+G   331 Consolidate the $1 and C<\1> notations
+	Though the @/ proposal merely foreshadows the Match object.
+	Also, we start at $0 now.
+
+B   332 Regex: Make /$/ equivalent to /\z/ under the '/s' modifier
+	There is no \z, and no /s, and $ just always means what \z used to mean.
+	We now use $$ to mean end of any line.
+
+M   333 Add C<header> and C<unheader> funtions to core distribution
+
+G   334 Perl should allow specially attributed subs to be called as C functions
+	The 'is native' mechanism is essentially this approach.
+
+Y   335 Class Methods Introspection: what methods does this object support?
+	This is now $object.^methods to call into the MOP.
+
+B   336 use strict 'objects': a new pragma for using Java-like objects in Perl
+	Superseded by the whole OO design.
+
+Y   337 Common attribute system to allow user-defined, extensible attributes
+	These are called traits in Perl 6, and are user-definable.
+
+C   338 shareable bytecode
+	This has to be decided on a VM-by-VM basis.
+
+Y   339 caller->eval BLOCK
+	Note that EVAL can't actually extend the caller's lexical pad though.
+
+Y   340 with takes a context
+	Probably possible already with the MY:: pseudopackage.  Likely to screw up the optimizer though.
+
+M   341 unified container theory
+	See also S09 for objects with both .[] and .{} subscripts.
+
+R   342 Pascal-like "with"
+	Can't introduce lexical names dynamically.  .<foo> given %hash is already pretty sweet.
+
+C   343 New Perl Mascot
+	See the Onion, and Camelia.
+
+Y   344 Elements of @_ should be read-only by default
+	Seems to behave like a copy currently though.
+
+G   345 Putting an Event Loop in the Core
+	Well, many event loops, via cooperating schedulers, really.
+
+C   346 Perl6's License Should be (GPL|Artistic-2.0)
+	Turns out that Artistic 2.0 is GPL compatible, so doesn't need to be dual-licensed.
+
+G   347 Remove long-deprecated $* (aka $MULTILINE_MATCHING)
+
+Y   348 Regex assertions in plain Perl code
+	We do now have assertions of the form <?{ $0 < 256 }>.
+
+R   349 Perl modules should be built with a Perl make program
+	Eep, why create yet another broken and/or incompatible version of make?
+	But don't let me stop you.
+
+B   350 Advanced I/O (AIO)
+	Superseded by promises, channels, and supplies.
+
+R   351 Beyond the amnesic eval
+	There are other better ways to do this.
+
+G   352 Merge Perl and C#, but have default Main class for scripting.
+	Despite the title, the author really just wants "Everything is an object."
+
+Y   353 A Sandboxing mechanism for Perl 6
+	Sandboxing is difficult to do in a VM-agnostic way.
+
+R   354 A Trademark on Perl Should be Acquired in Larry Wall's Name
+	Larry doesn't want a trademark on Perl.
+
+R   355 Leave $[ alone.
+	S09 has a mechanism specced for .{1} as the first element though.
+
+M   356 Dominant Value Expressions
+	This is too whacked out for the core.
+
+R   357 Perl should use XML for documentation instead of POD
+	Nope.  We like Pod.  It's almost human readable.
+
+R   358 Keep dump capability.
+	Highly implementation dependent, alas.
+
+Y   359 Improvement needed in error messages (both internal errors and die function).
+	It seems a pretty good indication of a fatal error already that the program stopped.
+	Not that many error messages couldn't use improvement, but telling people what they
+	already know is perhaps not the best way to improve things.  The term "internal error"
+	is relatively meaningless when it's all internal to the user.
+
+G   360 Allow multiply matched groups in regexes to return a listref of all matches
+	This is basically how the new P6 regexes work.
+
+G   361 Simplifying split() 
+	All better now.
