@@ -4,6 +4,7 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <title>[% readvar title %]</title>
     [% ifvar more_header %] [% readvar more_header %] [%endifvar%]
     <meta name=viewport content="width=device-width, initial-scale=1">
