@@ -137,25 +137,40 @@ section ul {
     background: #f5ef7b;
     border-color: #f2c100;
 }
-#download {
-    border: 2px solid white;
-    -moz-box-shadow: 5px 5px 10px white;
-    -webkit-box-shadow: 5px 5px 10px white;
-    box-shadow: 5px 5px 10px white;
-}
 
 #nav-home {
     background: #80b5ff;
 }
 
+#download {
+    border: 0;
+    -moz-box-shadow: none;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+}
+
 #download a {
+    background: #2065F7;
+    background: -webkit-linear-gradient(top, #9CBAFB 0, #5B8EF9 4.5%, #2065F7 100%);
+    background: linear-gradient(to bottom, #9CBAFB 0, #5B8EF9 4.5%, #2065F7 100%);
+    border: 1px solid #2168FF;
+    border-radius: 1em;
+    color: #fff;
+    text-shadow: 1px 1px 3px #666;
+    box-shadow: 5px 5px 10px #888;
+    display: inline-block;
+    font-size: 130%;
+    text-align: center;
+    margin: 2.4em 0 0;
+    padding: 0.5em 1.5em 0.5em;
+}
+
+#download a:hover {
+    background-color: #5B8EF9;
+    background: -webkit-linear-gradient(top, #9CBAFB 0, #5B8EF9 6%, #5B8EF9 100%);
+    background: linear-gradient(to bottom, #9CBAFB 0, #5B8EF9 6%, #5B8EF9 100%);
+    color: #fff;
     text-decoration: none;
-    border: 0px;
-    font-size: 100%;
-    color: #ffffff;
-    margin: 2em auto;
-    display: block;
-    width: 206px;
 }
 
 ul {
