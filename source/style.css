@@ -69,6 +69,33 @@ header img {
     border-bottom: 1px dotted #000;
 }
 
+#archive-notice {
+    height: 3em;
+}
+
+#archive-notice h3,
+#archive-notice p {
+    position: fixed;
+    width: 100%;
+    top: 0;
+    left: 0;
+    font-size: 80%;
+    text-align: center;
+    border-bottom: 1px solid #000;
+    background: #FEFE01;
+    color: #444;
+    margin: 0;
+    padding: .5em;
+}
+
+#archive-notice h3 {
+    height: 3em;
+}
+
+#archive-notice p {
+    top: 2em;
+}
+
 /* These two were previously "div a", but the entire page is in a wrapper div already. */
 a {
     text-decoration: none;
