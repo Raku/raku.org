@@ -224,7 +224,7 @@ footer {
 
 #navigation li
 {
-    display:         inline;
+    display:         inline-block;
     list-style-type: none;
     padding:   1ex;
     -moz-border-radius: 0.5ex;
