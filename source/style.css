@@ -139,6 +139,16 @@ section {
     padding: 1em 2em 1em 2em;
 }
 
+@media screen and (max-width: 971px) {
+	#col1, #col2 {
+		width: auto;
+	}
+
+	#col1 {
+		margin: 0 0 2em 0;
+	}
+}
+
 #col1 {
     float: left;
 }
