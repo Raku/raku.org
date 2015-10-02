@@ -1,80 +1,101 @@
 [% setvar title Perl 6 %]
+
+[% menu nav home %]
+
 [% setvar more_header
     <meta name="description" content="Home page for Perl 6, the newest member of the family of languages known as Perl." />
     <meta name="verify-v1" content="p7bEStVpDsW4ixm9YbF1ck02FRQfdA97ZL9mJnt0iQ0=" />
     <meta name="google-site-verification" content="fDTmO9fcCRRgBqbKirQidKJ6nhTqnolHrKrgwVWJxZA" />
 %]
 
-<header id="welcome-header">
-    <a href='http://github.com/perl6/mu/raw/master/misc/camelia.txt'><img src="camelia-logo.png" alt="camelia perl bug logo" /></a>
-    <h2>Welcome to Perl&nbsp;6</h2>
-    <p>Hi, my name is Camelia.  I'm the spokesbug for Perl&nbsp;6, the spunky little sister of Perl&nbsp;5.
-    Like her world-famous big sister, Perl&nbsp;6 intends to carry forward the high ideals of the
-    <a href="http://perl.org">Perl</a> community.  Perl&nbsp;6 is currently being developed
-    by a team of dedicated and enthusiastic volunteers.  You can help too.  The only requirement is that
-    you know how to be nice to all kinds of people (and butterflies).  Go to
-    <a class="header-black-link" href="http://webchat.freenode.net/?channels=perl6&amp;nick=">#perl6 (irc.freenode.net)</a>
-    and someone will be glad to help you <a href="/getting-started/">get started</a>.</p>
+<header id="welcome-header" class="row lead">
+  <div class="col-sm-9">
+    <h1>The <b>Perl&nbsp;6</b> Programming Language</h1>
+    <p>Hi, my name is Camelia.  I'm the spokesbug for Perl&nbsp;6,
+      the spunky little sister of Perl&nbsp;5. Like her world-famous big
+      sister, Perl&nbsp;6 intends to carry forward the high ideals of
+      the <a href="http://perl.org">Perl</a> community. Perl&nbsp;6 is
+      currently being developed by a team of dedicated and enthusiastic
+      volunteers. You can help too. The only requirement is that you know
+      how to be nice to all kinds of people (and butterflies). Go to
+      <a href="http://webchat.freenode.net/?channels=perl6&amp;nick="
+        >#perl6 (irc.freenode.net)</a>
+      and someone will be glad to help you
+        <a href="/getting-started/">get started</a>.
+    </p>
+  </div>
+  <div class="col-sm-3">
+    <a href='http://github.com/perl6/mu/raw/master/misc/camelia.txt'><img
+      src="camelia-logo.png" alt="camelia perl bug logo"
+      class="img-responsive center-block"
+    ></a>
+  </div>
 </header>
 
-<main>
-    <section id="community">
-        <h4><a href="/community/">Community</a></h4>
-        <ul>
-            <li><a href="/community/irc">#perl6 IRC channel</a>: <a href="irc://irc.freenode.net/%23perl6">system IRC client</a>
-            or&nbsp;<a href="http://webchat.freenode.net/?channels=perl6&amp;nick=">chat live in your browser</a></li>
-            <li><a href="/community/rosettacode">Perl&nbsp;6 on Rosetta Code</a>, <a href="http://pl6anet.org/">Blogs</a>, <a href="http://www.perlfoundation.org/perl6/index.cgi?perl_6">Perl 6 wiki</a></li>
-        </ul>
-        <p class="more"><a href="/community/">»MORE«</a></p>
-    </section>
+<main class="row home">
+  <section class="col-sm-4 col-md-3 well">
+    <h3 class="h2 trim-top">Jump in!</h3>
+    <p>Rakudo is a compiler for Perl&nbsp;6 code. Install it and you're
+      all set to run Perl&nbsp;6 programs!</p>
+    <a href="http://rakudo.org/how-to-get-rakudo"
+      class="btn btn-primary btn-lg btn-block">
+      Download Rakudo Perl&nbsp;6
+    </a>
+  </section>
 
-    <section id="download">
-        <a href="http://rakudo.org/how-to-get-rakudo">
-            Download Rakudo Perl&nbsp;6
-        </a>
-    </section>
 
-    <section id="compiler">
-        <h4><a href="/compilers/">Compilers</a></h4>
-        <ul>
-            <li><a href="http://rakudo.org/">Rakudo</a>, a compiler running on
-                <a href="http://moarvm.com/">MoarVM</a>,
-                 the JVM and other backends.</li>
-            <li><a href="https://github.com/sorear/niecza">Niecza</a>, a
-                Perl 6 compiler for the CLR (mono/.NET)</li>
-        </ul>
-        <p class="more"><a href="/compilers/">»MORE«</a></p>
-    </section>
+  <div class="col-sm-8 col-md-9">
+    <ul class="nav nav-tabs" role="tablist">
+      <li role="presentation" class="active"
+        ><a href="#samp-basic" role="tab"
+          data-toggle="tab">Words from File</a>
+      </li>
+      <li role="presentation"><a href="#samp-fib" role="tab" data-toggle="tab">Lazy Infinite Lists</a></li>
+      <li role="presentation"><a href="#samp-ops" role="tab" data-toggle="tab">Custom unicode operators
+      </a></li>
+      <li role="presentation"><a href="#samp-more" role="tab" data-toggle="tab">More examples</a></li>
+    </ul>
+    <div class="tab-content">
+      <div role="tabpanel" class="tab-pane active" id="samp-basic">
+<div class="highlight"><pre><span class="k">for</span> <span class="nb">IO</span>(<span class="s">&#39;dict.txt&#39;</span>).<span class="n">words</span> -&gt; <span class="nv">$word</span> {
+  <span class="nb">say</span> <span class="s">&quot;$word probably rhymes with Perl&quot;</span>
+    <span class="k">if</span> <span class="nv">$word</span> ~~<span class="sr"> /[ea?|u|i] rl $/</span>;
 
-    <section id="docs">
-        <h4><a href="/documentation/">Documentation</a></h4>
-        <ul>
-        <li><a href="/getting-started/">Getting started</a></li>
-        <li><a href="http://doc.perl6.org/">Perl&nbsp;6 Documentation</a></li>
-        <li><a href="http://doc.perl6.org/language/5to6">Perl&nbsp;5 to 6</a>,
-            an introduction for Perl&nbsp;5 programmers</li>
-        </ul>
-        <p class="more"><a href="/documentation/">»MORE«</a></p>
-    </section>
+  <span class="nb">say</span> <span class="s">&quot;$word is a palindrome&quot;</span>
+    <span class="k">if</span> <span class="nv">$word</span> <span class="o">eq</span> <span class="nv">$word</span>.<span class="nb">flip</span>;
+}
+</pre></div>
+      </div>
+      <div role="tabpanel" class="tab-pane" id="samp-fib">
+<div class="highlight"><pre><span class="k">my</span> <span class="nv">@fib</span> = <span class="mi">0</span>, <span class="mi">1</span>, *+* ... *;
+<span class="nb">say</span> <span class="s">&quot;Fibbonaci number #8 is @fib[7]&quot;</span>;
+</pre></div>
+      </div>
+      <div role="tabpanel" class="tab-pane" id="samp-ops">
+<div class="highlight"><pre><span class="k">multi</span> <span class="k">sub</span> <span class="n">postfix:</span><span class="s">&lt;❢&gt; (Int $i where $i &lt; 0) is tighter(&amp;infix:&lt;*&gt;</span>) {
+    <span class="k">fail</span> <span class="s">&quot;Not a Natural Number in Factorial&quot;</span>
+}
+<span class="k">multi</span> <span class="k">sub</span> <span class="n">postfix:</span><span class="s">&lt;❢&gt; (Int $i where 0|1) is tighter(&amp;infix:&lt;*&gt;</span>) { <span class="mi">1</span> }
+<span class="k">multi</span> <span class="k">sub</span> <span class="n">postfix:</span><span class="s">&lt;❢&gt; (Int $i where $i &gt; 1) is tighter(&amp;infix:&lt;*&gt;</span>) {
+    <span class="nv">$i</span> * (<span class="nv">$i-1</span>)❢
+}
 
-    <section id="specs">
-        <h4><a href="/specification/">Language Design</a></h4>
-        <ul>
-            <li><a href="http://design.perl6.org/">Synopsis</a> - official Perl&nbsp;6 design documents</li>
-            <li><a href="/compilers/std-viv">STD.pm</a> - official Perl&nbsp;6 grammar</li>
-        </ul>
-        <p class="more"><a href="/specification/">»MORE«</a></p>
-    </section>
+<span class="k">use</span> <span class="n">Test</span>;
+<span class="n">isa-ok</span> -<span class="mi">1</span>❢, <span class="nb">Failure</span>, <span class="s">&quot;Factorial for -1 fails&quot;</span>;
+<span class="nb">ok</span> <span class="mi">0</span>❢ == <span class="mi">1</span>, <span class="s">&quot;Factorial for 0&quot;</span>;
+<span class="nb">ok</span> <span class="mi">1</span>❢ == <span class="mi">1</span>, <span class="s">&quot;Factorial for 1&quot;</span>;
+<span class="nb">ok</span> <span class="mi">5</span>❢ == <span class="mi">120</span>, <span class="s">&quot;Factorial for a larger integer&quot;</span>;
+</pre></div>
+</div>
+      <div role="tabpanel" class="tab-pane" id="samp-more">
+        <p class="lead text-center well"
+          style="padding-top: 20px;">Want to see more?
+            <a href="http://examples.perl6.org/"
+          class="btn btn-primary">Visit Perl&nbsp;6 examples page</a>
+        </p>
+      </div>
+    </div>
 
-    <section id="stuff">
-        <h4><a href="/whatever/">Modules</a></h4>
-        <ul>
-            <li><a href="http://modules.perl6.org/">Perl&nbsp;6 modules
-                directory</a></li>
-            <li><a href="https://github.com/tadzik/panda/">Panda</a>, a
-            module installer for Rakudo</li>
-        </ul>
-    </section>
-
+  </div>
 </main>
 
