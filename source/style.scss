@@ -35,21 +35,22 @@ $p6logo4: #FE3265; // pink
 $p6logo5: #00FC00; // green
 
 body {
-    padding-top: 60px;
+    padding-top: 70px;
 }
 
 .navbar-inverse {
-    background: $p6col5;
+    // background: $p6col1;
 
     a {
-        color: lighten($p6col1, 10%)!important;
+        // color: lighten($p6col1, 10%)!important;
+        text-shadow: none!important;
     }
 
     .active a,
     a:hover,
     a:focus,
     a:active {
-        color: darken($p6col1, 10%)!important;
+        background: $p6col2!important;
     }
 }
 
@@ -166,6 +167,22 @@ a {
 
 .trim-top {
     margin-top: 0;
+}
+
+.trim-bottom {
+    margin-bottom: 0;
+}
+
+.trim {
+    padding-bottom: 0;
+}
+
+#mailing-lists,
+#botlist {
+    dd {
+        padding-left: 20px;
+        padding-bottom: 10px;
+    }
 }
 
 

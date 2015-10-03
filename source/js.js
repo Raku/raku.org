@@ -11,4 +11,5 @@ jQuery(function ($) {
 
     $('.home section:eq(0) .panel-body, .home section:eq(1) .panel-body').sameHeight();
     $('footer ul').sameHeight();
+    $('.equal-panels .panel-body').sameHeight();
 });

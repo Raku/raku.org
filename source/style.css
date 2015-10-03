@@ -1,15 +1,13 @@
 body {
-  padding-top: 60px; }
+  padding-top: 70px; }
 
-.navbar-inverse {
-  background: #3B3B3D; }
-  .navbar-inverse a {
-    color: #dae457 !important; }
-  .navbar-inverse .active a,
-  .navbar-inverse a:hover,
-  .navbar-inverse a:focus,
-  .navbar-inverse a:active {
-    color: #acb81d !important; }
+.navbar-inverse a {
+  text-shadow: none !important; }
+.navbar-inverse .active a,
+.navbar-inverse a:hover,
+.navbar-inverse a:focus,
+.navbar-inverse a:active {
+  background: #98C73D !important; }
 
 footer {
   background: #3B3B3D;
@@ -72,6 +70,17 @@ footer {
 
 .trim-top {
   margin-top: 0; }
+
+.trim-bottom {
+  margin-bottom: 0; }
+
+.trim {
+  padding-bottom: 0; }
+
+#mailing-lists dd,
+#botlist dd {
+  padding-left: 20px;
+  padding-bottom: 10px; }
 
 /* Pygments Highlighter */
 .hll {

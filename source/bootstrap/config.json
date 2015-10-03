@@ -162,11 +162,11 @@
     "@navbar-default-toggle-hover-bg": "#ddd",
     "@navbar-default-toggle-icon-bar-bg": "#888",
     "@navbar-default-toggle-border-color": "#ddd",
-    "@navbar-inverse-color": "lighten(@gray-light, 15%)",
-    "@navbar-inverse-bg": "#3B3B3D",
+    "@navbar-inverse-color": "#3B3B3D",
+    "@navbar-inverse-bg": "#D0DD2B",
     "@navbar-inverse-border": "darken(@navbar-inverse-bg, 10%)",
-    "@navbar-inverse-link-color": "lighten(@gray-light, 15%)",
-    "@navbar-inverse-link-hover-color": "#fff",
+    "@navbar-inverse-link-color": "#3B3B3D",
+    "@navbar-inverse-link-hover-color": "#000",
     "@navbar-inverse-link-hover-bg": "transparent",
     "@navbar-inverse-link-active-color": "@navbar-inverse-link-hover-color",
     "@navbar-inverse-link-active-bg": "darken(@navbar-inverse-bg, 10%)",
@@ -430,5 +430,5 @@
     "scrollspy.js",
     "transition.js"
   ],
-  "customizerUrl": "http://getbootstrap.com/customize/?id=6fd39e60ed7eb908396b"
+  "customizerUrl": "http://getbootstrap.com/customize/?id=29fbbdb857345e7d3189"
 }
