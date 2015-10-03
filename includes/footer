@@ -68,12 +68,6 @@
     </div>
   </div>
 </footer>
-
-<div class="div" id="chat">
-  <a href="http://webchat.freenode.net/?channels=perl6&amp;nick="
-    class="btn btn-block btn-primary ">Chat with us!</a>
-</div>
-
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
 <script src="/bootstrap/js/bootstrap.min.js"></script>
 <script src="/js.js"></script>

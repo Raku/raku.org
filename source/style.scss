@@ -1,38 +1,13 @@
 
-//http://www.colourlovers.com/palette/497539/Hello_baby?c=1
-// $p6col1: #044C5C;
-// $p6col2: #FC740A;
-// $p6col3: #FCB00A;
-// $p6col4: #FCEC0A;
-// $p6col5: #067A94;
-
-//http://www.colourlovers.com/palette/55992/Good_Vibe_Zone
-// $p6col1: #226888;
-// $p6col2: #398EB6;
-// $p6col3: #FFA200;
-// $p6col4: #FFD600;
-// $p6col5: #FFF500;
-
-// //http://www.colourlovers.com/palette/55992/Good_Vibe_Zone
-// $p6col1: #FDC938;
-// $p6col2: #EE6D0C;
-// $p6col3: #C7361E;
-// $p6col4: #69245C;
-// $p6col5: #3443A6;
-
-//http://www.colourlovers.com/digital-art/trends/branding/7874/ROBAROV_WEBDESIGN
 $p6col1: #D0DD2B;
 $p6col2: #98C73D;
 $p6col3: #00A9E0;
 $p6col4: #67CDDC;
 $p6col5: #3B3B3D;
 
-
-$p6logo1: #010101; // black
-$p6logo2: #FFFF00; // yellow
-$p6logo3: #0101FE; // blue
-$p6logo4: #FE3265; // pink
-$p6logo5: #00FC00; // green
+html {
+    overflow-y: scroll;
+}
 
 body {
     background: $p6col5;
@@ -175,17 +150,6 @@ footer {
         padding-left: 20px;
         padding-bottom: 10px;
     }
-}
-
-#chat {
-    position: fixed;
-    bottom: -100px;
-    padding: 5px 5px 15px;
-    border-radius: 4px;
-    background: $p6col3;
-    border: 1px solid darken($p6col3, 4%);
-    // opacity: 0;
-    box-shadow: 0px 0px 2px rgba(0, 0, 0, .3);
 }
 
 
