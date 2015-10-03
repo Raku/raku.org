@@ -1,3 +1,4 @@
+  </div>
 </div>
 
 <footer>
@@ -11,7 +12,7 @@
           <li><a href="/community/rosettacode">Perl&nbsp;6 on Rosetta Code</a>, <a href="http://pl6anet.org/">Blogs</a>, <a href="http://www.perlfoundation.org/perl6/index.cgi?perl_6">Perl 6 wiki</a></li>
         </ul>
 
-        <a href="/community/" class="btn btn-success">»MORE«</a>
+        <a href="/community/" class="btn btn-success">More</a>
       </section>
 
       <section class="col-sm-6 col-md-5ths">
@@ -22,7 +23,7 @@
           <li><a href="http://doc.perl6.org/language/5to6">Perl&nbsp;5 to 6</a>,
               an introduction for Perl&nbsp;5 programmers</li>
         </ul>
-          <a href="/documentation/" class="btn btn-success">»MORE«</a>
+          <a href="/documentation/" class="btn btn-success">More</a>
       </section>
 
       <section class="col-sm-6 col-md-5ths">
@@ -35,7 +36,7 @@
           module installer for Rakudo</li>
         </ul>
 
-        <a href="/whatever/" class="btn btn-success">»MORE«</a>
+        <a href="/whatever/" class="btn btn-success">More</a>
       </section>
 
       <section class="col-sm-6 col-md-5ths">
@@ -47,7 +48,7 @@
             <li><a href="https://github.com/sorear/niecza">Niecza</a>, a
                 Perl&nbsp;6 compiler for the CLR (mono/.NET)</li>
         </ul>
-        <a href="/compilers/" class="btn btn-success">»MORE«</a>
+        <a href="/compilers/" class="btn btn-success">More</a>
       </section>
 
       <section class="col-sm-6 col-md-5ths">
@@ -56,7 +57,7 @@
           <li><a href="http://design.perl6.org/">Synopsis</a> - official Perl&nbsp;6 design documents</li>
           <li><a href="/compilers/std-viv">STD.pm</a> - official Perl&nbsp;6 grammar</li>
         </ul>
-        <a href="/specification/" class="btn btn-success">»MORE«</a>
+        <a href="/specification/" class="btn btn-success">More</a>
       </section>
 
       <p class="col-sm-12 text-center"
@@ -67,6 +68,12 @@
     </div>
   </div>
 </footer>
+
+<div class="div" id="chat">
+  <a href="http://webchat.freenode.net/?channels=perl6&amp;nick="
+    class="btn btn-block btn-primary ">Chat with us!</a>
+</div>
+
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
 <script src="/bootstrap/js/bootstrap.min.js"></script>
 <script src="/js.js"></script>

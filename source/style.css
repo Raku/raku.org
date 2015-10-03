@@ -1,5 +1,12 @@
 body {
-  padding-top: 70px; }
+  background: #3B3B3D;
+  background: repeating-linear-gradient(45deg, #323234, #323234 10px, #333335 10px, #333335 20px); }
+
+.bg {
+  padding-top: 70px;
+  padding-bottom: 20px;
+  background: #fff;
+  min-height: 400px; }
 
 .navbar-inverse a {
   text-shadow: none !important; }
@@ -10,9 +17,6 @@ body {
   background: #98C73D !important; }
 
 footer {
-  background: #3B3B3D;
-  background: repeating-linear-gradient(45deg, #3a3a3c, #3a3a3c 10px, #3B3B3D 10px, #3B3B3D 20px);
-  margin-top: 20px;
   border-top: 20px solid #222223;
   padding: 5px 0 20px; }
   footer p {
@@ -29,6 +33,9 @@ footer {
   padding-top: 15px;
   padding-bottom: 15px;
   font-size: 160%; }
+
+.shy-list {
+  padding-left: 1em; }
 
 .shush-list {
   padding-left: 0;
@@ -71,6 +78,9 @@ footer {
 .trim-top {
   margin-top: 0; }
 
+.trim-top-inner {
+  padding-top: 0; }
+
 .trim-bottom {
   margin-bottom: 0; }
 
@@ -82,7 +92,19 @@ footer {
   padding-left: 20px;
   padding-bottom: 10px; }
 
+#chat {
+  position: fixed;
+  bottom: -100px;
+  padding: 5px 5px 15px;
+  border-radius: 4px;
+  background: #00A9E0;
+  border: 1px solid #009acc;
+  box-shadow: 0px 0px 2px rgba(0, 0, 0, 0.3); }
+
 /* Pygments Highlighter */
+.highlight pre, #samp-more {
+  margin-top: 10px; }
+
 .hll {
   background-color: #ffffcc; }
 

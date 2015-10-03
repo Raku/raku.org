@@ -1,8 +1,8 @@
-[% setvar title Perl 6 - Whatever %]
+[% setvar title Perl&nbsp;6 - Whatever %]
 
 [% menu nav whatever %]
 
-<header id="subpage-header">
+<header id="subpage-header" class="lead well">
     [% include camelia %]
 
     <h2>[% readvar title %]</h2>
@@ -14,29 +14,42 @@
     </p>
 </header>
 
-<div id="col1">
-    <h3>Installer, Editors, IDEs, *</h3>
-    <ul>
-        <li><a href="https://github.com/tadzik/panda/">panda</a> makes it easy
-        to install modules programs written in Perl&nbsp;6</li>
-        <li><a href="http://search.cpan.org/dist/Inline-Rakudo">Inline::Rakudo</a>, embedding Perl&nbsp;6 code in Perl&nbsp;5</li>
-        <li><a href="http://search.cpan.org/dist/Padre-Plugin-Perl6">Padre::Plugin::Perl6</a>, Perl&nbsp;6 highlighting and code execution in
-            <a href="http://padre.perlide.org/">Padre, the Perl IDE</a></li>
-        <li><a href="http://github.com/vim-perl/vim-perl">Perl&nbsp;6 syntax highlighting for Vim</a></li>
-        <li><a
-            href="http://github.com/jrockway/cperl-mode">Unified
-            Perl 6 + Perl 5 + Moose/MooseX::Declare Emacs syntax
-            highlighting</a></li>
-    </ul>
-</div>
-
-<div id="col2">
-    <h3>Merchandising</h3>
-    <ul>
-        <li><a href="https://rakudo.spreadshirt.com/">Spreadshirt</a> (<a
-                href="http://rakudo.spreadshirt.net/de/DE/Shop/">Spreadshirt
-                Germany</a>)</li>
-        <li><a href="http://cafepress.com/rakudo">Cafepress</a></li>
-        <li><a href="http://www.zazzle.com/rakudo">Zazzle</a></li>
-    </ul>
+<div class="row equal-panels">
+  <div class="col-sm-8">
+    <div class="panel panel-primary">
+      <div class="panel-heading">
+        <h3 class="panel-title">Installer, Editors, IDEs, *</h3>
+      </div>
+      <div class="panel-body">
+        <ul class="shy-list">
+            <li><a href="https://github.com/tadzik/panda/">panda</a> makes it easy
+            to install modules programs written in Perl&nbsp;6</li>
+            <li><a href="http://search.cpan.org/dist/Inline-Rakudo">Inline::Rakudo</a>, embedding Perl&nbsp;6 code in Perl&nbsp;5</li>
+            <li><a href="http://search.cpan.org/dist/Padre-Plugin-Perl6">Padre::Plugin::Perl6</a>, Perl&nbsp;6 highlighting and code execution in
+                <a href="http://padre.perlide.org/">Padre, the Perl IDE</a></li>
+            <li><a href="http://github.com/vim-perl/vim-perl">Perl&nbsp;6 syntax highlighting for Vim</a></li>
+            <li><a
+                href="http://github.com/jrockway/cperl-mode">Unified
+                Perl 6 + Perl 5 + Moose/MooseX::Declare Emacs syntax
+                highlighting</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="col-sm-4">
+    <div class="panel panel-info">
+      <div class="panel-heading">
+        <h3 class="panel-title">Merchandising</h3>
+      </div>
+      <div class="panel-body">
+        <ul class="shy-list">
+            <li><a href="https://rakudo.spreadshirt.com/">Spreadshirt</a> (<a
+                    href="http://rakudo.spreadshirt.net/de/DE/Shop/">Spreadshirt
+                    Germany</a>)</li>
+            <li><a href="http://cafepress.com/rakudo">Cafepress</a></li>
+            <li><a href="http://www.zazzle.com/rakudo">Zazzle</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
 </div>

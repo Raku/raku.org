@@ -1,8 +1,8 @@
-[% setvar title STD and viv -- Perl 6 standard grammar %]
+[% setvar title STD and viv -- Perl&nbsp;6 standard grammar %]
 
 [% menu nav compilers %]
 
-<header id="subpage-header">
+<header id="subpage-header" class="lead well">
     [% include camelia %]
 
     <h2>STD and viv</h2>
@@ -13,24 +13,37 @@
     and runnable code.</p>
 </header>
 
-<div id="col1">
-    <h3>STD</h3>
-    <p>The Perl 6 standard grammar is written in Perl 6, and specifies how a
-    Perl 6 program is parsed.</p>
-    <p>The source code can be found on <a
-    href="http://github.com/perl6/std/">github in the perl6/std project</a>
-    in the file <a
-        href="https://github.com/perl6/std/blob/master/STD.pm6">STD.pm6</a>.</p>
+<div class="row equal-panels">
+  <div class="col-sm-7">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title">STD</h3>
+      </div>
+      <div class="panel-body">
+        <p>The Perl 6 standard grammar is written in Perl 6, and specifies how a
+        Perl 6 program is parsed.</p>
+        <p>The source code can be found on <a
+        href="http://github.com/perl6/std/">github in the perl6/std project</a>
+        in the file <a
+            href="https://github.com/perl6/std/blob/master/STD.pm6">STD.pm6</a>.</p>
 
-    <p>Both STD.pm and viv are included in the <a
-    href="http://search.cpan.org/dist/STD/">STD</a> package on CPAN.</p>
-</div>
-
-<div id="col2">
-    <h3>viv</h3>
-    <p><em>viv</em> should be read as <em>VI ➔ V</em>, where V and I are Roman
-    numerals. So it's a translator from Perl 6 to Perl 5, expressly designed
-    to run STD.pm6 - it compiles to Perl 5 code only features that are needed
-    to run STD.pm6. However it can be used by other compilers as a base to
-    produce code for other backends.</p>
+        <p>Both STD.pm and viv are included in the <a
+        href="https://metacpan.org/release/STD">STD</a> package on CPAN.</p>
+      </div>
+    </div>
+  </div>
+  <div class="col-sm-5">
+    <div class="panel panel-warning">
+      <div class="panel-heading">
+        <h3 class="panel-title">viv</h3>
+      </div>
+      <div class="panel-body">
+        <p><em>viv</em> should be read as <em>VI ➔ V</em>, where V and I are Roman
+        numerals. So it's a translator from Perl 6 to Perl 5, expressly designed
+        to run STD.pm6 - it compiles to Perl 5 code only features that are needed
+        to run STD.pm6. However it can be used by other compilers as a base to
+        produce code for other backends.</p>
+      </div>
+    </div>
+  </div>
 </div>

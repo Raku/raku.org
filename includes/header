@@ -19,4 +19,5 @@
     [% endifvar %]
 </head>
 <body>
-<div class="container">
+<div class="bg">
+  <div class="container">
