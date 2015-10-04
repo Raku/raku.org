@@ -1,8 +1,76 @@
-<footer>
-    <p>If you want to contribute to this page,
-    <a href="/about/">look here for instructions</a>.</p>
-</footer>
+  </div>
+</div>
 
-</div> <!-- id="wrapper-outer" -->
+<footer>
+  <div class="container">
+    <div class="row">
+      <section class="col-sm-6 col-md-5ths">
+        <h4><a href="/community/">Community</a></h4>
+        <ul class="shush-list">
+          <li><a href="/community/irc">#perl6 IRC channel</a>: <a href="irc://irc.freenode.net/%23perl6">system IRC client</a>
+          or&nbsp;<a href="http://webchat.freenode.net/?channels=perl6&amp;nick=">chat live in your browser</a></li>
+          <li><a href="/community/rosettacode">Perl&nbsp;6 on Rosetta Code</a>, <a href="http://pl6anet.org/">Blogs</a>, <a href="http://www.perlfoundation.org/perl6/index.cgi?perl_6">Perl 6 wiki</a></li>
+        </ul>
+
+        <a href="/community/" class="btn btn-success">More</a>
+      </section>
+
+      <section class="col-sm-6 col-md-5ths">
+        <h4><a href="/documentation/">Documentation</a></h4>
+        <ul class="shush-list">
+          <li><a href="/getting-started/">Getting started</a></li>
+          <li><a href="http://doc.perl6.org/">Perl&nbsp;6 Documentation</a></li>
+          <li><a href="http://doc.perl6.org/language/5to6">Perl&nbsp;5 to 6</a>,
+              an introduction for Perl&nbsp;5 programmers</li>
+        </ul>
+          <a href="/documentation/" class="btn btn-success">More</a>
+      </section>
+
+      <section class="col-sm-6 col-md-5ths">
+        <h4><a href="/whatever/">Modules</a></h4>
+
+        <ul class="shush-list">
+          <li><a href="http://modules.perl6.org/">Perl&nbsp;6 modules
+              directory</a></li>
+          <li><a href="https://github.com/tadzik/panda/">Panda</a>, a
+          module installer for Rakudo</li>
+        </ul>
+
+        <a href="/whatever/" class="btn btn-success">More</a>
+      </section>
+
+      <section class="col-sm-6 col-md-5ths">
+        <h4><a href="/compilers/">Compilers</a></h4>
+        <ul class="shush-list">
+            <li><a href="http://rakudo.org/">Rakudo</a>, a compiler running on
+                <a href="http://moarvm.com/">MoarVM</a>,
+                 the JVM and other backends.</li>
+            <li><a href="https://github.com/sorear/niecza">Niecza</a>, a
+                Perl&nbsp;6 compiler for the CLR (mono/.NET)</li>
+        </ul>
+        <a href="/compilers/" class="btn btn-success">More</a>
+      </section>
+
+      <section class="col-sm-6 col-md-5ths">
+        <h4><a href="/specification/">Language Design</a></h4>
+        <ul class="shush-list">
+          <li><a href="http://design.perl6.org/">Synopsis</a> - official Perl&nbsp;6 design documents</li>
+          <li><a href="/compilers/std-viv">STD.pm</a> - official Perl&nbsp;6 grammar</li>
+        </ul>
+        <a href="/specification/" class="btn btn-success">More</a>
+      </section>
+
+      <p class="col-sm-12 text-center"
+        ><i class="glyphicon glyphicon-info-sign"></i>
+          If you want to contribute to this page,
+        <a href="/about/">look here for instructions</a>.
+      </p>
+    </div>
+  </div>
+</footer>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+<script src="/bootstrap/js/bootstrap.min.js"></script>
+<script src="/js.js"></script>
+
 </body>
 </html>

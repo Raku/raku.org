@@ -1,97 +1,116 @@
-[% setvar title Perl 6 Compilers %]
+[% setvar title Perl&nbsp;6 Compilers %]
 
 [% menu nav compilers %]
 
-<header id="subpage-header">
+<header id="subpage-header" class="lead well">
     [% include camelia %]
 
-    <h2>Perl 6 Compilers</h2>
+    <h2><b>Perl&nbsp;6</b> Compilers</h2>
 
-    <p>Perl 6 is a language specification, and just like C or C++ there
+    <p>Perl&nbsp;6 is a language specification, and just like C or C++ there
     are multiple compilers for the language.</p>
 </header>
 
-<div id="col1">
-    <h3>Compilers</h3>
-    <dl>
-        <p><dt><a href="http://rakudo.org/">Rakudo</a></dt>
-        <dd>Rakudo is copyrighted by the Perl Foundation, and runs on
-        <a href="http://moarvm.org/">MoarVM</a> and the Java Virtual Machine
-        (JVM).
-        It is actively developed on the
-        <a href="http://github.com/rakudo/rakudo">Rakudo GitHub</a> site. <a
-        href="http://rakudo.org/how-to-get-rakudo">Download or compile
-        Rakudo</a>.
-        </dd></p>
+<div class="row">
+  <div class="col-sm-8">
+    <div class="panel panel-default">
+      <div class="panel-body">
+        <h3 class="trim-top">Compilers</h3>
+        <dl>
+            <p><dt><a href="http://rakudo.org/">Rakudo</a></dt>
+            <dd>Rakudo is copyrighted by the Perl Foundation, and runs on
+            <a href="http://moarvm.org/">MoarVM</a> and the Java Virtual Machine
+            (JVM).
+            It is actively developed on the
+            <a href="http://github.com/rakudo/rakudo">Rakudo GitHub</a> site. <a
+            href="http://rakudo.org/how-to-get-rakudo">Download or compile
+            Rakudo</a>.
+            </dd></p>
 
-        <p><dt><a href="http://github.com/sorear/niecza">Niecza</a></dt>
-        <dd>Niecza is a compiler
-        targetting the Common Language Runtime (.NET and Mono).  Its goal
-        is to explore the static aspects of Perl 6 and the possibilities
-        for compile-time optimization.
-        </dd></p>
+            <p><dt><a href="http://github.com/sorear/niecza">Niecza</a></dt>
+            <dd>Niecza is a compiler
+            targetting the Common Language Runtime (.NET and Mono).  Its goal
+            is to explore the static aspects of Perl 6 and the possibilities
+            for compile-time optimization.
+            </dd></p>
 
-        <p><dt><a href="/compilers/std-viv">STD</a></dt>
-        <dd>STD is Larry Wall's reference implementation of the Perl 6 grammar,
-        parser generator, and some of the semantic verifier. STD is an
-        abbreviation of "Standard", as in "Perl6.0.0-STD". It is written in
-        Perl 6, transliterated into Perl 5 by viv.
-        It is also used by
-        various phases of several other compilers (mildew, perlito, elf).
-        </dd></p>
+            <p><dt><a href="/compilers/std-viv">STD</a></dt>
+            <dd>STD is Larry Wall's reference implementation of the Perl 6 grammar,
+            parser generator, and some of the semantic verifier. STD is an
+            abbreviation of "Standard", as in "Perl6.0.0-STD". It is written in
+            Perl 6, transliterated into Perl 5 by viv.
+            It is also used by
+            various phases of several other compilers (mildew, perlito, elf).
+            </dd></p>
 
-        <p><dt><a href="/compilers/std-viv">viv</a></dt>
-        <dd>viv ("vi" to "v", 6 to 5)
-        is a compiler that uses STD as its front-end. STD itself uses viv to
-        build. It is actively developed along with STD.
-        </dd></p>
+            <p><dt><a href="/compilers/std-viv">viv</a></dt>
+            <dd>viv ("vi" to "v", 6 to 5)
+            is a compiler that uses STD as its front-end. STD itself uses viv to
+            build. It is actively developed along with STD.
+            </dd></p>
 
-        <p><dt><a href="http://www.perlito.org/">Perlito</a></dt>
-        <dd>Perlito, also known as MiniPerl6,
-        is a subset of Perl 6, designed as a light bootstrapping language.
-        You can <a href="http://perlcabal.org/~fglock/perlito6.html">try it online</a>. It is
-        actively developed <a href="http://github.com/fglock/Perlito/">here</a>.
-        </dd></p>
+            <p><dt><a href="http://www.perlito.org/">Perlito</a></dt>
+            <dd>Perlito, also known as MiniPerl6,
+            is a subset of Perl 6, designed as a light bootstrapping language.
+            You can <a href="http://perlcabal.org/~fglock/perlito6.html">try it online</a>. It is
+            actively developed <a href="http://github.com/fglock/Perlito/">here</a>.
+            </dd></p>
 
-        <p><dt><a href="http://pugscode.org/">Pugs</a></dt>
-        <dd>Pugs is written in Haskell.
-        Maintenance releases for successive versions of ghc are
-        <a href="http://hackage.haskell.org/package/Pugs">published</a> to Hackage.
-        </dd></p>
-    </dl>
+            <p><dt><a href="http://pugscode.org/">Pugs</a></dt>
+            <dd>Pugs is written in Haskell.
+            Maintenance releases for successive versions of ghc are
+            <a href="http://hackage.haskell.org/package/Pugs">published</a> to Hackage.
+            </dd></p>
+        </dl>
 
-    <hr/>
+        <hr>
 
-    <p><strong><a href="https://github.com/perl6/nqp/">NQP</a></strong>
-    (Not Quite Perl) is <em>not</em> a Perl 6 compiler. NQP is a small subset of Perl 6
-    used as a foundational tool to help write compilers and libraries.
-    </p>
+        <p><strong><a href="https://github.com/perl6/nqp/">NQP</a></strong>
+        (Not Quite Perl) is <em>not</em> a Perl 6 compiler. NQP is a small subset of Perl 6
+        used as a foundational tool to help write compilers and libraries.
+        </p>
+      </div>
+    </div>
+  </div>
+  <div class="col-sm-4">
+    <div class="panel panel-danger">
+      <div class="panel-heading">
+        <h3 class="panel-title">Feature matrix</h3>
+      </div>
+      <div class="panel-body">
+        <section id="features" class="wide">
+        <p>To see which compilers implement which Perl 6 features, please see
+          our <a href="/compilers/features">feature comparison matrix</a>.</p>
+        </section>
+      </div>
+    </div>
+
+    <div class="panel panel-warning">
+      <div class="panel-heading">
+        <h3 class="panel-title">Supplementals</h3>
+      </div>
+      <div class="panel-body">
+        <section id="supplementals" class="wide">
+        <ul class="shush-list">
+            <li>
+            <a href="https://github.com/niner/Inline-Perl5">Inline::Perl5</a> executes
+            Perl&nbsp;5 code in Perl&nbsp;6.  Supports Perl 5 modules including XS
+            modules like <a href="https://metacpan.org/pod/DBI">DBI</a>.  Allows
+            passing integers, strings, arrays and hashes. Also supports calling methods
+            on Perl 5 objects from Perl 6 and calling methods on Perl 6 objects from Perl 5.
+            </li>
+
+            <li>
+            <a
+            href="http://github.com/rakudo/rakudo/tree/nom/src/core/">Rakudo's
+            setting library</a> which defines all of the classes, routines, and terms
+            available when your script starts. In Perl 5 parlance, it's roughly all the
+            things you can see in perlfunc, perlop, etc. This part of Perl&nbsp;6 is
+            mostly written in Perl&nbsp;6 (and NQP).
+            </li>
+        </ul>
+        </section>
+      </div>
+    </div>
+  </div>
 </div>
-
-<section id="features" class="wide">
-<h3>Feature matrix</h3>
-<p>To see which compilers implement which Perl 6 features, please see
-  our <a href="/compilers/features">feature comparison matrix</a>.</p>
-</section>
-
-<section id="supplementals" class="wide">
-<h3>Supplementals</h3>
-<ul>
-    <li>
-    <a href="https://github.com/niner/Inline-Perl5">Inline::Perl5</a> executes
-    Perl&nbsp;5 code in Perl&nbsp;6.  Supports Perl 5 modules including XS
-    modules like <a href="https://metacpan.org/pod/DBI">DBI</a>.  Allows
-    passing integers, strings, arrays and hashes. Also supports calling methods
-    on Perl 5 objects from Perl 6 and calling methods on Perl 6 objects from Perl 5.
-    </li>
-
-    <li>
-    <a
-    href="http://github.com/rakudo/rakudo/tree/nom/src/core/">Rakudo's
-    setting library</a> which defines all of the classes, routines, and terms
-    available when your script starts. In Perl 5 parlance, it's roughly all the
-    things you can see in perlfunc, perlop, etc. This part of Perl&nbsp;6 is
-    mostly written in Perl&nbsp;6 (and NQP).
-    </li>
-</ul>
-</section>

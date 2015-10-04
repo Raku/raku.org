@@ -1,392 +1,356 @@
+html {
+  overflow-y: scroll; }
+
 body {
-    margin: auto;
-    padding: 1.5em 3em 0 3em;
-    background-color: white;
-    color: #000000;
-    font: 12pt sans-serif;
-}
+  background: #3B3B3D;
+  background: repeating-linear-gradient(45deg, #323234, #323234 10px, #333335 10px, #333335 20px); }
 
-h4 {
-    text-align: center;
-    margin-bottom: 0.5em;
-}
+.bg {
+  padding-top: 70px;
+  padding-bottom: 20px;
+  background: #fff;
+  min-height: 400px; }
 
-section h4 a {
-    text-decoration: none;
-    border-bottom:   none;
-}
-
-#wrapper-outer {
-    margin: 0px auto;   /* Goodbye, IE5 */
-    padding: 0;
-    width: 55.21em; /* A little slipping room */
-    max-width: 100%;
-}
-
-header {
-    font-weight: bold;
-    -moz-box-shadow: 5px 5px 10px #888;
-    -webkit-box-shadow: 5px 5px 10px #888;
-    box-shadow: 5px 5px 10px #888;
-    border: 0.2em solid #63a4ff;
-    background: #80b5ff;
-    -moz-border-radius: 1em;
-    -webkit-border-radius: 1em;
-    border-radius: 1em;
-    position: relative;
-    padding: 0em 1em 0em 1em;
-}
-
-#welcome-header {
-    margin: 0px 0px 3em 0px;
-    min-height: 200px;
-}
-
-#subpage-header {
-    margin: 2em 0px 2em 0px;
-    min-height: 120px;
-}
-
-header img {
-    float: right;
-    position: relative;
-    top: -1.5em;
-    right: -2em;
-    z-index: 1;
-    border: 0;
-}
-
-
-#welcome-header a {
-    font-weight: bold;
-    text-decoration: none;
-    color: #ffffff;
-    border-bottom: 1px dotted #ffffff;
-}
-
-#welcome-header a.header-black-link {
-    color: #000;
-    border-bottom: 1px dotted #000;
-}
-
-#archive-notice {
-    height: 3em;
-}
-
-#archive-notice h3,
-#archive-notice p {
-    position: fixed;
-    width: 100%;
-    top: 0;
-    left: 0;
-    font-size: 80%;
-    text-align: center;
-    border-bottom: 1px solid #000;
-    background: #FEFE01;
-    color: #444;
-    margin: 0;
-    padding: .5em;
-}
-
-#archive-notice h3 {
-    height: 3em;
-}
-
-#archive-notice p {
-    top: 2em;
-}
-
-/* These two were previously "div a", but the entire page is in a wrapper div already. */
-a {
-    text-decoration: none;
-    font-weight: bold;
-    color: #000000;
-    border-bottom: 1px dotted #000000;
-}
-
-a:hover {
-    text-decoration: underline;
-    border-bottom: none;
-}
-
-section, #col1, #col2 {
-    color: #000000;
-    -moz-box-shadow: 5px 5px 10px #888;
-    -webkit-box-shadow: 5px 5px 10px #888;
-    box-shadow: 5px 5px 10px #888;
-    -moz-border-radius: 1em;
-    -webkit-border-radius: 1em;
-    border-radius: 1em;
-    border: 0.2em solid #dddddd;
-}
-
-section {
-    width: 15em;
-    height: 10em;
-    margin: 0.5em;
-    padding: 0 1em 1em 1em;
-    float: left;
-}
-
-.wide {
-    width: 23em;
-    margin: 0 0 1em;
-    float: right;
-}
-
-#col1, #col2 {
-    width: 23em;
-    padding: 1em 2em 1em 2em;
-}
-
-@media screen and (max-width: 971px) {
-	#col1, #col2 {
-		width: auto;
-	}
-
-	#col1 {
-		margin: 0 0 2em 0;
-	}
-}
-
-#col1 {
-    float: left;
-}
-
-#col2 {
-    float: right;
-}
-
-section ul {
-    font: 9pt sans-serif;
-    line-height: 130%;
-}
-
-#community, #stuff, #nav-community, #nav-docs, #nav-faq, #col1 {
-    background: #c0e472;
-    border-color: #8bc313;
-}
-#specs, #nav-specs, #nav-fun {
-    background: #e47286;
-    border-color: #e43b59;
-}
-#compiler, #docs, #nav-compilers, #nav-whatever, #col2 {
-    background: #f5ef7b;
-    border-color: #f2c100;
-}
-
-#nav-home {
-    background: #80b5ff;
-}
-
-#download {
-    border: 0;
-    -moz-box-shadow: none;
-    -webkit-box-shadow: none;
-    box-shadow: none;
-}
-
-#download a {
-    background: #2065F7;
-    background: -webkit-linear-gradient(top, #9CBAFB 0, #5B8EF9 4.5%, #2065F7 100%);
-    background: linear-gradient(to bottom, #9CBAFB 0, #5B8EF9 4.5%, #2065F7 100%);
-    border: 1px solid #2168FF;
-    border-radius: 1em;
-    color: #fff;
-    text-shadow: 1px 1px 3px #666;
-    box-shadow: 5px 5px 10px #888;
-    display: inline-block;
-    font-size: 130%;
-    text-align: center;
-    margin: 2.4em 0 0;
-    padding: 0.5em 1.5em 0.5em;
-}
-
-#download a:hover {
-    background-color: #5B8EF9;
-    background: -webkit-linear-gradient(top, #9CBAFB 0, #5B8EF9 6%, #5B8EF9 100%);
-    background: linear-gradient(to bottom, #9CBAFB 0, #5B8EF9 6%, #5B8EF9 100%);
-    color: #fff;
-    text-decoration: none;
-}
-
-ul {
-    margin: 0;
-    padding: 0;
-    list-style-type: none;
-}
-
-li {
-    margin-bottom: 0.5em;
-}
+.navbar-inverse a {
+  text-shadow: none !important; }
+.navbar-inverse .active a,
+.navbar-inverse a:hover,
+.navbar-inverse a:focus,
+.navbar-inverse a:active {
+  background: #98C73D !important; }
 
 footer {
-    clear: both;
-    font-size: 90%;
-    padding: 2.5em 2em 0px 2em;
-}
+  border-top: 20px solid #222223;
+  padding: 5px 0 20px; }
+  footer p {
+    margin-top: 30px;
+    padding-top: 10px;
+    opacity: .8;
+    border-top: 1px solid #2e2e30; }
+  footer *, footer h4 a {
+    color: #acb81d; }
+  footer a {
+    color: #dae457; }
+  footer .btn-success {
+    color: #000; }
 
-.bold { font-weight: bold; }
+.btn-xl {
+  padding-top: 15px;
+  padding-bottom: 15px;
+  font-size: 160%; }
 
-#navigation ul {
-    text-align: center;
-}
+.shy-list {
+  padding-left: 1em; }
 
-#navigation li
-{
-    display:         inline-block;
-    list-style-type: none;
-    padding:   1ex;
-    -moz-border-radius: 0.5ex;
-    -webkit-border-radius: 0.5ex;
-    border-radius: 0.5ex;
-    -moz-box-shadow: 5px 5px 10px #888;
-    -webkit-box-shadow: 5px 5px 10px #888;
-    box-shadow: 5px 5px 10px #888;
-}
+.shush-list {
+  padding-left: 0;
+  list-style: none; }
+  .shush-list li {
+    padding-bottom: 3px;
+    margin-bottom: 3px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05); }
+  .shush-list li:last-child {
+    border: 0; }
 
-#navigation li a {
-    text-decoration: none;
-    border-bottom: none;
-}
+.col-xs-5ths,
+.col-sm-5ths,
+.col-md-5ths,
+.col-lg-5ths {
+  position: relative;
+  min-height: 1px;
+  padding-right: 10px;
+  padding-left: 10px; }
 
-#navigation .active a {
-    text-decoration: underline;
-}
+.col-xs-5ths {
+  width: 20%;
+  float: left; }
 
-.more {
-    text-align: center;
-    color: #006;
-}
+@media (min-width: 768px) {
+  .col-sm-5ths {
+    width: 20%;
+    float: left; } }
+@media (min-width: 992px) {
+  .col-md-5ths {
+    width: 20%;
+    float: left; } }
+@media (min-width: 1200px) {
+  .col-lg-5ths {
+    width: 20%;
+    float: left; } }
+.nav-tabs * {
+  outline: 0 !important; }
 
-.more a {
-    color: #006;
-    border-bottom: 1px dotted #006;
-}
+.trim-top {
+  margin-top: 0; }
 
-dl#botlist dt {
-    margin-top: 1em;
-}
+.trim-top-inner {
+  padding-top: 0; }
 
-dl#botlist dd {
-    margin-left: 1.5em;
-}
+.trim-bottom {
+  margin-bottom: 0; }
 
-/*
-** Documentation page
-*/
-#newcomers {
-    background: #c0e472;
-    border-color: #8bc313;
-    height: auto;
-}
+.trim {
+  padding-bottom: 0; }
 
-#p5programmers {
-    background: #e47286;
-    border-color: #e43b59;
-    height: auto;
-}
+#mailing-lists dd,
+#botlist dd {
+  padding-left: 20px;
+  padding-bottom: 10px; }
 
-#compendiums {
-    background: #f5ef7b;
-    border-color: #f2c100;
-    height: auto;
-}
+/* Pygments Highlighter */
+.highlight pre, #samp-more {
+  margin-top: 10px; }
 
-#booksandprint {
-    background: #80b5ff;
-    border-color: #63a4ff;
-    height: auto;
-}
+.hll {
+  background-color: #ffffcc; }
 
-#examples {
-    background: #c0e472;
-    border-color: #8bc313;
-    height: auto;
-}
+.c {
+  color: #228B22; }
 
-#misc {
-    background: #e47286;
-    border-color: #e43b59;
-    height: auto;
-}
+/* Comment */
+.err {
+  color: #a61717;
+  background-color: #e3d2d2; }
 
-#compilers {
-    background: #c0e472;
-    border-color: #8bc313;
-    height: auto;
-}
+/* Error */
+.k {
+  color: #8B008B;
+  font-weight: bold; }
 
-#features {
-    background: #e47286;
-    border-color: #e43b59;
-    height: auto;
-}
+/* Keyword */
+.cm {
+  color: #228B22; }
 
-#supplementals {
-    background: #f5ef7b;
-    border-color: #f2c100;
-    height: auto;
-}
+/* Comment.Multiline */
+.cp {
+  color: #1e889b; }
 
+/* Comment.Preproc */
+.c1 {
+  color: #228B22; }
 
-/*
-** Three-column CSS magic
-*/
+/* Comment.Single */
+.cs {
+  color: #8B008B;
+  font-weight: bold; }
 
-/* common column settings */
-.colcommon {
-    width: 100%;                     /* width of page */
-    position: relative;
-}
+/* Comment.Special */
+.gd {
+  color: #aa0000; }
 
-div.autosize {
-    display: table; width: 1px;
-}
-div.autosize > * {
-    display: table-cell;
-}
+/* Generic.Deleted */
+.ge {
+  font-style: italic; }
 
-/* column container */
-.colmask {
-    position:relative;      /* This fixes the IE7 overflow hidden bug */
-    clear:both;
-    float:left;
-    width:100%;             /* width of whole page and then some */
-    overflow:hidden;        /* This chops off any overhanging divs */
-}
+/* Generic.Emph */
+.gr {
+  color: #aa0000; }
 
-.colright, .colmid, .colleft {
-    float: left;
-    width: 100%;
-    position: relative;
-}
+/* Generic.Error */
+.gh {
+  color: #000080;
+  font-weight: bold; }
 
-.col1, .col2, .col3 {
-    float: left;
-    position: relative;
-    padding: 0 0 1em 0;
-/*    overflow: hidden; */
-}
+/* Generic.Heading */
+.gi {
+  color: #00aa00; }
 
-/* 3 Column settings */
-.threecol {
-}
-.threecol .colmid {
-    right: 30%;
-}
-.threecol .colleft {
-    right: 30%;
-}
-.threecol .col1 {
-    width: 30%;                      /* width of center column content (column width minus padding on either side) */
-    left: 93%;                      /* 100% plus left padding of center column */
-}
-.threecol .col2 {
-    width: 28%;                      /* Width of left column content (column width minus padding on either side) */
-    left: 29%;                       /* width of (right column) plus (center column left and right padding) plus (left column left padding) */
-}
-.threecol .col3 {
-    width: 28%;                      /* Width of right column content (column width minus padding on either side) */
-    left: 69%;                       /* Please make note of the brackets here: (100% - left column width) plus (center column left and right padding) plus (left column left and right padding) plus (right column left padding) */
-}
+/* Generic.Inserted */
+.go {
+  color: #888888; }
+
+/* Generic.Output */
+.gp {
+  color: #555555; }
+
+/* Generic.Prompt */
+.gs {
+  font-weight: bold; }
+
+/* Generic.Strong */
+.gu {
+  color: #800080;
+  font-weight: bold; }
+
+/* Generic.Subheading */
+.gt {
+  color: #aa0000; }
+
+/* Generic.Traceback */
+.kc {
+  color: #8B008B;
+  font-weight: bold; }
+
+/* Keyword.Constant */
+.kd {
+  color: #8B008B;
+  font-weight: bold; }
+
+/* Keyword.Declaration */
+.kn {
+  color: #8B008B;
+  font-weight: bold; }
+
+/* Keyword.Namespace */
+.kp {
+  color: #8B008B;
+  font-weight: bold; }
+
+/* Keyword.Pseudo */
+.kr {
+  color: #8B008B;
+  font-weight: bold; }
+
+/* Keyword.Reserved */
+.kt {
+  color: #a7a7a7;
+  font-weight: bold; }
+
+/* Keyword.Type */
+.m {
+  color: #B452CD; }
+
+/* Literal.Number */
+.s {
+  color: #CD5555; }
+
+/* Literal.String */
+.na {
+  color: #658b00; }
+
+/* Name.Attribute */
+.nb {
+  color: #658b00; }
+
+/* Name.Builtin */
+.nc {
+  color: #008b45;
+  font-weight: bold; }
+
+/* Name.Class */
+.no {
+  color: #00688B; }
+
+/* Name.Constant */
+.nd {
+  color: #707a7c; }
+
+/* Name.Decorator */
+.ne {
+  color: #008b45;
+  font-weight: bold; }
+
+/* Name.Exception */
+.nf {
+  color: #008b45; }
+
+/* Name.Function */
+.nn {
+  color: #008b45;
+  text-decoration: underline; }
+
+/* Name.Namespace */
+.nt {
+  color: #8B008B;
+  font-weight: bold; }
+
+/* Name.Tag */
+.nv {
+  color: #00688B; }
+
+/* Name.Variable */
+.ow {
+  color: #8B008B; }
+
+/* Operator.Word */
+.w {
+  color: #bbbbbb; }
+
+/* Text.Whitespace */
+.mb {
+  color: #B452CD; }
+
+/* Literal.Number.Bin */
+.mf {
+  color: #B452CD; }
+
+/* Literal.Number.Float */
+.mh {
+  color: #B452CD; }
+
+/* Literal.Number.Hex */
+.mi {
+  color: #B452CD; }
+
+/* Literal.Number.Integer */
+.mo {
+  color: #B452CD; }
+
+/* Literal.Number.Oct */
+.sb {
+  color: #CD5555; }
+
+/* Literal.String.Backtick */
+.sc {
+  color: #CD5555; }
+
+/* Literal.String.Char */
+.sd {
+  color: #CD5555; }
+
+/* Literal.String.Doc */
+.s2 {
+  color: #CD5555; }
+
+/* Literal.String.Double */
+.se {
+  color: #CD5555; }
+
+/* Literal.String.Escape */
+.sh {
+  color: #1c7e71;
+  font-style: italic; }
+
+/* Literal.String.Heredoc */
+.si {
+  color: #CD5555; }
+
+/* Literal.String.Interpol */
+.sx {
+  color: #cb6c20; }
+
+/* Literal.String.Other */
+.sr {
+  color: #1c7e71; }
+
+/* Literal.String.Regex */
+.s1 {
+  color: #CD5555; }
+
+/* Literal.String.Single */
+.ss {
+  color: #CD5555; }
+
+/* Literal.String.Symbol */
+.bp {
+  color: #658b00; }
+
+/* Name.Builtin.Pseudo */
+.vc {
+  color: #00688B; }
+
+/* Name.Variable.Class */
+.vg {
+  color: #00688B; }
+
+/* Name.Variable.Global */
+.vi {
+  color: #00688B; }
+
+/* Name.Variable.Instance */
+.il {
+  color: #B452CD; }
+
+/* Literal.Number.Integer.Long */
+
+/*# sourceMappingURL=style.css.map */

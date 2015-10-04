@@ -1,7 +1,7 @@
 [% setvar title #perl6 IRC channel %]
 [% menu nav community %]
 
-<header id="subpage-header">
+<header id="subpage-header" class="lead well">
     [% include camelia %]
 
     <h2>[% readvar title %]</h2>
@@ -11,80 +11,88 @@
     </p>
     <p>
         We try to be very nice to newcomers, so feel free to join us, and ask
-        any Perl 6 questions you might have.
+        any Perl&nbsp;6 questions you might have.
     </p>
 </header>
 
-<div id="col1">
-    <h3>#perl6</h3>
+<div class="row equal-panels">
+  <div class="col-sm-4">
+    <div class="panel panel-default">
+      <div class="panel-body">
+        <h3 class="trim-top">#perl6</h3>
+        <p>
+            We discuss questions about Perl&nbsp;6, how to install a compiler,
+            proposals for small enhancements to the specification, ideas for new
+            modules - you name it.
+        </p>
 
-    <p>
-        We discuss questions about Perl&nbsp;6, how to install a compiler,
-        proposals for small enhancements to the specification, ideas for new
-        modules - you name it.
-    </p>
+        <p>
+            If you don't have an IRC client installed, you can use <a
+            href="http://webchat.freenode.net/?channels=perl6&amp;nick=">your
+            browser to connect to IRC</a>.
+        </p>
 
-    <p>
-        If you don't have an IRC client installed, you can use <a 
-        href="http://webchat.freenode.net/?channels=perl6&amp;nick=">your
-        browser to connect to IRC</a>.
-    </p>
+        <p>
+            If you missed an interesting discussion on #perl6 - don't worry,
+            <a href="http://irclog.perlgeek.de/perl6/today">there are public logs
+            available</a>. These logs also turn many Perl 6 specific abbreviations
+            into links, or explain them when you hover with the mouse over them.
+            A different logging facility can be found on <a
+            href="http://colabti.org/irclogger/irclogger_logs/perl6">colabti.org</a>.
+        </p>
 
-    <p>
-        If you missed an interesting discussion on #perl6 - don't worry,
-        <a href="http://irclog.perlgeek.de/perl6/today">there are public logs
-        available</a>. These logs also turn many Perl 6 specific abbreviations
-        into links, or explain them when you hover with the mouse over them.
-        A different logging facility can be found on <a
-        href="http://colabti.org/irclogger/irclogger_logs/perl6">colabti.org</a>.
-    </p>
+        <p>Please do not ask for help on Perl 5 topics in #perl6.</p>
+      </div>
+    </div>
+  </div>
 
-    <p>
-        Please do not ask for help on Perl 5 topics in #perl6.
-    </p>
+  <div class="col-sm-8">
+    <div class="panel panel-default">
+      <div class="panel-body trim">
+        <h3 class="trim-top">Bots</h3>
+
+        <p>A variety of IRC bots make our life easier, here's a short explanation
+        of what they do - <a
+        href="http://howcaniexplainthis.blogspot.com/2009/11/what-perl6-irc-bots-do.html">courtesy
+        by frettled</a>.</p>
+
+        <dl id="botlist" class="trim-bottom">
+            <dt>dalek</dt>
+            <dd>
+                Announces commits made to various projects relevant to Perl 6, such
+                as implementations of Perl 6
+                and <a href="https://github.com/perl6/">some of the repositories
+                owned by Perl 6</a>.
+            </dd>
+
+            <dt>hugme</dt>
+            <dd>
+                Hugs users, or adds them as collaborators to github
+                projects.
+            </dd>
+            <dt>camelia</dt>
+            <dd>
+                Perl 6 code evaluation bot. We use this for live testing of code
+                that may be of interest to others; it chats back to the channel.
+                <code>perl6: my $a;</code> will result in a test against
+                latest revisions of rakudo and niecza,
+                <code>nqp: say('foo')</code> will test nqp,
+                <code>std: my $a</code> will parse the expression using STD.pm6.
+                For other compilers, try "camelia: help".
+            </dd>
+            <dt>yoleaux</dt>
+            <dd>
+                Provides various functions, such as leaving messages for people and
+                translating text (see <a href="http://dpk.io/yoleaux">this handy
+                reference</a> for what yoleaux can do.)
+            </dd>
+            <dt>ilogger2</dt>
+            <dd>
+                Records everything said and done in the irc channel.
+            </dd>
+        </dl>
+      </div>
+    </div>
+  </div>
 </div>
 
-<div id="col2">
-    <h3>Bots</h3>
-
-    <p>A variety of IRC bots make our life easier, here's a short explanation
-    of what they do - <a
-    href="http://howcaniexplainthis.blogspot.com/2009/11/what-perl6-irc-bots-do.html">courtesy
-    by frettled</a>.</p>
-
-    <dl id="botlist">
-        <dt>dalek</dt>
-        <dd>
-            Announces commits made to various projects relevant to Perl 6, such
-            as implementations of Perl 6
-            and <a href="https://github.com/perl6/">some of the repositories
-            owned by Perl 6</a>.
-        </dd>
-
-        <dt>hugme</dt>
-        <dd>
-            Hugs users, or adds them as collaborators to github
-            projects.
-        </dd>
-        <dt>camelia</dt>
-        <dd>
-            Perl 6 code evaluation bot. We use this for live testing of code
-            that may be of interest to others; it chats back to the channel.
-            <code>perl6: my $a;</code> will result in a test against 
-            latest revisions of rakudo and niecza, 
-            <code>nqp: say('foo')</code> will test nqp, 
-            <code>std: my $a</code> will parse the expression using STD.pm6.
-            For other compilers, try "camelia: help".
-        </dd>
-        <dt>yoleaux</dt>
-        <dd>
-            Provides various functions, such as leaving messages for people and
-            translating text (see <a href="http://dpk.io/yoleaux">this handy
-            reference</a> for what yoleaux can do.)
-        </dd>
-        <dt>ilogger2</dt>
-        <dd>
-            Records everything said and done in the irc channel.
-        </dd>
-    </dl>
-</div>

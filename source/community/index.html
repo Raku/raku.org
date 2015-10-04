@@ -1,128 +1,141 @@
-[% setvar title Perl 6 Community %]
+[% setvar title Perl&nbsp;6 Community %]
 
 [% menu nav community %]
 
-<header id="subpage-header">
-    [% include camelia %]
+<header id="subpage-header" class="lead well">
+[% include camelia %]
 
-    <h2>The Perl 6 Community welcomes you</h2>
-    <p>
-       We are a bunch of volunteers developing Perl 6 and
-       Perl 6 applications, and try real hard to be nice to
-       each other.
-    </p>
+  <h2>The <b>Perl&nbsp;6</b> Community welcomes you</h2>
+  <p>
+     We are a bunch of volunteers developing Perl 6 and
+     Perl&nbsp;6 applications, and try real hard to be nice to
+     each other.
+  </p>
 
-    <p>Get in touch with us! Here is how:</p>
+  <p>Get in touch with us! Here is how:</p>
 </header>
 
-<div id="col1">
-    <h3>Internet Relay Chat (IRC)</h3>
+<div class="row equal-panels">
+  <div class="col-sm-5">
+    <div class="panel panel-default">
+        <div class="panel-body">
+          <h3 class="trim-top">Internet Relay Chat (IRC)</h3>
+          <p>
+              Much discussion happens on <a href="/community/irc">#perl6,
+              our IRC channel</a>. This is the fastest way to get help.
+          </p>
 
-    <p>
-        Much discussion happens on <a href="/community/irc">#perl6,
-        our IRC channel</a>. This is the fastest way to get help.
-    </p>
+          <h3>Blogs</h3>
+          <p>
+              Another way to stay tuned is <a href="http://pl6anet.org/">reading
+              posts from blogs that focus on Perl&nbsp;6.</a>
+          </p>
 
-    <h3>Blogs</h3>
+          <h3>Screencasts</h3>
+          <p>
+              You can learn some basics about Perl&nbsp;6 with these
+                  <a href="http://szabgab.com/perl6.html#screencast">introductory screencasts</a> by Gabor Szabo.
+              Gabor also frequents our IRC channel.
+          </p>
 
-    <p>
-        Another way to stay tuned is <a href="http://pl6anet.org/">reading
-        posts from blogs that focus on Perl&nbsp;6.</a>
-    </p>
+          <h3>Rosetta Code</h3>
+          <p>
+              Perl&nbsp;6 is well represented on
+              <a href="/community/rosettacode">Rosetta Code</a>, where you can see
+              Perl&nbsp;6 (and many other languages) applied to numerous
+              programming tasks.
+          </p>
 
-    <h3>Screencasts</h3>
+          <h3>Perl 6 Testers</h3>
+          <p>
+              <a href="http://testers.perl6.org/">Perl 6 Testers</a> shows the
+              test status of the modules listed in the
+              <a href="http://modules.perl6.org/">Perl 6 Modules Directory</a>.
+          </p>
 
-    <p>
-        You can learn some basics about Perl&nbsp;6 with these
-            <a href="http://szabgab.com/perl6.html#screencast">introductory screencasts</a> by Gabor Szabo.
-        Gabor also frequents our IRC channel.
-    </p>
+          <h3>Smoke Testing</h3>
+          <p>
+              The <a href="http://smoke.perl6.org/">Rakudo Module Smoke
+                Results</a> page shows the results of smoke testing the
+              <a href="http://modules.perl6.org/">Perl 6 Modules</a>.
+          </p>
+        </div>
+    </div>
+  </div>
 
-    <h3>Rosetta Code</h3>
+  <div class="col-sm-7">
+    <div class="panel panel-default">
+      <div class="panel-body trim">
+        <h3 class="trim-top">Mailing lists</h3>
+        <p>
+            For more persistent discussions (and for the poor folks who
+            can't use IRC) we have several mailing lists.
+        </p>
+        <p>
+            As of 2014, the lists have very low traffic
+            (because most activity is on <a href="/community/irc">#perl6</a>), but every
+            question sent to it usually gets answered swiftly by at
+            least one person.
+        </p>
+        <p>
+            You can subscribe to each list by sending an email to
+            <em>list-name</em>-subscribe@perl.org.
+        </p>
 
-    <p>
-        Perl&nbsp;6 is well represented on
-        <a href="/community/rosettacode">Rosetta Code</a>, where you can see
-        Perl&nbsp;6 (and many other languages) applied to numerous
-        programming tasks.
-    </p>
+        <dl id="mailing-lists" class="trim-bottom">
+            <dt>perl6-announce</dt>
+            <dd>
+                <p>Moderated lists for announcements and news. Fairly low traffic
+                (a few mails per month).</p>
+                <p><a
+                href="mailto:perl6-announce-subscribe@perl.org"
+                  class="btn btn-sm btn-primary">Subscribe</a>
+                <a href="http://nntp.perl.org/group/perl.perl6.announce/"
+                  class="btn btn-sm btn-success">Archive</a></p>
+            </dd>
 
-    <h3>Perl 6 Testers</h3>
+            <dt>perl6-language</dt>
+            <dd>
+                <p>Discussions on the Perl&nbsp;6 language</p>
+                <p><a
+                href="mailto:perl6-language-subscribe@perl.org"
+                  class="btn btn-sm btn-primary">Subscribe</a>
+                <a href="http://nntp.perl.org/group/perl.perl6.language/"
+                  class="btn btn-sm btn-success">Archive</a></p>
+            </dd>
 
-    <p>
-        <a href="http://testers.perl6.org/">Perl 6 Testers</a> shows the
-        test status of the modules listed in the
-        <a href="http://modules.perl6.org/">Perl 6 Modules Directory</a>.
-    </p>
+            <dt>perl6-compiler</dt>
+            <dd>
+                <p>Discussions on various Perl&nbsp;6 compilers</p>
+                <p><a
+                href="mailto:perl6-compiler-subscribe@perl.org"
+                  class="btn btn-sm btn-primary">Subscribe</a>
+                <a href="http://nntp.perl.org/group/perl.perl6.compiler/"
+                  class="btn btn-sm btn-success">Archive</a></p>
+            </dd>
 
-    <h3>Smoke Testing</h3>
+            <dt>perl6-users</dt>
+            <dd>
+                <p>User questions about the Perl&nbsp;6 language and compilers</p>
+                <p><a
+                href="mailto:perl6-users-subscribe@perl.org"
+                  class="btn btn-sm btn-primary">Subscribe</a>
+                <a href="http://nntp.perl.org/group/perl.perl6.users/"
+                  class="btn btn-sm btn-success">Archive</a></p>
+            </dd>
 
-    <p>
-        The <a href="http://smoke.perl6.org/">Rakudo Module Smoke
-          Results</a> page shows the results of smoke testing the
-        <a href="http://modules.perl6.org/">Perl 6 Modules</a>.
-    </p>
-</div>
-
-<div id="col2">
-    <h3>Mailing lists</h3>
-
-    <p>
-        For more persistent discussions (and for the poor folks who
-        can't use IRC) we have several mailing lists.
-    </p>
-    <p>
-        As of 2014, the lists have very low traffic
-        (because most activity is on <a href="/community/irc">#perl6</a>), but every
-        question sent to it usually gets answered swiftly by at
-        least one person.
-    </p>
-    <p>
-        You can subscribe to each list by sending an email to
-        <em>list-name</em>-subscribe@perl.org.
-    </p>
-
-    <dl>
-        <dt>perl6-announce</dt>
-        <dd>
-            <p>Moderated lists for announcements and news. Fairly low traffic
-            (a few mails per month).</p>
-            <p><a
-            href="mailto:perl6-announce-subscribe@perl.org">Subscribe</a>
-            <a href="http://nntp.perl.org/group/perl.perl6.announce/">Archive</a></p>
-        </dd>
-
-        <dt>perl6-language</dt>
-        <dd>
-            <p>Discussions on the Perl&nbsp;6 language</p>
-            <p><a
-            href="mailto:perl6-language-subscribe@perl.org">Subscribe</a>
-            <a href="http://nntp.perl.org/group/perl.perl6.language/">Archive</a></p>
-        </dd>
-
-        <dt>perl6-compiler</dt>
-        <dd>
-            <p>Discussions on various Perl&nbsp;6 compilers</p>
-            <p><a
-            href="mailto:perl6-compiler-subscribe@perl.org">Subscribe</a>
-            <a href="http://nntp.perl.org/group/perl.perl6.compiler/">Archive</a></p>
-        </dd>
-
-        <dt>perl6-users</dt>
-        <dd>
-            <p>User questions about the Perl&nbsp;6 language and compilers</p>
-            <p><a
-            href="mailto:perl6-users-subscribe@perl.org">Subscribe</a>
-            <a href="http://nntp.perl.org/group/perl.perl6.users/">Archive</a></p>
-        </dd>
-
-        <dt>perl6-workshops</dt>
-        <dd>
-            <p>Coordination of events related to Perl 6 (often together with
-            other Perl or open source events).</p>
-            <p><a
-                href="http://groups.google.com/group/perl6-workshops?hl=en">list
-                info, subscription</a>.</p>
-        </dd>
-    </dl>
+            <dt>perl6-workshops</dt>
+            <dd>
+                <p>Coordination of events related to Perl 6 (often together with
+                other Perl or open source events).</p>
+                <p><a
+                    href="http://groups.google.com/group/perl6-workshops?hl=en"
+                    class="btn btn-sm btn-primary">list info; subscription
+                    </a>
+                </p>
+            </dd>
+        </dl>
+      </div>
+    </div>
+  </div>
 </div>

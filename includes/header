@@ -2,17 +2,22 @@
 
 <!-- Hacking: see NOTES and TODO in this directory -->
 
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<html lang="en">
 <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>[% readvar title %]</title>
     [% ifvar more_header %] [% readvar more_header %] [%endifvar%]
-    <meta name=viewport content="width=device-width, initial-scale=1">
-    <link href="/favicon.ico" rel="shortcut icon" type="image/x-icon" />
-    <style>
-        @import url("/style.css");
-        [% ifvar sitecss %][% readvar sitecss %][% endifvar %]
-    </style>
+
+    <link href="/favicon.ico" rel="shortcut icon" type="image/x-icon">
+    <link href="/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/bootstrap/css/bootstrap-theme.min.css" rel="stylesheet">
+    <link href="/style.css" rel="stylesheet">
+    [% ifvar sitecss %]
+      <style>[% readvar sitecss %]</style>
+    [% endifvar %]
 </head>
 <body>
-<div id="wrapper-outer">
+<div class="bg">
+  <div class="container">
