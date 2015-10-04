@@ -57,7 +57,7 @@
     </ul>
     <div class="tab-content">
       <div role="tabpanel" class="tab-pane active" id="samp-basic">
-<div class="highlight"><pre><span class="k">for</span> <span class="nb">IO</span>(<span class="s">&#39;dict.txt&#39;</span>).<span class="n">words</span> -&gt; <span class="nv">$word</span> {
+<div class="highlight"><pre><span class="k">for</span> <span class="s">&#39;dict.txt&#39;</span>.<span class="nb">IO</span>.<span class="n">words</span> -&gt; <span class="nv">$word</span> {
   <span class="nb">say</span> <span class="s">&quot;$word probably rhymes with Perl&quot;</span>
     <span class="k">if</span> <span class="nv">$word</span> ~~<span class="sr"> /[ea?|u|i] rl $/</span>;
 
