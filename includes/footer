@@ -45,8 +45,6 @@
             <li><a href="http://rakudo.org/">Rakudo</a>, a compiler running on
                 <a href="http://moarvm.com/">MoarVM</a>,
                  the JVM and other backends.</li>
-            <li><a href="https://github.com/sorear/niecza">Niecza</a>, a
-                Perl&nbsp;6 compiler for the CLR (mono/.NET)</li>
         </ul>
         <a href="/compilers/" class="btn btn-success">More</a>
       </section>
