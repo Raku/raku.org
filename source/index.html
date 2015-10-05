@@ -57,35 +57,32 @@
     </ul>
     <div class="tab-content">
       <div role="tabpanel" class="tab-pane active" id="samp-basic">
-<div class="highlight"><pre><span class="k">for</span> <span class="s">&#39;dict.txt&#39;</span>.<span class="nb">IO</span>.<span class="n">words</span> -&gt; <span class="nv">$word</span> {
-  <span class="nb">say</span> <span class="s">&quot;$word probably rhymes with Perl&quot;</span>
-    <span class="k">if</span> <span class="nv">$word</span> ~~<span class="sr"> /[ea?|u|i] rl $/</span>;
+<div class="highlight"><pre><span class="Statement">for</span> <span class="Special">'</span><span class="Constant">dict.txt</span><span class="Special">'</span><span class="Statement">.</span><span class="Type">IO</span><span class="Statement">.</span>words <span class="Statement">-&gt;</span> <span class="Identifier">$</span><span class="Identifier">word</span> {
+  say <span class="Special">&quot;</span><span class="Identifier">$</span><span class="Identifier">word</span><span class="Constant"> probably rhymes with Perl</span><span class="Special">&quot;</span>
+    <span class="Statement">if</span> <span class="Identifier">$</span><span class="Identifier">word</span> <span class="Statement">~~</span> <span class="Special">/</span><span class="Special">[</span>ea<span class="Special">?</span><span class="Special">|</span>u<span class="Special">|</span>i<span class="Special">]</span><span class="Constant"> rl </span><span class="Special">$</span><span class="Special">/</span><span class="Statement">;</span>
 
-  <span class="nb">say</span> <span class="s">&quot;$word is a palindrome&quot;</span>
-    <span class="k">if</span> <span class="nv">$word</span> <span class="o">eq</span> <span class="nv">$word</span>.<span class="nb">flip</span>;
-}
-</pre></div>
+  say <span class="Special">&quot;</span><span class="Identifier">$</span><span class="Identifier">word</span><span class="Constant"> is a palindrome</span><span class="Special">&quot;</span>
+    <span class="Statement">if</span> <span class="Identifier">$</span><span class="Identifier">word</span> <span class="Statement">eq</span> <span class="Identifier">$</span><span class="Identifier">word</span><span class="Statement">.</span>flip<span class="Statement">;</span>
+}</pre></div>
       </div>
       <div role="tabpanel" class="tab-pane" id="samp-fib">
-<div class="highlight"><pre><span class="k">my</span> <span class="nv">@fib</span> = <span class="mi">0</span>, <span class="mi">1</span>, *+* ... *;
-<span class="nb">say</span> <span class="s">&quot;Fibonacci number #8 is @fib[7]&quot;</span>;
-</pre></div>
+<div class="highlight"><pre><span class="Special">my</span> <span class="Identifier">@</span><span class="Identifier">fib</span> <span class="Statement">=</span> <span class="Constant">0</span><span class="Statement">,</span> <span class="Constant">1</span><span class="Statement">,</span> <span class="Statement">*+*</span> <span class="Statement">...</span> <span class="Statement">*;</span>
+say <span class="Special">&quot;</span><span class="Constant">Fibonacci number #8 is </span><span class="Identifier">@</span><span class="Identifier">fib</span>[<span class="Constant">7</span>]<span class="Special">&quot;</span><span class="Statement">;</span></pre></div>
       </div>
       <div role="tabpanel" class="tab-pane" id="samp-ops">
-<div class="highlight"><pre><span class="k">multi</span> <span class="k">sub</span> <span class="n">postfix:</span><span class="s">&lt;❢&gt; (Int $i where $i &lt; 0) is tighter(&amp;infix:&lt;*&gt;</span>) {
-    <span class="k">fail</span> <span class="s">&quot;Not a Natural Number in Factorial&quot;</span>
+<div class="highlight"><pre><span class="Statement">multi</span> <span class="Statement">sub</span> postfix<span class="Statement">:</span><span class="Special">&lt;</span><span class="Constant">❢</span><span class="Special">&gt;</span> (<span class="Type">Int</span> <span class="Identifier">$</span><span class="Identifier">i</span> <span class="PreProc">where</span> <span class="Identifier">$</span><span class="Identifier">i</span> <span class="Statement">&lt;</span> <span class="Constant">0</span>) <span class="PreProc">is</span> <span class="Special">tighter</span>(<span class="Identifier">&amp;</span><span class="Identifier">infix</span><span class="Statement">:</span><span class="Special">&lt;</span><span class="Constant">*</span><span class="Special">&gt;</span>) {
+    <span class="Statement">fail</span> <span class="Special">&quot;</span><span class="Constant">Not a Natural Number in Factorial</span><span class="Special">&quot;</span>
 }
-<span class="k">multi</span> <span class="k">sub</span> <span class="n">postfix:</span><span class="s">&lt;❢&gt; (Int $i where 0|1) is tighter(&amp;infix:&lt;*&gt;</span>) { <span class="mi">1</span> }
-<span class="k">multi</span> <span class="k">sub</span> <span class="n">postfix:</span><span class="s">&lt;❢&gt; (Int $i where $i &gt; 1) is tighter(&amp;infix:&lt;*&gt;</span>) {
-    <span class="nv">$i</span> * (<span class="nv">$i-1</span>)❢
+<span class="Statement">multi</span> <span class="Statement">sub</span> postfix<span class="Statement">:</span><span class="Special">&lt;</span><span class="Constant">❢</span><span class="Special">&gt;</span> (<span class="Type">Int</span> <span class="Identifier">$</span><span class="Identifier">i</span> <span class="PreProc">where</span> <span class="Constant">0</span><span class="Statement">|</span><span class="Constant">1</span>) <span class="PreProc">is</span> <span class="Special">tighter</span>(<span class="Identifier">&amp;</span><span class="Identifier">infix</span><span class="Statement">:</span><span class="Special">&lt;</span><span class="Constant">*</span><span class="Special">&gt;</span>) { <span class="Constant">1</span> }
+<span class="Statement">multi</span> <span class="Statement">sub</span> postfix<span class="Statement">:</span><span class="Special">&lt;</span><span class="Constant">❢</span><span class="Special">&gt;</span> (<span class="Type">Int</span> <span class="Identifier">$</span><span class="Identifier">i</span> <span class="PreProc">where</span> <span class="Identifier">$</span><span class="Identifier">i</span> <span class="Statement">&gt;</span> <span class="Constant">1</span>) <span class="PreProc">is</span> <span class="Special">tighter</span>(<span class="Identifier">&amp;</span><span class="Identifier">infix</span><span class="Statement">:</span><span class="Special">&lt;</span><span class="Constant">*</span><span class="Special">&gt;</span>) {
+    <span class="Identifier">$</span><span class="Identifier">i</span> <span class="Statement">*</span> (<span class="Identifier">$</span><span class="Identifier">i</span><span class="Statement">-</span><span class="Constant">1</span>)❢
 }
 
-<span class="k">use</span> <span class="n">Test</span>;
-<span class="n">isa-ok</span> -<span class="mi">1</span>❢, <span class="nb">Failure</span>, <span class="s">&quot;Factorial for -1 fails&quot;</span>;
-<span class="nb">ok</span> <span class="mi">0</span>❢ == <span class="mi">1</span>, <span class="s">&quot;Factorial for 0&quot;</span>;
-<span class="nb">ok</span> <span class="mi">1</span>❢ == <span class="mi">1</span>, <span class="s">&quot;Factorial for 1&quot;</span>;
-<span class="nb">ok</span> <span class="mi">5</span>❢ == <span class="mi">120</span>, <span class="s">&quot;Factorial for a larger integer&quot;</span>;
-</pre></div>
+<span class="PreProc">use</span> Test<span class="Statement">;</span>
+isa-ok <span class="Constant">-1</span>❢<span class="Statement">,</span> <span class="Type">Failure</span><span class="Statement">,</span> <span class="Special">&quot;</span><span class="Constant">Factorial for -1 fails</span><span class="Special">&quot;</span><span class="Statement">;</span>
+ok <span class="Constant">0</span>❢ <span class="Statement">==</span> <span class="Constant">1</span><span class="Statement">,</span> <span class="Special">&quot;</span><span class="Constant">Factorial for 0</span><span class="Special">&quot;</span><span class="Statement">;</span>
+ok <span class="Constant">1</span>❢ <span class="Statement">==</span> <span class="Constant">1</span><span class="Statement">,</span> <span class="Special">&quot;</span><span class="Constant">Factorial for 1</span><span class="Special">&quot;</span><span class="Statement">;</span>
+ok <span class="Constant">5</span>❢ <span class="Statement">==</span> <span class="Constant">120</span><span class="Statement">,</span> <span class="Special">&quot;</span><span class="Constant">Factorial for a larger integer</span><span class="Special">&quot;</span><span class="Statement">;</span></pre></div>
 </div>
       <div role="tabpanel" class="tab-pane" id="samp-more">
         <p class="lead text-center well"
