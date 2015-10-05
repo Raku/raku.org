@@ -23,6 +23,17 @@ Here are some guidelines that you should respect when changing this site:
       - user's viewport is small (e.g. 800x600)
       - user resizes window
 
+  * We use [Bootstrap3](http://getbootstrap.com/) and
+    [jQuery](http://jquery.com/). Whenever possible, please use the facilities
+    these frameworks provide, instead of rolling out something custom.
+
+  * We use [SASS](http://sass-lang.com/) in `style.scss` to generate
+    `style.css`. You can do that by running
+    `sass --watch style.scss:style.css`. CSS is still valid SASS; if you
+    don't know SASS, just write plain CSS. If you cannot run `sass`, please
+    add your changes to `style.css` and ping @zoffixznet to add your styles
+    to `style.scss`.
+
   * Test any layout changes on [browsershots.org](http://browsershots.org)
     or [browserstack.com](http://browserstack.com). We support the current and previous major releases of Chrome, Firefox, Internet Explorer,
     and Safari.
