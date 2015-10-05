@@ -51,7 +51,7 @@
           data-toggle="tab">Words from File</a>
       </li>
       <li role="presentation"><a href="#samp-fib" role="tab" data-toggle="tab">Lazy Infinite Lists</a></li>
-      <li role="presentation"><a href="#samp-ops" role="tab" data-toggle="tab">Custom Unicode operators
+      <li role="presentation"><a href="#samp-ops" role="tab" data-toggle="tab">Custom operators
       </a></li>
       <li role="presentation"><a href="#samp-more" role="tab" data-toggle="tab">More examples</a></li>
     </ul>
@@ -70,19 +70,16 @@
 say <span class="Special">&quot;</span><span class="Constant">Fibonacci number #8 is </span><span class="Identifier">@</span><span class="Identifier">fib</span>[<span class="Constant">7</span>]<span class="Special">&quot;</span><span class="Statement">;</span></pre></div>
       </div>
       <div role="tabpanel" class="tab-pane" id="samp-ops">
-<div class="highlight"><pre><span class="Statement">multi</span> <span class="Statement">sub</span> postfix<span class="Statement">:</span><span class="Special">&lt;</span><span class="Constant">❢</span><span class="Special">&gt;</span> (<span class="Type">Int</span> <span class="Identifier">$</span><span class="Identifier">i</span> <span class="PreProc">where</span> <span class="Identifier">$</span><span class="Identifier">i</span> <span class="Statement">&lt;</span> <span class="Constant">0</span>) <span class="PreProc">is</span> <span class="Special">tighter</span>(<span class="Identifier">&amp;</span><span class="Identifier">infix</span><span class="Statement">:</span><span class="Special">&lt;</span><span class="Constant">*</span><span class="Special">&gt;</span>) {
-    <span class="Statement">fail</span> <span class="Special">&quot;</span><span class="Constant">Not a Natural Number in Factorial</span><span class="Special">&quot;</span>
-}
-<span class="Statement">multi</span> <span class="Statement">sub</span> postfix<span class="Statement">:</span><span class="Special">&lt;</span><span class="Constant">❢</span><span class="Special">&gt;</span> (<span class="Type">Int</span> <span class="Identifier">$</span><span class="Identifier">i</span> <span class="PreProc">where</span> <span class="Constant">0</span><span class="Statement">|</span><span class="Constant">1</span>) <span class="PreProc">is</span> <span class="Special">tighter</span>(<span class="Identifier">&amp;</span><span class="Identifier">infix</span><span class="Statement">:</span><span class="Special">&lt;</span><span class="Constant">*</span><span class="Special">&gt;</span>) { <span class="Constant">1</span> }
-<span class="Statement">multi</span> <span class="Statement">sub</span> postfix<span class="Statement">:</span><span class="Special">&lt;</span><span class="Constant">❢</span><span class="Special">&gt;</span> (<span class="Type">Int</span> <span class="Identifier">$</span><span class="Identifier">i</span> <span class="PreProc">where</span> <span class="Identifier">$</span><span class="Identifier">i</span> <span class="Statement">&gt;</span> <span class="Constant">1</span>) <span class="PreProc">is</span> <span class="Special">tighter</span>(<span class="Identifier">&amp;</span><span class="Identifier">infix</span><span class="Statement">:</span><span class="Special">&lt;</span><span class="Constant">*</span><span class="Special">&gt;</span>) {
-    <span class="Identifier">$</span><span class="Identifier">i</span> <span class="Statement">*</span> (<span class="Identifier">$</span><span class="Identifier">i</span><span class="Statement">-</span><span class="Constant">1</span>)❢
+<div class="highlight"><pre><span class="Statement">sub</span> postfix<span class="Statement">:</span><span class="Special">&lt;</span><span class="Constant">!</span><span class="Special">&gt;</span> (<span class="Type">Int</span> <span class="Identifier">$n</span>) {
+    <span class="Statement">fail</span> <span class="Special">&quot;</span><span class="Constant">Not a Natural Number in Factorial</span><span class="Special">&quot;</span> <span class="Statement">if</span> <span class="Identifier">$n</span> <span class="Statement">&lt;</span> <span class="Constant">0</span><span class="Statement">;</span>
+    <span class="Statement">[*]</span> <span class="Constant">2</span><span class="Statement">..</span><span class="Identifier">$n</span>
 }
 
 <span class="PreProc">use</span> Test<span class="Statement">;</span>
-isa-ok <span class="Constant">-1</span>❢<span class="Statement">,</span> <span class="Type">Failure</span><span class="Statement">,</span> <span class="Special">&quot;</span><span class="Constant">Factorial for -1 fails</span><span class="Special">&quot;</span><span class="Statement">;</span>
-ok <span class="Constant">0</span>❢ <span class="Statement">==</span> <span class="Constant">1</span><span class="Statement">,</span> <span class="Special">&quot;</span><span class="Constant">Factorial for 0</span><span class="Special">&quot;</span><span class="Statement">;</span>
-ok <span class="Constant">1</span>❢ <span class="Statement">==</span> <span class="Constant">1</span><span class="Statement">,</span> <span class="Special">&quot;</span><span class="Constant">Factorial for 1</span><span class="Special">&quot;</span><span class="Statement">;</span>
-ok <span class="Constant">5</span>❢ <span class="Statement">==</span> <span class="Constant">120</span><span class="Statement">,</span> <span class="Special">&quot;</span><span class="Constant">Factorial for a larger integer</span><span class="Special">&quot;</span><span class="Statement">;</span></pre></div>
+isa-ok <span class="Constant">-1</span><span class="Special">!</span><span class="Statement">,</span> <span class="Type">Failure</span><span class="Statement">,</span> <span class="Special">&quot;</span><span class="Constant">Factorial for -1 fails</span><span class="Special">&quot;</span><span class="Statement">;</span>
+ok <span class="Constant">0</span><span class="Special">!</span> <span class="Statement">==</span> <span class="Constant">1</span><span class="Statement">,</span> <span class="Special">&quot;</span><span class="Constant">Factorial for 0</span><span class="Special">&quot;</span><span class="Statement">;</span>
+ok <span class="Constant">1</span><span class="Special">!</span> <span class="Statement">==</span> <span class="Constant">1</span><span class="Statement">,</span> <span class="Special">&quot;</span><span class="Constant">Factorial for 1</span><span class="Special">&quot;</span><span class="Statement">;</span>
+ok <span class="Constant">5</span><span class="Special">!</span> <span class="Statement">==</span> <span class="Constant">120</span><span class="Statement">,</span> <span class="Special">&quot;</span><span class="Constant">Factorial for a larger integer</span><span class="Special">&quot;</span><span class="Statement">;</span></pre></div>
 </div>
       <div role="tabpanel" class="tab-pane" id="samp-more">
         <p class="lead text-center well"
