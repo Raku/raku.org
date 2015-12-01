@@ -1,6 +1,10 @@
 html {
   overflow-y: scroll; }
 
+@media (max-width: 768px) {
+  #welcome-header img { display: none!important; }
+}
+
 body {
   background: #3B3B3D;
   background: repeating-linear-gradient(45deg, #323234, #323234 10px, #333335 10px, #333335 20px); }

@@ -111,6 +111,10 @@ footer {
     float: left;
 }
 
+@media (max-width: 768px) {
+  #welcome-header img { display: none!important; }
+}
+
 @media (min-width: 768px) {
     .col-sm-5ths {
         width: 20%;
