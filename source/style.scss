@@ -204,3 +204,14 @@ footer {
         border-bottom: 0;
     }
 }
+
+.recent_blogs_rss {
+    display: inline-block;
+    overflow: hidden;
+    text-indent: -9999px;
+    width: 12px;
+    height: 12px;
+    background: url(rss.png);
+    position: relative;
+    top: 2px;
+}
