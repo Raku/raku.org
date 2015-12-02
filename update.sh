@@ -10,6 +10,7 @@ BEFORE=$(git rev-parse HEAD)
 git checkout -q -f origin/master
 if [ "$BEFORE" != "$(git rev-parse HEAD)" ]
 then
+        ./fetch-recent-blog-posts.pl
         if git diff --quiet $BEFORE HEAD includes
         then mowyw --make
         else mowyw
