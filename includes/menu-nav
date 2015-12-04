@@ -27,7 +27,7 @@
         [% item whatever <li id="nav-whatever"{{ class="active"}}
           ><a href="/whatever/">Whatever</a></li> %]
         [% item faq <li id="nav-faq"{{ class="active"}}
-          ><a href="http://doc.perl6.org/language/faq">FAQ</a></li> %]
+          ><a href="https://doc.perl6.org/language/faq">FAQ</a></li> %]
       </ul>
     </div>
   </div>
