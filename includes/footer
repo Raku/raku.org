@@ -30,7 +30,7 @@
         <h4><a href="/whatever/">Modules</a></h4>
 
         <ul class="shush-list">
-          <li><a href="http://modules.perl6.org/">Perl&nbsp;6 modules
+          <li><a href="https://modules.perl6.org/">Perl&nbsp;6 modules
               directory</a></li>
           <li><a href="https://github.com/tadzik/panda/">Panda</a>, a
           module installer for Rakudo</li>
