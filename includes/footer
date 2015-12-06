@@ -27,7 +27,7 @@
       </section>
 
       <section class="col-sm-6 col-md-5ths">
-        <h4><a href="/whatever/">Modules</a></h4>
+        <h4><a href="https://modules.perl6.org/">Modules</a></h4>
 
         <ul class="shush-list">
           <li><a href="https://modules.perl6.org/">Perl&nbsp;6 modules
@@ -36,7 +36,7 @@
           module installer for Rakudo</li>
         </ul>
 
-        <a href="/whatever/" class="btn btn-success">More</a>
+        <a href="https://modules.perl6.org/" class="btn btn-success">More</a>
       </section>
 
       <section class="col-sm-6 col-md-5ths">
