@@ -8,9 +8,9 @@ cd ~/perl6.org
 git fetch -q
 BEFORE=$(git rev-parse HEAD)
 git checkout -q -f origin/master
+./fetch-recent-blog-posts.pl
 if [ "$BEFORE" != "$(git rev-parse HEAD)" ]
 then
-        ./fetch-recent-blog-posts.pl
         if git diff --quiet $BEFORE HEAD includes
         then mowyw --make
         else mowyw
