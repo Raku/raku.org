@@ -27,7 +27,7 @@ my $j = $tx->res->dom->find("entry")->slice(0..2)
                     link  => $_->at("link")->{href} }
             })->to_array;
 
-spurt encode_json($j) => 'source/recent-blog-posts.json';
+spurt encode_json($j) => 'online/recent-blog-posts.json';
 print "Successfully wrote new blog posts\n";
 
 exit;
