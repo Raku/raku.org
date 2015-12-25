@@ -15,7 +15,7 @@
         [% item home <li id="nav-home"{{ class="active"}}
           ><a href="/">Home</a></li> %]
         [% item download <li id="nav-home"{{ class="active"}}
-          ><a href="/download">Download</a></li> %]
+          ><a href="/downloads">Download</a></li> %]
         [% item community <li id="nav-community"{{ class="active"}}
           ><a href="/community/">Community</a></li>%]
         [% item docs <li id="nav-docs" {{ class="active"}}
