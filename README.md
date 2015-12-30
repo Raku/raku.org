@@ -28,8 +28,9 @@ Here are some guidelines that you should respect when changing this site:
     these frameworks provide, instead of rolling out something custom.
 
   * We use [SASS](http://sass-lang.com/) in `style.scss` to generate
-    `style.css`. You can do that by running
-    `sass --watch style.scss:style.css`. CSS is still valid SASS; if you
+    `style.css`. You can do that by running `sass style.scss:style.css` inside
+    the `source` directory (add `--watch` flag to make it watch for changes
+    and re-generate the CSS file). CSS is still valid SASS; if you
     don't know SASS, just write plain CSS. If you cannot run `sass`, please
     add your changes to `style.css` and ping @zoffixznet to add your styles
     to `style.scss`.
