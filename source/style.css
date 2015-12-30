@@ -21,6 +21,10 @@ body {
 .navbar-inverse a:focus,
 .navbar-inverse a:active {
   background: #98C73D !important; }
+.navbar-inverse .nav a {
+  font-size: 93%;
+  padding-left: 13px;
+  padding-right: 13px; }
 
 footer {
   border-top: 20px solid #222223;

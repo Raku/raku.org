@@ -45,6 +45,12 @@ body {
     a:active {
         background: $p6col2!important;
     }
+
+    .nav a {
+        font-size: 93%;
+        padding-left: 13px;
+        padding-right: 13px;
+    }
 }
 
 footer {
