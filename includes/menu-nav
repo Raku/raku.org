@@ -14,7 +14,7 @@
       <ul class="nav navbar-nav">
         [% item home <li id="nav-home"{{ class="active"}}
           ><a href="/">Home</a></li> %]
-        [% item download <li id="nav-home"{{ class="active"}}
+        [% item download <li id="nav-downloads"{{ class="active"}}
           ><a href="/downloads">Download</a></li> %]
         [% item community <li id="nav-community"{{ class="active"}}
           ><a href="/community/">Community</a></li>%]
