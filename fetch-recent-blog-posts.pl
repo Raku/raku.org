@@ -24,7 +24,7 @@ my $j = $tx->res->dom->find("entry")->slice(0..2)
 ->map(sub{
         +{
             title => $_->at("title")->all_text,
-            link  => $_->at('link[type="text/html"]')->{href} }
+            link  => $_->at('link[type="text/html"]:not([rel="replies"])')->{href} }
     })->to_array;
 
 spurt encode_json($j) => 'online/recent-blog-posts.json';
