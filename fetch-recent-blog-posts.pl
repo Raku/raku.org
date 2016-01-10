@@ -9,7 +9,7 @@ use lib qw{
 
 use Mojo::UserAgent;
 use Mojo::JSON qw/encode_json/;
-use Mojo::Util qw/spurt/;
+use Mojo::Util qw/spurt  xml_escape/;
 
 my $tx = Mojo::UserAgent->new->get("http://pl6anet.org/atom.xml");
 
@@ -22,9 +22,10 @@ unless ( $tx->success ) {
 
 my $j = $tx->res->dom->find("entry")->slice(0..2)
 ->map(sub{
-        +{
-            title => $_->at("title")->all_text,
-            link  => $_->at('link[type="text/html"]:not([rel="replies"])')->{href} }
+          +{
+            title => xml_escape($_->at("title")->all_text),
+            link  => xml_escape($_->at('link[type="text/html"]:not([rel="replies"])')->{href}),
+          }
     })->to_array;
 
 spurt encode_json($j) => 'online/recent-blog-posts.json';
