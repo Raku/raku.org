@@ -11,7 +11,7 @@ use Mojo::UserAgent;
 use Mojo::JSON qw/encode_json/;
 use Mojo::Util qw/spurt/;
 
-my $tx = Mojo::UserAgent->new->get("http://pl6anet.org/atom.xml.broked");
+my $tx = Mojo::UserAgent->new->get("http://pl6anet.org/atom.xml");
 
 unless ( $tx->success ) {
     my $err   = $tx->error;
