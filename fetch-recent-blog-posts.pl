@@ -11,7 +11,7 @@ use Mojo::UserAgent;
 use Mojo::JSON qw/encode_json/;
 use Mojo::Util qw/spurt/;
 
-my $tx = Mojo::UserAgent->new->get("http://pl6anet.org/atom.xml");
+my $tx = Mojo::UserAgent->new->get("http://pl6anet.org/atom.xml.broked");
 
 unless ( $tx->success ) {
     my $err   = $tx->error;
@@ -21,11 +21,11 @@ unless ( $tx->success ) {
 }
 
 my $j = $tx->res->dom->find("entry")->slice(0..2)
-            ->map(sub{
-                +{
-                    title => $_->at("title")->all_text,
-                    link  => $_->at("link")->{href} }
-            })->to_array;
+->map(sub{
+        +{
+            title => $_->at("title")->all_text,
+            link  => $_->at('link[type="text/html"]')->{href} }
+    })->to_array;
 
 spurt encode_json($j) => 'online/recent-blog-posts.json';
 print "Successfully wrote new blog posts\n";
