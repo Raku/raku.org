@@ -34,8 +34,6 @@
               directory</a></li>
           <li><a href="https://github.com/tadzik/panda/">Panda</a>, a
           module installer for Rakudo</li>
-          <li><a href="https://github.com/ugexe/zef/">Zef</a>, a young
-          and feature rich module installer</li>
         </ul>
 
         <a href="https://modules.perl6.org/" class="btn btn-success">More</a>
