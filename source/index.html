@@ -45,34 +45,83 @@
   </div>
 </header>
 
-<div class="row" id="features_row">
-  <section class="col-sm-3">
-    <div class="well">
-      <h3 class="h2 trim-top">Jump in!</h3>
-      <p>Rakudo is a compiler for Perl&nbsp;6 code. Install it and you're
-        all set to run Perl&nbsp;6 programs!</p>
-      <a href="/downloads/"
-        class="btn btn-primary btn-lg btn-block"
-          style="white-space: normal; font-size: 120%">
-        Download Rakudo Perl&nbsp;6
-      </a>
-    </div>
-  </section>
-  <div class="col-sm-6">
-    <div class="panel panel-info">
-      <div class="panel-heading">
-        <h3 class="panel-title">
-          Many new features greatly advance our tradition of expressive and feature-rich programming
-        </h3>
+<main class="row">
+  <div class="col-sm-9 row">
+    <section class="col-sm-4">
+      <div class="well">
+        <h3 class="h2 trim-top">Jump in!</h3>
+        <p>Rakudo is a compiler for Perl&nbsp;6 code. Install it and you're
+          all set to run Perl&nbsp;6 programs!</p>
+        <a href="/downloads/"
+          class="btn btn-primary btn-lg btn-block"
+            style="white-space: normal; font-size: 120%">
+          Download Rakudo Perl&nbsp;6
+        </a>
       </div>
-      <div class="panel-body trim">
-        <ul class="shy-list">
-            <li>Object-oriented programming including generics, roles and multiple dispatch</li>
-            <li>Functional programming primitives, lazy and eager list evaluation, junctions, autothreading and hyperoperators (vector operators)</li>
-            <li>Parallelism, concurrency, and asynchrony including multi-core support</li>
-            <li>Definable grammars for pattern matching and generalized string processing</li>
-            <li>Optional and gradual typing</li>
-        </ul>
+    </section>
+    <div class="col-sm-8">
+      <div class="panel panel-info">
+        <div class="panel-heading">
+          <h3 class="panel-title">
+            Many new features greatly advance our tradition of expressive and feature-rich programming
+          </h3>
+        </div>
+        <div class="panel-body trim">
+          <ul class="shy-list">
+              <li>Object-oriented programming including generics, roles and multiple dispatch</li>
+              <li>Functional programming primitives, lazy and eager list evaluation, junctions, autothreading and hyperoperators (vector operators)</li>
+              <li>Parallelism, concurrency, and asynchrony including multi-core support</li>
+              <li>Definable grammars for pattern matching and generalized string processing</li>
+              <li>Optional and gradual typing</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-sm-12">
+      <ul class="nav nav-tabs" role="tablist">
+        <li role="presentation" class="active"
+          ><a href="#samp-basic" role="tab"
+            data-toggle="tab">Words from File</a>
+        </li>
+        <li role="presentation"><a href="#samp-fib" role="tab" data-toggle="tab">Lazy Infinite Lists</a></li>
+        <li role="presentation"><a href="#samp-ops" role="tab" data-toggle="tab">Custom operators
+        </a></li>
+        <li role="presentation"><a href="#samp-more" role="tab" data-toggle="tab">More examples</a></li>
+      </ul>
+      <div class="tab-content">
+        <div role="tabpanel" class="tab-pane active" id="samp-basic">
+  <div class="highlight"><pre><span class="Statement">for</span> <span class="Special">'</span><span class="Constant">dict.txt</span><span class="Special">'</span><span class="Statement">.</span><span class="Type">IO</span><span class="Statement">.</span>words <span class="Statement">-&gt;</span> <span class="Identifier">$</span><span class="Identifier">word</span> {
+    say <span class="Special">&quot;</span><span class="Identifier">$</span><span class="Identifier">word</span><span class="Constant"> probably rhymes with Perl</span><span class="Special">&quot;</span>
+      <span class="Statement">if</span> <span class="Identifier">$</span><span class="Identifier">word</span> <span class="Statement">~~</span> <span class="Special">/</span><span class="Special">[</span>ea<span class="Special">?</span><span class="Special">|</span>u<span class="Special">|</span>i<span class="Special">]</span><span class="Constant"> rl </span><span class="Special">$</span><span class="Special">/</span><span class="Statement">;</span>
+
+    say <span class="Special">&quot;</span><span class="Identifier">$</span><span class="Identifier">word</span><span class="Constant"> is a palindrome</span><span class="Special">&quot;</span>
+      <span class="Statement">if</span> <span class="Identifier">$</span><span class="Identifier">word</span> <span class="Statement">eq</span> <span class="Identifier">$</span><span class="Identifier">word</span><span class="Statement">.</span>flip<span class="Statement">;</span>
+  }</pre></div>
+        </div>
+        <div role="tabpanel" class="tab-pane" id="samp-fib">
+  <div class="highlight"><pre><span class="Special">my</span> <span class="Identifier">@</span><span class="Identifier">fib</span> <span class="Statement">=</span> <span class="Constant">0</span><span class="Statement">,</span> <span class="Constant">1</span><span class="Statement">,</span> <span class="Statement">*+*</span> <span class="Statement">...</span> <span class="Statement">*;</span>
+  say <span class="Special">&quot;</span><span class="Constant">Fibonacci number #8 is </span><span class="Identifier">@</span><span class="Identifier">fib</span>[<span class="Constant">7</span>]<span class="Special">&quot;</span><span class="Statement">;</span></pre></div>
+        </div>
+        <div role="tabpanel" class="tab-pane" id="samp-ops">
+  <div class="highlight"><pre><span class="Statement">sub</span> postfix<span class="Statement">:</span><span class="Special">&lt;</span><span class="Constant">!</span><span class="Special">&gt;</span> (<span class="Type">Int</span> <span class="Identifier">$n</span>) {
+      <span class="Statement">fail</span> <span class="Special">&quot;</span><span class="Constant">Not a Natural Number in Factorial</span><span class="Special">&quot;</span> <span class="Statement">if</span> <span class="Identifier">$n</span> <span class="Statement">&lt;</span> <span class="Constant">0</span><span class="Statement">;</span>
+      <span class="Statement">[*]</span> <span class="Constant">2</span><span class="Statement">..</span><span class="Identifier">$n</span>
+  }
+
+  <span class="PreProc">use</span> Test<span class="Statement">;</span>
+  isa-ok (<span class="Constant">-1</span>)<span class="Special">!</span><span class="Statement">,</span> <span class="Type">Failure</span><span class="Statement">,</span> <span class="Special">&quot;</span><span class="Constant">Factorial for -1 fails</span><span class="Special">&quot;</span><span class="Statement">;</span>
+  ok <span class="Constant">0</span><span class="Special">!</span> <span class="Statement">==</span> <span class="Constant">1</span><span class="Statement">,</span> <span class="Special">&quot;</span><span class="Constant">Factorial for 0</span><span class="Special">&quot;</span><span class="Statement">;</span>
+  ok <span class="Constant">1</span><span class="Special">!</span> <span class="Statement">==</span> <span class="Constant">1</span><span class="Statement">,</span> <span class="Special">&quot;</span><span class="Constant">Factorial for 1</span><span class="Special">&quot;</span><span class="Statement">;</span>
+  ok <span class="Constant">5</span><span class="Special">!</span> <span class="Statement">==</span> <span class="Constant">120</span><span class="Statement">,</span> <span class="Special">&quot;</span><span class="Constant">Factorial for a larger integer</span><span class="Special">&quot;</span><span class="Statement">;</span></pre></div>
+  </div>
+        <div role="tabpanel" class="tab-pane" id="samp-more">
+          <p class="lead text-center well"
+            style="padding-top: 20px;">Want to see more?
+              <a href="http://examples.perl6.org/"
+            class="btn btn-primary">Visit Perl&nbsp;6 examples page</a>
+          </p>
+        </div>
       </div>
     </div>
   </div>
@@ -93,73 +142,6 @@
         </ul>
       </div>
     </div>
-  </div>
-</div>
-
-<main class="row">
-  <div class="col-sm-3">
-    <div class="panel panel-primary">
-      <div class="panel-heading">
-        <h3 class="panel-title text-center"
-          >2015 Perl&nbsp;6 Advent Calendar</h3>
-      </div>
-      <div class="panel-body clearfix">
-        <a href="https://perl6advent.wordpress.com/" class="text-center"
-          style="display: block">
-          <i style="font-size: 90%">Something cool about Perl 6 every day</i>
-          <img src="camelia-advent.png" alt=""
-            class="img-responsive" style="margin: 10px auto 0">
-        </a>
-      </div>
-    </div>
-  </div>
-
-  <div class="col-sm-8 col-md-9">
-    <ul class="nav nav-tabs" role="tablist">
-      <li role="presentation" class="active"
-        ><a href="#samp-basic" role="tab"
-          data-toggle="tab">Words from File</a>
-      </li>
-      <li role="presentation"><a href="#samp-fib" role="tab" data-toggle="tab">Lazy Infinite Lists</a></li>
-      <li role="presentation"><a href="#samp-ops" role="tab" data-toggle="tab">Custom operators
-      </a></li>
-      <li role="presentation"><a href="#samp-more" role="tab" data-toggle="tab">More examples</a></li>
-    </ul>
-    <div class="tab-content">
-      <div role="tabpanel" class="tab-pane active" id="samp-basic">
-<div class="highlight"><pre><span class="Statement">for</span> <span class="Special">'</span><span class="Constant">dict.txt</span><span class="Special">'</span><span class="Statement">.</span><span class="Type">IO</span><span class="Statement">.</span>words <span class="Statement">-&gt;</span> <span class="Identifier">$</span><span class="Identifier">word</span> {
-  say <span class="Special">&quot;</span><span class="Identifier">$</span><span class="Identifier">word</span><span class="Constant"> probably rhymes with Perl</span><span class="Special">&quot;</span>
-    <span class="Statement">if</span> <span class="Identifier">$</span><span class="Identifier">word</span> <span class="Statement">~~</span> <span class="Special">/</span><span class="Special">[</span>ea<span class="Special">?</span><span class="Special">|</span>u<span class="Special">|</span>i<span class="Special">]</span><span class="Constant"> rl </span><span class="Special">$</span><span class="Special">/</span><span class="Statement">;</span>
-
-  say <span class="Special">&quot;</span><span class="Identifier">$</span><span class="Identifier">word</span><span class="Constant"> is a palindrome</span><span class="Special">&quot;</span>
-    <span class="Statement">if</span> <span class="Identifier">$</span><span class="Identifier">word</span> <span class="Statement">eq</span> <span class="Identifier">$</span><span class="Identifier">word</span><span class="Statement">.</span>flip<span class="Statement">;</span>
-}</pre></div>
-      </div>
-      <div role="tabpanel" class="tab-pane" id="samp-fib">
-<div class="highlight"><pre><span class="Special">my</span> <span class="Identifier">@</span><span class="Identifier">fib</span> <span class="Statement">=</span> <span class="Constant">0</span><span class="Statement">,</span> <span class="Constant">1</span><span class="Statement">,</span> <span class="Statement">*+*</span> <span class="Statement">...</span> <span class="Statement">*;</span>
-say <span class="Special">&quot;</span><span class="Constant">Fibonacci number #8 is </span><span class="Identifier">@</span><span class="Identifier">fib</span>[<span class="Constant">7</span>]<span class="Special">&quot;</span><span class="Statement">;</span></pre></div>
-      </div>
-      <div role="tabpanel" class="tab-pane" id="samp-ops">
-<div class="highlight"><pre><span class="Statement">sub</span> postfix<span class="Statement">:</span><span class="Special">&lt;</span><span class="Constant">!</span><span class="Special">&gt;</span> (<span class="Type">Int</span> <span class="Identifier">$n</span>) {
-    <span class="Statement">fail</span> <span class="Special">&quot;</span><span class="Constant">Not a Natural Number in Factorial</span><span class="Special">&quot;</span> <span class="Statement">if</span> <span class="Identifier">$n</span> <span class="Statement">&lt;</span> <span class="Constant">0</span><span class="Statement">;</span>
-    <span class="Statement">[*]</span> <span class="Constant">2</span><span class="Statement">..</span><span class="Identifier">$n</span>
-}
-
-<span class="PreProc">use</span> Test<span class="Statement">;</span>
-isa-ok (<span class="Constant">-1</span>)<span class="Special">!</span><span class="Statement">,</span> <span class="Type">Failure</span><span class="Statement">,</span> <span class="Special">&quot;</span><span class="Constant">Factorial for -1 fails</span><span class="Special">&quot;</span><span class="Statement">;</span>
-ok <span class="Constant">0</span><span class="Special">!</span> <span class="Statement">==</span> <span class="Constant">1</span><span class="Statement">,</span> <span class="Special">&quot;</span><span class="Constant">Factorial for 0</span><span class="Special">&quot;</span><span class="Statement">;</span>
-ok <span class="Constant">1</span><span class="Special">!</span> <span class="Statement">==</span> <span class="Constant">1</span><span class="Statement">,</span> <span class="Special">&quot;</span><span class="Constant">Factorial for 1</span><span class="Special">&quot;</span><span class="Statement">;</span>
-ok <span class="Constant">5</span><span class="Special">!</span> <span class="Statement">==</span> <span class="Constant">120</span><span class="Statement">,</span> <span class="Special">&quot;</span><span class="Constant">Factorial for a larger integer</span><span class="Special">&quot;</span><span class="Statement">;</span></pre></div>
-</div>
-      <div role="tabpanel" class="tab-pane" id="samp-more">
-        <p class="lead text-center well"
-          style="padding-top: 20px;">Want to see more?
-            <a href="http://examples.perl6.org/"
-          class="btn btn-primary">Visit Perl&nbsp;6 examples page</a>
-        </p>
-      </div>
-    </div>
-
   </div>
 </main>
 

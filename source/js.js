@@ -31,9 +31,6 @@ function setup_recent_blog_posts () {
                 + this.link + '">' + this.title + '</a></li>'
             );
         });
-
-        $('#features_row h3').sameHeight();
-        $('#features_row .panel-body').sameHeight();
     })
     .fail(function() {
         el.append('<li><i>Failed to fetch recent blogs</i></li>');
