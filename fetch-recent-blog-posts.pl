@@ -20,7 +20,7 @@ unless ( $tx->success ) {
     exit;
 }
 
-my $j = $tx->res->dom->find("entry")->slice(0..8)
+my $j = $tx->res->dom->find("entry")->slice(0..6)
 ->map(sub{
           +{
             title => xml_escape($_->at("title")->all_text),
