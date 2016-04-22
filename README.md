@@ -49,11 +49,15 @@ Here are some guidelines that you should respect when changing this site:
   * If you create a new page, please link to the URL *without* the
     ".html" extension.
 
-To run this site locally, install mowyw
-(`cpanm App::Mowyw Text::VimColor Plack`) then:
+To run this site locally:
 
+  - Install the following modules:
+
+    `cpanm App::Mowyw Text::VimColor Plack`
+
+  - Run the following commands to populate the `./online` folder and launch a local web server for testing:
+    ```
     mowyw
-    plackup app.psgi
-
-This populates the `./online` folder, and launches a local web server for
-testing, e.g. http://localhost:5000/index.html
+    plackup
+    ```
+  - Open http://localhost:5000/index.html in your browser
