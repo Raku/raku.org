@@ -24,7 +24,7 @@ my $j = $tx->res->dom->find("entry")->slice(0..6)
 ->map(sub{
           +{
             title => xml_escape($_->at("title")->all_text),
-            link  => xml_escape($_->at('link[type="text/html"]:not([rel="replies"])')->{href}),
+            link  => xml_escape($_->at('link:not([rel="replies"])')->{href}),
           }
     })->to_array;
 
