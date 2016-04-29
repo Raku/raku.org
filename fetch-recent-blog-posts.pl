@@ -22,9 +22,12 @@ unless ( $tx->success ) {
 
 my $j = $tx->res->dom->find("entry")->slice(0..6)
 ->map(sub{
+        # Look for text/html links and use the first without it if we don't find any
+        my $link = $_->at('link[type="text/html"]:not([rel="replies"])')
+            // $_->at('link:not([rel="replies"])');
           +{
             title => xml_escape($_->at("title")->all_text),
-            link  => xml_escape($_->at('link:not([rel="replies"])')->{href}),
+            link  => xml_escape($link->{href}),
           }
     })->to_array;
 
