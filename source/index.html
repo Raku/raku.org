@@ -93,27 +93,27 @@
         <div role="tabpanel" class="tab-pane active" id="samp-basic">
   <div class="highlight"><pre><span class="Statement">for</span> <span class="Special">'</span><span class="Constant">dict.txt</span><span class="Special">'</span><span class="Statement">.</span><span class="Type">IO</span><span class="Statement">.</span>words <span class="Statement">-&gt;</span> <span class="Identifier">$</span><span class="Identifier">word</span> {
     say <span class="Special">&quot;</span><span class="Identifier">$</span><span class="Identifier">word</span><span class="Constant"> probably rhymes with Perl</span><span class="Special">&quot;</span>
-      <span class="Statement">if</span> <span class="Identifier">$</span><span class="Identifier">word</span> <span class="Statement">~~</span> <span class="Special">/</span><span class="Special">[</span>ea<span class="Special">?</span><span class="Special">|</span>u<span class="Special">|</span>i<span class="Special">]</span><span class="Constant"> rl </span><span class="Special">$</span><span class="Special">/</span><span class="Statement">;</span>
+        <span class="Statement">if</span> <span class="Identifier">$</span><span class="Identifier">word</span> <span class="Statement">~~</span> <span class="Special">/</span><span class="Special">[</span>ea<span class="Special">?</span><span class="Special">|</span>u<span class="Special">|</span>i<span class="Special">]</span><span class="Constant"> rl </span><span class="Special">$</span><span class="Special">/</span><span class="Statement">;</span>
 
     say <span class="Special">&quot;</span><span class="Identifier">$</span><span class="Identifier">word</span><span class="Constant"> is a palindrome</span><span class="Special">&quot;</span>
-      <span class="Statement">if</span> <span class="Identifier">$</span><span class="Identifier">word</span> <span class="Statement">eq</span> <span class="Identifier">$</span><span class="Identifier">word</span><span class="Statement">.</span>flip<span class="Statement">;</span>
-  }</pre></div>
+        <span class="Statement">if</span> <span class="Identifier">$</span><span class="Identifier">word</span> <span class="Statement">eq</span> <span class="Identifier">$</span><span class="Identifier">word</span><span class="Statement">.</span>flip<span class="Statement">;</span>
+}</pre></div>
         </div>
         <div role="tabpanel" class="tab-pane" id="samp-fib">
   <div class="highlight"><pre><span class="Special">my</span> <span class="Identifier">@</span><span class="Identifier">fib</span> <span class="Statement">=</span> <span class="Constant">0</span><span class="Statement">,</span> <span class="Constant">1</span><span class="Statement">,</span> <span class="Statement">*+*</span> <span class="Statement">...</span> <span class="Statement">*;</span>
-  say <span class="Special">&quot;</span><span class="Constant">Fibonacci number #8 is </span><span class="Identifier">@</span><span class="Identifier">fib</span>[<span class="Constant">7</span>]<span class="Special">&quot;</span><span class="Statement">;</span></pre></div>
+say <span class="Special">&quot;</span><span class="Constant">Fibonacci number #8 is </span><span class="Identifier">@</span><span class="Identifier">fib</span>[<span class="Constant">7</span>]<span class="Special">&quot;</span><span class="Statement">;</span></pre></div>
         </div>
         <div role="tabpanel" class="tab-pane" id="samp-ops">
   <div class="highlight"><pre><span class="Statement">sub</span> postfix<span class="Statement">:</span><span class="Special">&lt;</span><span class="Constant">!</span><span class="Special">&gt;</span> (<span class="Type">Int</span> <span class="Identifier">$n</span>) {
-      <span class="Statement">fail</span> <span class="Special">&quot;</span><span class="Constant">Not a Natural Number in Factorial</span><span class="Special">&quot;</span> <span class="Statement">if</span> <span class="Identifier">$n</span> <span class="Statement">&lt;</span> <span class="Constant">0</span><span class="Statement">;</span>
-      <span class="Statement">[*]</span> <span class="Constant">2</span><span class="Statement">..</span><span class="Identifier">$n</span>
-  }
+    <span class="Statement">fail</span> <span class="Special">&quot;</span><span class="Constant">Not a Natural Number in Factorial</span><span class="Special">&quot;</span> <span class="Statement">if</span> <span class="Identifier">$n</span> <span class="Statement">&lt;</span> <span class="Constant">0</span><span class="Statement">;</span>
+    <span class="Statement">[*]</span> <span class="Constant">2</span><span class="Statement">..</span><span class="Identifier">$n</span>
+}
 
-  <span class="PreProc">use</span> Test<span class="Statement">;</span>
-  isa-ok (<span class="Constant">-1</span>)<span class="Special">!</span><span class="Statement">,</span> <span class="Type">Failure</span><span class="Statement">,</span> <span class="Special">&quot;</span><span class="Constant">Factorial for -1 fails</span><span class="Special">&quot;</span><span class="Statement">;</span>
-  ok <span class="Constant">0</span><span class="Special">!</span> <span class="Statement">==</span> <span class="Constant">1</span><span class="Statement">,</span> <span class="Special">&quot;</span><span class="Constant">Factorial for 0</span><span class="Special">&quot;</span><span class="Statement">;</span>
-  ok <span class="Constant">1</span><span class="Special">!</span> <span class="Statement">==</span> <span class="Constant">1</span><span class="Statement">,</span> <span class="Special">&quot;</span><span class="Constant">Factorial for 1</span><span class="Special">&quot;</span><span class="Statement">;</span>
-  ok <span class="Constant">5</span><span class="Special">!</span> <span class="Statement">==</span> <span class="Constant">120</span><span class="Statement">,</span> <span class="Special">&quot;</span><span class="Constant">Factorial for a larger integer</span><span class="Special">&quot;</span><span class="Statement">;</span></pre></div>
+<span class="PreProc">use</span> Test<span class="Statement">;</span>
+isa-ok (<span class="Constant">-1</span>)<span class="Special">!</span><span class="Statement">,</span> <span class="Type">Failure</span><span class="Statement">,</span> <span class="Special">&quot;</span><span class="Constant">Factorial for -1 fails</span><span class="Special">&quot;</span><span class="Statement">;</span>
+ok <span class="Constant">0</span><span class="Special">!</span> <span class="Statement">==</span> <span class="Constant">1</span><span class="Statement">,</span> <span class="Special">&quot;</span><span class="Constant">Factorial for 0</span><span class="Special">&quot;</span><span class="Statement">;</span>
+ok <span class="Constant">1</span><span class="Special">!</span> <span class="Statement">==</span> <span class="Constant">1</span><span class="Statement">,</span> <span class="Special">&quot;</span><span class="Constant">Factorial for 1</span><span class="Special">&quot;</span><span class="Statement">;</span>
+ok <span class="Constant">5</span><span class="Special">!</span> <span class="Statement">==</span> <span class="Constant">120</span><span class="Statement">,</span> <span class="Special">&quot;</span><span class="Constant">Factorial for a larger integer</span><span class="Special">&quot;</span><span class="Statement">;</span></pre></div>
   </div>
         <div role="tabpanel" class="tab-pane" id="samp-more">
           <p class="lead text-center well"
