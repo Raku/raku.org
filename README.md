@@ -37,7 +37,7 @@ Here are some guidelines that you should respect when changing this site:
 
   * We support the current and previous major releases of Chrome, Firefox,
     Internet Explorer (Edge), and Safari. Please test layout changes. Lacking actual
-    browers to test in, you can use [browsershots.org](http://browsershots.org)
+    browsers to test in, you can use [browsershots.org](http://browsershots.org)
     or [browserstack.com](http://browserstack.com).
 
   * We spell "Perl 6" consistently with a
