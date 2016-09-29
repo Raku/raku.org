@@ -19,7 +19,9 @@
         [% item community <li id="nav-community"{{ class="active"}}
           ><a href="/community/">Community</a></li>%]
         [% item docs <li id="nav-docs" {{ class="active"}}
-          ><a href="/documentation/">Documentation</a></li> %]
+          ><a href="http://docs.perl6.org">Documentation</a></li> %]
+        [% item docs <li id="nav-res" {{ class="active"}}
+          ><a href="/documentation/">Resources</a></li> %]
         [% item specs <li id="nav-specs" {{ class="active"}}
           ><a href="/specification/">Design</a></li> %]
         [% item compilers <li id="nav-compilers"{{ class="active"}}
