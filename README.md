@@ -1,10 +1,13 @@
-This is the source code for <https://perl6.org/>.
+# Perl6.org
+This is the source code for <https://perl6.org>.
 
 It is rendered with [mowyw](https://perlgeek.de/en/software/mowyw)
 every 15 minutes, so updates to the repository should also result in
-an update of perl6.org. If not, talk to moritz on
+an update of <https://perl6.org>  
+If not, talk to [moritz] on
 [#perl6](https://chat.mibbit.com/?channel=%23perl6&server=irc.freenode.net).
 
+### Guidelines
 Here are some guidelines that you should respect when changing this site:
 
   * Only link to up-to-date information. Feel free to delete outdated
@@ -16,7 +19,7 @@ Here are some guidelines that you should respect when changing this site:
     a broader Perl 6 audience.
 
   * If you have a Perl 6 blog, get it included in the planetsix.perl.org feed
-    instead. Talk to \[Coke\] on [#perl6](irc://irc.freenode.net/perl6).
+    instead. Talk to \[Coke\] on [#perl6](https://chat.mibbit.com/?channel=%23perl6&server=irc.freenode.net).
 
   * If you intend to change the layout, consider what happens when:
 
@@ -49,6 +52,7 @@ Here are some guidelines that you should respect when changing this site:
   * If you create a new page, please link to the URL *without* the
     ".html" extension.
 
+### Build
 To run this site locally:
 
   - Install the following modules:
@@ -62,7 +66,7 @@ To run this site locally:
     ```
   - Open http://localhost:5000/index.html in your browser
 
-# LICENSE
+### LICENSE
 
 See [LICENSE](LICENSE) file for the details of the license of the code in this repository.
 
