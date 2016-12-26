@@ -22,6 +22,8 @@
           ><a href="http://docs.perl6.org">Documentation</a></li> %]
         [% item res <li id="nav-res" {{ class="active"}}
           ><a href="/resources/">Resources</a></li> %]
+        [% item modules <li id="nav-modules" {{ class="active"}}
+          ><a href="https://modules.perl6.org/">Modules</a></li> %]
         [% item specs <li id="nav-specs" {{ class="active"}}
           ><a href="/specification/">Design</a></li> %]
         [% item compilers <li id="nav-compilers"{{ class="active"}}
