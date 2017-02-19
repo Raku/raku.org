@@ -1,6 +1,7 @@
 [% setvar title The Perl 6 Summary for the week ending 20040125 %]
 <div id="archive-notice">
     <h3>This file is part of the Perl 6 Archive</h3>
+    <table bgcolor="red"><tr><td><font color="white"> Note: these documents may be out of date. Do <b>not</b> use as reference!</font></tr></td></table>
     <p>To see what is currently happening visit <a href="http://www.perl6.org/">http://www.perl6.org/</a></p>
 </div>
 <div class='pod'>
@@ -178,7 +179,7 @@ yet.</p>
 <a name='Meanwhile in perl6-language'></a><h1>Meanwhile in perl6-language</h1>
 <a name='Semantics of Vector operations'></a><h2>Semantics of Vector operations</h2>
 <p>Determined to test everyone's Unicode readiness, Luke Palmer kicked
-off a discussion of the semantics of <code>[1,2,3] Â»+Â«
+off a discussion of the semantics of <code>[1,2,3] »+«
 [4,5,6]</code>. At first glance it looks like the result should be
 <code>[5,7,9]</code>, but Luke argued that actually, the code was trying to add
 two lists, each containing a single scalar, that just happened to be
@@ -187,15 +188,15 @@ glance is also called 'not violating the principle of least
 surprise'&quot;, before going on to surprise us all with 'lopsided' vector
 ops, which would allow the programmer to specify when a value was
 expected to be treated as a scalar:</p>
-<pre>    $a   Â»+Â« $b     # Treat $a and $b as lists
-    $x    +Â« $y     # Treat $x as a scalar and $b as a list
-          -Â« @bar   # Return a list of every element of @bar, negated
-    @foo Â»+  @bar   # Add the length of @bar to every element of @foo</pre>
-<p>Then he scared me with <code>@foo Â»+= @foo</code>. He noted that it might take
-some getting used to, but that it helped if you pronounce <code>Â»</code> and
-<code>Â«</code> as 'each'. Austin Hastings didn't like it (from a syntax
+<pre>    $a   »+« $b     # Treat $a and $b as lists
+    $x    +« $y     # Treat $x as a scalar and $b as a list
+          -« @bar   # Return a list of every element of @bar, negated
+    @foo »+  @bar   # Add the length of @bar to every element of @foo</pre>
+<p>Then he scared me with <code>@foo »+= @foo</code>. He noted that it might take
+some getting used to, but that it helped if you pronounce <code>»</code> and
+<code>«</code> as 'each'. Austin Hastings didn't like it (from a syntax
 highlighting point of view), but he appeared to be outvoted. Larry
-pointed out that <code>Â«Â»</code> etc were the least of a syntax highlighters
+pointed out that <code>«»</code> etc were the least of a syntax highlighters
 worries given that any <code>use</code>, <code>eval</code> or operator
 declaration had the potential to morph any subsequent syntax. Piers
 Cawley thought that truly accurate syntax highlighting would have
@@ -207,14 +208,14 @@ Smalltalkometer for Perl 6.</p>
 apparent that people seem to like this particular weirding of the
 language, and it certainly allows the programmer to disambiguate
 things rather neatly. Luke even pointed out that this new approach
-allows for calling a method on a list of values: <code>@list Â».method</code>,
-and to call a list of methods on a value: <code>$value.Â« @methods</code>.</p>
-<p>Then the fun began. The issue is that <code>Â»</code> and <code>Â«</code> can also be
+allows for calling a method on a list of values: <code>@list ».method</code>,
+and to call a list of methods on a value: <code>$value.« @methods</code>.</p>
+<p>Then the fun began. The issue is that <code>»</code> and <code>«</code> can also be
 written <code>&lt;&lt;</code> and <code>&gt;&gt;</code> (but your POD processor hates you
 for it). This leads to ambiguities like
 <code>&gt;&gt;+&lt;&lt;=&lt;&lt;</code> (which are even harder to type in
-a Pod escape) which can be parsed as <code>Â»+&lt;&lt;=Â«</code> or
-<code>Â»+Â«=Â«</code>. Larry wondered if the problem arose because of trying to
+a Pod escape) which can be parsed as <code>»+&lt;&lt;=«</code> or
+<code>»+«=«</code>. Larry wondered if the problem arose because of trying to
 make the <code>&lt;<code>lt</code></code> and <code>&gt;&gt;</code> alternatives look too similar
 to the Unicode glyphs.</p>
 <p>You know, looking at that last paragraph I can see why people think

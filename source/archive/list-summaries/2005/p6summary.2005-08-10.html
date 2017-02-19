@@ -1,6 +1,7 @@
 [% setvar title Perl 6 Summary for 2005-08-02 through 2005-08-10 %]
 <div id="archive-notice">
     <h3>This file is part of the Perl 6 Archive</h3>
+    <table bgcolor="red"><tr><td><font color="white"> Note: these documents may be out of date. Do <b>not</b> use as reference!</font></tr></td></table>
     <p>To see what is currently happening visit <a href="http://www.perl6.org/">http://www.perl6.org/</a></p>
 </div>
 <div class='pod'>
@@ -32,7 +33,7 @@
 <p><a href='http://pugscode.org/images/container.png' target='_blank'>pugscode.org</a> -- containers</p>
 <p><a href='http://pugscode.org/images/simple-compilation.png' target='_blank'>pugscode.org</a> -- compilation</p>
 <a name='PxPerl 5.8.7-4'></a><h3>PxPerl 5.8.7-4</h3>
-<p>Upon discovering that Pugs released a new version, GrÃ©goire PÃ©an released a new version of PxPerl that includes the new Pugs.  I (and many others) thank GrÃ©goire for lowering the entry bar for Perl 6 hacking on windows.</p>
+<p>Upon discovering that Pugs released a new version, Grégoire Péan released a new version of PxPerl that includes the new Pugs.  I (and many others) thank Grégoire for lowering the entry bar for Perl 6 hacking on windows.</p>
 <p><a href='http://groups-beta.google.com/group/perl.perl6.compiler/browse_frm/thread/fbdc7bfb5ff3d803/588edb288e8527c7' target='_blank'>groups-beta.google.com</a>#588edb288e8527c7</p>
 <a name='Hosting Lexical Declarations'></a><h3>Hosting Lexical Declarations</h3>
 <p>Declaring lexicals mid block confuses things, expecially declaring them mid statement as in <code> $x = $x + my $x if $x; </code>.  Autrijus proposed hoisting declarations of lexicals to the top of the block.  Unfortunately, this can make CALLER:: do funny things.  Thus, he suggests outlawing it.  Larry agreed.</p>
@@ -45,7 +46,7 @@
 <p>Tom submitted a patch which improves the command line argument processing powers of ops2c.pl.  Warnock applies.</p>
 <p><a href='http://groups-beta.google.com/group/perl.perl6.internals/browse_frm/thread/cc9242e455d1a63b/5d25c6b934119abe' target='_blank'>groups-beta.google.com</a>#5d25c6b934119abe</p>
 <a name='ANSI Escape Codes in Parrot'></a><h3>ANSI Escape Codes in Parrot</h3>
-<p>Klaas-Jan Stol was having trouble putting special characters like ANSI clear screen and &quot;Â¥&quot; into strings.  Nick pointed out that he need to be careful with encodings and escapes.  In parrot &quot;\O&quot; is an octal escape, in Lua it is apparently not.</p>
+<p>Klaas-Jan Stol was having trouble putting special characters like ANSI clear screen and &quot;¥&quot; into strings.  Nick pointed out that he need to be careful with encodings and escapes.  In parrot &quot;\O&quot; is an octal escape, in Lua it is apparently not.</p>
 <p><a href='http://groups-beta.google.com/group/perl.perl6.internals/browse_frm/thread/be5dc2f14b0dfd42/896d89835150a493' target='_blank'>groups-beta.google.com</a>#896d89835150a493</p>
 <a name='Parrot 0.2.3'></a><h3>Parrot 0.2.3</h3>
 <p>Leo announced the release of Parrot 0.2.3 &quot;Serenity&quot;, which reminds me, Firefly is coming back soon!! I can't wait!  Oddly google seems to have swallowed his release notice but not his warnings...</p>
@@ -54,10 +55,10 @@
 <p>Michal Wallace found a bug that would disappear if the file was renamed.  Leo, with the help of valgrind, provided Michal with a pointer.  Michal used that to find a likely culprit and provide a patch, which Leo then refined.</p>
 <p><a href='http://groups-beta.google.com/group/perl.perl6.internals/browse_frm/thread/d72580222deb1646/2b5afda2517c90bd' target='_blank'>groups-beta.google.com</a>#2b5afda2517c90bd</p>
 <a name='GDBM Hash on MinGW'></a><h3>GDBM Hash on MinGW</h3>
-<p>FranÃ§ois Perrad provided a patch fixing gdbmhash on MinGW.  Bernhard Schmalhofer applied it.</p>
+<p>François Perrad provided a patch fixing gdbmhash on MinGW.  Bernhard Schmalhofer applied it.</p>
 <p><a href='http://groups-beta.google.com/group/perl.perl6.internals/browse_frm/thread/455218c176531ba6/8bb0656904124f4c' target='_blank'>groups-beta.google.com</a>#8bb0656904124f4c</p>
 <a name='PyString Link Problem'></a><h3>PyString Link Problem</h3>
-<p>FranÃ§ois Perrad also fixed a link problem with pystring.o.  Jonathan Worthington applied that patch.</p>
+<p>François Perrad also fixed a link problem with pystring.o.  Jonathan Worthington applied that patch.</p>
 <p><a href='http://groups-beta.google.com/group/perl.perl6.internals/browse_frm/thread/1b63e4b253bb0eab/b10f19b834c85c0d' target='_blank'>groups-beta.google.com</a>#b10f19b834c85c0d</p>
 <a name='Filling a Large Data Structure'></a><h3>Filling a Large Data Structure</h3>
 <p>Amir Karger wanted to know how to fill a large data structure in PIR other than explicitly.  Leo suggested reading them in from a config file.</p>
@@ -93,7 +94,7 @@
 <a name='Adding a New Opcode'></a><h3>Adding a New Opcode</h3>
 <p>Gerd Pokorra wanted to know how to add a new opcode to parrot.  Klaas-Jan Stol and Leo provided answers.</p>
 <p><a href='http://groups-beta.google.com/group/perl.perl6.internals/browse_frm/thread/abcba81ef69f865c/b1d018e3114ce1f1' target='_blank'>groups-beta.google.com</a>#b1d018e3114ce1f1</p>
-<p>FranÃ§ois Perrad provided several patches for MinGW and Win32.  Warnock appliew.</p>
+<p>François Perrad provided several patches for MinGW and Win32.  Warnock appliew.</p>
 <p><a href='http://groups-beta.google.com/group/perl.perl6.internals/browse_frm/thread/5472a5cdd52bd3dc/a48d4d6482a9b13b' target='_blank'>groups-beta.google.com</a>#a48d4d6482a9b13b</p>
 <a name='Update intro.pod'></a><h3>Update intro.pod</h3>
 <p>Jonathan Worthington posted an updated intro.pod.  Autrijus provided a few edits, and Jonathan is planning on committing it.</p>
@@ -114,7 +115,7 @@
 <p>Amir Karger noticed that a break in interpreter.c.  Leo pointed out that he need to <code>make realclean</code>.</p>
 <p><a href='http://groups-beta.google.com/group/perl.perl6.internals/browse_frm/thread/bed06d6981b46f90/20a4e2bc68c05819' target='_blank'>groups-beta.google.com</a>#20a4e2bc68c05819</p>
 <a name='MinGW Meets m4'></a><h3>MinGW Meets m4</h3>
-<p>FranÃ§ois Perrad provided two patched to make m4 work on MinGW.  Warnock applies.</p>
+<p>François Perrad provided two patched to make m4 work on MinGW.  Warnock applies.</p>
 <p><a href='http://groups-beta.google.com/group/perl.perl6.internals/browse_frm/thread/73a2bf56f29a06c3/f6ba5da370dc450d' target='_blank'>groups-beta.google.com</a>#f6ba5da370dc450d</p>
 <a name='substr Segfault'></a><h3>substr Segfault</h3>
 <p>Will Coleda posted a short PIR test that will segfault in the substr opcode.  This led to some discussion of variable width encodings, and the explanation from Leo that substr was a call that would probably force parrot to rectify variable width encodings into fixed width ones (which parrot does lazily).  Then he fixed it (presumably as he had suggested).</p>

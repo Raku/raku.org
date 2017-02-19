@@ -1,6 +1,7 @@
 [% setvar title Perl 6 Summary for 2004-10-23 through 2004-11-01 %]
 <div id="archive-notice">
     <h3>This file is part of the Perl 6 Archive</h3>
+    <table bgcolor="red"><tr><td><font color="white"> Note: these documents may be out of date. Do <b>not</b> use as reference!</font></tr></td></table>
     <p>To see what is currently happening visit <a href="http://www.perl6.org/">http://www.perl6.org/</a></p>
 </div>
 <div class='pod'>
@@ -52,10 +53,10 @@
 <p>H.Merijn Brand reminded Leo that he hadn't been contacted yet about some &quot;Diana&quot; menthol alcohol.  I was confused, but apparently Leo wasn't...</p>
 <p><a href='http://groups-beta.google.com/group/perl.perl6.internals/browse_thread/thread/2865ee76953eaa8c' target='_blank'>groups-beta.google.com</a></p>
 <a name='pmc/inode analogy'></a><h3>pmc/inode analogy</h3>
-<p>StÃ©phane Payrard wanted to know if his analogy between pmcs and filesystems was correct.  Leo felt that it was mostly right and attempted to explain value/variable split.  Dan corrected Leo and went a little further.  What I have taken away from this is &quot;do not think of it in terms of high ;evel language operators, instead think of it in terms of C.  You get pointers and values (and you can point to a value).  Somethings do shallow copies (i.e. pointer copies) others do deep.</p>
+<p>Stéphane Payrard wanted to know if his analogy between pmcs and filesystems was correct.  Leo felt that it was mostly right and attempted to explain value/variable split.  Dan corrected Leo and went a little further.  What I have taken away from this is &quot;do not think of it in terms of high ;evel language operators, instead think of it in terms of C.  You get pointers and values (and you can point to a value).  Somethings do shallow copies (i.e. pointer copies) others do deep.</p>
 <p><a href='http://groups-beta.google.com/group/perl.perl6.internals/browse_thread/thread/586edc8400935e26' target='_blank'>groups-beta.google.com</a></p>
 <a name='pmc_type'></a><h3>pmc_type</h3>
-<p>Nicholas Clark wanted to know what a pcm_type of 0 means.  The answer: no such type.  This led to StÃ©phane Payrard asking about pmc_type values for abstract types.  They don't get types cause they can't be directly instatiated.  This led Paolo Molaro to wonder about the virtue of having a system closer to C++ with array lookup for virtual functions.  Nicholas, Leo, and Paolo banged on this for a while and decided that there was some room for optimization...  Leo scares me when he optimizes...</p>
+<p>Nicholas Clark wanted to know what a pcm_type of 0 means.  The answer: no such type.  This led to Stéphane Payrard asking about pmc_type values for abstract types.  They don't get types cause they can't be directly instatiated.  This led Paolo Molaro to wonder about the virtue of having a system closer to C++ with array lookup for virtual functions.  Nicholas, Leo, and Paolo banged on this for a while and decided that there was some room for optimization...  Leo scares me when he optimizes...</p>
 <p><a href='http://groups-beta.google.com/group/perl.perl6.internals/browse_thread/thread/0fffa129698f6d58' target='_blank'>groups-beta.google.com</a></p>
 <a name='extend.c:Parrot_call'></a><h3>extend.c:Parrot_call</h3>
 <p>Leo was bothered by the fact that Parrot_call only supported void return values.  So, much to Jeff Horwitz's joy, he fixed it.</p>

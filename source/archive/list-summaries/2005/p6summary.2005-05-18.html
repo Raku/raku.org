@@ -1,6 +1,7 @@
 [% setvar title Perl 6 Summary for 2005-05-03 through 2005-05-17 %]
 <div id="archive-notice">
     <h3>This file is part of the Perl 6 Archive</h3>
+    <table bgcolor="red"><tr><td><font color="white"> Note: these documents may be out of date. Do <b>not</b> use as reference!</font></tr></td></table>
     <p>To see what is currently happening visit <a href="http://www.perl6.org/">http://www.perl6.org/</a></p>
 </div>
 <div class='pod'>
@@ -43,7 +44,7 @@
 <p><a href='http://groups-beta.google.com/group/perl.perl6.compiler/browse_frm/thread/b11fbbc15f76458a/6d583eb2e080a85a' target='_blank'>groups-beta.google.com</a>#6d583eb2e080a85a -- release anouncement</p>
 <p><a href='http://groups-beta.google.com/group/perl.perl6.compiler/browse_frm/thread/5707e93ba2942868/d8085652bc85fe9d' target='_blank'>groups-beta.google.com</a>#d8085652bc85fe9d -- live CD</p>
 <a name='PXPerl meets Pugs'></a><h3>PXPerl meets Pugs</h3>
-<p>GrÃ©goire PÃ©an announced that he has added Pugs binaries to his windows distribution of Perl.  Pretty cool.  Autrijus innocently asked him to take on the slightly larger task of producing binaries of Parrot too, so that Pugs could be at its more powerful.</p>
+<p>Grégoire Péan announced that he has added Pugs binaries to his windows distribution of Perl.  Pretty cool.  Autrijus innocently asked him to take on the slightly larger task of producing binaries of Parrot too, so that Pugs could be at its more powerful.</p>
 <p><a href='http://groups-beta.google.com/group/perl.perl6.compiler/browse_frm/thread/a28bef89de27ef42/a4797d46952f98eb' target='_blank'>groups-beta.google.com</a>#a4797d46952f98eb</p>
 <a name='Parrot'></a><h2>Parrot</h2>
 <p>Wow did you see how I mentioned Parrot before going into.  That was like an awesome transition.  My high school english teachers would be so proud...</p>
@@ -51,7 +52,7 @@
 <p>Patrick wants character class opcodes of the form find first and find first not.  Leo pointed him to some hysterical raisins who might help.</p>
 <p><a href='http://groups-beta.google.com/group/perl.perl6.internals/browse_frm/thread/7fc88a464c05c257/a2cb3834be55832d' target='_blank'>groups-beta.google.com</a>#a2cb3834be55832d</p>
 <a name='PGE on MinGW'></a><h3>PGE on MinGW</h3>
-<p>FranÃ§ois Perrad fixed a problem with building PGE on MinGW.  Patrick applied the patch.</p>
+<p>François Perrad fixed a problem with building PGE on MinGW.  Patrick applied the patch.</p>
 <p><a href='http://groups-beta.google.com/group/perl.perl6.internals/browse_frm/thread/998bbdec6ed1c605/dc9f6a1c35fb2475' target='_blank'>groups-beta.google.com</a>#dc9f6a1c35fb2475</p>
 <a name='PIO_fdopen return value'></a><h3>PIO_fdopen return value</h3>
 <p>Luke Palmer both intoduced me to the wonderfully cute phrase &quot;untodid&quot; and provided a patch making PIO_fdopen return NULL when give bad flags.  Leo applied the patch, but Melvin Smith warned that this might be a bad idea.  Silence after that.</p>
@@ -137,7 +138,7 @@
 <p>Nick Glencros suggested renaming (or possibly removing) some old tag files from our CVS days.  Leo was unsure about the removing option, but liked the renaming one.</p>
 <p><a href='http://groups-beta.google.com/group/perl.perl6.internals/browse_frm/thread/3e3ea01ccb0a5b8f/66c327425726a9a4' target='_blank'>groups-beta.google.com</a>#66c327425726a9a4</p>
 <a name='MinGW build problems'></a><h3>MinGW build problems</h3>
-<p>FranÃ§ois Perrad provided a patch to fix some build problems on MinGW.  Leo applied the patch.</p>
+<p>François Perrad provided a patch to fix some build problems on MinGW.  Leo applied the patch.</p>
 <p><a href='http://groups-beta.google.com/group/perl.perl6.internals/browse_frm/thread/0e5de5ce8d80ad28/179f66a06c9a42b1' target='_blank'>groups-beta.google.com</a>#179f66a06c9a42b1</p>
 <a name='omniscient debugging in parrot'></a><h3>omniscient debugging in parrot</h3>
 <p>Andy Bach wondered how much of Omniscient Debugging would be possibly in parrot.  Leo reasoned that it could be added with some work.  It would involve replacing all mutating vtables with special versions that store extra information to allow them to roll back.</p>
@@ -150,7 +151,7 @@
 <p><a href='http://groups-beta.google.com/group/perl.perl6.internals/browse_frm/thread/2f54befe55c2801b/13f88903b1e55817' target='_blank'>groups-beta.google.com</a>#13f88903b1e55817</p>
 <p><a href='http://groups-beta.google.com/group/perl.perl6.internals/browse_frm/thread/e62f9f039faa6efe/594cf52e370df2c5' target='_blank'>groups-beta.google.com</a>#594cf52e370df2c5</p>
 <a name='config.t fails'></a><h3>config.t fails</h3>
-<p>FranÃ§ois Perrad found that config.t fails without first doing a make clean.  His initial solution was deemed a little too quick and too dirty by Leo.</p>
+<p>François Perrad found that config.t fails without first doing a make clean.  His initial solution was deemed a little too quick and too dirty by Leo.</p>
 <p><a href='http://groups-beta.google.com/group/perl.perl6.internals/browse_frm/thread/609bfa968e2c2748/93c5d7e042370d94' target='_blank'>groups-beta.google.com</a>#93c5d7e042370d94</p>
 <a name='find ops return for not found'></a><h3>find ops return for not found</h3>
 <p>Patrick provided a patch which changes the return value of find and find_not to the strings length (instead of -1) if the character does not occur.  Warnock applies.</p>
@@ -290,13 +291,13 @@
 <p>Autrijus noticed that numification of match objects made strings of digits numify to 1 (i.e. true).  He didn't like this.  Actually no one did.  So it has been changed to numify as one would expect.   After all, it can numify to 0 but true.</p>
 <p><a href='http://groups-beta.google.com/group/perl.perl6.language/browse_frm/thread/1223c3f11e0a6444/e7c68ffcd90eab2e' target='_blank'>groups-beta.google.com</a>#e7c68ffcd90eab2e</p>
 <a name='traits and properties API'></a><h3>traits and properties API</h3>
-<p>StÃ©phane Payrard wondered when and how traits would interact with properties.  Brent 'Dax' Royal-Gordon and Larry provided answers.</p>
+<p>Stéphane Payrard wondered when and how traits would interact with properties.  Brent 'Dax' Royal-Gordon and Larry provided answers.</p>
 <p><a href='http://groups-beta.google.com/group/perl.perl6.language/browse_frm/thread/16823aec5ef20ced/cec5b69464b40e22' target='_blank'>groups-beta.google.com</a>#cec5b69464b40e22</p>
 <a name='single element lists'></a><h3>single element lists</h3>
 <p>Jonathan Scott Duff wondered what <code> (1)[0] </code> would do.  Larry though that we would have to specialize ()[] to parse as (,)[].</p>
 <p><a href='http://groups-beta.google.com/group/perl.perl6.language/browse_frm/thread/89d14842806995e3/26d0e71ecf3a2add' target='_blank'>groups-beta.google.com</a>#26d0e71ecf3a2add</p>
 <a name='Void type?'></a><h3>Void type?</h3>
-<p>Thomas SandlaÃŸ, Rod Adams, and Autrijus speculated about ways to deal with a Void type.  Nothing definitive came out of it though...</p>
+<p>Thomas Sandlaß, Rod Adams, and Autrijus speculated about ways to deal with a Void type.  Nothing definitive came out of it though...</p>
 <p><a href='http://groups-beta.google.com/group/perl.perl6.language/browse_frm/thread/10e17e64680febd3/b313716c6e95b3a8' target='_blank'>groups-beta.google.com</a>#b313716c6e95b3a8</p>
 <a name='uniquely identifying objects'></a><h3>uniquely identifying objects</h3>
 <p>Stevan Little wondered if there was a way to uniquely identify objects in Perl 6.  Larry pointed him to the .id and the associated =:= operator.</p>
@@ -317,7 +318,7 @@
 <p>Juerd suggested using ./method to mean $?SELF.method (in an attempt to solve the long standing debate of $?SELF.method vs $_.method).  Much discussion ensued although the general response seems favorable.</p>
 <p><a href='http://groups-beta.google.com/group/perl.perl6.language/browse_frm/thread/5325e618c8a13d53/b3e9bc09565e4d0c' target='_blank'>groups-beta.google.com</a>#b3e9bc09565e4d0c</p>
 <a name='operators everywhere'></a><h3>operators everywhere</h3>
-<p>Rob Kinyon noted that there seemed to be an extremely large number of operators.  He expressed concern, because he had believed that P6 was going to have a small core with moduls.  Larry explained that most of these operators were in fact generated by combining a small set of operators and meta operators in a combinatorially explosive way, giving the wonderfully lucid example of [Â»+^=Â«].  Much discussion ensued.</p>
+<p>Rob Kinyon noted that there seemed to be an extremely large number of operators.  He expressed concern, because he had believed that P6 was going to have a small core with moduls.  Larry explained that most of these operators were in fact generated by combining a small set of operators and meta operators in a combinatorially explosive way, giving the wonderfully lucid example of [»+^=«].  Much discussion ensued.</p>
 <p><a href='http://groups-beta.google.com/group/perl.perl6.language/browse_frm/thread/59c945653fd23792/3f82db7c6ffaa285' target='_blank'>groups-beta.google.com</a>#3f82db7c6ffaa285</p>
 <a name='BUILD and submethods'></a><h3>BUILD and submethods</h3>
 <p>Ingo Blechschmidt wanted to be sure that all appropriate submethods would be called when they should and that only the correct one would be called when they shouldn't all be.  Larry answered that it did work as he expected.</p>

@@ -1,6 +1,7 @@
 [% setvar title Perl 6 Summary for 2005-10-10 through 2005-10-18 %]
 <div id="archive-notice">
     <h3>This file is part of the Perl 6 Archive</h3>
+    <table bgcolor="red"><tr><td><font color="white"> Note: these documents may be out of date. Do <b>not</b> use as reference!</font></tr></td></table>
     <p>To see what is currently happening visit <a href="http://www.perl6.org/">http://www.perl6.org/</a></p>
 </div>
 <div class='pod'>
@@ -76,7 +77,7 @@
 <p>Leo warned people that variable sized register frame changes were starting to hit Parrot.</p>
 <p><a href='http://groups.google.com/group/perl.perl6.internals/browse_frm/thread/5b0077a27df531b7/42d66ddeb1c6a841' target='_blank'>groups.google.com</a>#42d66ddeb1c6a841</p>
 <a name='Leaky Parrot'></a><h3>Leaky Parrot</h3>
-<p>Alberto SimÃµes is having trouble with Parrot leaking memory and a bad free.  Warnock applies.</p>
+<p>Alberto Simões is having trouble with Parrot leaking memory and a bad free.  Warnock applies.</p>
 <p><a href='http://groups.google.com/group/perl.perl6.internals/browse_frm/thread/5ca71ec206772204/d6bf452421c9afc5' target='_blank'>groups.google.com</a>#d6bf452421c9afc5</p>
 <a name='-0.0 Issues'></a><h3>-0.0 Issues</h3>
 <p>Leo posted a patch for comment which updates some of our double printing code to get around -0.0 issues.  Simon Vogl seemed happy with the patch, but I don't know if it got applied...</p>
@@ -86,10 +87,10 @@
 <p>Joshua Hoblitt resurrected (and applied) an old patch from Nick Glencross which sets execute permissions for libraries for some platforms.</p>
 <p><a href='http://groups.google.com/group/perl.perl6.internals/browse_frm/thread/90e840f04433bdb9/32fbd116b1008910' target='_blank'>groups.google.com</a>#32fbd116b1008910</p>
 <a name='Fighting with a Tiger'></a><h3>Fighting with a Tiger</h3>
-<p>Alberto SimÃµes was having troubles with Tiger.  Jonathan Worthington provided a little C wizardry, and Alberto was happy.  He asked to have the patch applied, but Warnock did instead.</p>
+<p>Alberto Simões was having troubles with Tiger.  Jonathan Worthington provided a little C wizardry, and Alberto was happy.  He asked to have the patch applied, but Warnock did instead.</p>
 <p><a href='http://groups.google.com/group/perl.perl6.internals/browse_frm/thread/39de276d71402cd9/28269791686ba344' target='_blank'>groups.google.com</a>#28269791686ba344</p>
 <a name='More Tiger Issues'></a><h3>More Tiger Issues</h3>
-<p>Alberto SimÃµes found a new build problem on Darwin.  Jonathan Worthington admits to making the problem and announced its fix.</p>
+<p>Alberto Simões found a new build problem on Darwin.  Jonathan Worthington admits to making the problem and announced its fix.</p>
 <p><a href='http://groups.google.com/group/perl.perl6.internals/browse_frm/thread/d85776efd3fdbbc0/e8554aa12c9e0c95' target='_blank'>groups.google.com</a>#e8554aa12c9e0c95</p>
 <p><a href='http://groups.google.com/group/perl.perl6.internals/browse_frm/thread/2e00e6bc52573a6f/e28bce3e45ed8146' target='_blank'>groups.google.com</a>#e28bce3e45ed8146</p>
 <a name='Debug Segments'></a><h3>Debug Segments</h3>
@@ -216,8 +217,8 @@
 <a name='zipping several arrays'></a><h3>zipping several arrays</h3>
 <p>Mark Reed wondered how to zip several arrays given that zip was an infix operator.  Luke Palmer explained that it was actually a listfix operator like <code>,</code>.</p>
 <p><a href='http://groups.google.com/group/perl.perl6.language/browse_frm/thread/3cb8bb881983b559/21152a256284c5e8' target='_blank'>groups.google.com</a>#21152a256284c5e8</p>
-<a name='New Class Sigil Â¢'></a><h3>New Class Sigil Â¢</h3>
-<p>Larry announced that there would be a new class sigil, namely Â¢.  This allows you to write functions like <code> sub sametype (Â¢T $x, Â¢T $y) {...}  </code>.  People generally like the idea but not the charcter.  I must admit that I agree with people.</p>
+<a name='New Class Sigil ¢'></a><h3>New Class Sigil ¢</h3>
+<p>Larry announced that there would be a new class sigil, namely ¢.  This allows you to write functions like <code> sub sametype (¢T $x, ¢T $y) {...}  </code>.  People generally like the idea but not the charcter.  I must admit that I agree with people.</p>
 <p><a href='http://groups.google.com/group/perl.perl6.language/browse_frm/thread/f026e181a6a599ac/66354fc1198e61d4' target='_blank'>groups.google.com</a>#66354fc1198e61d4</p>
 <a name='The usual footer'></a><h2>The usual footer</h2>
 <p>To post to any of these mailing lists please subscribe by sending email to &lt;<a href='mailto:perl6-internals-subscribe@perl.org'>perl6-internals-subscribe@perl.org</a>&gt;, &lt;<a href='mailto:perl6-language-subscribe@perl.org'>perl6-language-subscribe@perl.org</a>&gt;,  or &lt;<a href='mailto:perl6-compiler-subscribe@perl.org'>perl6-compiler-subscribe@perl.org</a>&gt;.  If you find these summaries useful or enjoyable, please consider contributing to the Perl Foundation to help support the development of Perl. You might also like to send feedback to <a href='mailto:ubermatt@gmail.com'>ubermatt@gmail.com</a></p>

@@ -1,6 +1,7 @@
 [% setvar title Higher resolution time values %]
 <div id="archive-notice">
     <h3>This file is part of the Perl 6 Archive</h3>
+    <table bgcolor="red"><tr><td><font color="white"> Note: these documents may be out of date. Do <b>not</b> use as reference!</font></tr></td></table>
     <p>To see what is currently happening visit <a href="http://www.perl6.org/">http://www.perl6.org/</a></p>
 </div>
 <div class='pod'>
@@ -39,7 +40,7 @@ following builtin functions:</p>
 will not always be able to represent all of the time precision that
 the platform actually support.  For instance time() value with Unix
 epoch represented with 15 decimal digit float precision will only
-support around 10 Âµs resolution for current timestamps.</p>
+support around 10 µs resolution for current timestamps.</p>
 <a name='IMPLEMENTATION'></a><h1>IMPLEMENTATION</h1>
 <p>Should be straight forward.  Configure might need to figure out some
 more about what hires-timer interfaces are available if it does not

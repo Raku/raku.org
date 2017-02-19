@@ -1,6 +1,7 @@
 [% setvar title The Perl 6 Summary for the week ending 2004-03-14 %]
 <div id="archive-notice">
     <h3>This file is part of the Perl 6 Archive</h3>
+    <table bgcolor="red"><tr><td><font color="white"> Note: these documents may be out of date. Do <b>not</b> use as reference!</font></tr></td></table>
     <p>To see what is currently happening visit <a href="http://www.perl6.org/">http://www.perl6.org/</a></p>
 </div>
 <div class='pod'>
@@ -45,7 +46,7 @@ again, I'll not be unhappy.</p>
 <p>Dan has come to the view that we need an alternative, light weight,
 calling convention for calling vtable opcode functions; the idea being
 that this should speed up objects a tad. He asked for suggestions.</p>
-<p>Leo TÃ¶tsch wasn't convinced that we really need special calling
+<p>Leo Tötsch wasn't convinced that we really need special calling
 conventions, arguing (with numbers) that it would be best to
 concentrate on speeding up object instantiation by optimizing object
 layout. Simon Glover agreed with him, noting that simply changing the
@@ -55,7 +56,7 @@ speedup of around 15% on the object benchmarks.</p>
 <a name='Summary Correction'></a><h2>Summary Correction</h2>
 <p>Last week I said that we can't yet do delegated method calls for vtable
 functions with objects. Leo pointed out that, actually, we can now. Leo
-also disclaimed any responsibility for helping Brent Royal-Gordon (nÃ©
+also disclaimed any responsibility for helping Brent Royal-Gordon (né
 Dax?) fix up the support functions for Parrot::Config, though Brent
 later claimed that he was merely the person doing the typing...</p>
 <p>Jerome Quelin noted that <b><i>parrotbug</i></b> has already reached version 0.2.1
@@ -99,7 +100,7 @@ so he submitted it to the list as a standalone library. Leo checked it
 in, you can find it at <code>library/objecthacks.imc</code></p>
 <p><a href='http://groups.google.com/groups?selm=200403091934.50795.parrot@jensbeimsurfen.de' target='_blank'>groups.google.com</a></p>
 <a name='Implementing stat?'></a><h2>Implementing <code>stat</code>?</h2>
-<p>Leo TÃ¶tsch proposed a <code>stat</code> opcode for finding out about things in the
+<p>Leo Tötsch proposed a <code>stat</code> opcode for finding out about things in the
 filesystem. He outlined a proposed interface. Dan agreed that we'd need
 something, but that Leo's proposal was far too unix-centric to work for
 a cross platform platform like Parrot. He suggested going back to first
@@ -222,7 +223,7 @@ initial understanding of what a metaclass is. He wondered if we'd need
 to have a 'call class method' operation. Paolo Molaro pointed out that
 most of this stuff only becomes a real issue when you have to deal with
 objects implemented in one language calling methods on objects
-implemented in a different one. Leo TÃ¶tsch explained Parrot's current
+implemented in a different one. Leo Tötsch explained Parrot's current
 (somewhat confusing to these eyes) hierarchy where:</p>
 <ul>
 <li><a name='A ParrotClass isa delegate PMC'></a>A ParrotClass isa delegate PMC</li>

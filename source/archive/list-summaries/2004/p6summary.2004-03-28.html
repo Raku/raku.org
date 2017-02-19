@@ -1,6 +1,7 @@
 [% setvar title The Perl 6 Summary for the week ending 2004-03-28 %]
 <div id="archive-notice">
     <h3>This file is part of the Perl 6 Archive</h3>
+    <table bgcolor="red"><tr><td><font color="white"> Note: these documents may be out of date. Do <b>not</b> use as reference!</font></tr></td></table>
     <p>To see what is currently happening visit <a href="http://www.perl6.org/">http://www.perl6.org/</a></p>
 </div>
 <div class='pod'>
@@ -32,14 +33,14 @@ architecture seemed to be optimized for the wrong thing, with the
 special case RetContinuations being symptoms. He argued that current
 architecture (where a single stack frame can accommodate multiple
 pushes, with copy on write semantics being used to handle full
-continuations) should be replaced with a 'naÃ¯ve' architecture using
+continuations) should be replaced with a 'naïve' architecture using
 linked lists of immutable, simple stack frames, one frame per
 push. Switching to this approach, he argued, would do away with a great
 deal of code complexity, and issues of high object creation overhead
 could be offset by using free lists and preallocation to reuse stack
 frames. Oh yes, and there'd be no difference between a RetContinuation
 and a full Continuation with this scheme.</p>
-<p>Leo TÃ¶tsch wasn't convinced. Dan was though, and made the decision to
+<p>Leo Tötsch wasn't convinced. Dan was though, and made the decision to
 switch to single item per frame, immutable, non COW stacks. Leo
 implemented it. His first cut was rather slow; later refinements added
 freelists and other handy stuff to start pulling the performance back
@@ -125,13 +126,13 @@ move around.</p>
 <p>Dan announced that he'd started adding opcode support for multimethod
 dispatch. Leo had a bunch of questions with no answers so far.</p>
 <p><a href='http://groups.google.com/groups?selm=a06010203bc88de42bcc6@' target='_blank'>groups.google.com</a>[172.24.18.98]</p>
-<a name='So that's where JÃ¼rgen's been'></a><h2>So that's where JÃ¼rgen's been</h2>
-<p>After a long absence, JÃ¼rgen BÃ¶mmels appeared on the list and explained
+<a name='So that's where Jürgen's been'></a><h2>So that's where Jürgen's been</h2>
+<p>After a long absence, Jürgen Bömmels appeared on the list and explained
 that he'd got a new job, moved to a new town and had had no connection
 to the Internet. He's currently working through a huge backlog of mail
 and trying to get familiar with the current state of Parrot. It sounds
 like it might be a while before he starts contributing patches to
-ParrotIO again. Still, welcome back JÃ¼rgen.</p>
+ParrotIO again. Still, welcome back Jürgen.</p>
 <p><a href='http://groups.google.com/groups?selm=m23c7vrh9p.fsf@helium.physik.uni-kl.de' target='_blank'>groups.google.com</a></p>
 <a name='ParrotUnit'></a><h2>ParrotUnit</h2>
 <p>Piers Cawley posted his initial version of ParrotUnit, a port of the

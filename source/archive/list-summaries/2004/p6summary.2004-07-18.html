@@ -1,6 +1,7 @@
 [% setvar title The Perl 6 Summary for the week ending 2004-07-18 %]
 <div id="archive-notice">
     <h3>This file is part of the Perl 6 Archive</h3>
+    <table bgcolor="red"><tr><td><font color="white"> Note: these documents may be out of date. Do <b>not</b> use as reference!</font></tr></td></table>
     <p>To see what is currently happening visit <a href="http://www.perl6.org/">http://www.perl6.org/</a></p>
 </div>
 <div class='pod'>
@@ -69,7 +70,7 @@ showed off some rather pretty Ruby metaphors.</p>
 <p>Another subthread discussed interpolation in strings. Larry's changed
 his mind so that <code>&quot;$file.ext&quot;</code> is now interpreted as
 <code>&quot;$object.method&quot;</code>. You need to do <code>&quot;${file}.ext&quot;</code> or <code>&quot;$( $file
-).ext&quot;</code>. Or maybe <code>&quot;$Â«fileÂ».ext&quot;</code> by analogy with <code>%fooÂ«barÂ»</code>. James
+).ext&quot;</code>. Or maybe <code>&quot;$«file».ext&quot;</code> by analogy with <code>%foo«bar»</code>. James
 Mastros pointed out that <code>.</code> is rather ambiguous in a literal string;
 sometimes a full stop is just a full stop.</p>
 <p><a href='http://groups.google.com/groups?threadm=a3ada2d104070804124184a442@mail.gmail.com' target='_blank'>groups.google.com</a></p>
