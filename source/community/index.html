@@ -174,11 +174,19 @@
         Once you've learned the language, you can write modules and share them in the ecosystem. We use <a href="https://github.com/ugexe/zef">zef</a> for packaging.
         See <a href="https://docs.perl6.org/language/modules">this guide</a> if you have questions about how to organize modules.
       </p>
-      <h4>Hack on a Compiler</h4>
+      <h4>Hack on the Rakudo Perl 6 Compiler</h4>
       <p>
-        Hacking on Perl 6 innards is a lot easier than you would think, thanks to <a href="https://github.com/perl6/nqp">NQP, or Not Quite Perl</a>.
-        NQP is a subset of Perl 6 that is much smaller and simpler. The idea is to get NQP running on various backends (javascript, java, moar, etc) and
-        then bootstrap the real deal (Perl 6) on top of NQP! Even if you don't know Perl6, you can get up to speed fairly fast with this <a href="https://github.com/edumentab/rakudo-and-nqp-internals-course">NQP learning course</a>.
+        <a href="http://rakudo.org/">Rakudo</a> is the most popular Perl 6 compiler right now. Hacking on Rakudo innards is a
+        lot easier than you would think, since most of it is written in Perl 6. However, since it
+        isn't completely self-hosting, some parts are written in <a href="https://github.com/perl6/nqp">NQP, or Not Quite Perl</a>.
+      </p><p>
+        NQP is a subset of Perl 6 that is much smaller and simpler than Perl 6. Rakudo targets
+        NQP. Then NQP targets various backend VMs like MoarVM, Javascript, and Java.
+      </p><p>
+        So you can get started right away by writing Perl 6, and if/when you need to access
+        some very low-level functionality you can learn NQP. You can get up to speed fairly
+        fast with this <a href="https://github.com/edumentab/rakudo-and-nqp-internals-course">NQP learning course</a>.
+        So feel free to jump right in!
       </p>
     </div>
   </div>
