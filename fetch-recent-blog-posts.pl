@@ -9,7 +9,8 @@ use lib qw{
 
 use Mojo::UserAgent;
 use Mojo::JSON qw/encode_json/;
-use Mojo::Util qw/spurt  xml_escape/;
+use Mojo::File qw/path/;
+use Mojo::Util qw/xml_escape/;
 
 my $tx = Mojo::UserAgent->new->get("http://pl6anet.org/atom.xml");
 
@@ -31,7 +32,7 @@ my $j = $tx->res->dom->find("entry")->slice(0..6)
           }
     })->to_array;
 
-spurt encode_json($j) => 'online/recent-blog-posts.json';
+path('online/recent-blog-posts.json')->spurt(encode_json($j));
 print "Successfully wrote new blog posts\n";
 
 exit;
