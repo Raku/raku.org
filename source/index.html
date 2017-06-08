@@ -83,40 +83,50 @@
       <div class="col-sm-12">
         <ul class="nav nav-tabs" role="tablist">
           <li role="presentation" class="active"
-            ><a href="#samp-basic" role="tab"
-              data-toggle="tab">Words from File</a>
+            ><a href="#samp-grammars" role="tab"
+              data-toggle="tab">Grammars</a>
           </li>
-          <li role="presentation"><a href="#samp-fib" role="tab" data-toggle="tab">Lazy Infinite Lists</a></li>
-          <li role="presentation"><a href="#samp-ops" role="tab" data-toggle="tab">Custom operators
-          </a></li>
-          <li role="presentation"><a href="#samp-more" role="tab" data-toggle="tab">More examples</a></li>
+          <li role="presentation"><a href="#samp-async" role="tab" data-toggle="tab">Async &amp; Parallelism</a></li>
+          <li role="presentation"><a href="#samp-rats" role="tab" data-toggle="tab">Rational Numbers</a></li>
+          <li role="presentation"><a href="#samp-lazy" role="tab" data-toggle="tab">Lazy Evaluation</a></li>
+          <li role="presentation"><a href="#samp-more" role="tab" data-toggle="tab">More…</a></li>
         </ul>
         <div class="tab-content">
-          <div role="tabpanel" class="tab-pane active" id="samp-basic">
-    <div class="highlight"><pre><span class="Statement">for</span> <span class="Special">'</span><span class="Constant">dict.txt</span><span class="Special">'</span><span class="Statement">.</span><span class="Type">IO</span><span class="Statement">.</span>words <span class="Statement">-&gt;</span> <span class="Identifier">$</span><span class="Identifier">word</span> {
-      say <span class="Special">&quot;</span><span class="Identifier">$</span><span class="Identifier">word</span><span class="Constant"> probably rhymes with Perl</span><span class="Special">&quot;</span>
-          <span class="Statement">if</span> <span class="Identifier">$</span><span class="Identifier">word</span> <span class="Statement">~~</span> <span class="Special">/</span><span class="Special">[</span>ea<span class="Special">?</span><span class="Special">|</span>u<span class="Special">|</span>i<span class="Special">]</span><span class="Constant"> rl </span><span class="Special">$</span><span class="Special">/</span><span class="Statement">;</span>
+          <div role="tabpanel" class="tab-pane active" id="samp-grammars">
+    <div class="highlight"><pre><span class="Statement">grammar</span> Parser {
+    <span class="Statement">rule</span>  TOP  {<span class="Constant"> I </span><span class="Special">&lt;</span>love<span class="Special">&gt;</span><span class="Constant"> </span><span class="Special">&lt;</span>lang<span class="Special">&gt;</span><span class="Constant"> </span>}
+    <span class="Statement">token</span> love {<span class="Constant"> </span><span class="Special">'</span><span class="Constant">♥</span><span class="Special">'</span><span class="Constant"> </span><span class="Special">|</span><span class="Constant"> love </span>}
+    <span class="Statement">token</span> lang {<span class="Constant"> </span><span class="Special">&lt; </span><span class="Constant">Perl Rust Go Python Ruby </span><span class="Special">&gt;</span><span class="Constant"> </span>}
+}
 
-      say <span class="Special">&quot;</span><span class="Identifier">$</span><span class="Identifier">word</span><span class="Constant"> is a palindrome</span><span class="Special">&quot;</span>
-          <span class="Statement">if</span> <span class="Identifier">$</span><span class="Identifier">word</span> <span class="Statement">eq</span> <span class="Identifier">$</span><span class="Identifier">word</span><span class="Statement">.</span>flip<span class="Statement">;</span>
-  }</pre></div>
-          </div>
-          <div role="tabpanel" class="tab-pane" id="samp-fib">
-    <div class="highlight"><pre><span class="Special">my</span> <span class="Identifier">@</span><span class="Identifier">primes</span> <span class="Statement">=</span> <span class="Statement">^</span>∞ <span class="Statement">.</span><span class="Identifier">grep</span><span class="Statement">:</span> <span class="Statement">*.</span><span class="Identifier">is</span><span class="Statement">-</span>prime<span class="Statement">;</span>
-  <span class="Identifier">say</span> <span class="Special">&quot;</span><span class="Constant">1001ˢᵗ prime is </span><span class="Identifier">@</span><span class="Identifier">primes</span>[<span class="Constant">1000</span>]<span class="Special">&quot;</span><span class="Statement">;</span></pre></div>
-          </div>
-          <div role="tabpanel" class="tab-pane" id="samp-ops">
-    <div class="highlight"><pre><span class="Statement">sub</span> postfix<span class="Statement">:</span><span class="Special">&lt;</span><span class="Constant">!</span><span class="Special">&gt;</span> (<span class="Type">Int</span> <span class="Identifier">$n</span>) {
-      <span class="Statement">fail</span> <span class="Special">&quot;</span><span class="Constant">Not a Natural Number in Factorial</span><span class="Special">&quot;</span> <span class="Statement">if</span> <span class="Identifier">$n</span> <span class="Statement">&lt;</span> <span class="Constant">0</span><span class="Statement">;</span>
-      <span class="Statement">[*]</span> <span class="Constant">2</span><span class="Statement">..</span><span class="Identifier">$n</span>
-  }
+<span class="Identifier">say</span> Parser<span class="Statement">.</span>parse<span class="Statement">:</span> <span class="Special">'</span><span class="Constant">I ♥ Perl</span><span class="Special">'</span><span class="Statement">;</span>
+<span class="Comment"># OUTPUT: ｢I ♥ Perl｣ love =&gt; ｢♥｣ lang =&gt; ｢Perl｣</span>
 
-  <span class="PreProc">use</span> Test<span class="Statement">;</span>
-  isa-ok (<span class="Constant">-1</span>)<span class="Special">!</span><span class="Statement">,</span> <span class="Type">Failure</span><span class="Statement">,</span> <span class="Special">&quot;</span><span class="Constant">Factorial for -1 fails</span><span class="Special">&quot;</span><span class="Statement">;</span>
-  ok <span class="Constant">0</span><span class="Special">!</span> <span class="Statement">==</span> <span class="Constant">1</span><span class="Statement">,</span> <span class="Special">&quot;</span><span class="Constant">Factorial for 0</span><span class="Special">&quot;</span><span class="Statement">;</span>
-  ok <span class="Constant">1</span><span class="Special">!</span> <span class="Statement">==</span> <span class="Constant">1</span><span class="Statement">,</span> <span class="Special">&quot;</span><span class="Constant">Factorial for 1</span><span class="Special">&quot;</span><span class="Statement">;</span>
-  ok <span class="Constant">5</span><span class="Special">!</span> <span class="Statement">==</span> <span class="Constant">120</span><span class="Statement">,</span> <span class="Special">&quot;</span><span class="Constant">Factorial for a larger integer</span><span class="Special">&quot;</span><span class="Statement">;</span></pre></div>
+<span class="Identifier">say</span> Parser<span class="Statement">.</span>parse<span class="Statement">:</span> <span class="Special">'</span><span class="Constant">I love Rust</span><span class="Special">'</span><span class="Statement">;</span>
+<span class="Comment"># OUTPUT: ｢I love Rust｣ love =&gt; ｢love｣ lang =&gt; ｢Rust｣</span></pre></div>
+          </div>
+          <div role="tabpanel" class="tab-pane" id="samp-async">
+    <div class="highlight"><pre>start { <span class="Identifier">sleep</span> <span class="Constant">1.5</span><span class="Statement">;</span> <span class="Identifier">print</span> <span class="Special">&quot;</span><span class="Constant">hi</span><span class="Special">&quot;</span> }
+await Supply<span class="Statement">.</span>from-list(<span class="Special">&lt;</span><span class="Constant">A B C D E F</span><span class="Special">&gt;</span>)<span class="Statement">.</span>throttle<span class="Statement">:</span> <span class="Constant">2</span><span class="Statement">,</span> {
+    <span class="Identifier">sleep</span> <span class="Constant">0.5</span><span class="Statement">;</span>
+    <span class="Statement">.</span><span class="Identifier">print</span>
+}
+
+<span class="Comment"># OUTPUT: ABCDhiEFT</span></pre></div>
     </div>
+    <div role="tabpanel" class="tab-pane" id="samp-rats">
+    <div class="highlight"><pre><span class="Comment"># No floating point noise:</span>
+<span class="Identifier">say</span> <span class="Constant">0.1</span> <span class="Statement">+</span> <span class="Constant">0.2</span> <span class="Statement">==</span> <span class="Constant">0.3</span><span class="Statement">;</span>        <span class="Comment"># OUTPUT: True</span>
+<span class="Identifier">say</span> (<span class="Constant">1</span><span class="Statement">/</span><span class="Constant">13</span> <span class="Statement">+</span> <span class="Constant">3</span><span class="Statement">/</span><span class="Constant">7</span> <span class="Statement">+</span> <span class="Constant">3</span><span class="Statement">/</span><span class="Constant">8</span>)<span class="Statement">.</span><span class="Identifier">perl</span><span class="Statement">;</span> <span class="Comment"># OUTPUT:  &lt;641/728&gt;</span></pre></div>
+    </div>
+    <div role="tabpanel" class="tab-pane" id="samp-lazy">
+            <div class="highlight"><pre><span class="Comment"># Infinite list of primes:</span>
+<span class="Special">my</span> <span class="Identifier">@</span><span class="Identifier">primes</span> <span class="Statement">=</span> <span class="Statement">^</span>∞ <span class="Statement">.</span><span class="Identifier">grep</span><span class="Statement">:</span> <span class="Statement">*.</span><span class="Identifier">is</span><span class="Statement">-</span>prime<span class="Statement">;</span>
+  <span class="Identifier">say</span> <span class="Special">&quot;</span><span class="Constant">1001ˢᵗ prime is </span><span class="Identifier">@</span><span class="Identifier">primes</span>[<span class="Constant">1000</span>]<span class="Special">&quot;</span><span class="Statement">;</span>
+
+<span class="Comment"># Lazily read words from a file</span>
+<span class="Statement">.</span><span class="Identifier">say</span> <span class="Statement">for</span> <span class="Special">'</span><span class="Constant">50TB.file.txt</span><span class="Special">'</span><span class="Statement">.</span><span class="Type">IO</span><span class="Statement">.</span>words<span class="Statement">;</span></pre></div>
+            </div>
           <div role="tabpanel" class="tab-pane" id="samp-more">
             <p class="lead text-center well"
               style="padding-top: 20px;">Want to see more?
