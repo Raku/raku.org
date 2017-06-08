@@ -122,7 +122,7 @@ await Supply<span class="Statement">.</span>from-list(<span class="Special">&lt;
     <div role="tabpanel" class="tab-pane" id="samp-lazy">
             <div class="highlight"><pre><span class="Comment"># Infinite list of primes:</span>
 <span class="Special">my</span> <span class="Identifier">@</span><span class="Identifier">primes</span> <span class="Statement">=</span> <span class="Statement">^</span>∞ <span class="Statement">.</span><span class="Identifier">grep</span><span class="Statement">:</span> <span class="Statement">*.</span><span class="Identifier">is</span><span class="Statement">-</span>prime<span class="Statement">;</span>
-  <span class="Identifier">say</span> <span class="Special">&quot;</span><span class="Constant">1001ˢᵗ prime is </span><span class="Identifier">@</span><span class="Identifier">primes</span>[<span class="Constant">1000</span>]<span class="Special">&quot;</span><span class="Statement">;</span>
+<span class="Identifier">say</span> <span class="Special">&quot;</span><span class="Constant">1001ˢᵗ prime is </span><span class="Identifier">@</span><span class="Identifier">primes</span>[<span class="Constant">1000</span>]<span class="Special">&quot;</span><span class="Statement">;</span>
 
 <span class="Comment"># Lazily read words from a file</span>
 <span class="Statement">.</span><span class="Identifier">say</span> <span class="Statement">for</span> <span class="Special">'</span><span class="Constant">50TB.file.txt</span><span class="Special">'</span><span class="Statement">.</span><span class="Type">IO</span><span class="Statement">.</span>words<span class="Statement">;</span></pre></div>
