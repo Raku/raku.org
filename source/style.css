@@ -118,8 +118,7 @@ footer {
   background-color: #F5F5F5;
   font-family: monospace; }
 .highlight .Comment {
-  color: #c00000;
-  font-weight: bold; }
+  color: #777; }
 .highlight .Constant {
   color: #0000c0; }
 .highlight .Special {
