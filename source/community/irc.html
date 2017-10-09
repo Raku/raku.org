@@ -51,45 +51,128 @@
       <div class="panel-body trim">
         <h3 class="trim-top">Bots</h3>
 
-        <p>A variety of IRC bots make our life easier, here's a short explanation
-        of what they do - <a
-        href="http://howcaniexplainthis.blogspot.com/2009/11/what-perl6-irc-bots-do.html">courtesy
-        by frettled</a>.</p>
+        <p>
+          A variety of IRC bots make our life easier, here's a short explanation
+          of what they do - <a
+          href="http://howcaniexplainthis.blogspot.com/2009/11/what-perl6-irc-bots-do.html">courtesy
+          by frettled</a>.
+        </p>
 
         <dl id="botlist" class="trim-bottom">
-            <dt>dalek</dt>
-            <dd>
-                Announces commits made to various projects relevant to Perl 6, such
-                as implementations of Perl 6
-                and <a href="https://github.com/perl6/">some of the repositories
-                owned by Perl 6</a>.
-            </dd>
+          <dt><a href="https://github.com/zoffixznet/geth">Geth</a></dt>
+          <dd>
+            A less buggy and Perl 6 version of dalek.
+          </dd>
 
-            <dt>hugme</dt>
-            <dd>
-                Hugs users, or adds them as collaborators to github
-                projects.
-            </dd>
-            <dt>camelia</dt>
-            <dd>
-                Perl 6 code evaluation bot. We use this for live testing of code
-                that may be of interest to others; it chats back to the channel.
-                <code>perl6: my $a;</code> will result in a test against
-                latest revisions of rakudo and niecza,
-                <code>nqp: say('foo')</code> will test nqp,
-                <code>std: my $a</code> will parse the expression using STD.pm6.
-                For other compilers, try "camelia: help".
-            </dd>
-            <dt>yoleaux</dt>
-            <dd>
-                Provides various functions, such as leaving messages for people and
-                translating text (see <a href="http://dpk.io/yoleaux">this handy
-                reference</a> for what yoleaux can do.)
-            </dd>
-            <dt>ilogger2</dt>
-            <dd>
-                Records everything said and done in the irc channel.
-            </dd>
+          <dt><a href="https://github.com/zoffixznet/na">NeuralAnomaly</a></dt>
+          <dd>
+            Automated release maker and release status bot; run by Zoffix
+            on their Linode.
+          </dd>
+
+          <dt><a href="https://github.com/zoffixznet/perl6-sourceable">SourceBaby</a></dt>
+          <dd>
+            Core source code locator
+          </dd>
+
+          <dt><a href="https://github.com/zoffixznet/undercover">Undercover</a></dt>
+          <dd>
+            Very similar to SourceBaby, except points to perl6.wtf
+            indicating stresstest coverage of code.
+          </dd>
+
+          <dt>ZofBot</dt>
+          <dd>
+            IRC-mention-to-Twitter-DM relay bot. Can also perform the
+            functionality of a Markov Chain bot, but this feature is
+            disabled in #perl6.
+          </dd>
+
+          <dt><a href="https://github.com/perl6/whateverable/wiki/Benchable">benchable</a></dt>
+          <dd></dd>
+
+          <dt><a href="https://github.com/perl6/whateverable/wiki/Bisectable">bisectable</a></dt>
+          <dd></dd>
+
+          <dt><a href="https://github.com/perl6/whateverable/wiki/Bloatable">bloatable</a></dt>
+          <dd></dd>
+
+          <dt><a href="https://github.com/zoffixznet/perl6-buggable">buggable</a></dt>
+          <dd>
+            RT queue search and utility bot.
+          </dd>
+
+          <dt>camelia</dt>
+          <dd>
+            Perl 6 code evaluation bot. We use this for live testing of code
+            that may be of interest to others; it chats back to the channel.
+            <code>perl6: my $a;</code> will result in a test against
+            latest revisions of rakudo and niecza,
+            <code>nqp: say('foo')</code> will test nqp,
+            <code>std: my $a</code> will parse the expression using STD.pm6.
+            For other compilers, try "camelia: help".
+          </dd>
+
+          <dt><a href="https://github.com/perl6/whateverable/wiki/Committable">committable</a></dt>
+          <dd></dd>
+
+          <dt><a href="https://github.com/perl6/whateverable/wiki/Coverable">coverable</a></dt>
+          <dd></dd>
+
+          <dt>dalek</dt>
+          <dd>
+          Announces commits made to various projects relevant to Perl 6, such
+          as implementations of Perl 6 and <a
+          href="https://github.com/perl6/">some of the repositories owned by
+          Perl 6</a>.
+          </dd>
+
+          <dt><a href="https://github.com/perl6/whateverable/wiki/Evalable">evalable</a></dt>
+          <dd></dd>
+
+          <dt><a href="https://github.com/perl6/whateverable/wiki/Greppable">greppable</a></dt>
+          <dd></dd>
+
+          <dt><a href="https://github.com/zoffixznet/huggable">huggable</a></dt>
+          <dd>
+            Let's you <code>.hug</code> people in the channel.
+          </dd>
+
+          <dt><a href="https://github.com/moritz/ilbot">ilbot</a></dt>
+          <dd>
+            IRC logging bot.
+          </dd>
+
+          <dt><a href="https://github.com/perl6/whateverable/wiki/Nativecallable">nativecallable</a></dt>
+          <dd></dd>
+
+          <dt><a href="https://github.com/perl6/whateverable/wiki/Quotable">quotable</a></dt>
+          <dd></dd>
+
+          <dt><a href="https://github.com/perl6/whateverable/wiki/Releasable">releasable</a></dt>
+          <dd></dd>
+
+          <dt><a href="https://github.com/perl6/whateverable/wiki/Squashable">squashable</a></dt>
+          <dd></dd>
+
+          <dt><a href="https://github.com/perl6/whateverable/wiki/Statisfiable">statisfiable</a></dt>
+          <dd></dd>
+
+          <dt>synopsebot6</dt>
+          <dd>
+            Creates links to the synopses and turns mentions of RT ticket
+            numbers into clickable RT links.
+          </dd>
+
+          <dt><a href="https://github.com/perl6/whateverable/wiki/Unicodable">unicodable</a></dt>
+          <dd></dd>
+
+          <dt><a href="https://docs.perl6.org/language/glossary#yoleaux_">yoleaux</a></dt>
+          <dd>
+            Provides various functions, such as leaving messages for people
+            and translating text (see <a href="http://dpk.io/yoleaux">this
+            handy reference</a> for what yoleaux can do.)
+          </dd>
         </dl>
       </div>
     </div>
