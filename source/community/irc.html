@@ -51,45 +51,191 @@
       <div class="panel-body trim">
         <h3 class="trim-top">Bots</h3>
 
-        <p>A variety of IRC bots make our life easier, here's a short explanation
-        of what they do - <a
-        href="http://howcaniexplainthis.blogspot.com/2009/11/what-perl6-irc-bots-do.html">courtesy
-        by frettled</a>.</p>
+        <p>
+          A variety of IRC bots make our life easier, here's a short explanation
+          of what they do - <a
+          href="http://howcaniexplainthis.blogspot.com/2009/11/what-perl6-irc-bots-do.html">courtesy
+          by frettled</a>.
+        </p>
 
         <dl id="botlist" class="trim-bottom">
-            <dt>dalek</dt>
-            <dd>
-                Announces commits made to various projects relevant to Perl 6, such
-                as implementations of Perl 6
-                and <a href="https://github.com/perl6/">some of the repositories
-                owned by Perl 6</a>.
-            </dd>
+          <dt><a href="https://github.com/perl6/whateverable/wiki/Benchable">benchable</a></dt>
+          <dd>
+            An IRC bot for benchmarking code at a given commit of Rakudo. It
+            can be addressed by its full name ('benchable6') or its short name
+            ('bench'). It will run the given code five times and return the
+            minimum amount of time taken.
+          </dd>
 
-            <dt>hugme</dt>
-            <dd>
-                Hugs users, or adds them as collaborators to github
-                projects.
-            </dd>
-            <dt>camelia</dt>
-            <dd>
-                Perl 6 code evaluation bot. We use this for live testing of code
-                that may be of interest to others; it chats back to the channel.
-                <code>perl6: my $a;</code> will result in a test against
-                latest revisions of rakudo and niecza,
-                <code>nqp: say('foo')</code> will test nqp,
-                <code>std: my $a</code> will parse the expression using STD.pm6.
-                For other compilers, try "camelia: help".
-            </dd>
-            <dt>yoleaux</dt>
-            <dd>
-                Provides various functions, such as leaving messages for people and
-                translating text (see <a href="http://dpk.io/yoleaux">this handy
-                reference</a> for what yoleaux can do.)
-            </dd>
-            <dt>ilogger2</dt>
-            <dd>
-                Records everything said and done in the irc channel.
-            </dd>
+          <dt><a href="https://github.com/perl6/whateverable/wiki/Bisectable">bisectable</a></dt>
+          <dd>
+            This bot is meant to help you find when something got broken. If
+            you want to know if something has ever worked use Committable
+            instead.
+          </dd>
+
+          <dt><a href="https://github.com/perl6/whateverable/wiki/Bloatable">bloatable</a></dt>
+          <dd>
+            An IRC bot for running bloaty on libmoar.so files of MoarVM. It can
+            be addressed by its full name ('bloatable6') or its short name
+            ('bloat' or 'bloaty'). It will run bloaty and pass one or more
+            libmoar.so files from different revisions of MoarVM.
+          </dd>
+
+          <dt><a href="https://github.com/zoffixznet/perl6-buggable">buggable</a></dt>
+          <dd>
+            RT queue search and utility bot.
+          </dd>
+
+          <dt>camelia</dt>
+          <dd>
+            Perl 6 code evaluation bot. We use this for live testing of code
+            that may be of interest to others; it chats back to the channel.
+            <code>perl6: my $a;</code> will result in a test against
+            latest revisions of rakudo and niecza,
+            <code>nqp: say('foo')</code> will test nqp,
+            <code>std: my $a</code> will parse the expression using STD.pm6.
+            For other compilers, try "camelia: help".
+          </dd>
+
+          <dt><a href="https://github.com/perl6/whateverable/wiki/Committable">committable</a></dt>
+          <dd>
+            An IRC bot for running code at a given commit of Rakudo. It can be
+            addressed by its full name ('committable6') or its short names
+            ('commit', 'c').
+          </dd>
+
+          <dt><a href="https://github.com/perl6/whateverable/wiki/Coverable">coverable</a></dt>
+          <dd>
+            An IRC bot for creating a coverage report of the Rakudo (and NQP)
+            source lines that were hit while running the code you give it. The
+            first option is the commit, the second (optional) option is the
+            filter for what lines of the MoarVM-generated coverage log you
+            want, the third is the code to run.
+          </dd>
+
+          <dt>dalek</dt>
+          <dd>
+            Announces commits made to various projects relevant to Perl 6, such
+            as implementations of Perl 6 and <a
+            href="https://github.com/perl6/">some of the repositories owned by
+            Perl 6</a>.
+          </dd>
+
+          <dt><a href="https://github.com/perl6/whateverable/wiki/Evalable">evalable</a></dt>
+          <dd>
+            Evalable is just Committable that defaults to <code>HEAD</code>.
+          </dd>
+
+          <dt><a href="https://github.com/zoffixznet/geth">Geth</a></dt>
+          <dd>
+            A less buggy and Perl 6 version of dalek.
+          </dd>
+
+          <dt><a href="https://github.com/perl6/whateverable/wiki/Greppable">greppable</a></dt>
+          <dd>
+            An IRC bot for grepping through the module ecosystem. It can be
+            addressed by its full name ('greppable6') or its short name
+            ('grep').
+          </dd>
+
+          <dt><a href="https://github.com/zoffixznet/huggable">huggable</a></dt>
+          <dd>
+            Let's you <code>.hug</code> people in the channel.
+          </dd>
+
+          <dt><a href="https://github.com/moritz/ilbot">ilbot</a></dt>
+          <dd>
+            IRC logging bot.
+          </dd>
+
+          <dt><a href="https://github.com/perl6/whateverable/wiki/Nativecallable">nativecallable</a></dt>
+          <dd>
+            an IRC bot for generating Perl 6 NativeCall code from C
+            definitions. It can be addressed by its full name
+            ('nativecallable6') or its short name ('nativecall'). The bot is
+            using App::GPTrixie to do the conversion.
+          </dd>
+
+          <dt><a href="https://github.com/zoffixznet/na">NeuralAnomaly</a></dt>
+          <dd>
+            Automated release maker and release status bot; run by Zoffix
+            on their Linode.
+          </dd>
+
+          <dt><a href="https://github.com/perl6/whateverable/wiki/Quotable">quotable</a></dt>
+          <dd>
+             An IRC bot for searching messages in the IRC log. It can be
+             addressed by its full name ('quotable6') or its short name
+             ('quote').
+          </dd>
+
+          <dt><a href="https://github.com/perl6/whateverable/wiki/Releasable">releasable</a></dt>
+          <dd>
+            An IRC bot for getting information about the upcoming release. It
+            can be addressed by its full name ('releasable6') or its short name
+            ('release').
+
+            As a user, you are probably only interested in its only command
+            “status”. It tells when the next release is going to happen and how
+            many blockers are there.
+          </dd>
+
+          <dt><a href="https://github.com/zoffixznet/perl6-sourceable">SourceBaby</a></dt>
+          <dd>
+            Core source code locator
+          </dd>
+
+          <dt><a href="https://github.com/perl6/whateverable/wiki/Squashable">squashable</a></dt>
+          <dd>
+            An IRC bot for the Monthly Bug Squash Day (a.k.a. Community Bug
+            SQUASHathon). It can be addressed by its full name ('squashable6')
+            or its short name ('squash'). It can tell you when the next even is
+            going to happen and what's the current status of the active event.
+            Also, it will also announce changes to the repo.
+          </dd>
+
+          <dt><a href="https://github.com/perl6/whateverable/wiki/Statisfiable">statisfiable</a></dt>
+          <dd>
+            An IRC bot that can gather stats across rakudo builds. It can be
+            addressed by its full name ('statisfiable6') or its short name
+            ('stat'). For most commands it will reply with a gist that has a
+            graph and the raw data. Note that stats are cached, but it takes
+            some time for it to generate the graph, so be patient.
+          </dd>
+
+          <dt>synopsebot6</dt>
+          <dd>
+            Creates links to the synopses and turns mentions of RT ticket
+            numbers into clickable RT links.
+          </dd>
+
+          <dt><a href="https://github.com/zoffixznet/undercover">Undercover</a></dt>
+          <dd>
+            Very similar to SourceBaby, except points to perl6.wtf
+            indicating stresstest coverage of code.
+          </dd>
+
+          <dt><a href="https://github.com/perl6/whateverable/wiki/Unicodable">unicodable</a></dt>
+          <dd>
+            An IRC bot for getting interested information about unicode
+            characters. It can be addressed by its full name ('unicodable6') or
+            its short name ('u').
+          </dd>
+
+          <dt><a href="https://docs.perl6.org/language/glossary#yoleaux_">yoleaux</a></dt>
+          <dd>
+            Provides various functions, such as leaving messages for people
+            and translating text (see <a href="http://dpk.io/yoleaux">this
+            handy reference</a> for what yoleaux can do.)
+          </dd>
+
+          <dt>ZofBot</dt>
+          <dd>
+            IRC-mention-to-Twitter-DM relay bot. Can also perform the
+            functionality of a Markov Chain bot, but this feature is
+            disabled in #perl6.
+          </dd>
         </dl>
       </div>
     </div>
