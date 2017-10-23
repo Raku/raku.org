@@ -31,18 +31,29 @@
         <h3 class="trim-top">Installing from source</h3>
 
         <p>People on UNIX-like systems can try out Rakudo Star from an extracted source tarball.</p>
-        
+
         <p>You will need recent versions of perl, git, make and gcc. Also a basic familiarity with UNIX.</p>
 
         <p>For full instructions see
         <a href="http://rakudo.org/how-to-get-rakudo/">http://rakudo.org/how-to-get-rakudo/</a></p>
-        
-        <p>A quick start for Linux/Mac/BSD/Mingw etc. follows:</p>
+
+        <p>A quick start for Linux, Mac, BSD, Mingw, etc. follows.
+	  Note that if the $PREFIX directory (the chosen installation directory) already exists, you will
+	  have to remove the following directories before attempting
+	  configuration:</p>
+
+	<pre># rm -rf $PREFIX/bin
+# rm -rf $PREFIX/include
+# rm -rf $PREFIX/lib
+# rm -rf $PREFIX/share/nqp
+# rm -rf $PREFIX/share/pkgconfig></pre>
+
+	<p>Now get the source and configure:</p>
 
         <pre>% wget https://rakudo.perl6.org/downloads/star/rakudo-star-2017.07.tar.gz
-% tar xfz rakudo-star-2017.07.tar.gz 
+% tar xfz rakudo-star-2017.07.tar.gz
 % cd rakudo-star-2017.07
-# perl Configure.pl --gen-moar --prefix /opt/rakudo-star-2017.07     
+# perl Configure.pl --gen-moar --prefix $PREFIX
 # make install</pre>
 
         <h3 class="trim-top">Rakudo Star 2017.07 Errata</h3>
