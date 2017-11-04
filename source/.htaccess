@@ -1,3 +1,4 @@
 Redirect 301 /documentation  https://perl6.org/resources/
 Redirect 301 /documentation/ https://perl6.org/resources/
 Redirect 303 /irc            https://webchat.freenode.net/?channels=#perl6
+Redirect 303 /sponsor-jnthn  https://6guts.wordpress.com/2017/05/12/looking-for-perl-6-rakudo-and-moarvm-development-funding/
