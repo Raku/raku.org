@@ -1,2 +1,3 @@
 Redirect 301 /documentation  https://perl6.org/resources/
 Redirect 301 /documentation/ https://perl6.org/resources/
+Redirect 303 /irc            https://webchat.freenode.net/?channels=#perl6
