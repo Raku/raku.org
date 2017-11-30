@@ -49,6 +49,7 @@
 
         <ul class="shy-list">
             <li>Windows port: NativeCall modules, such as Linenoise, may not fully work depending on compiler (differs depending on whether mingw or MSVC and whether 32 or 64 bit).</li>
+            <li>Windows 10, using the Windows Subsystem for Linux: You will have to apply this <a href="https://github.com/nxadm/rakudo-pkg/blob/master/docker/fix_windows10">fix</a> to account for the WSL <a href="https://github.com/MoarVM/MoarVM/issues/470">not supporting execstack properly</a></li>
             <li>Intel/Linux, Intel/*BSD and Mac: no specific issues known currently.</li>
         </ul>
       </div>
