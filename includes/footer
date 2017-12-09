@@ -53,7 +53,6 @@
         <h4><a href="/specification/">Language Design</a></h4>
         <ul class="shush-list">
           <li><a href="https://design.perl6.org/">Synopsis</a> - official Perl&nbsp;6 design documents</li>
-          <li><a href="/compilers/std-viv">STD.pm</a> - official Perl&nbsp;6 grammar</li>
         </ul>
         <a href="/specification/" class="btn btn-success">More</a>
       </section>
