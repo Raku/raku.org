@@ -66,6 +66,9 @@ To run this site locally:
     ```
   - Open http://localhost:5000/index.html in your browser
 
+Tip: if you remove `source/archive` directory, `mowyw` generation will run a
+lot faster. Useful for checking frequently-made changes.
+
 ### LICENSE
 
 See [LICENSE](LICENSE) file for the details of the license of the code in this repository.
