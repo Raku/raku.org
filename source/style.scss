@@ -121,9 +121,9 @@ footer {
     float: left;
 }
 
-@media (max-width: 768px) {
-  #welcome-header img { display: none!important; }
-}
+#welcome-header img { margin-top: -40px; }
+@media (max-width: 1200px) { #welcome-header img { margin-top: 0; } }
+@media (max-width: 768px)  { #welcome-header img { width: 200px;  } }
 
 @media (min-width: 768px) {
     .col-sm-5ths {

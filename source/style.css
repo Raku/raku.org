@@ -75,9 +75,15 @@ footer {
   width: 20%;
   float: left; }
 
+#welcome-header img {
+  margin-top: -40px; }
+
+@media (max-width: 1200px) {
+  #welcome-header img {
+    margin-top: 0; } }
 @media (max-width: 768px) {
   #welcome-header img {
-    display: none !important; } }
+    width: 200px; } }
 @media (min-width: 768px) {
   .col-sm-5ths {
     width: 20%;
