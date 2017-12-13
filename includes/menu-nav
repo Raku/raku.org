@@ -24,10 +24,6 @@
           ><a href="/resources/">Resources</a></li> %]
         [% item modules <li id="nav-modules" {{ class="active"}}
           ><a href="https://modules.perl6.org/">Modules</a></li> %]
-        [% item specs <li id="nav-specs" {{ class="active"}}
-          ><a href="/specification/">Design</a></li> %]
-        [% item compilers <li id="nav-compilers"{{ class="active"}}
-          ><a href="/compilers/">Compilers</a></li> %]
         [% item fun <li id="nav-fun" {{ class="active"}}
           ><a href="/fun/">Fun</a></li> %]
         [% item whatever <li id="nav-whatever"{{ class="active"}}

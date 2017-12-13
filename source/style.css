@@ -2,7 +2,7 @@ html {
   overflow-y: scroll; }
 
 body {
-  background: #3B3B3D;
+  background: #3b3b3d;
   background: repeating-linear-gradient(45deg, #323234, #323234 10px, #333335 10px, #333335 20px); }
 
 small {
@@ -23,11 +23,11 @@ small {
 .navbar-inverse a:hover,
 .navbar-inverse a:focus,
 .navbar-inverse a:active {
-  background: #98C73D !important; }
+  background: #98c73d !important; }
 .navbar-inverse .nav a {
   font-size: 93%;
-  padding-left: 13px;
-  padding-right: 13px; }
+  padding-left: 11px;
+  padding-right: 11px; }
 
 footer {
   border-top: 20px solid #222223;
@@ -156,5 +156,3 @@ footer {
   background: url(rss.png);
   position: relative;
   top: 2px; }
-
-/*# sourceMappingURL=style.css.map */
