@@ -32,7 +32,7 @@
         <ul class="shush-list">
           <li><a href="https://modules.perl6.org/">Perl&nbsp;6 modules
               directory</a></li>
-          <li><a href="https://github.com/ugexe/zef/">Zef</a> Perl&nbsp;6
+          <li><a href="https://modules.perl6.org/dist/zef:github">Zef</a> Perl&nbsp;6
               module manager</li>
         </ul>
 
