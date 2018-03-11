@@ -162,3 +162,6 @@ footer {
   background: url(rss.png);
   position: relative;
   top: 2px; }
+
+#navbar {
+  padding-left: 16px; }
