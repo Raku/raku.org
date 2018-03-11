@@ -23,7 +23,7 @@ Here are some guidelines that you should respect when changing this site:
 
   * If you intend to change the layout, consider what happens when:
 
-      - user's viewport is small (e.g. 800x600)
+      - user's viewport is small (e.g. mobile device)
       - user resizes window
 
   * We use [Bootstrap3](http://getbootstrap.com/) and
