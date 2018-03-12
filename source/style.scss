@@ -222,4 +222,14 @@ footer {
     top: 2px;
 }
 
-#navbar { padding-left: 16px }
+#navbar { 
+    padding-left: 16px;
+    
+    a[href*="//"]:after {
+        padding-left: 3px;
+        content: url(/external-link-icon.svg);
+        width: 12px;
+        height: 12px;
+        display: inline-block;
+    }
+}

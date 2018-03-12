@@ -2,7 +2,7 @@ html {
   overflow-y: scroll; }
 
 body {
-  background: #3b3b3d;
+  background: #3B3B3D;
   background: repeating-linear-gradient(45deg, #323234, #323234 10px, #333335 10px, #333335 20px); }
 
 small {
@@ -23,7 +23,7 @@ small {
 .navbar-inverse a:hover,
 .navbar-inverse a:focus,
 .navbar-inverse a:active {
-  background: #98c73d !important; }
+  background: #98C73D !important; }
 .navbar-inverse .nav a {
   font-size: 93%;
   padding-left: 11px;
@@ -165,3 +165,11 @@ footer {
 
 #navbar {
   padding-left: 16px; }
+  #navbar a[href*="//"]:after {
+    padding-left: 3px;
+    content: url(/external-link-icon.svg);
+    width: 12px;
+    height: 12px;
+    display: inline-block; }
+
+/*# sourceMappingURL=style.css.map */
