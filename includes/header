@@ -13,7 +13,7 @@
     <link href="/favicon.ico" rel="shortcut icon" type="image/x-icon">
     <link href="/bootstrap/css/bootstrap.min.css" rel="stylesheet">
     <link href="/bootstrap/css/bootstrap-theme.min.css" rel="stylesheet">
-    <link href="/style.css" rel="stylesheet">
+    <link href="/style.css?v=1" rel="stylesheet">
     [% ifvar sitecss %]
       <style>[% readvar sitecss %]</style>
     [% endifvar %]
