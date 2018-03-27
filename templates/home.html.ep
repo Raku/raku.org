@@ -1,2 +1,88 @@
 % layout 'default';
 % title 'Welcome';
+
+<div class="row">
+  <div class="col-sm-12">
+    <h1><%== p6 %>: a Brand New Language in the Perl Family</h1>
+
+    <div id="home-carousel" class="carousel slide" data-ride="carousel">
+      <ol class="carousel-indicators">
+        <li data-target="#home-carousel" data-slide-to="0" class="active"></li>
+        <li data-target="#home-carousel" data-slide-to="1"></li>
+        <li data-target="#home-carousel" data-slide-to="2"></li>
+      </ol>
+      <div class="carousel-inner">
+        <div class="carousel-item active">
+          <div class="row px-5 py-2">
+            <div class="col-md-6">
+              <%==  code_block <<~'END'
+                grammar Parser {
+                    rule  TOP  { I <love> <lang> }
+                    token love { '♥' | love }
+                    token lang { < Perl Rust Go Python Ruby > }
+                }
+
+                say Parser.parse: 'I ♥ Perl';
+                # OUTPUT: ｢I ♥ Perl｣ love => ｢♥｣ lang => ｢Perl｣
+
+                say Parser.parse: 'I love Rust';
+                # OUTPUT: ｢I love Rust｣ love => ｢love｣ lang => ｢Rust｣
+                END
+              %>
+            </div>
+            <div class="col-md-6">
+              <h2>A Breakthrough in Regex Syntax</h2>
+              <p><%== p6 %> easserts Perl's dominance in the world of
+                text processing and leads with a simpler, more
+                readable, and more powerful regex syntax. Grammars—composable
+                object-like collections of regexes—are even part of the core
+                language!</p>
+            </div>
+          </div>
+        </div>
+        <div class="carousel-item">
+          <div class="row px-5 py-2">
+            <div class="col-md-6">
+              <%==  code_block <<~'END'
+              # Single-threaded (~12s to run)
+              (^∞)      .grep(*.is-prime)[6000].say;
+
+              # Multi-threaded (~4s to run)
+              (^∞).hyper.grep(*.is-prime)[6000].say;
+              END
+              %>
+            </div>
+            <div class="col-md-6">
+              <h2>Ease of Multi-Threading</h2>
+              <p>Language offers composable concurrency primitives and
+                parallelism constructs.</p>
+            </div>
+          </div>
+        </div>
+        <div class="carousel-item">
+          <div class="row px-5 py-2">
+            <div class="col-md-6">
+              <%==  code_block <<~'END'
+              END
+              %>
+            </div>
+            <div class="col-md-6">
+              <h2></h2>
+              <p></p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <a class="carousel-control-prev" href="#home-carousel" role="button"
+        data-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="sr-only">Previous</span>
+      </a>
+      <a class="carousel-control-next" href="#home-carousel" role="button"
+        data-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="sr-only">Next</span>
+      </a>
+    </div>
+  </div>
+</div>
