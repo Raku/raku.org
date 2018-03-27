@@ -1,7 +1,9 @@
 #!/usr/bin/env perl
 
 use lib qw<lib>;
+use 5.026;
 use Mojolicious::Lite;
+use Mojo::Util qw/xml_escape/;
 
 plugin Config => { file => 'conf.conf' };
 
@@ -54,12 +56,15 @@ helper nav_active => sub {
         ? ' active' : ''
 };
 helper items_in => sub {
-        my ($c, $what ) = @_;
-        return unless defined $what;
-        $what = $c->stash($what) // [] unless ref $what;
-        return @$what;
-    };
-
+    my ($self, $what ) = @_;
+    return unless defined $what;
+    $what = $self->stash($what) // [] unless ref $what;
+    return @$what;
+};
+helper code_block => sub {
+    my ($self, $code) = @_;
+    '<pre class="code-block"><code>' . xml_escape($code) . '</code></pre>'
+};
 
 ####
 app->start;
