@@ -1,0 +1,3 @@
+#!/bin/sh
+morbo -l 'http://*:4243' -w assets -w templates -w lib app.pl
+
