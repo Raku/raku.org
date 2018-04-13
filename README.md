@@ -7,6 +7,9 @@ an update of <https://perl6.org>
 If not, talk to [moritz] on
 [#perl6](https://chat.mibbit.com/?channel=%23perl6&server=irc.freenode.net).
 
+### Multilingual translation
+[Chinese translation](https://github.com/ccworld1000/perl6.org).
+
 ### Guidelines
 Here are some guidelines that you should respect when changing this site:
 
