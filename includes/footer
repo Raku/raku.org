@@ -52,7 +52,10 @@
       <section class="col-sm-6 col-md-5ths">
         <h4><a href="/specification/">Language Design</a></h4>
         <ul class="shush-list">
-          <li><a href="https://design.perl6.org/">Synopsis</a> - official Perl&nbsp;6 design documents</li>
+          <li><a href="https://github.com/perl6/roast">Specification</a> -
+              Official Perl&nbsp;6 language specification test suite</li>
+          <li><a href="https://design.perl6.org/">Speculations</a> -
+              historical language design documents</li>
         </ul>
         <a href="/specification/" class="btn btn-success">More</a>
       </section>
