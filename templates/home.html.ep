@@ -54,8 +54,8 @@
             </div>
             <div class="col-md-6">
               <h2>Ease of Multi-Threading</h2>
-              <p>Language offers composable concurrency primitives and
-                parallelism constructs.</p>
+              <p>Language offers composable high-level concurrency primitives
+                and parallelism constructs.</p>
             </div>
           </div>
         </div>
@@ -63,12 +63,30 @@
           <div class="row px-5 py-2">
             <div class="col-md-6">
               <%==  code_block <<~'END'
+                # Infinite list of primes:
+                my @primes = ^∞ .grep: *.is-prime;
+                say "1000ᵗʰ prime is @primes.skip(999).head()";
+
+                # Lazily read words from a file
+                .say for '50TB.file.txt'.IO.words;
+
+                # Count-only of the number of 10-letter combinations
+                say combinations('a'..'z', 10).elems;
+                # OUTPUT: «5311735␤»
               END
               %>
             </div>
             <div class="col-md-6">
-              <h2></h2>
-              <p></p>
+              <h2>Lasy Evaluation</h2>
+              <p>The best work is the one you don't have to do at all!
+                <%== p6 %> lets you chain a "pipeline" of operations
+                that will lazily pull only as much information from the
+                source as needed to complete its task.</p>
+
+              <p>Context-sensitive optimizations let your code avoid
+                doing some of the work (e.g. only count the number
+                of items without producing them) or even avould all of the
+                work entirely (if its result is discarded).</p>
             </div>
           </div>
         </div>
