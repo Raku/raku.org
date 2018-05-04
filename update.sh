@@ -4,7 +4,6 @@
 # installation at www.perl6.org
 date
 set -e
-cd ~/perl6.org
 git fetch -q
 BEFORE=$(git rev-parse HEAD)
 git checkout -q -f origin/master
@@ -16,10 +15,13 @@ then
         else mowyw
         fi
 fi
-cd ~/features
-git fetch -q
-BEFORE=$(git rev-parse HEAD)
-git checkout -q -f origin/master
-if [ "$BEFORE" != "$(git rev-parse HEAD)" ]
-then perl process.pl > ~/perl6.org/online/compilers/features.html
-fi
+
+# remove features [Now it's actually not]
+
+#cd ~/features
+#git fetch -q
+#BEFORE=$(git rev-parse HEAD)
+#git checkout -q -f origin/master
+#if [ "$BEFORE" != "$(git rev-parse HEAD)" ]
+#then perl process.pl > ~/perl6.org/online/compilers/features.html
+#fi
