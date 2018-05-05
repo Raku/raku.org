@@ -17,6 +17,9 @@ then
         else mowyw
         fi
 fi
+
+# The ~/features dir contains a checkout of
+# the https://github.com/perl6/features repo
 cd ~/features
 git fetch -q
 BEFORE=$(git rev-parse HEAD)
