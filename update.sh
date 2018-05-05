@@ -12,6 +12,9 @@ git checkout -q -f origin/master
 ./fetch-recent-blog-posts.pl
 if [ "$BEFORE" != "$(git rev-parse HEAD)" ]
 then
+        if git diff --quiet $BEFORE HEAD update.sh
+        then cp update.sh ~/update.sh
+        fi
         if git diff --quiet $BEFORE HEAD includes
         then mowyw --make
         else mowyw
