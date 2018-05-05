@@ -3,6 +3,7 @@
 # this script is used by www.p6c.org to update the
 # installation at www.perl6.org
 date
+source ~/perl5/perlbrew/etc/bashrc
 set -e
 cd ~/perl6.org
 git fetch -q
