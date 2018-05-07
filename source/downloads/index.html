@@ -14,7 +14,7 @@
       <div class="panel-body trim">
 
         <h3 class="trim-top">Rakudo Star</h3>
-        <p> Rakudo Star 2018.01 is a useful and usable production distribution of
+        <p> Rakudo Star 2018.04 is a useful and usable production distribution of
         Perl 6 which supports the latest Christmas Perl 6 (6.c language
         version).<p>
 
@@ -39,20 +39,18 @@
         
         <p>A quick start for Linux/Mac/BSD/Mingw etc. follows:</p>
 
-        <pre>% wget https://rakudo.perl6.org/downloads/star/rakudo-star-2018.01.tar.gz
-% tar xfz rakudo-star-2018.01.tar.gz 
-% cd rakudo-star-2018.01
-# perl Configure.pl --gen-moar --prefix /opt/rakudo-star-2018.01     
+        <pre>% wget https://rakudo.perl6.org/downloads/star/rakudo-star-2018.04.tar.gz
+% tar xfz rakudo-star-2018.04.tar.gz 
+% cd rakudo-star-2018.04
+# perl Configure.pl --gen-moar --prefix /opt/rakudo-star-2018.04     
 # make install</pre>
 
-        <h3 class="trim-top">Rakudo Star 2018.01 Errata</h3>
+        <h3 class="trim-top">Rakudo Star 2018.04 Errata</h3>
 
         <ul class="shy-list">
-            <li>Updating zef via "zef install zef" is recommended. Newer versions of zef include a work around for an apparent Rakudo bug which shows itself in zef being unable to update mirrors sometimes. </li>
             <li>Windows port: NativeCall modules, such as Linenoise, may not fully work depending on compiler (differs depending on whether mingw or MSVC and whether 32 or 64 bit).</li>
             <li>Windows 10, using the Windows Subsystem for Linux: You will have to apply this <a href="https://github.com/nxadm/rakudo-pkg/blob/master/docker/fix_windows10">fix</a> to account for the WSL <a href="https://github.com/MoarVM/MoarVM/issues/470">not supporting execstack properly</a></li>
             <li>Intel/Linux, Intel/*BSD and Mac: no specific issues known currently.</li>
-            <li>Big Endian Systems (mips/macppc etc) are currently broken later than 2017.07</li>
         </ul>
       </div>
     </div>
