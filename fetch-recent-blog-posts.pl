@@ -1,11 +1,4 @@
-#!/home/modules.perl6.org/perl5/perlbrew/perls/perl-5.22.0/bin/perl
-
-use lib qw{
-    /home/modules.perl6.org/perl5/perlbrew/perls/perl-5.22.0/lib/site_perl/5.22.0/x86_64-linux
-    /home/modules.perl6.org/perl5/perlbrew/perls/perl-5.22.0/lib/site_perl/5.22.0
-    /home/modules.perl6.org/perl5/perlbrew/perls/perl-5.22.0/lib/5.22.0/x86_64-linux
-    /home/modules.perl6.org/perl5/perlbrew/perls/perl-5.22.0/lib/5.22.0
-};
+#!/usr/bin/env perl
 
 use Mojo::UserAgent;
 use Mojo::JSON qw/encode_json/;
