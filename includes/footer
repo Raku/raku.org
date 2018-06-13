@@ -8,7 +8,7 @@
         <h4><a href="/community/">Community</a></h4>
         <ul class="shush-list">
           <li><a href="/community/irc">#perl6 IRC channel</a>: <a href="irc://irc.freenode.net/%23perl6">system IRC client</a>
-          or&nbsp;<a href="http://webchat.freenode.net/?channels=perl6&amp;nick=">chat live in your browser</a></li>
+          or&nbsp;<a href="https://webchat.freenode.net/?channels=perl6&amp;nick=">chat live in your browser</a></li>
           <li><a href="/community/rosettacode">Perl&nbsp;6 on Rosetta Code</a>, <a href="http://pl6anet.org/">Blogs</a></li>
         </ul>
 
