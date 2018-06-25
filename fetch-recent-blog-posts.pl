@@ -15,7 +15,9 @@ unless ( $tx->success ) {
 }
 
 my $j = $tx->res->dom->find("entry")->grep(sub {
-    # hackish fix to get rid of comment entries from medium.com
+    # Hackish fix to get rid of comment entries from medium.com.
+    # Only articles appear to have `category` elements, so if we detect
+    # an entry from medium.com, ensure it also has `category` element
     $_->at('link')->{href} =~ m{^https://medium\.com}
         ? $_->find('category')->each
         : 1
