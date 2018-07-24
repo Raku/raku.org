@@ -40,8 +40,11 @@
         <pre>% wget https://rakudo.perl6.org/downloads/star/rakudo-star-2018.04.tar.gz
 % tar xfz rakudo-star-2018.04.tar.gz
 % cd rakudo-star-2018.04
-# perl Configure.pl --gen-moar --prefix /opt/rakudo-star-2018.04
-# make install</pre>
+% perl Configure.pl --gen-moar --prefix ~/rakudo
+% make install
+% echo "export PATH=\$HOME/rakudo/install/bin/:\$PATH" >> ~/.bashrc 
+% echo "export PATH=\$HOME/rakudo/install/share/perl6/site/bin:\$PATH" >> ~/.bashrc
+% source ~/.bashrc</pre>
 
         <h3 class="trim-top">Rakudo Star 2018.04 Errata</h3>
 
