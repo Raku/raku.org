@@ -29,19 +29,22 @@
         <h3 class="trim-top">Installing from source</h3>
 
         <p>People on UNIX-like systems can try out Rakudo Star from an extracted source tarball.</p>
-        
+
         <p>You will need recent versions of perl, git, make and gcc. Also a basic familiarity with UNIX.</p>
 
         <p>For full instructions see
         <a href="http://rakudo.org/how-to-get-rakudo/">http://rakudo.org/how-to-get-rakudo/</a></p>
-        
+
         <p>A quick start for Linux/Mac/BSD/Mingw etc. follows:</p>
 
         <pre>% wget https://rakudo.perl6.org/downloads/star/rakudo-star-2018.04.tar.gz
-% tar xfz rakudo-star-2018.04.tar.gz 
+% tar xfz rakudo-star-2018.04.tar.gz
 % cd rakudo-star-2018.04
-# perl Configure.pl --gen-moar --prefix /opt/rakudo-star-2018.04     
-# make install</pre>
+% perl Configure.pl --gen-moar --prefix ~/rakudo
+% make install
+% echo "export PATH=\$HOME/rakudo/install/bin/:\$PATH" >> ~/.bashrc 
+% echo "export PATH=\$HOME/rakudo/install/share/perl6/site/bin:\$PATH" >> ~/.bashrc
+% source ~/.bashrc</pre>
 
         <h3 class="trim-top">Rakudo Star 2018.04 Errata</h3>
 
@@ -75,7 +78,7 @@
           <a href="https://github.com/rakudo/star/raw/master/docs/2015-spw-perl6-course.pdf">Perl 6 Introductory course (PDF slides)</a>
         </p>
         <p>
-          <a href="http://perl6intro.com/">Perl 6 Introduction</a>
+          <a href="https://perl6intro.com/">Perl 6 Introduction</a>
         </p>
         <p>
           <a href="https://learnxinyminutes.com/docs/perl6/">Learn Perl 6 in Y minutes</a>
