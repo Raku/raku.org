@@ -16,6 +16,7 @@ jQuery(function ($) {
     if ( ! $('.bg').length ) { $('body').css({background: '#fff'}) }
 
     setup_recent_blog_posts();
+    update_pre_tag_left_top_border_radius();
 });
 
 function setup_recent_blog_posts () {
@@ -34,5 +35,21 @@ function setup_recent_blog_posts () {
     })
     .fail(function() {
         el.append('<li><i>Failed to fetch recent blogs</i></li>');
+    });
+}
+
+// This function updates first <pre> tag's left-top border radius
+// responsively when the different tab is clicked
+function update_pre_tag_left_top_border_radius () {
+    $(document).ready(function() {
+        $('.tab-content') > $('pre').first().css('border-radius', '0px 4px 4px');
+        $('ul.nav-tabs li').click(function(e) {
+            var firstPreEl = $('.tab-content') > $('pre').first();
+            if ($(this).index() === 0) {
+                firstPreEl.css('border-radius', '0px 4px 4px');
+            } else {
+                firstPreEl.css('border-radius', '4px');
+            }
+        });
     });
 }

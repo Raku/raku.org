@@ -99,6 +99,10 @@ footer {
 .nav-tabs * {
   outline: 0 !important; }
 
+.nav-tabs {
+  border-bottom: 0px;
+}
+
 .trim-top {
   margin-top: 0; }
 
@@ -118,6 +122,7 @@ footer {
 
 /* https://github.com/stmuk/p6-Text-VimColour  Highlighter */
 .highlight pre {
+  height: 260px;
   white-space: pre-wrap;
   font-family: monospace;
   color: #000;
