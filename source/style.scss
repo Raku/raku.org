@@ -150,6 +150,10 @@ footer {
     outline: 0!important;
 }
 
+.nav-tabs {
+    border-bottom: 0px;
+}
+
 .trim-top {
     margin-top: 0;
 }
@@ -183,6 +187,7 @@ footer {
         color: #000;
         background-color: #F5F5F5;
         font-family: monospace;
+        height: 260px;
     }
     .Comment { color: #777; }
     .Constant { color: #0000c0;  }
@@ -222,9 +227,9 @@ footer {
     top: 2px;
 }
 
-#navbar { 
+#navbar {
     padding-left: 16px;
-    
+
     a[href*="//"]:after {
         padding-left: 3px;
         content: url(/external-link-icon.svg);

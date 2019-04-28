@@ -100,8 +100,7 @@ footer {
   outline: 0 !important; }
 
 .nav-tabs {
-  border-bottom: 0px;
-}
+  border-bottom: 0px; }
 
 .trim-top {
   margin-top: 0; }
@@ -122,12 +121,12 @@ footer {
 
 /* https://github.com/stmuk/p6-Text-VimColour  Highlighter */
 .highlight pre {
-  height: 260px;
   white-space: pre-wrap;
   font-family: monospace;
   color: #000;
   background-color: #F5F5F5;
-  font-family: monospace; }
+  font-family: monospace;
+  height: 260px; }
 .highlight .Comment {
   color: #777; }
 .highlight .Constant {
