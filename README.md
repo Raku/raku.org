@@ -60,7 +60,7 @@ To run this site locally:
 
   - Install the following modules:
 
-    `cpanm App::Mowyw Text::VimColor Plack`
+    `cpanm App::Mowyw Text::VimColor Plack IO::Socket::SSL HTML::Template::Compiled Mojolicious`
 
   - Run the following commands to populate the `./online` folder and launch a local web server for testing:
     ```
