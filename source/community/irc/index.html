@@ -53,10 +53,11 @@
 
         <p>
           A variety of IRC bots make our life easier, here's a short explanation
-          of what they do - <a
-          href="http://howcaniexplainthis.blogspot.com/2009/11/what-perl6-irc-bots-do.html">courtesy
+          of what they do - <a href="http://howcaniexplainthis.blogspot.com/2009/11/what-perl6-irc-bots-do.html">courtesy
           by frettled</a>.
         </p>
+          <p> <a href="https://github.com/perl6/whateverable/wiki">Some more detailed information</a> about 
+              the bots in the Whateverable collection.</p>
 
         <dl id="botlist" class="trim-bottom">
           <dt><a href="https://github.com/perl6/whateverable/wiki/Benchable">benchable</a></dt>
@@ -159,6 +160,12 @@
             using App::GPTrixie to do the conversion.
           </dd>
 
+          <dt><a href="https://github.com/perl6/whateverable/wiki/Notable">notable</a></dt>
+          <dd>
+            an IRC bot for for noting things. It can be addressed by its full name ('notable6') 
+            or its short name ('note'). There is also a “weekly:” shortcut.
+          </dd>
+
           <dt><a href="https://github.com/perl6/whateverable/wiki/Quotable">quotable</a></dt>
           <dd>
              An IRC bot for searching messages in the IRC log. It can be
@@ -176,7 +183,28 @@
             “status”. It tells when the next release is going to happen and how
             many blockers are there.
           </dd>
+            
+          <dt><a href="https://github.com/perl6/whateverable/wiki/Reportable">reportable</a></dt>
+          <dd>
+            An IRC bot for generating reports of changes in rakudo RT and GitHub issue trackers 
+            (which issues were resolved, updated, rejected, etc.). It can be addressed by its full name 
+            ('reportable6') or its short name ('report'). It takes snapshots of issue trackers 
+            periodically, and then you can ask it to generate a report for two given snapshots.
 
+              See also: <a href="https://github.com/rakudo/rakudo/wiki/Ticket-updates">Weekly, Monthly and Yearly reports</a>
+          </dd>
+
+          <dt><a href="https://github.com/perl6/whateverable/wiki/Shareable">shareable</a></dt>
+          <dd>
+             An IRC bot for making rakudo builds produced by Whateverable publicly available. 
+             It can be addressed by its full name ('shareable6').
+              
+             As of today, rakudo is not relocatable. For that reason the tars contain absolute paths,
+              so you have to extract these archives accordingly. Note that the build will be located 
+              in /tmp/whateverable/rakudo-moar/SOME-SHA/. Also, as of today these files are only 
+              useful for you if you're on linux x86_64.
+          </dd>
+            
           <dt><a href="https://github.com/zoffixznet/perl6-sourceable">SourceBaby</a></dt>
           <dd>
             Core source code locator
@@ -206,11 +234,25 @@
             numbers into clickable RT links.
           </dd>
 
+          <dt><a href="https://github.com/perl6/whateverable/wiki/Tellable">tellable</a></dt>
+          <dd>
+            An IRC bot for passing messages to users who are currently offline. 
+            You can also use it to see when was the last time somebody talked.
+          </dd>
+
+
           <dt><a href="https://github.com/zoffixznet/undercover">Undercover</a></dt>
           <dd>
             Very similar to SourceBaby, except points to
             <a href="https://wtf.rakudo.party/">https://wtf.rakudo.party/</a>
             indicating stresstest coverage of code.
+          </dd>
+
+          <dt><a href="https://github.com/perl6/whateverable/wiki/Undersightable">undersightable</a></dt>
+          <dd>
+             An IRC bot for checking that important things are operating correctly (websites are up, 
+             bots are online, released tarballs are correct, etc.). It can be addressed by its full name 
+             ('undersightable6').
           </dd>
 
           <dt><a href="https://github.com/perl6/whateverable/wiki/Unicodable">unicodable</a></dt>
