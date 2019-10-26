@@ -1,9 +1,9 @@
-[% setvar title Perl 6 Programming Language %]
+[% setvar title Raku Programming Language %]
 
 [% menu nav home %]
 
 [% setvar more_header
-    <meta name="description" content="Home page for Perl 6, the newest member of the family of languages known as Perl." />
+    <meta name="description" content="Home page for Raku, the newest member of the family of languages known as Perl." />
     <meta name="verify-v1" content="p7bEStVpDsW4ixm9YbF1ck02FRQfdA97ZL9mJnt0iQ0=" />
     <meta name="google-site-verification" content="fDTmO9fcCRRgBqbKirQidKJ6nhTqnolHrKrgwVWJxZA" />
 %]
@@ -14,7 +14,7 @@
       <div class="panel" style="box-shadow: 1px 1px 3px rgba(0, 0, 0, .3)">
         <div class="panel-primary">
           <div class="panel-heading">
-              <h3 class="panel-title">Perl&nbsp;6 'Diwali' 6.d Language Specification Released</h3>
+              <h3 class="panel-title">6.d Language Specification Released</h3>
           </div>
           <div class="panel-body trim" style="background: #fafafa">
             <p style="font-size: 81%">
@@ -26,7 +26,7 @@
       </div>
     </div>
     <div class="col-sm-12">
-      <h1>The <b>Perl&nbsp;6</b> Programming Language</h1>
+      <h1>The <b>Raku</b> Programming Language</h1>
 
       <a href='https://github.com/perl6/mu/raw/master/misc/camelia.txt'
         class="pull-right"><img
@@ -34,15 +34,15 @@
         class="img-responsive"
       ></a>
 
-      <p>Hi, my name is Camelia.  I'm the spokesbug for Perl&nbsp;6.
-        Perl&nbsp;6 intends to carry forward the high ideals of
+      <p>Hi, my name is Camelia.  I'm the spokesbug for Raku.
+        Raku intends to carry forward the high ideals of
         the <a href="https://www.perlfoundation.org">Perl community</a>.
-        Perl&nbsp;6 has been developed by a team of dedicated and
+        Raku has been developed by a team of dedicated and
         enthusiastic volunteers, and continues to be developed. You
         can help too. The only requirement is that you know
         how to be nice to all kinds of people (and butterflies). Go to
-        <a href="https://webchat.freenode.net/?channels=perl6&amp;nick="
-          >#perl6 (irc.freenode.net)</a>
+        <a href="https://webchat.freenode.net/?channels=raku&amp;nick="
+          >#raku (irc.freenode.net)</a>
         and someone will be glad to help you
           <a href="/getting-started/">get started</a>.
       </p>
@@ -54,12 +54,12 @@
       <section class="col-sm-4">
         <div class="well">
           <h3 class="h2 trim-top">Jump in!</h3>
-          <p>Rakudo is a compiler for Perl&nbsp;6 code. Install it and you're
-            all set to run Perl&nbsp;6 programs!</p>
+          <p>Rakudo is a compiler for Raku code. Install it and you're
+            all set to run Raku programs!</p>
           <a href="/downloads/"
             class="btn btn-primary btn-lg btn-block"
               style="white-space: normal; font-size: 120%">
-            Download Rakudo Perl&nbsp;6
+            Download Rakudo
           </a>
         </div>
       </section>
@@ -98,14 +98,14 @@
     <div class="highlight"><pre><span class="Statement">grammar</span> Parser {
     <span class="Statement">rule</span>  TOP  {<span class="Constant"> I </span><span class="Special">&lt;</span>love<span class="Special">&gt;</span><span class="Constant"> </span><span class="Special">&lt;</span>lang<span class="Special">&gt;</span><span class="Constant"> </span>}
     <span class="Statement">token</span> love {<span class="Constant"> </span><span class="Special">'</span><span class="Constant">♥</span><span class="Special">'</span><span class="Constant"> </span><span class="Special">|</span><span class="Constant"> love </span>}
-    <span class="Statement">token</span> lang {<span class="Constant"> </span><span class="Special">&lt; </span><span class="Constant">Perl Rust Go Python Ruby </span><span class="Special">&gt;</span><span class="Constant"> </span>}
+    <span class="Statement">token</span> lang {<span class="Constant"> </span><span class="Special">&lt; </span><span class="Constant">Raku Perl Rust Go Python Ruby </span><span class="Special">&gt;</span><span class="Constant"> </span>}
 }
 
-<span class="Identifier">say</span> Parser<span class="Statement">.</span>parse<span class="Statement">:</span> <span class="Special">'</span><span class="Constant">I ♥ Perl</span><span class="Special">'</span><span class="Statement">;</span>
-<span class="Comment"># OUTPUT: ｢I ♥ Perl｣ love =&gt; ｢♥｣ lang =&gt; ｢Perl｣</span>
+<span class="Identifier">say</span> Parser<span class="Statement">.</span>parse<span class="Statement">:</span> <span class="Special">'</span><span class="Constant">I ♥ Raku</span><span class="Special">'</span><span class="Statement">;</span>
+<span class="Comment"># OUTPUT: ｢I ♥ Raku｣ love =&gt; ｢♥｣ lang =&gt; ｢Raku｣</span>
 
-<span class="Identifier">say</span> Parser<span class="Statement">.</span>parse<span class="Statement">:</span> <span class="Special">'</span><span class="Constant">I love Rust</span><span class="Special">'</span><span class="Statement">;</span>
-<span class="Comment"># OUTPUT: ｢I love Rust｣ love =&gt; ｢love｣ lang =&gt; ｢Rust｣</span></pre></div>
+<span class="Identifier">say</span> Parser<span class="Statement">.</span>parse<span class="Statement">:</span> <span class="Special">'</span><span class="Constant">I love Perl</span><span class="Special">'</span><span class="Statement">;</span>
+<span class="Comment"># OUTPUT: ｢I love Perl｣ love =&gt; ｢love｣ lang =&gt; ｢Perl｣</span></pre></div>
           </div>
           <div role="tabpanel" class="tab-pane" id="samp-async">
     <div class="highlight"><pre>start { <span class="Identifier">sleep</span> <span class="Constant">1.5</span><span class="Statement">;</span> <span class="Identifier">print</span> <span class="Special">&quot;</span><span class="Constant">hi</span><span class="Special">&quot;</span> }
@@ -133,7 +133,7 @@ await Supply<span class="Statement">.</span>from-list(<span class="Special">&lt;
             <p class="lead text-center well"
               style="padding-top: 20px;">Want to see more?
                 <a href="https://examples.perl6.org/"
-              class="btn btn-primary">Visit Perl&nbsp;6 examples page</a>
+              class="btn btn-primary">Visit Raku examples page</a>
             </p>
           </div>
         </div>

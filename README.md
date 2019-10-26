@@ -1,11 +1,11 @@
-# Perl6.org
-This is the source code for <https://perl6.org>.
+# raku.org
+This is the source code for <https://raku.org>.
 
 It is rendered with [mowyw](https://perlgeek.de/en/software/mowyw)
 every 15 minutes, so updates to the repository should also result in
-an update of <https://perl6.org>  
+an update of <https://raku.org>
 If not, talk to [moritz] on
-[#perl6](https://chat.mibbit.com/?channel=%23perl6&server=irc.freenode.net).
+[#raku](https://chat.mibbit.com/?channel=raku&server=irc.freenode.net).
 
 ### Multilingual translation
 [Chinese translation](https://github.com/ccworld1000/perl6.org).
@@ -19,10 +19,10 @@ Here are some guidelines that you should respect when changing this site:
   * Be nice.
 
   * Don't hesitate to link to pages you wrote yourself, if they are helpful to
-    a broader Perl 6 audience.
+    a broader Raku audience.
 
-  * If you have a Perl 6 blog, get it included in the planetsix.perl.org feed
-    instead. Talk to \[Coke\] on [#perl6](https://chat.mibbit.com/?channel=%23perl6&server=irc.freenode.net).
+  * If you have a Raku blog, get it included in the https://planet.raku.org feed
+    instead. Talk to \[Coke\] on [#raku](https://chat.mibbit.com/?channel=%23raku&server=irc.freenode.net).
 
   * If you intend to change the layout, consider what happens when:
 
@@ -45,10 +45,6 @@ Here are some guidelines that you should respect when changing this site:
     Internet Explorer (Edge), and Safari. Please test layout changes. Lacking actual
     browsers to test in, you can use [browsershots.org](http://browsershots.org)
     or [browserstack.com](http://browserstack.com).
-
-  * We spell "Perl 6" consistently with a
-    [non-breaking space](https://en.wikipedia.org/wiki/Non-breaking_space#Keyboard_entry_methods).
-    If you don't already have one, go get an editor with decent Unicode support.
 
   * Speaking of which, all pages are served as UTF-8.
 
