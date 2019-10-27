@@ -1,13 +1,13 @@
-[% setvar title Perl&nbsp;6 Compilers %]
+[% setvar title Raku Compilers %]
 
 [% menu nav compilers %]
 
 <header id="subpage-header" class="lead well">
     [% include camelia %]
 
-    <h2><b>Perl&nbsp;6</b> Compilers</h2>
+    <h2><b>Raku</b> Compilers</h2>
 
-    <p>Perl&nbsp;6 is a language specification and, just like C or C++, it 
+    <p>Raku is a language specification and, just like C or C++, it
     encourages multiple compilers for the language.</p>
 </header>
 
@@ -26,11 +26,10 @@
         href="https://rakudo.org/files">Download or compile
         Rakudo</a>.</p>
 
-        <p>NQP
-        (Not Quite Perl) is <em>not</em> a Perl 6 compiler. NQP is a small subset of Perl 6
+        <p>NQP is <em>not</em> a Raku compiler. NQP is a small subset of Raku
         used as a foundational tool to help write compilers (including
-        <a href="https://github.com/rakudo/rakudo/blob/master/src/main.nqp">Rakudo
-        Perl&nbsp;6</a>) and libraries.
+        <a href="https://github.com/rakudo/rakudo/blob/master/src/main.nqp">Rakudo</a>)
+        and libraries.
         </p>
 
         <hr>
@@ -85,19 +84,19 @@
         <ul class="shush-list">
             <li>
             <a href="https://github.com/niner/Inline-Perl5">Inline::Perl5</a> executes
-            Perl&nbsp;5 code in Perl&nbsp;6.  Supports Perl 5 modules including XS
+            Perl code in Raku.  Supports Perl modules including XS
             modules like <a href="https://metacpan.org/pod/DBI">DBI</a>.  Allows
             passing integers, strings, arrays and hashes. Also supports calling methods
-            on Perl 5 objects from Perl 6 and calling methods on Perl 6 objects from Perl 5.
+            on Perl objects from Raku and calling methods on Raku objects from Perl.
             </li>
 
             <li>
             <a
             href="http://github.com/rakudo/rakudo/tree/master/src/core/">Rakudo's
             setting library</a> which defines all of the classes, routines, and terms
-            available when your script starts. In Perl 5 parlance, it's roughly all the
-            things you can see in perlfunc, perlop, etc. This part of Perl&nbsp;6 is
-            mostly written in Perl&nbsp;6 (and NQP).
+            available when your script starts. In Perl parlance, it's roughly all the
+            things you can see in perlfunc, perlop, etc. This part of Raku is
+            mostly written in Raku (and NQP).
             </li>
         </ul>
         </section>
