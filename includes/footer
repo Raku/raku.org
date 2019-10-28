@@ -7,9 +7,9 @@
       <section class="col-sm-6 col-md-5ths">
         <h4><a href="/community/">Community</a></h4>
         <ul class="shush-list">
-          <li><a href="/community/irc">#perl6 IRC channel</a>: <a href="irc://irc.freenode.net/%23perl6">system IRC client</a>
-          or&nbsp;<a href="https://webchat.freenode.net/?channels=perl6&amp;nick=">chat live in your browser</a></li>
-          <li><a href="/community/rosettacode">Perl&nbsp;6 on Rosetta Code</a>, <a href="https://pl6anet.org/">Blogs</a></li>
+          <li><a href="/community/irc">#raku IRC channel</a>: <a href="irc://irc.freenode.net/%23raku">system IRC client</a>
+          or&nbsp;<a href="https://webchat.freenode.net/?channels=raku&amp;nick=">chat live in your browser</a></li>
+          <li><a href="/community/rosettacode">Raku on Rosetta Code</a>, <a href="https://pl6anet.org/">Blogs</a></li>
         </ul>
 
         <a href="/community/" class="btn btn-success">More</a>
@@ -19,9 +19,9 @@
         <h4><a href="/resources/">Resources</a></h4>
         <ul class="shush-list">
           <li><a href="/getting-started/">Getting started</a></li>
-          <li><a href="https://docs.perl6.org/">Perl&nbsp;6 Documentation</a></li>
-          <li><a href="https://docs.perl6.org/language.html#Migration_guides">Perl&nbsp;5 to Perl 6</a>,
-              an introduction for Perl&nbsp;5 programmers</li>
+          <li><a href="https://docs.perl6.org/">Raku Documentation</a></li>
+          <li><a href="https://docs.perl6.org/language.html#Migration_guides">Other languages to Raku</a>,
+              an introduction for programmers</li>
         </ul>
           <a href="/resources/" class="btn btn-success">More</a>
       </section>
@@ -30,9 +30,9 @@
         <h4><a href="https://modules.perl6.org/">Modules</a></h4>
 
         <ul class="shush-list">
-          <li><a href="https://modules.perl6.org/">Perl&nbsp;6 modules
+          <li><a href="https://modules.perl6.org/">Raku modules
               directory</a></li>
-          <li><a href="https://modules.perl6.org/dist/zef:github">Zef</a> Perl&nbsp;6
+          <li><a href="https://modules.perl6.org/dist/zef:github">Zef</a> Raku
               module manager</li>
         </ul>
 
@@ -53,7 +53,7 @@
         <h4><a href="/specification/">Language Design</a></h4>
         <ul class="shush-list">
           <li><a href="https://github.com/perl6/roast">Specification</a> -
-              Official Perl&nbsp;6 language specification test suite</li>
+              Official Raku language specification test suite</li>
           <li><a href="https://design.raku.org/">Speculations</a> -
               historical language design documents</li>
         </ul>
