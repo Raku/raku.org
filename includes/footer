@@ -54,7 +54,7 @@
         <ul class="shush-list">
           <li><a href="https://github.com/perl6/roast">Specification</a> -
               Official Perl&nbsp;6 language specification test suite</li>
-          <li><a href="https://design.perl6.org/">Speculations</a> -
+          <li><a href="https://design.raku.org/">Speculations</a> -
               historical language design documents</li>
         </ul>
         <a href="/specification/" class="btn btn-success">More</a>
