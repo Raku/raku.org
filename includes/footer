@@ -43,7 +43,7 @@
         <h4><a href="/compilers/">Compilers</a></h4>
         <ul class="shush-list">
             <li><a href="http://rakudo.org/">Rakudo</a>, a compiler running on
-                <a href="http://moarvm.com/">MoarVM</a>,
+                <a href="https://moarvm.org/">MoarVM</a>,
                  the JVM and other backends.</li>
         </ul>
         <a href="/compilers/" class="btn btn-success">More</a>
