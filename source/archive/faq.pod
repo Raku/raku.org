@@ -157,7 +157,7 @@ For more information on the latest re: perl 6, check out:
 
 =item http://www.parrot.org/
 
-=item http://rakudo.org/
+=item https://rakudo.org/
 
 =back
 
