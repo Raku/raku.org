@@ -14,40 +14,74 @@
       <div class="panel-body trim">
 
         <h3 class="trim-top">Rakudo Star</h3>
-        <p> Rakudo Star 2019.03 is a useful and usable production distribution of
-        Raku which supports the latest 6.d language version.<p>
+
+        <p>
+          Rakudo Star 2020.01 is a useful and usable production distribution of
+          Raku which supports the latest 6.d language version.
+        <p>
 
         <h3 class="trim-top">Installing from binaries</h3>
 
-        <p>Windows and macOS users can directly install the most recent version of Rakudo Star from the downloads section.</p>
+        <p>
+          Windows and macOS users can directly install the most recent version
+          of Rakudo Star from the downloads section.
+        </p>
 
         <p><a href="https://rakudo.org/files/">https://rakudo.org/files/</a></p>
 
-        <p>Docker users can directly install with <tt>docker pull rakudo-star</tt> </p>
+        <p>
+          Docker users can directly install with <tt>docker pull
+          rakudo-star</tt>
+        </p>
 
         <h3 class="trim-top">Installing from source</h3>
 
-        <p>People on UNIX-like systems can try out Rakudo Star from an extracted source tarball.</p>
+        <p>
+          People on UNIX-like systems can try out Rakudo Star from an extracted
+          source tarball.
+        </p>
 
-        <p>You will need recent versions of perl, git, make and gcc. Also a basic familiarity with UNIX.</p>
+        <p>
+          You will need recent versions of perl, git, make and gcc. Also a
+          basic familiarity with UNIX.
+        </p>
 
-        <p>For full instructions see
-        <a href="https://rakudo.org/files/star/source">rakudo.org's "Install Rakudo Star from Source" page</a></p>
+        <p>
+          For full instructions see <a
+          href="https://rakudo.org/files/star/source">rakudo.org's "Install
+          Rakudo Star from Source" page</a>
+        </p>
 
-        <p>A quick start for Linux/Mac/BSD/Mingw etc. follows:</p>
+        <p>
+          A quick start for Linux/Mac/BSD/Mingw etc. follows:
+        </p>
 
-        <pre>% wget https://rakudo.perl6.org/downloads/star/rakudo-star-2019.03.tar.gz
-% tar xfz rakudo-star-2019.03.tar.gz
-% cd rakudo-star-2019.03
+        <pre>% wget https://rakudo.perl6.org/downloads/star/rakudo-star-2020.01.tar.gz
+% tar xfz rakudo-star-2020.01.tar.gz
+% cd rakudo-star-2020.01
 % perl Configure.pl --gen-moar --make-install --prefix ~/rakudo
 </pre>
 
-        <h3 class="trim-top">Rakudo Star 2019.03 Errata</h3>
+        <h3 class="trim-top">Rakudo Star 2020.01 Errata</h3>
 
         <ul class="shy-list">
-            <li>Windows port: NativeCall modules, such as Linenoise, may not fully work depending on compiler (differs depending on whether mingw or MSVC and whether 32 or 64 bit).</li>
-            <li>Windows 10, using the Windows Subsystem for Linux: You might have to apply this <a href="https://github.com/nxadm/rakudo-pkg/blob/master/docker/fix_windows10">fix</a> to account for the WSL <a href="https://github.com/MoarVM/MoarVM/issues/470">not supporting execstack properly</a></li>
-            <li>Intel/Linux, Intel/*BSD and Mac: no specific issues known currently.</li>
+            <li>
+              Windows port: NativeCall modules, such as Linenoise, may not
+              fully work depending on compiler (differs depending on whether
+              mingw or MSVC and whether 32 or 64 bit).
+            </li>
+            <li>
+              Windows 10, using the Windows Subsystem for Linux: You might have
+              to apply this <a
+              href="https://github.com/nxadm/rakudo-pkg/blob/master/docker/fix_windows10">fix</a>
+              to account for the WSL <a
+              href="https://github.com/MoarVM/MoarVM/issues/470">not supporting
+              execstack properly</a>
+            </li>
+            <li>
+              Intel/Linux, Intel/*BSD and Mac: no specific issues known
+              currently.
+            </li>
         </ul>
       </div>
     </div>
@@ -99,9 +133,9 @@
           <a href="https://modules.raku.org/dist/zef:github">Zef Module installer</a>
         </p>
         <p>
-          <a href="https://metacpan.org/">Perl 5 Modules</a> that you can
-          use with <a href="https://modules.raku.org/dist/Inline::Perl5"
-            ><code>Inline::Perl5</code></a>
+          <a href="https://metacpan.org/">Perl 5 Modules</a> that you can use
+          with <a
+          href="https://modules.raku.org/dist/Inline::Perl5"><code>Inline::Perl5</code></a>
         </p>
       </div>
     </div>
