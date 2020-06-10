@@ -13,9 +13,9 @@
    id="svg12395"
    sodipodi:version="0.32"
    inkscape:version="0.46"
-   sodipodi:docname="p6-overview.svg"
+   sodipodi:docname="raku-overview.svg"
    inkscape:output_extension="org.inkscape.output.svg.inkscape"
-   inkscape:export-filename="/home/moritz/p6/p6-overview.png"
+   inkscape:export-filename="/home/moritz/raku/raku-overview.png"
    inkscape:export-xdpi="66.18"
    inkscape:export-ydpi="66.18">
   <defs
@@ -5569,7 +5569,7 @@
          sodipodi:role="line"
          id="tspan16065"
          x="151.42857"
-         y="191.99658">Perl 6</tspan></text>
+         y="191.99658">Raku</tspan></text>
     <rect
        style="fill:none;fill-opacity:1;stroke:#000000;stroke-width:1.00819612;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
        id="rect17900"
