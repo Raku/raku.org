@@ -5,7 +5,7 @@ It is rendered with [mowyw](https://perlgeek.de/en/software/mowyw)
 every 15 minutes, so updates to the repository should also result in
 an update of <https://raku.org>
 If not, talk to [moritz] on
-[#raku](https://chat.mibbit.com/?channel=raku&server=irc.freenode.net).
+[#raku](https://webchat.freenode.net/?channels=#raku).
 
 ### Multilingual translation
 [Chinese translation](https://github.com/ccworld1000/perl6.org).
