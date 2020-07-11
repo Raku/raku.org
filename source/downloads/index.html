@@ -3,141 +3,37 @@
 [% menu nav download %]
 
 <header id="subpage-header" class="lead well">
+[% include camelia %]
 
-    <h2><b>Raku</b> Download</h2>
+  <h2>Download <b>Raku</b></h2>
+  <p>
+    Raku is a language specification similar to C and C++. To actually run
+    programs written in Raku one needs a <i>Raku implementation</i>. There
+    are several implementations varying in their level of maturity and
+    development activity.
+  </p>
 
 </header>
 
-<div class="row">
-  <div class="col-sm-8">
-    <div class="panel panel-default">
-      <div class="panel-body trim">
-
-        <h3 class="trim-top">Rakudo Star</h3>
-
-        <p>
-          Rakudo Star 2020.01 is a useful and usable production distribution of
-          Raku which supports the latest 6.d language version.
-        <p>
-
-        <h3 class="trim-top">Installing from binaries</h3>
-
-        <p>
-          Windows and macOS users can directly install the most recent version
-          of Rakudo Star from the downloads section.
-        </p>
-
-        <p><a href="https://rakudo.org/star/">https://rakudo.org/star/</a></p>
-
-        <p>
-          Docker users can directly install with <tt>docker pull
-          rakudo-star</tt>
-        </p>
-
-        <h3 class="trim-top">Installing from source</h3>
-
-        <p>
-          People on UNIX-like systems can try out Rakudo Star from an extracted
-          source tarball.
-        </p>
-
-        <p>
-          You will need recent versions of perl, git, make and gcc. Also a
-          basic familiarity with UNIX.
-        </p>
-
-        <p>
-          For full instructions see <a
-          href="https://rakudo.org/files/star/source">rakudo.org's "Install
-          Rakudo Star from Source" page</a>
-        </p>
-
-        <p>
-          A quick start for Linux/Mac/BSD/Mingw etc. follows:
-        </p>
-
-        <pre>% wget https://rakudo.org/downloads/star/rakudo-star-2020.01.tar.gz
-% tar xfz rakudo-star-2020.01.tar.gz
-% cd rakudo-star-2020.01
-% perl Configure.pl --gen-moar --make-install --prefix ~/rakudo
-</pre>
-
-        <h3 class="trim-top">Rakudo Star 2020.01 Errata</h3>
-
-        <ul class="shy-list">
-            <li>
-              Windows port: NativeCall modules, such as Linenoise, may not
-              fully work depending on compiler (differs depending on whether
-              mingw or MSVC and whether 32 or 64 bit).
-            </li>
-            <li>
-              Windows 10, using the Windows Subsystem for Linux: You might have
-              to apply this <a
-              href="https://github.com/nxadm/rakudo-pkg/blob/master/docker/fix_windows10">fix</a>
-              to account for the WSL <a
-              href="https://github.com/MoarVM/MoarVM/issues/470">not supporting
-              execstack properly</a>
-            </li>
-            <li>
-              Intel/Linux, Intel/*BSD and Mac: no specific issues known
-              currently.
-            </li>
-        </ul>
+<div class="panel panel-default">
+  <div class="panel-body trim">
+    <h3 class="trim-top">Rakudo</h3>
+    <p>
+      Rakudo is currently the most actively developed and mature
+      implementation of Raku. Rakudo can be downloaded from its website.
+      <br/>
+      <div class="text-center">
+        <a href="https://rakudo.org/" class="btn btn-lg btn-primary">
+          <i class="glyphicon glyphicon-globe"></i> Rakudo Website
+        </a>
       </div>
-    </div>
-  </div>
-  <div class="col-sm-4">
-    <div class="panel panel-default">
-      <div class="panel-body trim">
-        <h3 class="trim-top">More Download Options</h3>
-        <p>
-          Source archives, pre-compiled packages, ...
-          <a href="https://rakudo.org/downloads"
-              class="btn btn-primary btn-block"
-            ><i class="glyphicon glyphicon-gift"></i>
-              rakudo.org/downloads</a>
-        </p>
-      </div>
-    </div>
-  </div>
-  <div class="col-sm-4">
-    <div class="panel panel-default">
-      <div class="panel-body trim">
-        <h3 class="trim-top">Introductory Material</h3>
-        <p>
-          <a href="https://github.com/rakudo/star/raw/master/docs/2015-spw-perl6-course.pdf">Raku Introductory course (PDF slides)</a>
-        </p>
-        <p>
-          <a href="https://raku.guide/">The Raku Guide</a>
-        </p>
-        <p>
-          <a href="https://learnxinyminutes.com/docs/raku/">Learn Raku in Y minutes</a>
-        </p>
-        <p>
-          <a href="https://docs.raku.org/language.html">Official Documentation</a>
-        </p>
-        <p>
-          <a href="/resources/">Other resources…</a>
-        </p>
-      </div>
-    </div>
-  </div>
-  <div class="col-sm-4">
-    <div class="panel panel-default">
-      <div class="panel-body trim">
-        <h3 class="trim-top">Raku Ecosystem</h3>
-        <p>
-          <a href="https://modules.raku.org/">Modules extending Raku</a>
-        </p>
-        <p>
-          <a href="https://modules.raku.org/dist/zef:github">Zef Module installer</a>
-        </p>
-        <p>
-          <a href="https://metacpan.org/">Perl Modules</a> that you can use
-          with <a
-          href="https://modules.raku.org/dist/Inline::Perl5"><code>Inline::Perl5</code></a>
-        </p>
-      </div>
-    </div>
+    </p>
+
+    <h3 class="trim-top">Other implementations</h3>
+    <p>
+      There exist other implementations of Raku varying in their level of
+      maturity and development activity. Have a look at
+      <a href="/compilers">the compilers page</a> for an overview.
+    </p>
   </div>
 </div>
