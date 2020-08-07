@@ -13,7 +13,7 @@ Merge Perl and C#, but have default Main class for scripting.
 
 =head1 ABSTRACT
 
-Several Raku RFCs have stated that "everything should become
+Several Perl6 RFCs have stated that "everything should become
 an object".  I agree with this idea.  I would go further and
 state that perl should become an OO language at its core but
 still retain a procedural front-end.
@@ -37,7 +37,7 @@ instead, I would counter with a couple of points.  First, Perl's
 syntax is more in line with C, C++, ObjC, Java, and C#.  Second,
 Perl's syntax is more powerful (safer too) than that of indentation
 based languages.  Third, since C# and Java can be implemented as
-a subset of C++, I imagine that Raku could also be implemented
+a subset of C++, I imagine that Perl6 could also be implemented
 thus.  Fourth, due to the aforementioned similarities, defining
 an intermediate language (a.k.a. bytecode) would be simpler.
 Fifth, I like Perl, but wish it could do versioning and objects

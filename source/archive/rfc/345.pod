@@ -107,7 +107,7 @@ subsystem otherwise all of the normal I/O will not support callbacks.
 =head1 IMPACT
 
 Current applications using the different event loops will need to be
-rewritten to use the Raku event loop.
+rewritten to use the Perl6 event loop.
 
 Event dispatching has to be well integrated with how events are
 queued. RFC's 14 and 174 propose extended I/O functionality but they

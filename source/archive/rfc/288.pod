@@ -45,7 +45,7 @@ and this:
 	Make CGI programming easier.  Make as first class as
 	@ARGV and %ENV for CLI progging.
 
-Raku make it *easier* to write CGI programs than Perl5.  
+Perl6 make it *easier* to write CGI programs than Perl5.  
 
 This should be accomplished by adding a 'use cgi;' pragma that
 does the very basics for plugging Perl into a CGI invocation

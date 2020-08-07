@@ -103,10 +103,10 @@ than subblocks) the sandbox can become less restrictive, so you can close
 down the box, C<require> your untrusted code, and then open it a bit.
 
 The one exception to this is that modules in perl's own lib directory
-(tainting the C<RAKULIB> (?)  environment variable) might be allowed to
+(tainting the C<PERL6LIB> (?)  environment variable) might be allowed to
 run with full privilege, as these have already been checked, and will
 generally not be untrusted. This is a problem, as it is possible then to
-implement a denial of resources attack, using the raku own modules. The
+implement a denial of resources attack, using the perl6 own modules. The
 author will try and think of a way round this. :)
 
 =head2 Filesystem
@@ -125,7 +125,7 @@ port range checks are perhaps easier than the filesystem checking.
 
 =head2 Resource usage
 
-This could be implemented either entirely within Raku, but this carries
+This could be implemented either entirely within Perl6, but this carries
 all of the overheads of profiling code, or it could be implemented using
 C<ulimit()> on systems which have it, and catching the signal itself (I
 haven't been able to find any references of what signal this is...)

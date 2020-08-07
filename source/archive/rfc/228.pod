@@ -24,7 +24,7 @@ function return values.  It can be used to quickly optimize
 recursive functions, or functions that take a long time to
 execute (such as gethostbyname).  
 
-A version of Memoize.pm should be added into the Raku standard
+A version of Memoize.pm should be added into the Perl6 standard
 library, and it should be added as a pragmatic module (i.e. memoize.pm).
 
 Adding Memoize plugins (Memoize::Expire, etc.) into the standard library
@@ -32,7 +32,7 @@ is a separate discussion.
 
 =head1 NOTES ON FREEZE
 
-There were no real objections to including memoize.pm in the Raku core.
+There were no real objections to including memoize.pm in the Perl6 core.
 
 =head1 OUTSTANDING ISSUES
 
@@ -63,9 +63,9 @@ None.
 
 =head1 IMPLEMENTATION
 
-Add memoize into the raku source tarball, as a pragmatic module.
+Add memoize into the perl6 source tarball, as a pragmatic module.
 
-The Raku language may allow some workarounds to be avoided, such
+The Perl6 language may allow some workarounds to be avoided, such
 as using a string value to specify the function to be memoized.
 
 =head1 REFERENCES

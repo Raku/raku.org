@@ -66,7 +66,7 @@ This would change the perl5 meaning of lvalue subroutines.  Currently
 you must have the lvalue as the last value before the return, and the
 assignment is implicitly done by Perl.  I advocate making it explicit:
 
-  # this is perl
+  # this is perl5
   sub foo :lvalue {
     $variable;		# am I rvalue or lvalue sub?  I don't know
   }
@@ -74,7 +74,7 @@ assignment is implicitly done by Perl.  I advocate making it explicit:
 
 I would now have this as:
 
-  # this is raku
+  # this is perl6
   sub foo :lvalue ($new) {
     $variable = $new;
   }
@@ -86,7 +86,7 @@ to say whether you're lvalue or rvalue and what to do.  That makes
 an lvalue sub more like the STORE method of a tied variable, where
 you can decide whether the storage is acceptable:
 
-  # still raku
+  # still perl6
   sub foo :lvalue ($new) {
     if (want("lvalue")) {
       if ($new >= 0) {

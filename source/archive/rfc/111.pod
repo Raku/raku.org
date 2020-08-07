@@ -24,7 +24,7 @@ this up.
 
 =head1 DESCRIPTION
 
-Raku should ignore any whitespace before the terminator of a heredoc on any
+Perl6 should ignore any whitespace before the terminator of a heredoc on any
 line.  Further it should ignore any whitespace ";"s (and comments) that
 follow the terminator.  Perl should also ignore whitespace between the << and
 the terminator.  

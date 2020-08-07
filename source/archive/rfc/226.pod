@@ -14,7 +14,7 @@ Selective interpolation in single quotish context.
 
 =head1 ABSTRACT
 
-Raku should allow scalars and arrays to be tagged such that they are
+Perl6 should allow scalars and arrays to be tagged such that they are
 interpolated in single quotish context.
 
 =head1 DESCRIPTION

@@ -4,7 +4,7 @@ Beyond the amnesic eval
 
 =head1 VERSION
 
-  Maintainer: Stï¿½phane Payrard <stef@francenet.fr>
+  Maintainer: Stéphane Payrard <stef@francenet.fr>
   Date: 29 Sep 2000
   Mailing List: perl6-language@perl.org
   Number: 351
@@ -98,12 +98,12 @@ Unscoped eval
 
 Refeences to forthcoming RFCs.
 
-There are other features needed to make raku a good shell.  They can
+There are other features needed to make perl6 a good shell.  They can
 be mode-dependant so as not to interfere with perl as a programming
 language.
 
 
-Command line languages make heavy usage of litterals. In raku command
+Command line languages make heavy usage of litterals. In perl6 command
 line mode, the default should be to interpret most strings as
 litteral. For example C</etc/> should be a string that will
 interpreted as a filename.  "Taking things litterally" will describe

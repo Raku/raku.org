@@ -22,7 +22,7 @@ is extremely large and unwieldy. Some parts of the documentation have
 not been revised for years, even when they contain incorrect or outdated
 information.
 
-This RFC proposes a way to manage documentation for Raku, as well as
+This RFC proposes a way to manage documentation for Perl6, as well as
 give the Perl5 docs a much needed spring cleaning.
 
 =head1 DESCRIPTION
@@ -30,7 +30,7 @@ give the Perl5 docs a much needed spring cleaning.
 The RFC process has brought out a large number of people who want to
 discuss and debate aspects of Perl. It is the goal of this RFC to
 propose a method of harnessing this interest for the good not only of
-Raku, but of Perl as well.
+Perl6, but of Perl5 as well.
 
 This proposed method is simple: a mailing list will be set up with an
 express purpose of editing, correcting, re-ordering, re-organizing, and
@@ -38,7 +38,7 @@ expanding existing documentation.
 
 This mailing list will not relate to proposals to change Perl; it will
 deal with Perl's current behavior only. When there is more information
-about the changes from Perl to Raku, the documentation mailing list
+about the changes from Perl5 to Perl6, the documentation mailing list
 will begin incorporating those changes into the documentation. Until
 then, however, there is still plenty of work to be done, and no reason
 that this work cannot begin immediately.

@@ -22,7 +22,7 @@ At the very least it should help to point out that good support
 for numerical functionality is more than just matrix multiplication
 on multidim arrays.
 
-The RFCs on multi-dimensional arrays for Raku address some of the
+The RFCs on multi-dimensional arrays for Perl6 address some of the
 issues discussed in this RFC.
 
 =head1 ABSTRACT
@@ -76,7 +76,7 @@ The basic data object of PDL is a zero- to multidimensional array
 of numbers, all of the same data type (for efficiency reasons, 
 it is desirable to store the numbers in the native binary format and 
 consecutively in memory instead of having a Perl SV for each one).
-Raku could come up with a representation for such types as part
+Perl6 could come up with a representation for such types as part
 of its core (or be sufficiently flexible in its SV design).
 
 It is also critical to be able to specify a range of types,
@@ -314,7 +314,7 @@ The PDL core is currently suffering from similar problems as
 perl 5: it works but is poorly documented and many hacks make it
 increasingly difficult to modify and maintain. But it works C<;)>.
 
-In any case, some of the raku guys have asked for a rundown of
+In any case, some of the perl6 guys have asked for a rundown of
 the principal guts of the implementation. Here it goes...
 
 =head2 Compact, typed multi-dimensional arrays
@@ -326,7 +326,7 @@ C<$a> and C<$b> and store the result in the scalar C<$c> with whatever
 type that the result has".  As with any perl object, new objects can
 be easily derived from piddles for specialised purposes.
 
-In Raku it may be desirable to use C<@syntax> for all arrays - whether
+In Perl6 it may be desirable to use C<@syntax> for all arrays - whether
 compact, implementing smart references, or not. The use of C<$a> for
 PDL arrays and C<@a> for normal perl arrays B<is> confusing, we would
 like to see some unification. Ideally perl arrays would support some,
@@ -722,10 +722,10 @@ is what we are really after.
 =head1 SUMMARY
 
 We have explained the key ideas which make PDL work, and work well. It remains
-to be determined which of these might belong in the core of raku, in order
+to be determined which of these might belong in the core of perl6, in order
 to make PDL work more seamlessly, and which belong in the module.
 
-Our take on this: raku should support a compact, numerical array type which is
+Our take on this: perl6 should support a compact, numerical array type which is
 overloadable and can be manipulated with nice syntax. A key point is to abolish the
 visual distinction between perl arrays (C<@x>) and PDL arrays (C<$x>) which is confusing
 but forced upon us by the current object paradigm. There is also considerable
@@ -756,7 +756,7 @@ http://pdl.perl.org
 
 http://pdl.sourceforge.net/FAQ
 
-raku RFCs on Ranges and Default Methods.
+perl6 RFCs on Ranges and Default Methods.
 
 Matlab
 

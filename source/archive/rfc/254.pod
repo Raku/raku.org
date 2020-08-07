@@ -175,7 +175,7 @@ number of classes inherit from a single superclass and it is desirable to
 extend said superclass without making modifications to any subclasses.
 This has tremendously powerful implications in the area of data inheritance
 as this would allow the addition of fields to a superclass through
-L<fields> (or the feature of similar functionality in raku) thus affecting
+L<fields> (or the feature of similar functionality in perl6) thus affecting
 all subclasses of that superclass.
 
 Therefore, it is proposed that a method of defining collections of classes

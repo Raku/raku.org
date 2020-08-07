@@ -31,7 +31,7 @@ low-level implementation of this proposal).
 
 =head1 DESCRIPTION
 
-The 'strict' pragma (or whatever form it takes in raku) should
+The 'strict' pragma (or whatever form it takes in perl6) should
 include in its 'default set of strictness' a new subpragma, 'system'.
 This subpragma has the following semantics:
 

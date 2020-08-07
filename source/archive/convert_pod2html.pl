@@ -8,7 +8,7 @@ use File::Find::Rule;
 #
 # This (hacked together) script converts the .pod files
 # which dev.perl.org used to support into .html files
-# which should just about work for mowyw and www.raku.org
+# which should just about work for mowyw and www.perl6.org
 #
 # To run:
 # > cd source/archive/
@@ -80,7 +80,7 @@ foreach my $file (@files) {
     $html .= '<div id="archive-notice">
     <h3>This file is part of the Perl 6 Archive</h3>
     <table bgcolor="red"><tr><td><font color="white"> Note: these documents may be out of date. Do <b>not</b> use as reference!</font></tr></td></table>
-    <p>To see what is currently happening visit <a href="http://www.raku.org/">http://www.raku.org/</a></p>
+    <p>To see what is currently happening visit <a href="http://www.perl6.org/">http://www.perl6.org/</a></p>
 </div>
 ';
     $html .= $podhtml->pod2html( $file, %pod_opts );

@@ -1,10 +1,10 @@
 =head1 TITLE
 
-Transaction-enabled variables for Raku
+Transaction-enabled variables for Perl6
 
 =head1 VERSION
 
-  Maintainer: Szabï¿½, Balï¿½zs <dlux@kapu.hu>
+  Maintainer: Szabó, Balázs <dlux@kapu.hu>
   Date: 17 Aug 2000
   Last Modified: 13 Sep 2000
   Mailing List: perl6-internals@perl.org
@@ -18,13 +18,13 @@ Transactions are quite important in a database-enabled application.
 Professional database systems have transaction-handling inside, but there are
 only a few laguage out there, what supports transactions in variable level.
 
-In raku, we can support transaction-enabled variables (including objects and
+In perl6, we can support transaction-enabled variables (including objects and
 tied variables), and we can control transaction-enabled perl modules with that
 (this include modules that do external I/O also). We can use our perl program
 to tie several transaction-enabled data sources, and we can use perl to easily
 maintain the consistency between them. 
 
-In this RFC we will look at how these variables would look like in raku.
+In this RFC we will look at how these variables would look like in perl6.
 
 =head1 STATUS
 

@@ -178,7 +178,7 @@ Does a html image have both an alt and a src, and what are they?
 			    \s src=(?$Src=(".*?"|\S*)) )>/ix;
 
 
-It might be possible to have a regex that simply matches valid raku out of
+It might be possible to have a regex that simply matches valid perl6 out of
 this. (though it would be large...)!
 
 =head1 IMPLENTATION

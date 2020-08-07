@@ -24,7 +24,7 @@ returned 0.
 
 =head1 IMPLEMENTATION
 
-Straightforward.  The perl526 translator simply wraps the raku wait()
+Straightforward.  The perl526 translator simply wraps the perl6 wait()
 and waitpid():
 
   do { my $r = waitpid(...); return -1 if !defined $r;

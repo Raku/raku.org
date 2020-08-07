@@ -60,7 +60,7 @@ C<Inline> more robust, helps towards backwards compatability, and
 provides an easy "out" if a project grows to exceed C<Inline's>
 capabilities.
 
-In raku, something like XS should still exist, but just as a foundation
+In perl6, something like XS should still exist, but just as a foundation
 for C<Inline>. Savvy hackers could defeat C<Inline> and write glue code
 themselves, but this would not be the standard.
 
@@ -104,7 +104,7 @@ Version 0.30 will also support the following syntax:
       return x + y;
     }
 
-If so desired, raku might be able to simply recognize the C<__C__>
+If so desired, perl6 might be able to simply recognize the C<__C__>
 marker, and not require the C<use Inline;> at all. The code would look
 like:
 

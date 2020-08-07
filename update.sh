@@ -1,11 +1,11 @@
 #!/bin/bash
 
 # this script is used by www.p6c.org to update the
-# installation at www.raku.org
+# installation at www.perl6.org
 date
 source ~/perl5/perlbrew/etc/bashrc
 set -e
-cd ~/raku.org
+cd ~/perl6.org
 git fetch -q
 BEFORE=$(git rev-parse HEAD)
 git checkout -q -f origin/master
@@ -28,5 +28,5 @@ git fetch -q
 BEFORE=$(git rev-parse HEAD)
 git checkout -q -f origin/master
 if [ "$BEFORE" != "$(git rev-parse HEAD)" ]
-then perl process.pl > ~/raku.org/online/compilers/features.html
+then perl process.pl > ~/perl6.org/online/compilers/features.html
 fi

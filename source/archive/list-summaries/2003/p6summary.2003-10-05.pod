@@ -102,7 +102,7 @@ L<http://groups.google.com/groups?threadm=rt-24088-65535.16.1624113421836%40rt.p
 Actually, Parrot gets F<pcre.imc>: Leo TE<ouml>tsch has wrapped
 libpcre, the Perl Compatible Regular Expression library that almost
 every language out there (except Perl of course) uses for its
-regexes. Leo thinks it might be useful for bootstrapping Raku
+regexes. Leo thinks it might be useful for bootstrapping Perl6
 rules. Dan doesn't want to have PCRE in core, or for it to be
 required for any part of building parrot, so the wrapper will be
 available in our current 'catch all' directory for such things,

@@ -280,7 +280,7 @@ suggested, and I think modules and classes are a good place for that.
 [Update: Nowadays the main program is also strict by default, as soon
 as we know it's Perl 6 and not Perl 5.  If we say something like
 "C<use 6.0;>" as the first thing, we know it's Perl 6, and thus we
-know it's strict.  (Likewise saying C<#!/usr/bin/raku> would default
+know it's strict.  (Likewise saying C<#!/usr/bin/perl6> would default
 to strict.)   I think we could recognize a shorter, less formal
 form without the C<use> which would default to not being strict:
 

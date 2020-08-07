@@ -25,7 +25,7 @@ to my current idea of DWIMish behavior for packed data.
 
 =head1 ABSTRACT
 
-Raku should be able to DWIMishly distinguish between strings which
+Perl6 should be able to DWIMishly distinguish between strings which
 are likely to be meant to be human readable (called printable strings
 here-after) and packed data structures stored as strings. This would
 permit greater specificity in programming and thus better error
@@ -33,7 +33,7 @@ checking.
 
 =head1 DESCRIPTION
 
-Although there is no way for raku to be sure whether a user intends a
+Although there is no way for perl6 to be sure whether a user intends a
 particular string to be human readable or not, it could DWIMishly get
 it right a large fraction of the time, analogous to how perl now
 differentiates between a string and a numeric. Doing so would permit
@@ -53,8 +53,8 @@ well, you get the idea.
 
 The generation of warnings or errors would only occur if the user
 invoked C<use warnings 'packed'> and/or C<use strict 'packed'>
-explicitly. Without these pragmas, Raku's behavior regarding packed
-data would be like Perl's.
+explicitly. Without these pragmas, Perl6's behavior regarding packed
+data would be like Perl5's.
 
 With packed strings recognizable to the compiler and interpreter
 through the PkOK bit, they would interact with functions, operators,

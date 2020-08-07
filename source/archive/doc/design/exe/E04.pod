@@ -943,10 +943,10 @@ implies:
 
 =item *
 
-The Raku C<for>, C<while>, C<if>, and C<given> statements each take
+The Perl 6 C<for>, C<while>, C<if>, and C<given> statements each take
 two arguments: an expression that controls them and a
 subroutine/closure that they execute. Normally, that closure is just a
-block (in Raku I<all> blocks are really closures):
+block (in Perl6 I<all> blocks are really closures):
 
     for 1..10 {         # no comma needed before opening brace
         print
