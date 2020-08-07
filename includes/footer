@@ -52,7 +52,7 @@
       <section class="col-sm-6 col-md-5ths">
         <h4><a href="/specification/">Language Design</a></h4>
         <ul class="shush-list">
-          <li><a href="https://github.com/perl6/roast">Specification</a> -
+          <li><a href="https://github.com/Raku/roast">Specification</a> -
               Official Raku language specification test suite</li>
           <li><a href="https://design.raku.org/">Speculations</a> -
               historical language design documents</li>
