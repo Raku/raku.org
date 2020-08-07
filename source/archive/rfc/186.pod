@@ -75,7 +75,7 @@ data structure is to slurp a file into an array.
 
 =back
 
-If Perl6 follows Java's example of distinguishing "bytes" from
+If Raku follows Java's example of distinguishing "bytes" from
 "characters", then it should be understood that the proposed i/o handles
 manipulate I<bytes>, not characters.  That is, the Java equivalents
 are classes like C<java.io.ByteArrayInputStream>.

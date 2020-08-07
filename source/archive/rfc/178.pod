@@ -526,7 +526,7 @@ like this
 
 =head1 IMPLEMENTATION
 
-Perl6 could have either cooperative threads or preemptive threads.
+Raku could have either cooperative threads or preemptive threads.
 
 =head2 Cooperative threads
 
@@ -549,7 +549,7 @@ Cooperative threads have several disadvantages
 
 =item *
 
-The interpreter has to do asynchronous I/O. But Perl6 may support
+The interpreter has to do asynchronous I/O. But Raku may support
 asynchronous I/O per RFC 47, and the interpreter has an event loop to
 run the callbacks.
 
@@ -576,14 +576,14 @@ can still crash the interpreter.)
 
 The big drawback of preemptive threads is that the interpreter itself
 becomes a multi-threaded program, with all attendant synchronization
-requirements. If Perl6 gets preemptive threads, expect race conditions
+requirements. If Raku gets preemptive threads, expect race conditions
 to become the kind of ongoing headache that memory leaks were for
 Perl4 and Perl5.
 
 
 =head2 Locking
 
-If Perl6 implements preemptive threads, then the interpreter must lock
+If Raku implements preemptive threads, then the interpreter must lock
 variables to ensure atomic data access.
 
     Perl source		Implementation
@@ -656,9 +656,9 @@ It does what I want.
 
 =item *
 
-One of the goals of Perl6 is to get out from under the backwards
-compatibility constraints that have boxed in Perl5. Organizing the
-threading model around the need to make Perl5 modules reentrant seems
+One of the goals of Raku is to get out from under the backwards
+compatibility constraints that have boxed in Perl. Organizing the
+threading model around the need to make Perl modules reentrant seems
 inconsistent with this.
 
 =item *
@@ -727,8 +727,8 @@ reentrant in an isolated data model, and not in a shared data model.
 However, C<Term::Complete> isn't even reentrant I<under Perl5>. If two
 different parts of an application both use C<Term::Complete>, they
 don't need threads to fight over the values of its globals. I'm hard
-pressed to see that the design of Perl6 should be driven by the need
-to fix modules that are broken in Perl5.
+pressed to see that the design of Raku should be driven by the need
+to fix modules that are broken in Perl.
 
 =back
 

@@ -27,7 +27,7 @@ I propose changing it so that system() returns false on failure and
 true on success.
 
 It would no longer return the exit status of the program, which would
-need to be collected through C<$?> or its perl6 replacement.
+need to be collected through C<$?> or its raku replacement.
 
 =head1 IMPLEMENTATION
 

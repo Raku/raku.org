@@ -356,7 +356,7 @@ This is my justification for the first 6 items on the list.
 While I have nothing against  OO techniques (I've found C++ OO features
 useful for a compiled language), it is somewhat cumbersome to deal with
 OO for small projects.  Perhaps some of the "make everything an object"
-RFCs for Perl6 will sidestep  that cumbersomeness, and moot this point.
+RFCs for Raku will sidestep  that cumbersomeness, and moot this point.
 However, until or unless that is  achieved, I'd rather not be forced to
 use objects  to achieve  exception handling.  On  the other  hand, when
 building  large system, having  an exception  object might  be helpful.
@@ -416,7 +416,7 @@ For example (I'll use Perl language examples henceforth):
   $handle3 = open ( "<file3" ) always close ( $handle3 );
   throw "Error opening file3" if ! defined $handle3;
 
-If you assume that Perl6 open  gets enhanced to throw an exception when
+If you assume that Raku open  gets enhanced to throw an exception when
 it fails, you can simplify this to:
 
   $handle1 = open ( "<file1" ) always close ( $handle1 );

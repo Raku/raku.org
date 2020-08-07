@@ -14,7 +14,7 @@ Generate module dependencies easily
 
 =head1 ABSTRACT
 
-Perl6 should ship with a simple utility that shows all modules a program
+Raku should ship with a simple utility that shows all modules a program
 uses, and all modules those modules use.
 
 =head1 DESCRIPTION

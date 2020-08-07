@@ -64,7 +64,7 @@ functions no longer have this side-effect, but instead reset() be
 used:
 
   keys %hash;	# reset the iterator in perl5
-  reset %hash;	# same but in in perl6
+  reset %hash;	# same but in in raku
 
 This function more obviously describes what is happening.  reset()
 also has a meaning, but that functionality does not clash

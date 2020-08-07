@@ -119,7 +119,7 @@ ever created, e.g.
   $a->slice(:);
   $a->slice(-5:-2);
 
-which might actually be written in perl6 as
+which might actually be written in raku as
 
   $a(:); # and/or
   @a[:];

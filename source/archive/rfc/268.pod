@@ -222,7 +222,7 @@ lists of details.
         localtime
         stat
 
-Some changes to this list may be necessitated by other changes to Perl6.
+Some changes to this list may be necessitated by other changes to Raku.
 
 =head4 Standardized keys
 

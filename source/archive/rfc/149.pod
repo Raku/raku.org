@@ -204,7 +204,7 @@ RFC 132: subroutines should be able to return an lvalue:
         lvalue cases.  This is in direct contradiction to the lreturn
         keyword recommended here.
 
-RFC 130: Transaction-enabled variables for Perl6:
+RFC 130: Transaction-enabled variables for Raku:
         We discuss how lvalue subs can be safe()d in the Implementation
         sections.
 

@@ -13,7 +13,7 @@ Detecting Perl Core Modules Should Be Easy
 
 =head1 ABSTRACT
 
-In Perl6 it should be easy to see to check whether any particular
+In Raku it should be easy to see to check whether any particular
 module comes from the Perl core or not.
 
 =head1 DESCRIPTION
@@ -41,7 +41,7 @@ doing lots of meta-module stuff like Devel::Modlist.
 If followed as above, we would simply have the package variable $CORE
 set to be true in all modules in the Perl standard library.
 
-Converting perl5 to perl6 would have to make sure that any $CORE
+Converting perl to raku would have to make sure that any $CORE
 variables need to be translated to another name.
 
 =head1 REFERENCES

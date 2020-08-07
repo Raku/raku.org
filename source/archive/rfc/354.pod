@@ -11,7 +11,7 @@ A Trademark on Perl Should be Acquired in Larry Wall's Name
   Number: 354
   Version: 2
   Status: Frozen
-  Suggests: RFC 346: Perl6's License Should be (GPL|Artistic-2.0)
+  Suggests: RFC 346: Raku's License Should be (GPL|Artistic-2.0)
 
 =head1 ABSTRACT
 
@@ -92,4 +92,4 @@ that things that are called "Perl" really are Perl.
 
 The Artistic License
 
-RFC 346: Perl6's License Should be (GPL|Artistic-2.0)
+RFC 346: Raku's License Should be (GPL|Artistic-2.0)

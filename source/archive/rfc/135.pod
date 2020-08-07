@@ -36,7 +36,7 @@ require an explicit C<m>.
 =head1 IMPLEMENTATION
 
 Remove the bare C</.../> and C<?...?> from the grammar :-)  When
-converting perl5 programs to perl6, put the C<m> in.
+converting perl programs to raku, put the C<m> in.
 
 =head1 REFERENCES
 

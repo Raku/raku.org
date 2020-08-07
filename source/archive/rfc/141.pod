@@ -21,7 +21,7 @@ By the end of this committee meeting, we will have a language
 that is arbitrarily extensible in accordance with decades of
 computer programming practice.
 
-Perl6 is NOT a quick hack done to save implementor time.  It is a
+Raku is NOT a quick hack done to save implementor time.  It is a
 carefully crafted piece of fine work.  It is correct.
 
 Having put all this work into it, we would like to see this

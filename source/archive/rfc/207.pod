@@ -330,7 +330,7 @@ to be used in an array index for at least one array.
 
 =head Lazy Evaluation
 
-Assuming that lazy evaluation is used in other parts of Perl6, it
+Assuming that lazy evaluation is used in other parts of Raku, it
 would be nice if these loops could also be evaluated lazily.
 
 In list context, this could be done by creating an anonymous function
@@ -343,10 +343,10 @@ to evaluate the looped expression at the desired indices:
 
 This anonymous function can be TIEd to the resulting anonymous array,
 so all array lookups would invoke this function.  Since TIEing is
-supposed to be improved in Perl6, this would be a reasonable way to do
+supposed to be improved in Raku, this would be a reasonable way to do
 it.
 
-If other lazy evaluation mechanisms work in Perl6, they could be used
+If other lazy evaluation mechanisms work in Raku, they could be used
 instead.
 
 I am uncertain if lazy evaluation makes sense in void context.

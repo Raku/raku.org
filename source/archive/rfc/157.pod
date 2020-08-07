@@ -18,7 +18,7 @@ deprecated for at least 5 years.  They should be removed from the language.
 
 =head1 DESCRIPTION
 
-Perl6 is a chance to finally remove all the deprecated syntax and start
+Raku is a chance to finally remove all the deprecated syntax and start
 fresh with only allowing the syntax we want.  The C<dbmopen> and C<dbmclose>
 commands are deprecated wrappers to C<tie> and C<untie> commands with a
 specific limited functionality C<AnyDBM> package.

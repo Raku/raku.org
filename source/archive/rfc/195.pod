@@ -60,7 +60,7 @@ then the conversion would simply be a matter of putting:
 
 at the top of any converted program that uses chop().
 
-Implementation in perl6 is very straightforward: don't implement
+Implementation in raku is very straightforward: don't implement
 chop().
 
 =head1 REFERENCES

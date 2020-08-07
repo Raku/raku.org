@@ -74,8 +74,8 @@ it.
 =head2 Compatibility
 
 "=for testing" and the associated modules and utilities are compatible
-with Perl5 and most POD utilities.  They do not have to wait for
-Perl6.  Its inclusion in the core is not mandatory and it can life
+with Perl and most POD utilities.  They do not have to wait for
+Raku.  Its inclusion in the core is not mandatory and it can life
 life as seperate utility if necessary (see below).
 
 

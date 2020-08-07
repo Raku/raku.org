@@ -113,7 +113,7 @@ C<no autoglob qw(filehandle scalar); # turn it off for ...>
 Changes from the semantics of AUTOLOAD mean that existing AUTOLOADs
 will almost certainly break badly if simply renamed.  Therefore it
 would be wise to keep the existing AUTOLOAD (although deprecated)
-for the first stable release of perl6, but remove it in later
+for the first stable release of raku, but remove it in later
 releases.  This will give people sufficient time to heed the
 warnings (we do heed warnings, right?) and update their code.
 

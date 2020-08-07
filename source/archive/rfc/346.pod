@@ -1,6 +1,6 @@
 =head1 TITLE
 
-Perl6's License Should be (GPL|Artistic-2.0)
+Raku's License Should be (GPL|Artistic-2.0)
 
 =head1 VERSION
 
@@ -13,8 +13,8 @@ Perl6's License Should be (GPL|Artistic-2.0)
   Status: Frozen
   Requires: RFC 211: The Artistic License Must Be Changed
   Suggests: RFC 346: A Trademark on Perl Should be Acquired in Larry Wall's Name
-  Conflicts With: RFC 219: Perl6's License Should Be a Minor Bugfix of Perl5's License
-  Conflicts With: RFC XXX: Perl6's License Should be the same as the modified BSD license
+  Conflicts With: RFC 219: Raku's License Should Be a Minor Bugfix of Perl5's License
+  Conflicts With: RFC XXX: Raku's License Should be the same as the modified BSD license
 
 =head1 ABSTRACT
 
@@ -25,7 +25,7 @@ Artistic License to be an open source and free software license, and to be
 unambiguous.  Input from the perl6-licenses@perl.org mailing lists was
 incorporated as much as possible.
 
-In addition, this RFC proposes that the license of Perl6 be the disjunction
+In addition, this RFC proposes that the license of Raku be the disjunction
 of the GNU General Public License and the Artistic License, Version 2.0.
 
 =head1 FREEZE NOTES
@@ -68,7 +68,7 @@ exact URLs).
 
 =item
 
-The license of perl6 itself will be a dual-license, the disjunction of the
+The license of raku itself will be a dual-license, the disjunction of the
 GNU General Public License and The Artistic License, Version 2.0.
 
 =back
@@ -301,9 +301,9 @@ holder(s) and seek a different licensing arrangement.
        EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 
-=head2 The License of Perl6
+=head2 The License of Raku
 
-The following is the license for perl6 that this RFC proposes:
+The following is the license for raku that this RFC proposes:
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of either:

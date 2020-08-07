@@ -479,7 +479,7 @@ RFC 152: Replace invocant in @_ with self() builtin
 
 RFC 189: Objects: Hierarchical calls to initializers and destructors
 
-RFC 130: Transaction-enabled variables for Perl6
+RFC 130: Transaction-enabled variables for Raku
 
 Camel-3 Chapter on C<tie>, p363-398
 

@@ -130,7 +130,7 @@ behaviour in regexes.
 
 Use of this special variable has already been deprecated at least since
 Perl5 first came out, more than 5 years ago. It is a very good candidate
-to be removed from Perl6 altogether, which would result in fewer
+to be removed from Raku altogether, which would result in fewer
 gotcha's in the language. That is a Good Thing.
 
 Perlvar says:
@@ -163,7 +163,7 @@ synonyms under all circumstances.
 
 =head1 MIGRATION
 
-The Perl5 To Perl6 converter can replace every occurence of
+The Perl To Raku converter can replace every occurence of
 
     /$/s
 

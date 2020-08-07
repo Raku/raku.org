@@ -15,12 +15,12 @@ More functions from set theory to manipulate arrays
 
 When programming in perl we need really often to calculate
 union, intersection, difference between arrays. It will be
-cool if such functions could be part of the perl6 language.
+cool if such functions could be part of the raku language.
 
 =head1 DESCRIPTION
 
 Functions from Set theory are often needed when manipulating arrays,
-I'd like to to find most of them in the new perl6 language.
+I'd like to to find most of them in the new raku language.
 
 The most usefull and needed are, for me, 
 

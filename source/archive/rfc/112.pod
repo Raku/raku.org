@@ -87,7 +87,7 @@ V3 - added bit about backrefs, and brackets.
 
 V4 - Clarified a few things and froze
 
-=head1 IMPLENTATION
+=head1 IMPLEMENTATION
 
 Currently all $scalars in regexes are expanded before the main regex compiler
 gets to analyse the syntax.  This problem also affects several other RFCs

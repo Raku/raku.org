@@ -19,7 +19,7 @@ additionally provide their own hash functions and equality tests.
 =head1 NOTE
 
 This RFC is probably premature. It needs a lot of firming up, and I
-wonder if it would be better targeted to the perl6-language-internals
+wonder if it would be better targeted to the raku-language-internals
 group. But I want to respect the new RFC freeze date (today). And it
 should still serve to focus discussion, IMO the main purpose of an RFC.
 
@@ -35,7 +35,7 @@ identical contents, they will still be given distinct keys in the
 hashtable. However, C<$hash{$ref}> will no longer be equal to
 C<$hash{"$ref"}>.
 
-Blessed references (or whatever they become in Perl6) can define a
+Blessed references (or whatever they become in Raku) can define a
 HASH subroutine that returns an integer. Any two objects whose HASH
 functions return different values will never resolve to the same hash
 table entry.

@@ -16,7 +16,7 @@ Thread Programming Model
 
 =head1 ABSTRACT
 
-This RFC describes the programming interface to Perl6 threads. 
+This RFC describes the programming interface to Raku threads. 
 It documents the function calls, operators, classes, methods, or
 whatever else the language provides for programming with threads.
 

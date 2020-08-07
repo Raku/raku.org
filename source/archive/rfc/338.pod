@@ -4,7 +4,7 @@ shareable bytecode
 
 =head1 VERSION
 
-   Maintainer: Stéphane Payrard <stef@francenet.fr>
+   Maintainer: Stï¿½phane Payrard <stef@francenet.fr>
    Date: 28 Sep 2000
    Mailing List: perl6-internals@perl.org
    Number: 338
@@ -13,12 +13,12 @@ shareable bytecode
 
 =head1 ABSTRACT
 
-perl6 should be designed so that different interpretor instances share
+raku should be designed so that different interpretor instances share
 bytecode just like binary executables do with shared libraries.
 
 =head1 DESCRIPTION
 
-perl6 should not behave like xemacs or java where virtual machines do
+raku should not behave like xemacs or java where virtual machines do
 not share loaded bytecode.
 
 Complex environments have multiple simultaneously active instances of

@@ -1,6 +1,6 @@
 =head1 TITLE
 
-Perl6's License Should Be a Minor Bugfix of Perl5's License
+Raku's License Should Be a Minor Bugfix of Perl5's License
 
 =head1 VERSION
 
@@ -18,7 +18,7 @@ Perl6's License Should Be a Minor Bugfix of Perl5's License
 This RFC has been withdrawn.  I made this proposal because there was nothing
 else on the table at the time.  However, I now endorse my new RFC:
 
-RFC 346: Perl6's License Should be (GPL|Artistic-2.0)
+RFC 346: Raku's License Should be (GPL|Artistic-2.0)
 
 If someone else would like to take control of this RFC and champion it, they
 are welcome to, but I believe that no one currently supports this idea.
@@ -29,12 +29,12 @@ This is a minimalist approach to the licensing for perl6.  The only change
 from perl5 is some minor changes to the Artistic License.  The Artistic
 license is changed to clarify it better legally, yielding "The Clarified
 Artistic License" (referred to "AL-Clarified" for short).  The overall
-license of perl6 would remain a dual-license, the disjunction of the GPL and
+license of raku would remain a dual-license, the disjunction of the GPL and
 AL-Clarified.
 
 =head1 DESCRIPTION
 
-This proposal takes a minimalist approach for the licensing of perl6.
+This proposal takes a minimalist approach for the licensing of raku.
 
 The only change between the license proposed here and the license of perl5
 is some minor changes to the Artistic License.  These changes fix only a few
@@ -55,7 +55,7 @@ which has been dubbed "The Clarified Artistic License".
 
 =item
 
-The license of perl6 itself will be a dual-license, the disjunction of the
+The license of raku itself will be a dual-license, the disjunction of the
 GNU General Public License and The Clarified Artistic License.
 
 =back
@@ -338,9 +338,9 @@ WARRANTIES OF MERCHANTIBILITY AND FITNESS FOR A PARTICULAR PURPOSE.
 
 				The End
 
-=head2 The License of Perl6
+=head2 The License of Raku
 
-The following is the license for perl6 that this RFC proposes:
+The following is the license for raku that this RFC proposes:
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of either:
