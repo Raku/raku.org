@@ -87,15 +87,16 @@
             RT queue search and utility bot.
           </dd>
 
-          <dt>camelia</dt>
+          <dt><a href="https://github.com/Raku/evalbot">camelia</a></dt>
           <dd>
             Raku code evaluation bot. We use this for live testing of code
             that may be of interest to others; it chats back to the channel.
-            <code>raku: my $a;</code> will result in a test against
-            latest revisions of rakudo and niecza,
-            <code>nqp: say('foo')</code> will test nqp,
-            <code>std: my $a</code> will parse the expression using STD.pm6.
-            For other compilers, try "camelia: help".
+            <code>rakudo: my $a;</code> will result in a test against
+            latest revisions of rakudo and MoarVM. (aliases include <code>m:</code> and <code>rm:</code>)
+            <code>nqp: say('foo')</code> will test nqp.
+            <code>star: use JSON::Fast; my $a</code> (or alias <code>s:</code>)
+            will test against the latest <a href="https://rakudo.org/star">rakudo star bundle</a>
+            <code>camelia: help</code> will give some other aliases.
           </dd>
 
           <dt><a href="https://github.com/perl6/whateverable/wiki/Committable">committable</a></dt>
