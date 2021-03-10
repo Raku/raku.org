@@ -163,6 +163,25 @@ footer {
   position: relative;
   top: 2px; }
 
+#ref-logos {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  align-items: center; }
+
+#ref-logos > img {
+  height: 70px;
+  margin: 20px; }
+
+#ref-logos > img#helpshift-logo {
+  height: 170px; }
+
+#ref-logos > img#haltec-logo {
+  height: 61px; }
+
+#ref-logos > img#cns-logo {
+  height: 73px; }
+
 #navbar {
   padding-left: 16px; }
   #navbar a[href*="//"]:after {
