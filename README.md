@@ -5,7 +5,7 @@ It is rendered with [mowyw](https://perlgeek.de/en/software/mowyw)
 every 15 minutes, so updates to the repository should also result in
 an update of <https://raku.org>
 If not, talk to [moritz] on
-[#raku](https://webchat.freenode.net/?channels=#raku).
+[#raku](https://kiwiirc.com/client/irc.libera.chat/#raku).
 
 ### Multilingual translation
 [Chinese translation](https://github.com/ccworld1000/perl6.org).
@@ -22,7 +22,7 @@ Here are some guidelines that you should respect when changing this site:
     a broader Raku audience.
 
   * If you have a Raku blog, get it included in the https://planet.raku.org feed
-    instead. Talk to \[Coke\] on [#raku](https://chat.mibbit.com/?channel=%23raku&server=irc.freenode.net).
+    instead. Talk to \[Coke\] on [#raku](https://kiwiirc.com/client/irc.libera.chat/#raku).
 
   * If you intend to change the layout, consider what happens when:
 
