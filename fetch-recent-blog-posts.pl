@@ -5,7 +5,7 @@ use Mojo::JSON qw/encode_json/;
 use Mojo::File qw/path/;
 use Mojo::Util qw/xml_escape/;
 
-my $tx = Mojo::UserAgent->new->get("https://pl6anet.org/atom.xml");
+my $tx = Mojo::UserAgent->new->get("https://planet.raku.org/atom.xml");
 
 unless ( $tx->success ) {
     my $err   = $tx->error;
