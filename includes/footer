@@ -63,7 +63,8 @@
       <p class="col-sm-12 text-center"
         ><i class="glyphicon glyphicon-info-sign"></i>
           If you want to contribute to this page,
-        <a href="/about/">look here for instructions</a>.
+        <a href="/about/">look here for instructions</a>.<br/>
+        The Raku® Programming Language
       </p>
     </div>
   </div>
