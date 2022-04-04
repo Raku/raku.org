@@ -7,7 +7,7 @@ use Mojo::Util qw/xml_escape/;
 
 my $tx = Mojo::UserAgent->new->get("https://planet.raku.org/atom.xml");
 
-if ( my $err = $tx->error; ) {  
+if ( my $err = $tx->error ) {  
     warn $err->{code} ? "ERROR: $err->{code} response: $err->{message}"
                               : "Connection error: $err->{message}";
     exit;
