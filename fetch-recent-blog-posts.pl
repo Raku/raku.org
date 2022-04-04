@@ -20,7 +20,7 @@ my $j = $tx->res->dom->find("entry")->grep(sub {
     $_->at('link')->{href} =~ m{^https://medium\.com}
         ? $_->find('category')->each
         : 1
-    })->slice(0..6)->map(sub{
+    })->map(sub{
         # Look for text/html links and use the first without it if we don't find any
         my $link = $_->at('link[type="text/html"]:not([rel="replies"])')
             // $_->at('link:not([rel="replies"])');
@@ -30,7 +30,7 @@ my $j = $tx->res->dom->find("entry")->grep(sub {
           }
     })->to_array;
 
-path('online/recent-blog-posts.json')->spurt(encode_json($j));
+path('online/recent-blog-posts.json')->spurt(encode_json([@$j[0..6]]));
 print "Successfully wrote new blog posts\n";
 
 exit;
