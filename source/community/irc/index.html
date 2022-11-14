@@ -53,13 +53,14 @@
 
         <p>
           A variety of IRC bots make our life easier, here's a short explanation
-          of what they do - <a
-          href="http://howcaniexplainthis.blogspot.com/2009/11/what-perl6-irc-bots-do.html">courtesy
+          of what they do - <a href="http://howcaniexplainthis.blogspot.com/2009/11/what-perl6-irc-bots-do.html">courtesy
           by frettled</a>.
         </p>
+          <p> <a href="https://github.com/Raku/whateverable/wiki">Some more detailed information</a> about 
+              the bots in the Whateverable collection.</p>
 
         <dl id="botlist" class="trim-bottom">
-          <dt><a href="https://github.com/perl6/whateverable/wiki/Benchable">benchable</a></dt>
+          <dt><a href="https://github.com/Raku/whateverable/wiki/Benchable">benchable</a></dt>
           <dd>
             An IRC bot for benchmarking code at a given commit of Rakudo. It
             can be addressed by its full name ('benchable6') or its short name
@@ -67,14 +68,14 @@
             minimum amount of time taken.
           </dd>
 
-          <dt><a href="https://github.com/perl6/whateverable/wiki/Bisectable">bisectable</a></dt>
+          <dt><a href="https://github.com/Raku/whateverable/wiki/Bisectable">bisectable</a></dt>
           <dd>
             This bot is meant to help you find when something got broken. If
             you want to know if something has ever worked use Committable
             instead.
           </dd>
 
-          <dt><a href="https://github.com/perl6/whateverable/wiki/Bloatable">bloatable</a></dt>
+          <dt><a href="https://github.com/Raku/whateverable/wiki/Bloatable">bloatable</a></dt>
           <dd>
             An IRC bot for running bloaty on libmoar.so files of MoarVM. It can
             be addressed by its full name ('bloatable6') or its short name
@@ -99,14 +100,14 @@
             <code>camelia: help</code> will give some other aliases.
           </dd>
 
-          <dt><a href="https://github.com/perl6/whateverable/wiki/Committable">committable</a></dt>
+          <dt><a href="https://github.com/Raku/whateverable/wiki/Committable">committable</a></dt>
           <dd>
             An IRC bot for running code at a given commit of Rakudo. It can be
             addressed by its full name ('committable6') or its short names
             ('commit', 'c').
           </dd>
 
-          <dt><a href="https://github.com/perl6/whateverable/wiki/Coverable">coverable</a></dt>
+          <dt><a href="https://github.com/Raku/whateverable/wiki/Coverable">coverable</a></dt>
           <dd>
             An IRC bot for creating a coverage report of the Rakudo (and NQP)
             source lines that were hit while running the code you give it. The
@@ -115,11 +116,11 @@
             want, the third is the code to run.
           </dd>
 
-          <dt><a href="https://github.com/perl6/geth">Geth</a></dt>
+          <dt><a href="https://github.com/Raku/geth">Geth</a></dt>
           <dd>
             Announces commits made to various projects relevant to Raku, such
             as implementations of Raku and <a
-            href="https://github.com/perl6/">some of the repositories owned by
+            href="https://github.com/Raku/">some of the repositories owned by
             Raku</a>.
           </dd>
 
@@ -129,12 +130,12 @@
               lurks quietly, picking targets for extermination.
           </dd>
 
-          <dt><a href="https://github.com/perl6/whateverable/wiki/Evalable">evalable</a></dt>
+          <dt><a href="https://github.com/Raku/whateverable/wiki/Evalable">evalable</a></dt>
           <dd>
             Evalable is just Committable that defaults to <code>HEAD</code>.
           </dd>
 
-          <dt><a href="https://github.com/perl6/whateverable/wiki/Greppable">greppable</a></dt>
+          <dt><a href="https://github.com/Raku/whateverable/wiki/Greppable">greppable</a></dt>
           <dd>
             An IRC bot for grepping through the module ecosystem. It can be
             addressed by its full name ('greppable6') or its short name
@@ -151,7 +152,7 @@
             IRC logging bot.
           </dd>
 
-          <dt><a href="https://github.com/perl6/whateverable/wiki/Nativecallable">nativecallable</a></dt>
+          <dt><a href="https://github.com/Raku/whateverable/wiki/Nativecallable">nativecallable</a></dt>
           <dd>
             an IRC bot for generating Raku NativeCall code from C
             definitions. It can be addressed by its full name
@@ -159,14 +160,20 @@
             using App::GPTrixie to do the conversion.
           </dd>
 
-          <dt><a href="https://github.com/perl6/whateverable/wiki/Quotable">quotable</a></dt>
+          <dt><a href="https://github.com/Raku/whateverable/wiki/Notable">notable</a></dt>
+          <dd>
+            an IRC bot for for noting things. It can be addressed by its full name ('notable6') 
+            or its short name ('note'). There is also a “weekly:” shortcut.
+          </dd>
+
+          <dt><a href="https://github.com/Raku/whateverable/wiki/Quotable">quotable</a></dt>
           <dd>
              An IRC bot for searching messages in the IRC log. It can be
              addressed by its full name ('quotable6') or its short name
              ('quote').
           </dd>
 
-          <dt><a href="https://github.com/perl6/whateverable/wiki/Releasable">releasable</a></dt>
+          <dt><a href="https://github.com/Raku/whateverable/wiki/Releasable">releasable</a></dt>
           <dd>
             An IRC bot for getting information about the upcoming release. It
             can be addressed by its full name ('releasable6') or its short name
@@ -176,13 +183,33 @@
             “status”. It tells when the next release is going to happen and how
             many blockers are there.
           </dd>
+            
+          <dt><a href="https://github.com/Raku/whateverable/wiki/Reportable">reportable</a></dt>
+          <dd>
+            An IRC bot for generating reports of changes in rakudo RT and GitHub issue trackers 
+            (which issues were resolved, updated, rejected, etc.). It can be addressed by its full name 
+            ('reportable6') or its short name ('report'). It takes snapshots of issue trackers 
+            periodically, and then you can ask it to generate a report for two given snapshots.
 
+              See also: <a href="https://github.com/rakudo/rakudo/wiki/Ticket-updates">Weekly, Monthly and Yearly reports</a>
+          </dd>
+
+          <dt><a href="https://github.com/Raku/whateverable/wiki/Shareable">shareable</a></dt>
+          <dd>
+             An IRC bot for making rakudo builds produced by Whateverable publicly available. 
+             It can be addressed by its full name ('shareable6').
+              
+             Note that the build will be located 
+              in /tmp/whateverable/rakudo-moar/SOME-SHA/. Also, as of today these files are only 
+              useful for you if you're on linux x86_64.
+          </dd>
+            
           <dt><a href="https://github.com/zoffixznet/perl6-sourceable">SourceBaby</a></dt>
           <dd>
             Core source code locator
           </dd>
 
-          <dt><a href="https://github.com/perl6/whateverable/wiki/Squashable">squashable</a></dt>
+          <dt><a href="https://github.com/Raku/whateverable/wiki/Squashable">squashable</a></dt>
           <dd>
             An IRC bot for the Monthly Bug Squash Day (a.k.a. Community Bug
             SQUASHathon). It can be addressed by its full name ('squashable6')
@@ -191,7 +218,7 @@
             Also, it will also announce changes to the repo.
           </dd>
 
-          <dt><a href="https://github.com/perl6/whateverable/wiki/Statisfiable">statisfiable</a></dt>
+          <dt><a href="https://github.com/Raku/whateverable/wiki/Statisfiable">statisfiable</a></dt>
           <dd>
             An IRC bot that can gather stats across rakudo builds. It can be
             addressed by its full name ('statisfiable6') or its short name
@@ -200,11 +227,18 @@
             some time for it to generate the graph, so be patient.
           </dd>
 
-          <dt><a href="https://github.com/perl6/synopsebot">synopsebot6</a></dt>
+          <dt><a href="https://github.com/Raku/synopsebot">synopsebot6</a></dt>
           <dd>
             Creates links to the synopses and turns mentions of RT ticket
             numbers into clickable RT links.
           </dd>
+
+          <dt><a href="https://github.com/Raku/whateverable/wiki/Tellable">tellable</a></dt>
+          <dd>
+            An IRC bot for passing messages to users who are currently offline. 
+            You can also use it to see when was the last time somebody talked.
+          </dd>
+
 
           <dt><a href="https://github.com/zoffixznet/undercover">Undercover</a></dt>
           <dd>
@@ -213,14 +247,14 @@
             indicating stresstest coverage of code.
           </dd>
 
-          <dt><a href="https://github.com/perl6/whateverable/wiki/Unicodable">unicodable</a></dt>
+          <dt><a href="https://github.com/Raku/whateverable/wiki/Unicodable">unicodable</a></dt>
           <dd>
             An IRC bot for getting interesting information about Unicode
             characters. It can be addressed by its full name ('unicodable6') or
             its short name ('u').
           </dd>
 
-          <dt><a href="https://docs.perl6.org/language/glossary#yoleaux_">yoleaux</a></dt>
+          <dt><a href="https://docs.raku.org/language/glossary#yoleaux_">yoleaux</a></dt>
           <dd>
             Provides various functions, such as leaving messages for people
             and translating text (see <a href="http://dpk.io/yoleaux">this
