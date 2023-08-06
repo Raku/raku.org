@@ -1,10 +1,10 @@
-[% setvar title Get Involved - Help making Raku %]
+[% SET title = 'Get Involved - Help making Raku' %]
 
-[% menu nav gettingstarted %]
+[% PROCESS 'menu-nav' current = 'gettingstarted' %]
 
 <header id="subpage-header" class="lead well">
-    [% include camelia %]
-    <h2>[% readvar title %]</h2>
+    [% INCLUDE 'camelia' %]
+    <h2>[% GET title %]</h2>
 
     <p>You don't need to be a guru or a wizard to help Raku development.
     Just some free time, and the willingness to be part of a great

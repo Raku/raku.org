@@ -1,9 +1,9 @@
-[% setvar title Raku Community %]
+[% SET title = 'Raku Community' %]
 
-[% menu nav community %]
+[% PROCESS 'menu-nav' current = 'community' %]
 
 <header id="subpage-header" class="lead well">
-[% include camelia %]
+[% INCLUDE 'camelia' %]
 
   <h2>The <b>Raku</b> Community welcomes you</h2>
   <p>

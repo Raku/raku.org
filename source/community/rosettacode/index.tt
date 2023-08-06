@@ -1,11 +1,11 @@
-[% setvar title Raku on Rosetta Code %]
+[% SET title = 'Raku on Rosetta Code' %]
 
-[% menu nav community %]
+[% PROCESS 'menu-nav' current = 'community' %]
 
 <header id="subpage-header" class="lead well">
-    [% include camelia %]
+    [% INCLUDE 'camelia' %]
 
-    <h2>[% readvar title %]</h2>
+    <h2>[% GET title %]</h2>
     <p>
         <a href="http://rosettacode.org/wiki/Rosetta_Code">Rosetta Code</a>
         is a community site that presents solutions to programming tasks in

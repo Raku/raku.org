@@ -1,19 +1,15 @@
-[% setvar title Raku Programming Language %]
+[% SET title = 'Raku Programming Language' %]
 
-[% menu nav home %]
+[% PROCESS 'menu-nav' current = 'home' %]
 
-[% setvar more_header
-    <meta name="description" content="Home page of the Raku Programming Language." />
-    <meta name="verify-v1" content="p7bEStVpDsW4ixm9YbF1ck02FRQfdA97ZL9mJnt0iQ0=" />
-    <meta name="google-site-verification" content="fDTmO9fcCRRgBqbKirQidKJ6nhTqnolHrKrgwVWJxZA" />
-%]
+[% SET extra_header_template = 'more-header' %]
 
 <div class="container-fluid">
   <header id="welcome-header" class="row lead">
     <div class="col-sm-12">
       <h1>The <b>Raku</b> Programming Language</h1>
 
-      <a href='https://github.com/perl6/mu/raw/master/misc/camelia.txt'
+      <a href='https://raw.githubusercontent.com/Raku/mu/master/misc/camelia.txt'
         class="pull-right"><img
         src="camelia-logo.png" alt="»ö«"
         class="img-responsive"

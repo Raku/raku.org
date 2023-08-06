@@ -1,9 +1,9 @@
-[% setvar title Raku is optimized for fun! %]
+[% SET title = 'Raku is optimized for fun!' %]
 
-[% menu nav fun %]
+[% PROCESS 'menu-nav' current = 'fun' %]
 
 <header id="subpage-header" class="lead well">
-    [% include camelia %]
+    [% INCLUDE 'camelia' %]
 
     <h2><b>Raku®</b> is optimized for fun!</h2>
 
