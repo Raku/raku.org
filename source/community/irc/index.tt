@@ -1,10 +1,10 @@
-[% setvar title #raku IRC channel %]
-[% menu nav community %]
+[% SET title = '#raku IRC channel' %]
+[% PROCESS 'menu-nav' current = 'community' %]
 
 <header id="subpage-header" class="lead well">
-    [% include camelia %]
+    [% INCLUDE 'camelia' %]
 
-    <h2>[% readvar title %]</h2>
+    <h2>[% GET title %]</h2>
     <p>
         Much real-time discussion happens on our IRC channel, <a
         href="https://kiwiirc.com/client/irc.libera.chat/#raku">#raku on irc.libera.chat</a>.

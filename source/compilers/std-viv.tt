@@ -1,9 +1,9 @@
-[% setvar title STD and viv -- Raku standard grammar %]
+[% SET title = 'STD and viv -- Raku standard grammar' %]
 
-[% menu nav compilers %]
+[% PROCESS 'menu-nav' current = 'compilers' %]
 
 <header id="subpage-header" class="lead well">
-    [% include camelia %]
+    [% INCLUDE 'camelia' %]
 
     <h2>STD and viv</h2>
 

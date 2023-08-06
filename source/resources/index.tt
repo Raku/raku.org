@@ -1,9 +1,9 @@
-[% setvar title Raku Resources %]
+[% SET title = 'Raku Resources' %]
 
-[% menu nav res %]
+[% PROCESS 'menu-nav' current = 'res' %]
 
 <header id="subpage-header" class="lead well">
-    [% include camelia %]
+    [% INCLUDE 'camelia' %]
 
     <h2><b>Raku</b> Resources</h2>
     <p>

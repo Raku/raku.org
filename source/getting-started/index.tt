@@ -1,10 +1,10 @@
-[% setvar title Getting started with Raku %]
+[% SET title = 'Getting started with Raku' %]
 
-[% menu nav gettingstarted %]
+[% PROCESS 'menu-nav' current = 'gettingstarted' %]
 
 <header id="subpage-header" class="lead well">
-    [% include camelia %]
-    <h2>[% readvar title %]</h2>
+    [% INCLUDE 'camelia' %]
+    <h2>[% GET title %]</h2>
 
     <p>You are new to Raku? The other pages on this site offer too many
     options and confuse you? Then here is the right place to read on.</p>
