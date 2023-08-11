@@ -1,11 +1,11 @@
-<pre>[% syntax perl6 %]
-my @scale = ("$_$_" for 0..9, <a b c d e f>);
-my @zeroes = '00' xx 16;
+<pre>
+<span class="synSpecial">my</span> <span class="synIdentifier">@scale</span> <span class="synStatement">=</span> (<span class="synSpecial">&quot;</span><span class="synIdentifier">$_$_</span><span class="synSpecial">&quot;</span> <span class="synStatement">for</span> <span class="synConstant">0</span><span class="synStatement">..</span><span class="synConstant">9</span><span class="synStatement">,</span> <span class="synSpecial">&lt;</span><span class="synConstant">a b c d e f</span><span class="synSpecial">&gt;</span>)<span class="synStatement">;</span>
+<span class="synSpecial">my</span> <span class="synIdentifier">@zeroes</span> <span class="synStatement">=</span> <span class="synSpecial">'</span><span class="synConstant">00</span><span class="synSpecial">'</span> <span class="synStatement">xx</span> <span class="synConstant">16</span><span class="synStatement">;</span>
 
-# Fade from red to blue
-for @scale.reverse Z @zeroes Z @scale -> $r, $g, $b {
-    say "#$r$g$b";
+<span class="synComment"># Fade from red to blue</span>
+<span class="synStatement">for</span> <span class="synIdentifier">@scale</span><span class="synStatement">.</span><span class="synIdentifier">reverse</span> <span class="synStatement">Z</span> <span class="synIdentifier">@zeroes</span> <span class="synStatement">Z</span> <span class="synIdentifier">@scale</span> <span class="synStatement">-&gt;</span> <span class="synIdentifier">$r</span><span class="synStatement">,</span> <span class="synIdentifier">$g</span><span class="synStatement">,</span> <span class="synIdentifier">$b</span> {
+    <span class="synIdentifier">say</span> <span class="synSpecial">&quot;</span><span class="synConstant">#</span><span class="synIdentifier">$r$g$b</span><span class="synSpecial">&quot;</span><span class="synStatement">;</span>
 }
-[% endsyntax %]</pre>
-[% option no-header %][% option no-footer %]
+</pre>
+
 
