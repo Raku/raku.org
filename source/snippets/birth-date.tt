@@ -1,16 +1,16 @@
-<pre>[% syntax perl6 %]
-my $birth-date-string = prompt "When were you born (yyyy-mm-dd)?";
-my $birth-date = Date.new($birth-date-string);
+<pre>
+<span class="synSpecial">my</span> <span class="synIdentifier">$birth-date-string</span> <span class="synStatement">=</span> prompt <span class="synSpecial">&quot;</span><span class="synConstant">When were you born (yyyy-mm-dd)?</span><span class="synSpecial">&quot;</span><span class="synStatement">;</span>
+<span class="synSpecial">my</span> <span class="synIdentifier">$birth-date</span> <span class="synStatement">=</span> Date<span class="synStatement">.</span><span class="synIdentifier">new</span>(<span class="synIdentifier">$birth-date-string</span>)<span class="synStatement">;</span>
 
-my $today = Date.today;
-my $age = $today.year - $birth-date.year;
+<span class="synSpecial">my</span> <span class="synIdentifier">$today</span> <span class="synStatement">=</span> Date<span class="synStatement">.</span>today<span class="synStatement">;</span>
+<span class="synSpecial">my</span> <span class="synIdentifier">$age</span> <span class="synStatement">=</span> <span class="synIdentifier">$today</span><span class="synStatement">.</span>year <span class="synStatement">-</span> <span class="synIdentifier">$birth-date</span><span class="synStatement">.</span>year<span class="synStatement">;</span>
 
-# But your birthday this year may not have been yet
-if $today.day-of-year < $birth-date.day-of-year {
-    $age--;
+<span class="synComment"># But your birthday this year may not have been yet</span>
+<span class="synStatement">if</span> <span class="synIdentifier">$today</span><span class="synStatement">.</span>day-of-year <span class="synStatement">&lt;</span> <span class="synIdentifier">$birth-date</span><span class="synStatement">.</span>day-of-year {
+    <span class="synIdentifier">$age</span><span class="synStatement">--;</span>
 }
 
-say "You are $age years old!";
-[% endsyntax %]</pre>
-[% option no-header %][% option no-footer %]
+<span class="synIdentifier">say</span> <span class="synSpecial">&quot;</span><span class="synConstant">You are </span><span class="synIdentifier">$age</span><span class="synConstant"> years old!</span><span class="synSpecial">&quot;</span><span class="synStatement">;</span>
+</pre>
+
 

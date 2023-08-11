@@ -1,9 +1,9 @@
-<pre>[% syntax perl6 %]
-my $sentence = "I am going to go feed the the cat.";
+<pre>
+<span class="synSpecial">my</span> <span class="synIdentifier">$sentence</span> <span class="synStatement">=</span> <span class="synSpecial">&quot;</span><span class="synConstant">I am going to go feed the the cat.</span><span class="synSpecial">&quot;</span><span class="synStatement">;</span>
 
-if $sentence ~~ / (\w+) \h+ $0 / {
-    say "Duplicate word '$0 $0' found at position $/.from().";
+<span class="synStatement">if</span> <span class="synIdentifier">$sentence</span> <span class="synStatement">~~</span> <span class="synSpecial">/</span><span class="synConstant"> </span><span class="synSpecial">(\w+)</span><span class="synConstant"> </span><span class="synSpecial">\h+</span><span class="synConstant"> </span><span class="synIdentifier">$0</span><span class="synConstant"> </span><span class="synSpecial">/</span> {
+    <span class="synIdentifier">say</span> <span class="synSpecial">&quot;</span><span class="synConstant">Duplicate word '</span><span class="synIdentifier">$0</span><span class="synConstant"> </span><span class="synIdentifier">$0</span><span class="synConstant">' found at position </span><span class="synIdentifier">$/</span><span class="synConstant">.from().</span><span class="synSpecial">&quot;</span><span class="synStatement">;</span>
 }
-[% endsyntax %]</pre>
-[% option no-header %][% option no-footer %]
+</pre>
+
 
