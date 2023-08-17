@@ -3,7 +3,7 @@
 [% PROCESS 'menu-nav' current = 'about' %]
 
 <header id="subpage-header" class="lead well">
-    [% INCLUDE 'camelia' %]
+    [% INSERT 'camelia' %]
     <h2>About raku.org</h2>
     <p>raku.org is, just like Raku, a volunteer driven project.
     Content on raku.org should be up-to-date rather than comprehensive.
