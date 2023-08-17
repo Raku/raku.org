@@ -3,7 +3,7 @@
 [% PROCESS 'menu-nav' current = 'whatever' %]
 
 <header id="subpage-header" class="lead well">
-    [% INCLUDE 'camelia' %]
+    [% INSERT 'camelia' %]
 
     <h2><b>Raku</b> - IDEs</h2>
 

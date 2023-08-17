@@ -3,7 +3,7 @@
 [% PROCESS 'menu-nav' current = 'gettingstarted' %]
 
 <header id="subpage-header" class="lead well">
-    [% INCLUDE 'camelia' %]
+    [% INSERT 'camelia' %]
     <h2>[% GET title %]</h2>
 
     <p>You are new to Raku? The other pages on this site offer too many
