@@ -1,0 +1,29 @@
+{
+  "auth": "zef:raku",
+  "authors": [
+    "The Raku website authors"
+  ],
+  "build-depends": [
+  ],
+  "depends": [
+    "LibXML:ver<0.10.4>:auth<zef:dwarring>:api<0.10.0>",
+    "HTTP::Tiny:ver<0.2.5>:auth<zef:jjatria>",
+    "JSON::Fast:ver<0.19>:auth<cpan:TIMOTIMO>",
+    "Path::Finder:ver<0.4.6>:auth<zef:leont>",
+    "Template6:ver<0.14.0>:auth<zef:raku-community-modules>"
+  ],
+  "description": "The distribution for the tooling of the raku.org site.",
+  "license": "Artistic-2.0",
+  "name": "raku-website",
+  "perl": "6.d",
+  "provides": {
+  },
+  "resources": [
+  ],
+  "source-url": "",
+  "tags": [
+  ],
+  "test-depends": [
+  ],
+  "version": "0.0.1"
+}
