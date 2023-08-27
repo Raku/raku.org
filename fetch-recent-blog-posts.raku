@@ -1,8 +1,8 @@
 #!/usr/bin/env raku
 
-use LibXML::Reader;
-use HTTP::Tiny;
-use JSON::Fast;
+use LibXML::Reader:ver<0.10.4>:auth<zef:dwarring>:api<0.10.0>;
+use HTTP::Tiny:ver<0.2.5>:auth<zef:jjatria>;
+use JSON::Fast:ver<0.19>:auth<cpan:TIMOTIMO>;
 
 my $tx = HTTP::Tiny.new.get("https://planet.raku.org/atom.xml");
 
