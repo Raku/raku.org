@@ -1,7 +1,7 @@
 #!/usr/bin/env raku
 use v6.d;
-use Path::Finder:ver<0.4.5>;
-use Template6:ver<0.13.0>;
+use Path::Finder:ver<0.4.6>;
+use Template6:ver<0.14.0>;
 
 
 sub published-counterpart(IO::Path $source-path) {

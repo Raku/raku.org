@@ -1,14 +1,10 @@
 # raku.org
 This is the source code for <https://raku.org>.
 
-It is rendered with [mowyw](https://perlgeek.de/en/software/mowyw)
-every 15 minutes, so updates to the repository should also result in
+It is rendered every 15 minutes, so updates to the repository should also result in
 an update of <https://raku.org>
 If not, talk to [moritz] on
 [#raku](https://kiwiirc.com/client/irc.libera.chat/#raku).
-
-### Multilingual translation
-[Chinese translation](https://github.com/ccworld1000/perl6.org).
 
 ### Guidelines
 Here are some guidelines that you should respect when changing this site:
@@ -56,19 +52,22 @@ Here are some guidelines that you should respect when changing this site:
 ### Build
 To run this site locally:
 
-  - Install the following modules:
+  - libxml2 is a native binary dependency; make sure to install it as your platform requires (except Windows where it's baked into the Raku dist)
 
-    `cpanm App::Mowyw Text::VimColor Plack IO::Socket::SSL HTML::Template::Compiled Mojolicious`
+  - for content generation, install this repository as a module:
+    `zef install .`
+
+  - Install the following Perl modules for setting up the server:
+
+    `cpanm Plack IO::Socket::SSL`
 
   - Run the following commands to populate the `./online` folder and launch a local web server for testing:
-    ```
-    mowyw
+    ```sh
+    ./fetch-recent-blog-posts.raku
+    ./publish-sources.raku
     plackup
     ```
   - Open http://localhost:5000/index.html in your browser
-
-Tip: if you remove `source/archive` directory, `mowyw` generation will run a
-lot faster. Useful for checking frequently-made changes.
 
 ### LICENSE
 
