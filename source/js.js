@@ -2,7 +2,7 @@ jQuery(function ($) {
     var el = $('#recent_blog_posts');
     if ( ! el.length ) { return; }
 
-    $.ajax('recent-blog-posts.json')
+    $.ajax('https://raku.org/recent-blog-posts.json')
     .done(function(feed) {
         $(feed).each(function(){
             el.append(
