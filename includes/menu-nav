@@ -24,10 +24,10 @@
           ><a href="/resources/">Resources</a></li> %]
         [% item modules <li id="nav-modules" {{ class="active"}}
           ><a href="https://modules.raku.org/">Modules</a></li> %]
+        [% item whatever <li id="nav-whatever"{{ class="active"}}
+          ><a href="/whatever/">IDEs</a></li> %]
         [% item fun <li id="nav-fun" {{ class="active"}}
           ><a href="/fun/">Fun</a></li> %]
-        [% item whatever <li id="nav-whatever"{{ class="active"}}
-          ><a href="/whatever/">Whatever</a></li> %]
         [% item faq <li id="nav-faq"{{ class="active"}}
           ><a href="https://docs.raku.org/language/faq">FAQ</a></li> %]
       </ul>
