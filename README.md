@@ -50,6 +50,8 @@ Here are some guidelines that you should respect when changing this site:
 
   * If you create a new page, please link to the URL *without* the
     ".html" extension.
+ 
+  * When referenced the first time in a section, use Raku®, but Rakudo™ or Camelia™.
 
 ### Build
 To run this site locally:
