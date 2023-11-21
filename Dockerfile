@@ -1,14 +1,10 @@
-FROM docker.io/perl:5.38.0 as builder
+FROM docker.io/rakudo-star:latest as builder
 
 WORKDIR /usr/src/app
 
-RUN cpan App::Mowyw
-RUN cpan Plack
-RUN cpan Mojo::UserAgent
-
 COPY . .
-RUN perl fetch-recent-blog-posts.pl
-RUN mowyw
+RUN zef install --deps-only .
+RUN ./publish-sources.raku
 
 FROM docker.io/caddy:latest
 # Processed static files are written to ./online
