@@ -15,11 +15,11 @@
         <li id="nav-home"[% IF current eq 'home' %] class="active"[% END %]><a href="/">Home</a></li>
         <li id="nav-downloads"[% IF current eq 'downloads' %] class="active"[% END %]><a href="/downloads">Download</a></li>
         <li id="nav-community"[% IF current eq 'community' %] class="active"[% END %]><a href="/community/">Community</a></li>
-        <li id="nav-docs" [% IF current eq 'docs' %] class="active"[% END %]><a href="https://docs.raku.org">Documentation</a></li>
-        <li id="nav-res" [% IF current eq 'res' %] class="active"[% END %]><a href="/resources/">Resources</a></li>
-        <li id="nav-modules" [% IF current eq 'modules' %] class="active"[% END %]><a href="https://modules.raku.org/">Modules</a></li>
+        <li id="nav-docs"[% IF current eq 'docs' %] class="active"[% END %]><a href="https://docs.raku.org">Documentation</a></li>
+        <li id="nav-res"[% IF current eq 'res' %] class="active"[% END %]><a href="/resources/">Resources</a></li>
+        <li id="nav-modules"[% IF current eq 'modules' %] class="active"[% END %]><a href="https://modules.raku.org/">Modules</a></li>
+        <li id="nav-whatever"[% IF current eq 'whatever' %] class="active"[% END %]><a href="/whatever/">IDEs</a></li>
         <li id="nav-fun" [% IF current eq 'fun' %] class="active"[% END %]><a href="/fun/">Fun</a></li>
-        <li id="nav-whatever"[% IF current eq 'whatever' %] class="active"[% END %]><a href="/whatever/">Whatever</a></li>
         <li id="nav-faq"[% IF current eq 'faq' %] class="active"[% END %]><a href="https://docs.raku.org/language/faq">FAQ</a></li>
       </ul>
     </div>
