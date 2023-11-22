@@ -4,7 +4,8 @@ use Path::Finder:ver<0.4.6>;
 use Template6:ver<0.14.0>;
 
 
-sub published-counterpart(IO::Path $source-path) {
+sub published-counterpart(IO::Path $source-path, Bool :$safe-path) {
+    mkdir $source-path.parent if $safe-path;
     my $same-under-online = 'online'.IO.add: $source-path.relative('source');
     $same-under-online.extension eq 'tt' ?? $same-under-online.extension('html') !! $same-under-online
 }
@@ -20,7 +21,7 @@ sub MAIN(Bool :$incremental) {
     
     for $non-templates.in('source', :!loop-safe, :!sorted).race {
         print "Copying '$_'..." if %*ENV<VERBOSE>;
-        .copy: .&published-counterpart;
+        .copy: .&published-counterpart(:safe-path);
         say 'Done.' if %*ENV<VERBOSE>;
     }
 
@@ -32,7 +33,7 @@ sub MAIN(Bool :$incremental) {
     
     for $wrapped-templates.in('source', :!loop-safe, :!sorted).race {
         print "Processing '$_'..." if %*ENV<VERBOSE>;
-        .&published-counterpart.spurt: $wrapper-engine.process($_);
+        .&published-counterpart(:safe-path).spurt: $wrapper-engine.process($_);
         say 'Done.' if %*ENV<VERBOSE>;
     }
 
@@ -44,7 +45,7 @@ sub MAIN(Bool :$incremental) {
 
     for $raw-templates.in('source/snippets', :!loop-safe, :!sorted).race {
         print "Processing '$_'..." if %*ENV<VERBOSE>;
-        .&published-counterpart.spurt: $raw-engine.process($_);
+        .&published-counterpart(:safe-path).spurt: $raw-engine.process($_);
         say 'Done.' if %*ENV<VERBOSE>;
     }
 
