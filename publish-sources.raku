@@ -5,8 +5,8 @@ use Template6:ver<0.14.0>;
 
 
 sub published-counterpart(IO::Path $source-path, Bool :$safe-path) {
-    mkdir $source-path.parent if $safe-path;
     my $same-under-online = 'online'.IO.add: $source-path.relative('source');
+    mkdir $same-under-online.parent if $safe-path;
     $same-under-online.extension eq 'tt' ?? $same-under-online.extension('html') !! $same-under-online
 }
 
