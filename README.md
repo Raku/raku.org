@@ -63,8 +63,8 @@ To run this site locally:
 
   - Run the following commands to populate the `./online` folder and launch a local web server for testing:
     ```sh
-    ./fetch-recent-blog-posts.raku
-    ./publish-sources.raku
+    raku fetch-recent-blog-posts.raku
+    raku publish-sources.raku
     plackup
     ```
   - Open http://localhost:5000/index.html in your browser
