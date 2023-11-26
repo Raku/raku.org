@@ -8,15 +8,15 @@ cd ~/perl6.org
 git fetch -q
 BEFORE=$(git rev-parse HEAD)
 git checkout -q -f origin/master
-./fetch-recent-blog-posts.raku
+raku fetch-recent-blog-posts.raku
 if [ "$BEFORE" != "$(git rev-parse HEAD)" ]
 then
         if git diff --quiet $BEFORE HEAD update.sh
         then cp update.sh ~/update.sh
         fi
         if git diff --quiet $BEFORE HEAD includes
-        then ./publish-sources.raku --incremental
-        else ./publish-sources.raku
+        then raku publish-sources.raku --incremental
+        else raku publish-sources.raku
         fi
 fi
 
