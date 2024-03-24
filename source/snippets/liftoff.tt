@@ -1,0 +1,8 @@
+<pre>
+<span class="synStatement">for</span> <span class="synConstant">10</span> <span class="synStatement">...</span> <span class="synConstant">0</span> <span class="synStatement">-&gt;</span> <span class="synIdentifier">$count</span> {
+    <span class="synIdentifier">say</span> <span class="synSpecial">&quot;</span><span class="synIdentifier">$count</span><span class="synConstant">...</span><span class="synSpecial">&quot;</span><span class="synStatement">;</span>
+    <span class="synPreProc">LAST</span> { <span class="synIdentifier">say</span> <span class="synSpecial">&quot;</span><span class="synConstant">Liftoff!</span><span class="synSpecial">&quot;</span> }<span class="synStatement">;</span>
+}
+</pre>
+
+

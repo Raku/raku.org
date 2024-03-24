@@ -1,9 +1,0 @@
-<pre>[% syntax perl6 %]
-my $sentence = "I am going to go feed the the cat.";
-
-if $sentence ~~ / (\w+) \h+ $0 / {
-    say "Duplicate word '$0 $0' found at position $/.from().";
-}
-[% endsyntax %]</pre>
-[% option no-header %][% option no-footer %]
-

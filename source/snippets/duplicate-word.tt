@@ -1,0 +1,9 @@
+<pre>
+<span class="synSpecial">my</span> <span class="synIdentifier">$sentence</span> <span class="synStatement">=</span> <span class="synSpecial">&quot;</span><span class="synConstant">I am going to go feed the the cat.</span><span class="synSpecial">&quot;</span><span class="synStatement">;</span>
+
+<span class="synStatement">if</span> <span class="synIdentifier">$sentence</span> <span class="synStatement">~~</span> <span class="synSpecial">/</span><span class="synConstant"> </span><span class="synSpecial">(\w+)</span><span class="synConstant"> </span><span class="synSpecial">\h+</span><span class="synConstant"> </span><span class="synIdentifier">$0</span><span class="synConstant"> </span><span class="synSpecial">/</span> {
+    <span class="synIdentifier">say</span> <span class="synSpecial">&quot;</span><span class="synConstant">Duplicate word '</span><span class="synIdentifier">$0</span><span class="synConstant"> </span><span class="synIdentifier">$0</span><span class="synConstant">' found at position </span><span class="synIdentifier">$/</span><span class="synConstant">.from().</span><span class="synSpecial">&quot;</span><span class="synStatement">;</span>
+}
+</pre>
+
+

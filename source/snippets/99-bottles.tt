@@ -1,0 +1,12 @@
+<pre>
+<span class="synSpecial">my</span> <span class="synIdentifier">@beers</span> <span class="synStatement">=</span> <span class="synSpecial">'</span><span class="synConstant">beers</span><span class="synSpecial">'</span><span class="synStatement">,</span> <span class="synSpecial">'</span><span class="synConstant">beer</span><span class="synSpecial">'</span><span class="synStatement">,</span> <span class="synSpecial">'</span><span class="synConstant">beers</span><span class="synSpecial">'</span> <span class="synStatement">xx</span> <span class="synConstant">97</span><span class="synStatement">;</span>
+
+<span class="synStatement">for</span> <span class="synIdentifier">reverse</span>(<span class="synConstant">1</span><span class="synStatement">..</span><span class="synConstant">99</span>) <span class="synStatement">Z</span> <span class="synIdentifier">reverse</span>(<span class="synConstant">0</span><span class="synStatement">..</span><span class="synConstant">98</span>) <span class="synStatement">-&gt;</span> <span class="synIdentifier">$n</span><span class="synStatement">,</span> <span class="synIdentifier">$nn</span> {
+    <span class="synIdentifier">say</span> <span class="synSpecial">&quot;</span><span class="synIdentifier">$n</span><span class="synConstant"> </span><span class="synIdentifier">@beers</span>[<span class="synIdentifier">$n</span>]<span class="synConstant"> on the wall!</span><span class="synSpecial">&quot;</span><span class="synStatement">;</span>
+    <span class="synIdentifier">say</span> <span class="synSpecial">&quot;</span><span class="synIdentifier">$n</span><span class="synConstant"> </span><span class="synIdentifier">@beers</span>[<span class="synIdentifier">$n</span>]<span class="synConstant">!</span><span class="synSpecial">&quot;</span><span class="synStatement">;</span>
+    <span class="synIdentifier">say</span> <span class="synSpecial">&quot;</span><span class="synConstant">Take one down, pass it around,</span><span class="synSpecial">&quot;</span><span class="synStatement">;</span>
+    <span class="synIdentifier">say</span> <span class="synSpecial">&quot;</span><span class="synIdentifier">$nn</span><span class="synConstant"> </span><span class="synIdentifier">@beers</span>[<span class="synIdentifier">$nn</span>]<span class="synConstant"> on the wall!</span><span class="synSpecial">&quot;</span><span class="synStatement">;</span>
+}
+</pre>
+
+

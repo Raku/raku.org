@@ -1,3 +1,24 @@
+<!DOCTYPE html>
+
+<!-- Hacking: see NOTES and TODO in this directory -->
+
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>[% GET title %]</title>
+    [% IF extra_header_template %] [% INSERT extra_header_template %] [% END %]
+
+    <link href="/favicon.ico" rel="shortcut icon" type="image/x-icon">
+    <link href="/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/bootstrap/css/bootstrap-theme.min.css" rel="stylesheet">
+    <link href="/style.css?v=1" rel="stylesheet">
+</head>
+<body>
+<div class="bg">
+  <div class="container">
+[% content %]
   </div>
 </div>
 

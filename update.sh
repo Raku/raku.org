@@ -3,21 +3,20 @@
 # this script is used by www.p6c.org to update the
 # installation at www.perl6.org
 date
-source ~/perl5/perlbrew/etc/bashrc
 set -e
 cd ~/perl6.org
 git fetch -q
 BEFORE=$(git rev-parse HEAD)
 git checkout -q -f origin/master
-./fetch-recent-blog-posts.pl
+raku fetch-recent-blog-posts.raku
 if [ "$BEFORE" != "$(git rev-parse HEAD)" ]
 then
         if git diff --quiet $BEFORE HEAD update.sh
         then cp update.sh ~/update.sh
         fi
         if git diff --quiet $BEFORE HEAD includes
-        then mowyw --make
-        else mowyw
+        then raku publish-sources.raku --incremental
+        else raku publish-sources.raku
         fi
 fi
 
