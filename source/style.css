@@ -169,17 +169,17 @@ footer {
   flex-wrap: wrap;
   align-items: center; }
 
-#ref-logos > img {
+#ref-logos img {
   height: 70px;
   margin: 20px; }
 
-#ref-logos > img#helpshift-logo {
+#ref-logos img#helpshift-logo {
   height: 170px; }
 
-#ref-logos > img#haltec-logo {
+#ref-logos img#haltec-logo {
   height: 61px; }
 
-#ref-logos > img#cns-logo {
+#ref-logos img#cns-logo {
   height: 73px; }
 
 #navbar {
