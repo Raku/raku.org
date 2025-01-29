@@ -8,7 +8,7 @@
         <h4><a href="/community/">Community</a></h4>
         <ul class="shush-list">
           <li><a href="/community/irc">#raku IRC channel</a>: <a href="irc://irc.libera.chat/#raku">system IRC client</a>
-          or&nbsp;<a href="https://kiwiirc.com/client/irc.libera.chat/#raku">chat live in your browser</a></li>
+          or&nbsp;<a href="https://web.libera.chat/#raku">chat live in your browser</a></li>
           <li><a href="/community/rosettacode">Raku on Rosetta Code</a>, <a href="https://planet.raku.org/">Blogs</a></li>
         </ul>
 
