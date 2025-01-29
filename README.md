@@ -4,8 +4,6 @@ This is the source code for <https://raku.org>.
 It is rendered with [mowyw](https://perlgeek.de/en/software/mowyw)
 every 15 minutes, so updates to the repository should also result in
 an update of <https://raku.org>
-If not, talk to [moritz] on
-[#raku](https://kiwiirc.com/client/irc.libera.chat/#raku).
 
 ### Multilingual translation
 [Chinese translation](https://github.com/ccworld1000/perl6.org).
