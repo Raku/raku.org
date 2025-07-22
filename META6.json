@@ -1,0 +1,22 @@
+{
+    "name": "Org",
+    "description": "raku.org website",
+    "version": "0.0.1",
+    "authors": [
+        "librasteve"
+    ],
+    "auth": "zef:librasteve",
+    "depends": [
+        "Air",
+        "Air::Plugin::Hilite"
+    ],
+    "build-depends": [],
+    "provides": {
+        "Org": "lib/Org.rakumod",
+        "Org::Home": "lib/Org/Home.rakumod",
+        "Org::Install": "lib/Org/Install.rakumod",
+        "Org::Info": "lib/Org/Info.rakumod"
+    },
+    "license": "Artistic-2.0",
+    "source-url": ""
+}

@@ -1,0 +1,6 @@
+use Test;
+use Org;
+
+pass "replace me";
+
+done-testing;

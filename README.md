@@ -1,80 +1,65 @@
-# raku.org
-This is the source code for <https://raku.org>.
+# raku-org-25-proto
+a prototype upgrade to the raku.org website
 
-It is rendered with [mowyw](https://perlgeek.de/en/software/mowyw)
-every 15 minutes, so updates to the repository should also result in
-an update of <https://raku.org>
+the process is:
 
-### Multilingual translation
-[Chinese translation](https://github.com/ccworld1000/perl6.org).
+1. Gather Requirments
 
-### Guidelines
-Here are some guidelines that you should respect when changing this site:
+all interested folk invited to comment and input on [Requirements.md](https://github.com/librasteve/raku-org-25-proto/blob/main/Requirements.md)
+ - open an Issue for discussion of a point
+ - when agreed, make a PR for review and merge
 
-  * Only link to up-to-date information. Feel free to delete outdated
-    information — it is often more confusing than helpful.
+the aim was to get all feedback within 5 days - ie by 4th June - so that it can be incorporated into the prototype build
+[now closed for new requirements]
 
-  * Be nice.
+2. Build Initial Prototype
 
-  * Don't hesitate to link to pages you wrote yourself, if they are helpful to
-    a broader Raku audience.
+done - yay!
+spike01 now available at
+https://proto25.harcstack.org
 
-  * If you have a Raku blog, get it included in the https://planet.raku.org feed.
-    See the [github repo](https://github.com/raku/planet.raku.org)
+(you can also follow instructions below to install and hack locally)
 
-  * If you intend to change the layout, consider what happens when:
+3. Summit Folks Review
 
-      - user's viewport is small (e.g. mobile device)
-      - user resizes window
+initially summit participants and Damian are invited to review
+see ./Review.md for what to do
 
-  * We use [Bootstrap3](http://getbootstrap.com/) and
-    [jQuery](http://jquery.com/). Whenever possible, please use the facilities
-    these frameworks provide, instead of rolling out something custom.
+...
 
-  * We use [SASS](http://sass-lang.com/) in `style.scss` to generate
-    `style.css`. You can do that by running `sass style.scss:style.css` inside
-    the `source` directory (add `--watch` flag to make it watch for changes
-    and re-generate the CSS file). CSS is still valid SASS; if you
-    don't know SASS, just write plain CSS. If you cannot run `sass`, please
-    add your changes to `style.css` and ping @zoffixznet to add your styles
-    to `style.scss`.
 
-  * We support the current and previous major releases of Chrome, Firefox,
-    Internet Explorer (Edge), and Safari. Please test layout changes. Lacking actual
-    browsers to test in, you can use [browsershots.org](http://browsershots.org)
-    or [browserstack.com](http://browserstack.com).
+---
 
-  * Speaking of which, all pages are served as UTF-8.
+# Installation
 
-  * If you create a new page, please link to the URL *without* the
-    ".html" extension.
- 
-  * When referenced the first time in a section, use Raku®, but Rakudo™ or Camelia™.
+Install raku - eg. from rakubrew, then:
 
-### Build
-To run this site locally:
+Install Cro & Air (branch hilite)
 
-  - Install the following modules:
+```
+zef install --/test cro
+git clone https://github.com/librasteve/Air.git 
+cd Air
+git checkout hilite
+zef install . --force-install
+cd ..
+```
 
-    `cpanm App::Mowyw Text::VimColor Plack IO::Socket::SSL HTML::Template::Compiled Mojolicious`
+Red is not used in this build.
 
-  - Run the following commands to populate the `./online` folder and launch a local web server for testing:
-    ```
-    mowyw
-    plackup
-    ```
-  - Open http://localhost:5000/index.html in your browser
+Clone and install this repo
 
-Tip: if you remove `source/archive` directory, `mowyw` generation will run a
-lot faster. Useful for checking frequently-made changes.
+```
+git clone https://github.com/librasteve/raku-org-25-proto.git
+cd raku-org-25-proto
+zef install . --force-install
+```
 
-### LICENSE
+Run and view it
 
-See [LICENSE](LICENSE) file for the details of the license of the code in this repository.
+```
+raku -Ilib service.raku
+Open a browser and go to http://localhost:3000
+```
 
-This repository also contains code authored by third parties that may be licensed under a different license. Such
-files indicate the copyright and license terms at the top of the file. Currently these include:
-
-* jQuery and jQuery UI libraries: Copyright 2015 jQuery Foundation and other contributors; [MIT License](http://creativecommons.org/licenses/MIT)
-* The Camelia image is copyright 2009 by Larry Wall. Permission to use is granted under the [Artistic License 2.0](License), or any subsequent version
-of the Artistic License
+~librasteve
