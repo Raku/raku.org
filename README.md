@@ -1,7 +1,7 @@
 # raku-org-25-proto
 a prototype upgrade to the raku.org website
 
-the process is:
+the process:
 
 1. Gather Requirments
 
@@ -15,7 +15,7 @@ the aim was to get all feedback within 5 days - ie by 4th June - so that it can 
 2. Build Initial Prototype
 
 done - yay!
-spike01 now available at
+spike02 now available at
 https://proto25.harcstack.org
 
 (you can also follow instructions below to install and hack locally)
@@ -24,25 +24,33 @@ https://proto25.harcstack.org
 
 initially summit participants and Damian are invited to review
 see ./Review.md for what to do
+[now complete]
+
+4. Move Proto to Dev
+
+the code has been moved from https://github.com/librasteve/raku-org-25-proto to here
+Dockerfile and GHA has been written and checked
+
+5. Final Check
+
+6. Go Live
+
+7. Continuous Improvement
 
 ...
 
 
 ---
 
-# Installation
+# Local Installation
 
 Install raku - eg. from rakubrew, then:
 
-Install Cro & Air (branch hilite)
+Install Cro & Air
 
 ```
 zef install --/test cro
-git clone https://github.com/librasteve/Air.git 
-cd Air
-git checkout hilite
-zef install . --force-install
-cd ..
+zef install Air
 ```
 
 Red is not used in this build.
@@ -50,16 +58,19 @@ Red is not used in this build.
 Clone and install this repo
 
 ```
-git clone https://github.com/librasteve/raku-org-25-proto.git
-cd raku-org-25-proto
+git clone https://github.com/Raku/raku.org.git
+git checkout proto-25
+cd raku.org
 zef install . --force-install
 ```
 
 Run and view it
 
 ```
+export CRO_WEBSITE_HOST=0.0.0.0
+export CRO_WEBSITE_PORT=4000
 raku -Ilib service.raku
-Open a browser and go to http://localhost:3000
+Open a browser and go to http://localhost:4000
 ```
 
 ~librasteve
