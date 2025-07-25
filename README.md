@@ -48,7 +48,7 @@ Dockerfile and GHA has been written and checked
 Checkout the [quay.io](https://quay.io/repository/chroot.club/proto-25?tab=tags&tag=latest) repo 
 
 ```
-docker run -it -p 4000:4000 quay.io/chroot.club/proto-25
+docker run -it -p 4000:4000 quay.io/chroot.club/proto-25  [:tag]
 Open a browser and go to http://localhost:4000
 ```
 
