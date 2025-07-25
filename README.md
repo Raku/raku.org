@@ -41,6 +41,14 @@ Dockerfile and GHA has been written and checked
 
 ...
 
+---
+
+# Docker Installation
+
+```
+docker run -it -p 4000:4000 quay.io/chroot.club/proto-25
+Open a browser and go to http://localhost:4000
+```
 
 ---
 
