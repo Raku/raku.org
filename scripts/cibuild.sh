@@ -9,9 +9,15 @@ cmd_container () {
   echo $QUAY_PASSWORD | docker login quay.io -u $QUAY_USERNAME --password-stdin
   full_tag="quay.io/chroot.club/proto-25:${tag_version}"
   docker build --build-arg quay_expiration="8w" -t $full_tag .
-  docker push $full_tag
-}
 
+  # Also tag as "latest"
+  latest_tag="quay.io/chroot.club/proto-25:latest"
+  docker tag $full_tag $latest_tag
+
+  # Push both tags
+  docker push $full_tag
+  docker push $latest_tag
+}
 
 if [ -z $1 ]; then
   cmd_container
