@@ -1,0 +1,3 @@
+proto25.harcstack.org {
+    reverse_proxy webapp:4000
+}
