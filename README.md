@@ -73,6 +73,7 @@ Clone and install this repo
 git clone https://github.com/Raku/raku.org.git
 git checkout proto-25
 cd raku.org
+zef install . --deps-only   #e.g. Air::Plugin::Hilite
 ```
 
 Run and view it
