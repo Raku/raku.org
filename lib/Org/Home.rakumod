@@ -13,7 +13,7 @@ sub vignette(*@a, *%h) {
 sub install {
     div [
         a :href</nav/1/install>, :target<_self>, button 'Install';
-        p 'Linux, macOS, Windows';
+        p 'Linux, macOS, Windows, Docker';
     ];
 }
 

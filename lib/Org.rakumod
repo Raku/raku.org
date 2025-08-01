@@ -5,37 +5,39 @@ use Air::Base;
 use Air::Plugin::Hilite;
 
 use Org::Home;
+use Org::Community;
 use Org::Install;
-use Org::Info;
-
+use Org::Learn;
+use Org::Tools;
 
 my @tools = [Analytics.new: :provider(Umami), :key<FIXME>,];  # fixme
-
 
 my &basepage = &page.assuming(
     title       => 'Raku®',
     description => 'The Raku® programming language.',
     footer      =>  footer [
-                        hr;
-                        p safe Q|
-                            Hypered with <a href="https://htmx.org" target="_blank">htmx</a>.
-                            Aloft on <a href="https://harcstack.org" target="_blank"><b>&Aring;ir</b></a>.
-                            Constructed in <a href="https://cro.raku.org" target="_blank">cro</a>.
-                            Written in <a href="https://raku.org" target="_blank">raku</a>.
-                            &nbsp;&amp;&nbsp;
-                            Styled by <a href="https://picocss.com" target="_blank">picocss</a>.
-                        |;
-                        p safe 'The Raku® Programming Language';
-                    ],
-);
+        hr;
+        p safe Q|
+            Hypered with <a href="https://htmx.org" target="_blank">htmx</a>.
+            Aloft on <a href="https://harcstack.org" target="_blank"><b>&Aring;ir</b></a>.
+            Constructed in <a href="https://cro.raku.org" target="_blank">cro</a>.
+            Written in <a href="https://raku.org" target="_blank">raku</a>.
+            &nbsp;&amp;&nbsp;
+            Styled by <a href="https://picocss.com" target="_blank">picocss</a>.
+        |;
+        p safe 'The Raku® Programming Language';
+    ],
+    );
 
 my &shadow = &background.assuming
     :url<https://upload.wikimedia.org/wikipedia/commons/f/fd/Butterfly_bottom_PSF_transparent.gif>;
 
 
-my Page $home    = home-page    &basepage, &shadow;
-my Page $install = install-page &basepage, &shadow;
-my Page $info    = info-page    &basepage, &shadow;
+my Page $home      = home-page      &basepage, &shadow;
+my Page $community = community-page &basepage, &shadow;
+my Page $install   = install-page   &basepage, &shadow;
+my Page $learn     = learn-page     &basepage, &shadow;
+my Page $tools     = tools-page     &basepage, &shadow;
 
 my Nav $nav =
     nav
@@ -49,18 +51,17 @@ my Nav $nav =
         ),
         :widgets[lightdark],
         [
-            info      => $info,
-            git       => (external :href<https://github.com/rakudo/rakudo>),
+            community => $community,
+            learn     => $learn,
+            tools     => $tools,
             docs      => (external :href<https://docs.raku.org>),
-            ecosystem => (external :href<https://raku.land>),
-            guide     => (external :href<https://raku.guide>),
-            weekly    => (external :href<https://rakudoweekly.blog/blog-feed/>),
-            chat      => (external :href<https://discord.gg/VzYpdQ6>),
+            modules   => (external :href<https://raku.land>),
+            git       => (external :href<https://github.com/rakudo/rakudo>),
             install   => $install,
         ];
 
 
-my Page @pages = [$home, $install, $info];
+my Page @pages = [$home, $community, $learn, $install, $tools];
 { .nav = $nav } for @pages;
 
 sub SITE is export {
