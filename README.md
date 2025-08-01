@@ -73,7 +73,6 @@ Clone and install this repo
 git clone https://github.com/Raku/raku.org.git
 git checkout proto-25
 cd raku.org
-zef install . --force-install
 ```
 
 Run and view it
@@ -81,7 +80,7 @@ Run and view it
 ```
 export CRO_WEBSITE_HOST=0.0.0.0
 export CRO_WEBSITE_PORT=4000
-raku -Ilib service.raku
+raku -I. service.raku
 Open a browser and go to http://localhost:4000
 ```
 
