@@ -3,7 +3,7 @@ name: Build and Test
 on: 
   push:
     branches:
-      - proto-25 
+      - dev
 
 jobs:
   build_and_push:
