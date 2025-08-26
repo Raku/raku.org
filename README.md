@@ -1,6 +1,6 @@
 [![Build and Test](https://github.com/Raku/raku.org/actions/workflows/ci.yml/badge.svg)](https://github.com/Raku/raku.org/actions/workflows/ci.yml)
 
-# raku.org proto-25
+# raku.org dev
 a prototype upgrade to the raku.org website
 
 the process:
