@@ -14,9 +14,17 @@ cmd_container () {
   latest_tag="quay.io/chroot.club/proto-25:latest"
   docker tag $full_tag $latest_tag
 
+  # Begin migration to non-prototype tag
+  raku_org_full_tag="quay.io/chroot.club/raku-org-website:${tag_version}"
+  raku_org_latest_tag="quay.io/chroot.club/raku-org-website:latest"
+  docker tag $full_tag $raku_org_full_tag
+  docker tag $full_tag $raku_org_latest_tag
+
   # Push both tags
   docker push $full_tag
   docker push $latest_tag
+  docker push $raku_org_full_tag
+  docker push $raku_org_latest_tag
 }
 
 if [ -z $1 ]; then
