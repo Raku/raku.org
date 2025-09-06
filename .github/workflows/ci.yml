@@ -1,9 +1,10 @@
-name: Build and Test
+name: Build and Push
 
 on: 
   push:
     branches:
-      - dev
+      - main
+  pull_request:
 
 jobs:
   build_and_push:
