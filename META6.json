@@ -1,0 +1,24 @@
+{
+    "name": "Org",
+    "description": "blah blah blah",
+    "version": "0.0.1",
+    "authors": [
+        "librasteve"
+    ],
+    "auth": "zef:librasteve",
+    "depends": [
+        "Air",
+        "Air::Plugin::Hilite"
+    ],
+    "build-depends": [],
+    "provides": {
+        "Org": "lib/Org.rakumod",
+        "Org::Home": "lib/Org/Home.rakumod",
+        "Org::Community": "lib/Org/Community.rakumod",
+        "Org::Install": "lib/Org/Install.rakumod",
+        "Org::Learn": "lib/Org/Learn.rakumod",
+        "Org::Tools": "lib/Org/Tools.rakumod"
+    },
+    "license": "Artistic-2.0",
+    "source-url": ""
+}

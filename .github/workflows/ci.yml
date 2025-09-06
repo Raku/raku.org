@@ -1,0 +1,19 @@
+name: Build and Push
+
+on: 
+  push:
+    branches:
+      - main
+  pull_request:
+
+jobs:
+  build_and_push:
+    runs-on: ubuntu-latest
+    env:
+      QUAY_USERNAME: chroot.club+proto25
+      QUAY_PASSWORD: ${{ secrets.QUAY_PASSWORD }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      - name: Build and push container
+        run: ./scripts/cibuild.sh container

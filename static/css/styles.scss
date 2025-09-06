@@ -1,0 +1,204 @@
+@use "node_modules/@picocss/pico/scss" with (
+  $theme-color: "pink"
+);
+
+//some root overrides for scale https://github.com/picocss/pico/discussions/482
+
+:root {
+  --pico-font-family-sans-serif: Inter, system-ui, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, Helvetica, Arial, "Helvetica Neue", sans-serif, var(--pico-font-family-emoji);
+  --pico-font-size: 106.25%;                        /* Original: 100% */
+  --pico-line-height: 1.25;                         /* Original: 1.5 */
+  --pico-form-element-spacing-vertical: 0.5rem;     /* Original: 1rem */
+  --pico-form-element-spacing-horizontal: 1.0rem;   /* Original: 1.25rem */
+  --pico-border-radius: 0.375rem;                   /* Original: 0.25rem */
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  --pico-font-weight: 600;                          /* Original: 700 */
+}
+
+article {
+  border: 1px solid var(--pico-muted-border-color); /* Original doesn't have a border */
+  border-radius: calc(var(--pico-border-radius) * 2); /* Original: var(--pico-border-radius) */
+}
+
+article>footer {
+  border-radius: calc(var(--pico-border-radius) * 2); /* Original: var(--pico-border-radius) */
+}
+
+b {
+  color: springgreen;
+}
+
+.logo, .logo:hover {
+  /* Remove underline by default and on hover */
+  text-decoration: none;
+  font-size:160%;
+  font-weight:700;
+}
+
+body > footer > p {
+  font-size:66%;
+  font-style:italic;
+}
+
+
+
+
+/* Raku code highlighting */
+
+//hardwire hilite colours (for now)
+:root {
+    --base-color-scalar: #2458a2;       /* Darker than #3273dc */
+    --base-color-array: #B01030;        /* Darkened crimson */
+    --base-color-hash: #00a693;         /* Darker cyan-green */
+    --base-color-code: #209cee;         /* Bulma info */
+    --base-color-keyword: #008c7e;      /* Darkened primary cyan */
+    --base-color-operator: #1ca24f;     /* Darker green for contrast */
+    --base-color-type: #d12c4c;         /* Deeper pinkish red */
+    --base-color-routine: #489fdc;      /* Richer blue, not too pale */
+    --base-color-string: #369ec6;       /* Stronger blue-cyan */
+    --base-color-string-delimiter: #1d90d2; /* More contrast than #7dd3fc */
+    --base-color-escape: #2b2b2b;       /* Darkened for visibility */
+    --base-color-text: #2a2a2a;         /* Darker base text */
+    --base-color-comment: #4aa36c;      /* Less pastel, more visible green */
+    --base-color-regex-special: #00996f; /* Balanced mid-green */
+    --base-color-regex-literal: #a52a2a; /* brown */
+    --base-color-regex-delimiter: #aa00aa; /* Darkened fuchsia */
+    --base-color-doc-text: #2b9e71;     /* Deeper mint green */
+    --base-color-doc-markup: #d02b4c;   /* Matches adjusted danger */
+}
+
+.raku-code {
+    z-index: 1;
+    text-align:left;
+    position: relative;
+    max-width: 100%;
+    overflow-x: auto;
+
+    button.copy-code {
+        float: right;
+        cursor: pointer;
+        opacity: 0;
+        padding: 0 0.25rem 0.25rem 0.25rem;
+        margin-left: 0.25rem;
+        margin-bottom: -15px;
+        position: relative;
+    }
+    &:hover button.copy-code {
+        opacity: 1;
+    }
+
+    label {
+        float: right;
+        font-size: xx-small;
+        font-style: italic;
+        height: auto;
+        padding-right: 0;
+        margin-top: 1rem;
+    }
+    /* required to match highlights-js css with raku highlighter css */
+    pre.browser-hl { padding: 7px; }
+
+    .code-name {
+        padding-top: 0.75rem;
+        padding-left: 1.25rem;
+        font-weight: 500;
+    }
+    pre {
+        display: inline-block;
+        overflow: auto;
+        width: 100%;
+        margin-bottom: 0px;
+    }
+    .rakudoc-in-code {
+        padding: 1.25rem 1.5rem;
+    }
+    .section {
+        /* https://github.com/Raku/doc-website/issues/144 */
+        padding: 0rem;
+    }
+
+    // Exception: If inside .nohighlights, reset styles
+    .nohighlights {
+        background: none;
+        color: inherit;
+    }
+    .rainbow-name_scalar {
+      color: var(--base-color-scalar);
+      font-weight: 500;
+    }
+    .rainbow-name_array {
+      color: var(--base-color-array);
+      font-weight: 500;
+    }
+    .rainbow-name_hash {
+      color: var(--base-color-hash);
+      font-weight: 500;
+    }
+    .rainbow-name_code {
+      color: var(--base-color-code);
+      font-weight: 500;
+    }
+    .rainbow-keyword {
+      color: var(--base-color-keyword);
+      font-weight: 500;
+    }
+    .rainbow-operator {
+      color: var(--base-color-operator);
+      font-weight: 500;
+    }
+    .rainbow-type {
+      color: var(--base-color-type);
+      font-weight: 500;
+    }
+    .rainbow-routine {
+      color: var(--base-color-routine);
+      font-weight: 500;
+    }
+    .rainbow-string {
+      color: var(--base-color-string);
+      font-weight: 500;
+    }
+    .rainbow-string_delimiter {
+      color: var(--base-color-string-delimiter);
+      font-weight: 500;
+    }
+    .rainbow-escape {
+      color: var(--base-color-escape);
+      font-weight: 500;
+    }
+    .rainbow-text {
+      color: var(--base-color-text);
+      font-weight: 500;
+    }
+    .rainbow-comment {
+      color: var(--base-color-comment);
+      font-weight: 500;
+    }
+    .rainbow-regex_special {
+      color: var(--base-color-regex-special);
+      font-weight: 500;
+    }
+    .rainbow-regex_literal {
+      color: var(--base-color-regex-literal);
+      font-weight: 500;
+    }
+    .rainbow-regex_delimiter {
+      color: var(--base-color-regex-delimiter);
+      font-weight: 500;
+    }
+    .rainbow-rakudoc_text {
+      color: var(--base-color-doc-text);
+      font-weight: 500;
+    }
+    .rainbow-rakudoc_markup {
+      color: var(--base-color-doc-markup);
+      font-weight: 500;
+    }
+}
