@@ -107,3 +107,24 @@ sudo docker-compose down
 ```
 
 ~librasteve
+
+# git fsck
+
+See https://github.com/Raku/raku.org/issues/50
+
+Please note that there is a git fsck issue with this repository. If you have
+enabled fsckObjects, you will see this error when cloning:
+
+```
+error: object 552c801ce329aab35ec7a165998e114da4edbd8e: zeroPaddedFilemode: contains zero-padded file modes
+```
+
+This warning stems from a change in git where that used to be treated as a
+different representation than non zero padded, and so you might have a
+slightly larger repository (it couldn't tell they were the same). This doesn't
+seem like a true corruption of the repository, even though fsck has been
+updated to complain about it.
+
+For now, you can disable fsckObjects when interacting with this repository
+or use something like '--depth 1' for your clone.
+
