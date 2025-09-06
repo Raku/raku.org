@@ -1,0 +1,20 @@
+---
+"cro": 1
+"endpoints": 
+  -   
+    "host-env": "HTTP_HOST"
+    "id": "http"
+    "name": "HTTP"
+    "port-env": "HTTP_PORT"
+    "protocol": "http"
+"entrypoint": "service.raku"
+"env":  []  
+"id": "http"
+"links":  []  
+"name": "http"
+"ignore":
+  - .iml
+  - .iml~
+  - .idea/
+  - static/css/
+...

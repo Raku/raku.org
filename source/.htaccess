@@ -1,6 +1,0 @@
-Redirect 301 /documentation  https://perl6.org/resources/
-Redirect 301 /documentation/ https://perl6.org/resources/
-Redirect 303 /irc            https://web.libera.chat/#raku
-Redirect 303 /irc-dev        https://web.libera.chat/#raku-dev
-Redirect 303 /sponsor-jnthn  https://6guts.wordpress.com/2017/05/12/looking-for-perl-6-rakudo-and-moarvm-development-funding/
-Redirect 301 /survey/2018.06/results https://docs.google.com/forms/d/19qSBpGWWc9RNruxPWySHkmy3tppaqeqUNGfZpHhdsMs/viewanalytics
