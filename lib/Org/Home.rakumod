@@ -73,9 +73,9 @@ sub home-page(&basepage, &shadow) is export {
                                 h3 'Multi Paradigm';
                                 p 'Smoothly combine coding styles:';
                                 ul [
-                                    li( 'Object-Oriented:'; code 'class Circle'; 'encapsulates data and behavior.' );
-                                    li( 'Functional: built-ins like'; code '.map'; 'and operators like'; code '».'; 'and'; code '[+]'; '.' );
-                                    li( 'Declarative:'; code '...'; 'infers sequences, such as the powers of two.' );
+                                    li( 'Object-Oriented:'; code 'class Circle'; ' encapsulates data and behavior.' );
+                                    li( 'Functional: built-ins like'; code '.map'; ' and operators like'; code '».'; ' and'; code '[+]'; ' .' );
+                                    li( 'Declarative:'; code '...'; ' infers sequences, such as the powers of two.' );
                                     li( 'Procedural: the overall code flow is straightforward.' );
                                 ];
                                 code-note 'natural syntax & semantics';
@@ -105,8 +105,8 @@ sub home-page(&basepage, &shadow) is export {
                                 h3 'Strict & Gradual Types';
                                 p 'Introduce types as needed:';
                                 ul [
-                                    li( code 'Str $name'; 'and'; code 'Int $age'; 'enforce strict types.');
-                                    li( code '$user'; 'and'; code '$info'; 'are dynamically typed.' );
+                                    li( code 'Str $name'; ' and'; code 'Int $age'; ' enforce strict types.');
+                                    li( code '$user'; ' and'; code '$info'; ' are dynamically typed.' );
                                     li( 'They work smoothly together ... gradual typing in action.' );
                                 ];
                                 code-note 'rapid prototype to solid product';
@@ -156,8 +156,8 @@ sub home-page(&basepage, &shadow) is export {
                                 h3 'Command Line';
                                 p 'Create your own command line function:';
                                 ul [
-                                    li( 'Positional arguments like ('; code '$name'; ') are required by default.');
-                                    li( 'Named arguments like (', code ':$age'; ' and '; code ':$verbose'; ') are optional.' );
+                                    li( 'Positional arguments like ('; code '$name'; ' ) are required by default.');
+                                    li( 'Named arguments like (', code ':$age'; ' and '; code ':$verbose'; ' ) are optional.' );
                                     li( 'Boolean flags like ', code '--verbose'; ' are automatically treated as True if present.' );
                                 ];
                                 code-note 'with automated --help';
@@ -182,7 +182,7 @@ sub home-page(&basepage, &shadow) is export {
                         vignette :direction<rtl>, [
                             article [
                                 h3 'Thriving Ecosystem';
-                                p ['The'; code 'zef'; 'package manager and '; code 'raku.land'; 'directory provide a unified framework for specifying and installing modules.'];
+                                p ['The'; code 'zef'; ' package manager and '; code 'raku.land'; ' directory provide a unified framework for specifying and installing modules.'];
                                 p 'Built in semantic version literals and smart compare for wildcard (*) and minimum (+) versions.';
                                 p 'Revision-gated compiler selection underpins the durability of your code.';
                                 code-note 'robust package management';
@@ -206,7 +206,7 @@ sub home-page(&basepage, &shadow) is export {
                             article [
                                 h3 'One Liners';
                                 p 'Use on the command line for more ergonomic scripts.';
-                                p ['An'; code 'awk'; 'alternative, for example.'];
+                                p ['An'; code 'awk'; ' alternative, for example.'];
                                 code-note 'bash, sed, awk alternative';
                             ];
                             article [
@@ -373,7 +373,7 @@ sub home-page(&basepage, &shadow) is export {
                             article [
                                 h3 'File IO';
                                 p 'Changes the first occurrence of "Hello" to "Hi" in the file.';
-                                p [code '.IO.lines'; ' and '; code '.IO.words'; 'return a lazy list of the file lines or words. This batch pipelined model makes light work of enormous files'];
+                                p [code '.IO.lines'; ' and '; code '.IO.words'; ' return a lazy list of the file lines or words. This batch pipelined model makes light work of enormous files'];
                                 code-note 'well designed abstractions';
                             ];
                             article [
@@ -431,10 +431,10 @@ sub home-page(&basepage, &shadow) is export {
                             article [
                                 h3 'Feed Operators';
                                 ul [
-                                    li( code '(1..5)'; 'creates a Range.' );
-                                    li( code 'map'; 'doubles each value.' );
-                                    li( code 'grep'; 'filters value greater than 5.' );
-                                    li( code 'say'; 'outputs the results.' );
+                                    li( code '(1..5)'; ' creates a Range.' );
+                                    li( code 'map'; ' doubles each value.' );
+                                    li( code 'grep'; ' filters value greater than 5.' );
+                                    li( code 'say'; ' outputs the results.' );
                                 ];
                                 code-note 'function pipelines';
                             ];
@@ -460,7 +460,7 @@ sub home-page(&basepage, &shadow) is export {
                             article [
                                 h3 'Rational Numerics';
                                 p  'Int, BigInt, Rational (fraction), Complex & Num (floating point) numbers all come as standard.';
-                                p  ['Prevents floating-point errors by using exact math, so'; code '0.1 + 0.2 == 0.3'; 'just works.'];
+                                p  ['Prevents floating-point errors by using exact math, so'; code '0.1 + 0.2 == 0.3'; ' just works.'];
                                 code-note 'math without surprises';
                             ];
                             article [
@@ -503,7 +503,7 @@ sub home-page(&basepage, &shadow) is export {
                         vignette :direction<rtl>, [
                             article [
                                 h3 'Smartmatching';
-                                p [ 'The '; code 'given { when }'; ' construct uses smartmatching ('; code('~~'); ') to check type, equality, membership, logic, regex and so on.'; ];
+                                p [ 'The '; code 'given { when }'; ' construct uses smartmatching ('; code('~~'); ' ) to check type, equality, membership, logic, regex and so on.'; ];
                                 code-note 'powerful matcher capability';
                             ];
                             article [
@@ -599,11 +599,11 @@ sub home-page(&basepage, &shadow) is export {
                             p 'Starts an HTTP server on ', code 'localhost:10000';
                             p 'Responds to:';
                             ul [
-                                li( code '/'; 'with '; em '"Hello Cro!".');
+                                li( code '/'; ' with '; em '"Hello Cro!".');
                                 li( code '/hello'; ' with '; em '"Hello World!".');
                                 li( code '/greet/<name>'; ' with a personalized greeting, e.g. '; em '"Hello, Alice!"');
                             ];
-                            p 'Stops gracefully with Ctrl+C (', code 'SIGINT', ')';
+                            p ['Stops gracefully with Ctrl+C ('; code 'SIGINT'; ' )'];
                             code-note 'pluggable middleware and Cro template language';
                         ];
                         article [
