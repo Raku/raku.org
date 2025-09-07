@@ -30,6 +30,8 @@ class Buttabs does Tabs {
         }
         .tab-links > li > a {
             border-radius: var(--pico-border-radius);
+            border-top-left-radius: 0;
+            border-top-right-radius: 0;
             background-color: transparent;
             text-decoration: none;
             cursor: pointer;
