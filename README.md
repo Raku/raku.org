@@ -1,45 +1,37 @@
 [![Build and Test](https://github.com/Raku/raku.org/actions/workflows/ci.yml/badge.svg)](https://github.com/Raku/raku.org/actions/workflows/ci.yml)
+[![License: Artistic-2.0](https://img.shields.io/badge/License-Artistic%202.0-0298c3.svg)](https://opensource.org/licenses/Artistic-2.0)
 
-# raku.org dev
-a prototype upgrade to the raku.org website
+# raku.org
+This is the source code for <https://raku.org>.
 
-the process:
+It is rendered every 15 minutes, so commits to the repository should also result in an update of <https://raku.org>. If not, please report an issue for the infra team on [#raku](https://raku.org/community/irc), our IRC channel.
 
-1. Gather Requirments
+### Guidelines
+Here are some guidelines that you should respect when changing this site:
 
-all interested folk invited to comment and input on [Requirements.md](https://github.com/librasteve/raku-org-25-proto/blob/main/Requirements.md)
- - open an Issue for discussion of a point
- - when agreed, make a PR for review and merge
+* Only link to up-to-date information. Feel free to delete outdated information — it is often more confusing than helpful.
 
-the aim was to get all feedback within 5 days - ie by 4th June - so that it can be incorporated into the prototype build
-[now closed for new requirements]
+* Be nice.
 
-2. Build Initial Prototype
+* Don't hesitate to link to pages you wrote yourself, if they are helpful to a broader Raku audience.
 
-done - yay!
-spike02 now available at
-https://proto25.harcstack.org
+* If you have a Raku blog, get it included in the https://planet.raku.org feed instead. You can request this on [#raku](https://raku.org/community/irc), our IRC channel.
 
-(you can also follow instructions below to install and hack locally)
+* If you intend to change the layout, consider what happens when:
 
-3. Summit Folks Review
+    - user's viewport is small (e.g. mobile device)
+    - user resizes window
 
-initially summit participants and Damian are invited to review
-see ./Review.md for what to do
-[now complete]
+* We support Chrome, Safari and Edge (HTML5).
 
-4. Move Proto to Dev
+* Please test your changes locally before committing.
 
-the code has been moved from https://github.com/librasteve/raku-org-25-proto to here
-Dockerfile and GHA has been written and checked
+* We use latest Raku.
 
-5. Final Check
+### hArc Stack
+We use the raku [hArc stack](https://harcstack.org) to make the site. hArc stack combines HTMX, Air, Red and Cro. Red is not used in this case so there is no database to worry about. The raku Air module is the glue for the stack and the documentation is [here](https://librasteve.github.io/Air/), if you would like to read some introductory blogs on hArc, then go [here](https://rakujourney.wordpress.com/all-posts/) and find 'HARC' on page. Please ping me - librasteve - on Discord or IRC if you would like any help.
 
-6. Go Live
-
-7. Continuous Improvement
-
-...
+Yeah, Raku on Raku. ;-)
 
 ---
 
@@ -71,7 +63,6 @@ Clone and install this repo
 
 ```
 git clone https://github.com/Raku/raku.org.git
-git checkout proto-25
 cd raku.org
 zef install . --deps-only   #e.g. Air::Plugin::Hilite
 ```
