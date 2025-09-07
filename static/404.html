@@ -1,0 +1,407 @@
+
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+    <title>Raku®</title>
+    <meta name="description" content="The Raku® programming language." />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script crossorigin="anonymous" integrity="sha384-xcuj3WpfgjlKF+FXhSQFQ0ZNr39ln+hwjN3npfM9VBnUskLolQAcN80McRIVOPuO" src="https://unpkg.com/htmx.org@1.9.5"></script>
+
+    <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/highlight.min.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/languages/haskell.min.js"></script>
+
+    <script defer data-website-id="bd5ca56b-3bad-47c7-b0a1-73ba5c3b5713" src="https://cloud.umami.is/script.js"></script>
+
+    <script defer data-website-id="bd5ca56b-3bad-47c7-b0a1-73ba5c3b5713" src="https://cloud.umami.is/script.js"></script>
+
+    <script defer data-website-id="bd5ca56b-3bad-47c7-b0a1-73ba5c3b5713" src="https://cloud.umami.is/script.js"></script>
+
+    <script defer data-website-id="bd5ca56b-3bad-47c7-b0a1-73ba5c3b5713" src="https://cloud.umami.is/script.js"></script>
+
+    <script defer src="https://cloud.umami.is/script.js" data-website-id="bd5ca56b-3bad-47c7-b0a1-73ba5c3b5713"></script>
+
+    <script defer data-website-id="bd5ca56b-3bad-47c7-b0a1-73ba5c3b5713" src="https://cloud.umami.is/script.js"></script>
+
+    <link type="image/x-icon" rel="icon" href="/img/favicon.ico" />
+    <link rel="stylesheet" href="/css/styles.css" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css" rel="stylesheet" />
+    <style>.tab-menu {
+        display: block;
+        justify-content: left;
+    }
+    .tab-links {
+        display: block;
+    }
+    .tab-links > li.active > a {
+        text-decoration: underline;
+    }
+
+    @media (max-width: 768px) {
+        .tab-menu {
+            text-align: ;
+        }
+        .tab-links > * {
+            padding-top: 0;
+            padding-bottom:1em;
+        }
+    }
+    </style>
+
+    <style>.tab-menu {
+        display: block;
+        justify-content: left;
+    }
+    .tab-links {
+        display: block;
+    }
+    .tab-links > li > a {
+        border-radius: var(--pico-border-radius);
+        border-top-left-radius: 0;
+        border-top-right-radius: 0;
+        background-color: transparent;
+        text-decoration: none;
+        cursor: pointer;
+        user-select: none;
+    }
+    .tab-links > li.active > a {
+        text-decoration: none;
+        border-bottom: var(--pico-border-width) solid var(--pico-primary-hover);
+    }
+
+    @media (max-width: 768px) {
+        .tab-menu {
+            text-align: center;
+        }
+        .tab-links > * {
+            padding-top: 0;
+            padding-bottom:1em;
+        }
+    }
+    </style>
+
+    <style>#background {
+        position: fixed;
+        top: 140px;
+        left: 0;
+        width: 100vw;
+        height: 320px;
+        background: url('https://upload.wikimedia.org/wikipedia/commons/f/fd/Butterfly_bottom_PSF_transparent.gif');
+        opacity: 0.1;
+        filter: grayscale(100%);
+        transform: rotate(-9deg);
+        background-repeat: no-repeat;
+        background-position: center center;
+        z-index: -1;
+        pointer-events: none;
+        padding: 20px;
+    }
+    </style>
+
+    <style>dashboard {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1rem;
+    }
+    </style>
+
+    <style>dashboard > article {
+        display: flex;
+        align-items: center;
+        flex-direction: column;
+
+        /* Responsive sizing */
+        flex: 1 1 600px;
+    //min-width: 600px;
+        max-width: 800px;
+    }
+    </style>
+
+    <style>/* Custom styles for the hamburger menu */
+    .menu {
+        display: none;
+        flex-direction: column;
+        gap: 10px;
+        position: absolute;
+        top: 60px;
+        right: 20px;
+        background: rgba(0, 0, 0, .95);
+        padding: 1rem;
+        border-radius: 8px;
+        box-shadow: 0 4px 6px rgba(128, 128, 128, .2);
+        z-index: 800;
+    }
+
+    .menu a {
+        display: block;
+    }
+
+    .menu.show {
+        display: flex;
+    }
+
+    .hamburger {
+        color: var(--pico-primary);
+        display: none;
+        cursor: pointer;
+        font-size: 2.5rem;
+        background: none;
+        border: none;
+        padding: 0.5rem;
+    }
+
+    @media (max-width: 768px) {
+        .hamburger {
+            display: block;
+        }
+
+        .nav-links {
+            display: none;
+        }
+    }
+    </style>
+</head>
+
+<body>
+<header class="container">
+    <nav>
+        <ul>
+            <li class="logo">
+<span>
+<a style="display: flex; align-items: center; gap: 0.5rem; text-decoration: none;" href="/" target="_self">
+<img src="/img/camelia-logo.png" title="Hi, my name is Camelia. I'm the spokesbug for the Raku Programming Language. Raku has been developed by a team of dedicated and enthusiastic open source volunteers, and continues to be developed. You can help too. The only requirement is that you know how to be nice to all kinds of people (and butterflies)." width="60px" />
+<p style="margin:0">Raku®</p>
+</a></span></li></ul>
+        <button id="hamburger" class="hamburger">&#9776;</button>
+        <ul hx-target="#content" class="nav-links" hx-swap="outerHTML">
+            <li>
+                <a href="/nav/1/community">community</a></li>
+            <li>
+                <a href="/nav/1/learn">learn</a></li>
+            <li>
+                <a href="/nav/1/tools">tools</a></li>
+            <li>
+                <a href="https://docs.raku.org" target="_blank" rel="noopener noreferrer">docs</a></li>
+            <li>
+                <a href="https://raku.land" target="_blank" rel="noopener noreferrer">modules</a></li>
+            <li>
+                <a target="_blank" rel="noopener noreferrer" href="https://github.com/rakudo/rakudo">git</a></li>
+            <li>
+                <a href="/nav/1/install">install</a></li>
+            <li>
+                <a href="/nav/1/html404">html404</a></li>
+            <li>
+                <a style="font-variant-emoji: text" id ="sunIcon">&#9728;</a>
+                <a style="font-variant-emoji: text" id ="moonIcon">&#9790;</a>
+                <script>
+                    // Function to show/hide icons
+                    function updateIcons(theme) {
+                        if (theme === "dark") {
+                            sunIcon.style.display = "none"; // Hide sun
+                            moonIcon.style.display = "block"; // Show moon
+                        } else {
+                            sunIcon.style.display = "block"; // Show sun
+                            moonIcon.style.display = "none"; // Hide moon
+                        }
+                    }
+                    function setTheme(mode) {
+                        const htmlElement = document.documentElement;
+                        let newTheme = mode;
+
+                        if (mode === "toggle") {
+                            const currentTheme = htmlElement.getAttribute("data-theme") || "light";
+                            newTheme = currentTheme === "dark" ? "light" : "dark";
+                        } else if (mode === "system") {
+                            newTheme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+                        }
+
+                        htmlElement.setAttribute("data-theme", newTheme);
+                        localStorage.setItem("theme", newTheme); // Save theme to localStorage
+                        updateIcons(newTheme);
+                    }
+
+                    // select theme on page load
+                    document.addEventListener("DOMContentLoaded", () => {
+                        const savedTheme = localStorage.getItem("theme");
+                        const systemPrefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+                        const initialTheme = savedTheme ?? (systemPrefersDark ? "dark" : "light");
+
+                        updateIcons(initialTheme);
+                        document.documentElement.setAttribute("data-theme", initialTheme);
+                    });
+
+                    // Listen for system dark mode changes and update the theme dynamically
+                    window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", () => {
+                        setTheme("system"); // Follow system setting
+                    });
+
+                    const sunIcon = document.getElementById("sunIcon");
+                    const moonIcon = document.getElementById("moonIcon");
+
+                    // Attach to a icon click
+                    document.getElementById("sunIcon").addEventListener("click", () => setTheme("dark"));
+                    document.getElementById("moonIcon").addEventListener("click", () => setTheme("light"));
+                </script>
+            </li>
+        </ul>
+        <ul id="menu" hx-swap="outerHTML" class="menu" hx-target="#content">
+            <li>
+                <a href="/nav/1/community">community</a></li>
+            <li>
+                <a href="/nav/1/learn">learn</a></li>
+            <li>
+                <a href="/nav/1/tools">tools</a></li>
+            <li>
+                <a rel="noopener noreferrer" href="https://docs.raku.org" target="_blank">docs</a></li>
+            <li>
+                <a rel="noopener noreferrer" href="https://raku.land" target="_blank">modules</a></li>
+            <li>
+                <a rel="noopener noreferrer" href="https://github.com/rakudo/rakudo" target="_blank">git</a></li>
+            <li>
+                <a href="/nav/1/install">install</a></li>
+            <li>
+                <a href="/nav/1/html404">html404</a></li>
+        </ul>
+    </nav></header>
+<main class="container">
+    <div id="background"></div>
+    <div align="center">
+        <h1>404 Error</h1>
+        <h2>Oops - this page does not exist.</h2>
+    </div>
+</main>
+<footer class="container">
+    <hr />
+    <p>
+        Hypered with <a href="https://htmx.org" target="_blank">htmx</a>.
+        Aloft on <a href="https://harcstack.org" target="_blank"><b>&Aring;ir</b></a>.
+        Constructed in <a href="https://cro.raku.org" target="_blank">cro</a>.
+        Written in <a href="https://raku.org" target="_blank">raku</a>.
+        &nbsp;&amp;&nbsp;
+        Styled by <a href="https://picocss.com" target="_blank">picocss</a>.
+    </p>
+    <p>The Raku® Programming Language</p>
+</footer>
+<script>    // Hilite-helper.js
+
+function copyCode() {
+    // copy code block to clipboard adapted from solution at
+    // https://stackoverflow.com/questions/34191780/javascript-copy-string-to-clipboard-as-text-html
+    // if behaviour problems with different browsers add stylesheet code from that solution.
+    const copyButtons = Array.from(document.querySelectorAll('.copy-code'));
+    copyButtons.forEach( function( button ) {
+        // this works with / without label
+        var codeElement = button.nextElementSibling;
+        while (codeElement && codeElement.tagName !== 'DIV') {
+            codeElement = codeElement.nextElementSibling;
+        }
+        button.addEventListener( 'click', function(insideButton) {
+            var container = document.createElement('div');
+            container.innerHTML = codeElement.innerHTML;
+            container.style.position = 'fixed';
+            container.style.pointerEvents = 'none';
+            container.style.opacity = 0;
+            document.body.appendChild(container);
+            window.getSelection().removeAllRanges();
+            var range = document.createRange();
+            range.selectNode(container);
+            window.getSelection().addRange(range);
+            document.execCommand("copy", false);
+            document.body.removeChild(container);
+        });
+    });
+}
+
+// DOM ready
+document.addEventListener('DOMContentLoaded', function () {
+    // trigger the highlighter for non-Raku code
+    copyCode();
+    hljs.highlightAll();
+});
+
+// HTMX updates
+document.addEventListener('htmx:afterSwap', function () {
+    copyCode();
+    hljs.highlightAll();
+});
+</script>
+
+<script>function setupTabLinks() {
+    const links = document.querySelectorAll('.tab-links > *');
+    const hiddenInput = document.getElementById('selectedOption');
+    const display = document.getElementById('selectedDisplay');
+
+    links.forEach(link => {
+        link.addEventListener('click', function (e) {
+            e.preventDefault();
+
+            links.forEach(l => l.classList.remove('active'));
+
+            this.classList.add('active');
+
+            const value = this.getAttribute('data-value');
+            if (hiddenInput) hiddenInput.value = value;
+            if (display) display.textContent = `Selected: ${this.textContent}`;
+        });
+    });
+}
+
+// Run on initial load
+document.addEventListener('DOMContentLoaded', setupTabLinks);
+
+// Re-run after HTMX swaps in new content
+document.body.addEventListener('htmx:afterSwap', setupTabLinks);
+</script>
+
+<script>function setupTabLinks() {
+    const links = document.querySelectorAll('.tab-links > *');
+    const hiddenInput = document.getElementById('selectedOption');
+    const display = document.getElementById('selectedDisplay');
+
+    links.forEach(link => {
+        link.addEventListener('click', function (e) {
+            e.preventDefault();
+
+            links.forEach(l => l.classList.remove('active'));
+
+            this.classList.add('active');
+
+            const value = this.getAttribute('data-value');
+            if (hiddenInput) hiddenInput.value = value;
+            if (display) display.textContent = `Selected: ${this.textContent}`;
+        });
+    });
+}
+
+// Run on initial load
+document.addEventListener('DOMContentLoaded', setupTabLinks);
+
+// Re-run after HTMX swaps in new content
+document.body.addEventListener('htmx:afterSwap', setupTabLinks);
+</script>
+
+<script>const hamburger = document.getElementById('hamburger');
+const menu = document.getElementById('menu');
+
+if (hamburger && menu) {
+    hamburger.addEventListener('click', () => {
+        menu.classList.toggle('show');
+    });
+
+    document.addEventListener('click', (e) => {
+        if (!menu.contains(e.target) && !hamburger.contains(e.target)) {
+            menu.classList.remove('show');
+        }
+    });
+}
+
+// Hide the menu when resizing the viewport to a wider width
+window.addEventListener('resize', () => {
+    if (window.innerWidth > 768) {
+        menu.classList.remove('show');
+    }
+});
+</script>
+</body>
+</html>

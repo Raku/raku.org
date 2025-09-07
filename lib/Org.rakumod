@@ -9,8 +9,9 @@ use Org::Community;
 use Org::Install;
 use Org::Learn;
 use Org::Tools;
+use Org::HTML404;
 
-my @tools = [Analytics.new: :provider(Umami), :key<FIXME>,];  # fixme
+my @tools = [Analytics.new: :provider(Umami), :key<bd5ca56b-3bad-47c7-b0a1-73ba5c3b5713>,];  # fixme
 
 my &basepage = &page.assuming(
     title       => 'Raku®',
@@ -38,6 +39,7 @@ my Page $community = community-page &basepage, &shadow;
 my Page $install   = install-page   &basepage, &shadow;
 my Page $learn     = learn-page     &basepage, &shadow;
 my Page $tools     = tools-page     &basepage, &shadow;
+my Page $html404   = html404-page   &basepage, &shadow;
 
 my Nav $nav =
     nav
@@ -58,10 +60,10 @@ my Nav $nav =
             modules   => (external :href<https://raku.land>),
             git       => (external :href<https://github.com/rakudo/rakudo>),
             install   => $install,
+            #html404   => $html404,     ###uncomment this line to temporarily show 404.html page
         ];
 
-
-my Page @pages = [$home, $community, $learn, $install, $tools];
+my Page @pages = [$home, $community, $learn, $install, $tools];     ###add $html404 here also
 { .nav = $nav } for @pages;
 
 sub SITE is export {
