@@ -13,6 +13,7 @@ sub vignette(*@a, *%h) {
 sub install {
     div [
         a :href</nav/1/install>, :target<_self>, button 'Install';
+        div :style('min-height:0.4em;');
         p 'Linux, macOS, Windows, Docker';
     ];
 }
@@ -59,9 +60,9 @@ sub home-page(&basepage, &shadow) is export {
             shadow;
             div :align<center>, [
                 h1 safe 'Raku is an expressive, multi&#8209;paradigm, Open Source language that works the way you think.';
-                spacer :height<16em>;
+                spacer;
                 install;
-                spacer :height<16em>;
+                spacer;
             ];
 
             div [
@@ -669,9 +670,9 @@ sub home-page(&basepage, &shadow) is export {
             ];
 
             div :align<center>, :style<min-width:400px;>, [
-                spacer :min-height<4em>;
+                spacer;
                 install;
-                spacer :min-height<4em>;
+                spacer;
             ];
         ];
 }
