@@ -397,8 +397,8 @@ sub home-page(&basepage, &shadow) is export {
                         vignette :direction<rtl>, [
                             article [
                                 h3 'Unicode Regexes';
-                                p  'Arguably the most powerful Unicode-aware regular expression engine available, especially for complex text processing.';
-                                p 'It shines in tasks where precision and multilingual support are essential such as Grapheme and Diacritic handling.';
+                                p  'The most powerful Unicode-aware regular expression engine available, especially for complex text processing.';
+                                p  'It shines in tasks where precision and multilingual support are essential such as Grapheme and Diacritic handling.';
                                 code-note 'unicode centric text handling';
                             ];
                             article [
