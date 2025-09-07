@@ -6,7 +6,7 @@ This is the source code for <https://raku.org>.
 
 It is a complete rewrite bringing many of the best parts of the old site. The old site can still be viewed [here](https://web.archive.org/web/20250821232603/https://raku.org/).
 
-It is rendered every 15 minutes, so commits to the repository should also result in an update of <https://raku.org>. If not, please report an issue for the infra team on [#raku](https://raku.org/community/irc), our IRC channel.
+It is rendered every 15 minutes, so commits to the repository's main branch should also result in an update of <https://raku.org>. If not, please report an issue for the infra team on [#raku](https://raku.org/community/irc), our IRC channel.
 
 ### Guidelines
 Here are some guidelines that you should respect when changing this site:
