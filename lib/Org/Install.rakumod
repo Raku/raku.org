@@ -16,7 +16,6 @@ sub install-page(&basepage, &shadow) is export {
                     Docker  => tab Docker();
                 ];
             ];
-
         ];
     }
 
