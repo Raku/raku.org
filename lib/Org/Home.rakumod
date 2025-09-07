@@ -196,7 +196,7 @@ sub home-page(&basepage, &shadow) is export {
                                     # Use API 1 from version 2.1 or later (any minor release)
                                     use Physics::Measure:api<1>:ver<2.1+.*>:auth<zef:alice> :ALL;
 
-                                    say 42m / 10s;   # 42m/s
+                                    say 42m / 10s;   # 4.2m/s
                                     END
                                 ];
                         ];
