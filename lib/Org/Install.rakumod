@@ -88,6 +88,15 @@ Just copy and paste the following lines into a console.
     brew install rakudo-star
 
 
+## Installation (MacPorts)
+
+[MacPorts](https://www.macports.org/) is a popular macOS package manager.
+
+Just copy and paste the following lines into a console.
+
+    sudo port install rakudo
+
+
 ## Installation (Rakubrew)
 
 Rakubrew is a Raku installation tool. It allows you to have multiple versions of different Raku implementations installed in parallel and switch between them. It's a [perlbrew](https://perlbrew.pl/) and [plenv](https://github.com/tokuhirom/plenv) look alike and supports both flavours of commands.
