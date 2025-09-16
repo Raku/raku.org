@@ -76,7 +76,7 @@ div [
 h1 'macOS';
 
 markdown q:to/END/;
-Other download and installation [options](/nav/1/info) are available.
+Other download and installation [options](/nav/1/tools) are available.
 
 ## Installation (Homebrew)
 
@@ -140,7 +140,7 @@ div [
 h1 'Windows';
 
 markdown q:to/END/;
-Other download and installation [options](/nav/1/info) are available.
+Other download and installation [options](/nav/1/tools) are available.
 
 Rakubrew is a Raku installation tool. It allows you to have multiple versions of different Raku implementations installed in parallel and switch between them. It's a [perlbrew](https://perlbrew.pl/) and [plenv](https://github.com/tokuhirom/plenv) look alike and supports both flavours of commands.
 
