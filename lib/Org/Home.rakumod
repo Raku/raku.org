@@ -181,7 +181,7 @@ sub home-page(&basepage, &shadow) is export {
                         ];
 
 
-                    thriving-ecosystem => tab  #iamerejh
+                    thriving-ecosystem => tab
                         vignette :direction<rtl>, [
                             article [
                                 h3 'Thriving Ecosystem';
@@ -214,7 +214,7 @@ sub home-page(&basepage, &shadow) is export {
                             ];
                             article [
                                 hilite q:to/END/;
-                                    raku -ne 'say s:g/foo/bar/' file.txt
+                                    raku -ne 'say S:g/foo/bar/' file.txt
                                     # subst all "foo" with "bar"
 
                                     raku -pe 's/ (\d+) / {flip($0)} /' file.txt
