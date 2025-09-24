@@ -550,24 +550,6 @@ sub home-page(&basepage, &shadow) is export {
                             ];
                     ];
 
-                FFI => tab
-                    vignette [
-                        article [
-                            h3 'FFI (Foreign Function Interface)';
-                            p 'Call functions or use data from libraries written in another language — often C or C++.';
-                            code-note 'reuse code and improve performance';
-                        ];
-                        article [
-                            hilite q:to/END/;
-                                use NativeCall;
-
-                                sub abs(int32 --> int32) is native('c') { * }
-
-                                say abs(-42);  # Outputs: 42
-                                END
-                            ];
-                    ];
-
                 LLM => tab
                     vignette [
                         article [
@@ -595,10 +577,49 @@ sub home-page(&basepage, &shadow) is export {
                             ];
                     ];
 
-                Cro => tab
+                CPAN => tab
                     vignette [
                         article [
-                            h3 'Distributed Web Services';
+                            h3 'CPAN (Comprehensive Perl Archive Network)';
+                            p( 'Use '; code 'Inline::Perl5'; ' to call Perl library functions and to insert Perl directly in your Raku code.');
+                            p( 'Here we write & compress '; em 'some data'; ' to a new bzip2 archive.' );
+                            code-note 'access over 220,000 Perl modules';
+                        ];
+                        article [
+                            hilite q:to/END/;
+                                use Inline::Perl5;
+                                use IO::Compress::Bzip2:from<Perl5>;
+
+                                my $bzip2 = IO::Compress::Bzip2.new('sample.bz2');
+                                $bzip2.print('some data');
+
+                                $bzip2.close;
+                                END
+                            ];
+                    ];
+
+                FFI => tab
+                    vignette [
+                        article [
+                            h3 'FFI (Foreign Function Interface)';
+                            p 'Call functions or use data from libraries written in another language — often C or C++.';
+                            code-note 'reuse code and improve performance';
+                        ];
+                        article [
+                            hilite q:to/END/;
+                                use NativeCall;
+
+                                sub abs(int32 --> int32) is native('c') { * }
+
+                                say abs(-42);  # Outputs: 42
+                                END
+                            ];
+                    ];
+
+                Web => tab
+                    vignette [
+                        article [
+                            h3 'Cro Distributed Web Services';
                             p 'Starts an HTTP server on ', code 'localhost:10000';
                             p 'Responds to:';
                             ul [
@@ -639,10 +660,10 @@ sub home-page(&basepage, &shadow) is export {
                             ];
                     ];
 
-                Red => tab
+                ORM => tab
                     vignette [
                         article [
-                            h3 'Object Relational Mapper (ORM)';
+                            h3 'Red Object Relational Mapper (ORM)';
                             p 'Here we use Red to define a Person model with fields id, firstName, and lastName. It sets up a SQLite database, creates a corresponding table, and populates it with data from a json-data() function. The ^populate method takes model data from JSON and inserts it into the database.';
                             code-note 'declarative table definitions';
                         ];
