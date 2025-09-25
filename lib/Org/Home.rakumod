@@ -587,13 +587,12 @@ sub home-page(&basepage, &shadow) is export {
                         ];
                         article [
                             hilite q:to/END/;
-                                use Inline::Perl5;
                                 use IO::Compress::Bzip2:from<Perl5>;
 
-                                my $bzip2 = IO::Compress::Bzip2.new('sample.bz2');
-                                $bzip2.print('some data');
-
-                                $bzip2.close;
+                                with IO::Compress::Bzip2.new: 'sample.bz2' {
+                                  .print: 'some data';
+                                  .close;
+                                }
                                 END
                             ];
                     ];
