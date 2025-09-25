@@ -33,7 +33,6 @@ my &basepage = &page.assuming(
 my &shadow = &background.assuming
     :url<https://upload.wikimedia.org/wikipedia/commons/f/fd/Butterfly_bottom_PSF_transparent.gif>;
 
-
 my Page $home      = home-page      &basepage, &shadow;
 my Page $community = community-page &basepage, &shadow;
 my Page $install   = install-page   &basepage, &shadow;
@@ -60,23 +59,20 @@ my Nav $nav =
             modules   => (external :href<https://raku.land>),
             git       => (external :href<https://github.com/rakudo/rakudo>),
             install   => $install,
-            #html404   => $html404,     ###uncomment this line to temporarily show 404.html page
         ];
 
-my Page @pages = [$home, $community, $learn, $install, $tools];     ###add $html404 here also
+my Page @pages = [$home, $community, $learn, $install, $tools];
+
 { .nav = $nav } for @pages;
+$html404.nav = $nav;
+
 
 sub SITE is export {
     site
-        :@tools,
-        :register[Air::Plugin::Hilite.new, Tabs.new, Home::Buttabs.new, Background.new,
-              Dashboard.new, Box.new],
-        :theme-color<pink>,
-        :bold-color<springgreen>,
-        :@pages,
+        :@tools, :@pages, :$html404,
+        :register[Air::Plugin::Hilite.new, Tabs.new, Home::Buttabs.new, Background.new, Dashboard.new, Box.new],
+        :theme-color<pink>, :bold-color<springgreen>,
 }
-
-
 
 =begin pod
 
