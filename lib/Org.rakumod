@@ -28,7 +28,7 @@ my &basepage = &page.assuming(
         |;
         p safe 'The Raku® Programming Language';
     ],
-    );
+);
 
 my &shadow = &background.assuming
     :url<https://upload.wikimedia.org/wikipedia/commons/f/fd/Butterfly_bottom_PSF_transparent.gif>;
@@ -39,6 +39,8 @@ my Page $install   = install-page   &basepage, &shadow;
 my Page $learn     = learn-page     &basepage, &shadow;
 my Page $tools     = tools-page     &basepage, &shadow;
 my Page $html404   = html404-page   &basepage, &shadow;
+
+my Page @pages = [$home, $community, $learn, $install, $tools, $html404];
 
 my Nav $nav =
     nav
@@ -57,19 +59,17 @@ my Nav $nav =
             tools     => $tools,
             docs      => (external :href<https://docs.raku.org>),
             modules   => (external :href<https://raku.land>),
-            git       => (external :href<https://github.com/rakudo/rakudo>),
+            source    => (external :href<https://github.com/rakudo/rakudo>),
             install   => $install,
         ];
 
-my Page @pages = [$home, $community, $learn, $install, $tools];
-
 { .nav = $nav } for @pages;
-$html404.nav = $nav;
 
+my Redirect @redirects = ['community' => '/nav/1/community'];
 
 sub SITE is export {
     site
-        :@tools, :@pages, :$html404,
+        :@tools, :@pages, :$html404, :@redirects,
         :register[Air::Plugin::Hilite.new, Tabs.new, Home::Buttabs.new, Background.new, Dashboard.new, Box.new],
         :theme-color<pink>, :bold-color<springgreen>,
 }
