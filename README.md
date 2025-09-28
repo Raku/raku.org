@@ -55,8 +55,7 @@ Install raku - eg. from rakubrew, then:
 Install Cro & Air
 
 ```
-zef install --/test cro
-zef install Air
+zef install --/test cro Air
 ```
 
 Red is not used in this build.
