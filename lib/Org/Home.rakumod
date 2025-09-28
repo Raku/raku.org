@@ -186,7 +186,7 @@ sub home-page(&basepage, &shadow) is export {
                             article [
                                 h3 'Thriving Ecosystem';
                                 p ['The'; code 'zef'; ' package manager and '; code 'raku.land'; ' directory provide a unified framework for specifying and installing modules.'];
-                                p 'Built in semantic version literals and smart compare for wildcard (*) and minimum (+) versions.';
+                                p 'Built in version literals and smart compare for wildcard (*) and minimum (+) versions.';
                                 p 'Revision-gated compiler selection underpins the durability of your code.';
                                 code-note 'robust package management';
                             ];
