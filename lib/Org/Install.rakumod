@@ -266,7 +266,7 @@ system, delete the  `~/.rakubrew` and `~/.local/share/rakubrew` directories.
 
 # Further Info
 
-More information on Rakubrew is available [here](https://github.com/Raku/App-Rakubrew)
+More information on Rakubrew is available [here](https://rakubrew.org/).
 
 END
 
