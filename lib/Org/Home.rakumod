@@ -92,7 +92,7 @@ sub home-page(&basepage, &shadow) is export {
 
                                     my @radii = 1,2,4...256;
 
-                                    my @circles = map { Circle.new(:$^radius) }, @radii;
+                                    my @circles = map { Circle.new: :radius($_) }, @radii;
 
                                     my $total-area = [+] @circles».area;
 
