@@ -11,7 +11,7 @@ use Org::Learn;
 use Org::Tools;
 use Org::HTML404;
 
-my @tools = [Analytics.new: :provider(Umami), :key<bd5ca56b-3bad-47c7-b0a1-73ba5c3b5713>,];  # fixme
+my @tools = [Analytics.new: :provider(Provider::Umami), :key<bd5ca56b-3bad-47c7-b0a1-73ba5c3b5713>,];  # fixme
 
 my &basepage = &page.assuming(
     title       => 'Raku®',
@@ -65,7 +65,13 @@ my Nav $nav =
 
 { .nav = $nav } for @pages;
 
-my Redirect @redirects = ['community' => '/nav/1/community'];
+my Redirect @redirects = [
+    community => '/nav/1/community',
+    learn     => '/nav/1/learn',
+    tools     => '/nav/1/tools',
+    install   => '/nav/1/install',
+    download  => '/nav/1/install',
+];
 
 sub SITE is export {
     site
