@@ -353,7 +353,7 @@ sub home-page(&basepage, &shadow) is export {
                             article [
                                 h3 'Signatures';
                                 p 'The signature syntax simplifies function definitions with clear parameter handling and built-in type checks';
-                                p 'See if you can spot positional (@) and named (%) args, optonal(?) [and mandatory(!)] args, slurpy parameters (*), slips (|), type defined-ness (:D), type coercion (()), return types (-->) and aliases (:f)';
+                                p 'See if you can spot positional (@) and named (%) args, optional(?) [and mandatory(!)] args, slurpy parameters (*), slips (|), type defined-ness (:D), type coercion (()), return types (-->) and aliases (:f)';
                                 code-note 'finely tuned interfaces';
                             ];
                             article [
