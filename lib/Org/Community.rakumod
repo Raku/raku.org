@@ -3,7 +3,6 @@ unit class Community;
 use Air::Functional :BASE;
 use Air::Base;
 
-
 sub community-page(&basepage, &shadow) is export {
     basepage #:REFRESH(10),
         main [
@@ -39,7 +38,7 @@ sub community-page(&basepage, &shadow) is export {
                 box :order(2), [
                     header h3 'Social & Blogs';
                     main markdown q:to/END/;
-                    Social:
+                    #### Social
 
                      - Bluesky: [#rakulang](https://bsky.app/search?q=%23rakulang)
                      - Mastodon: [@rakulang](https://fosstodon.org/@rakulang)
@@ -47,7 +46,7 @@ sub community-page(&basepage, &shadow) is export {
                      - Facebook: [Join the Raku Group](https://www.facebook.com/groups/raku.perl6/)
                      - Twitter: [Follow @raku_news](https://twitter.com/raku_news)
 
-                    Blogs:
+                    #### Blogs
 
                      - [Perl and Raku Weekly Challenge](https://perlweeklychallenge.org/)
                      - [Raku Blog Aggregator](https://planet.raku.org/)
