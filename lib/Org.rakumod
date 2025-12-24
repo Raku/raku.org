@@ -31,7 +31,7 @@ my &basepage = &page.assuming(
 );
 
 my &shadow = &background.assuming(
-    :src<img/Butterfly_bottom_PSF_transparent.gif>,
+    :src</img/Butterfly_bottom_PSF_transparent.gif>,
     :rotate(-9),
 );
 
