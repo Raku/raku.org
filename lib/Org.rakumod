@@ -11,7 +11,7 @@ use Org::Learn;
 use Org::Tools;
 use Org::HTML404;
 
-my @tools = [Analytics.new: :provider(Provider::Umami), :key<bd5ca56b-3bad-47c7-b0a1-73ba5c3b5713>,];  # fixme
+my @tools = [Analytics.new: :provider(Provider::Umami), :key<bd5ca56b-3bad-47c7-b0a1-73ba5c3b5713>,];
 
 my &basepage = &page.assuming(
     title       => 'Raku®',
@@ -30,8 +30,10 @@ my &basepage = &page.assuming(
     ],
 );
 
-my &shadow = &background.assuming
-    :url<https://upload.wikimedia.org/wikipedia/commons/f/fd/Butterfly_bottom_PSF_transparent.gif>;
+my &shadow = &background.assuming(
+    :src<img/Butterfly_bottom_PSF_transparent.gif>,
+    :rotate(-9),
+);
 
 my Page $home      = home-page      &basepage, &shadow;
 my Page $community = community-page &basepage, &shadow;
@@ -76,7 +78,8 @@ my Redirect @redirects = [
 sub SITE is export {
     site
         :@tools, :@pages, :$html404, :@redirects,
-        :register[Air::Plugin::Hilite.new, Tabs.new, Home::Buttabs.new, Background.new, Dashboard.new, Box.new],
+        :register[Air::Plugin::Hilite.new, Tabs.new, Home::Buttabs.new,
+                  Background.new, Dashboard.new, Box.new],
         :theme-color<pink>, :bold-color<springgreen>,
 }
 
