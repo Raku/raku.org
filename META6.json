@@ -7,7 +7,7 @@
     ],
     "auth": "zef:librasteve",
     "depends": [
-        "Air:ver<0.1.1>:auth<zef:librasteve>",
+        "Air:ver<0.1.2>:auth<zef:librasteve>",
         "Air::Plugin::Hilite:ver<0.0.6>:auth<zef:librasteve>"
     ],
     "build-depends": [],
