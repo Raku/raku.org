@@ -30,6 +30,7 @@ my &basepage = &page.assuming(
     ],
 );
 
+# https://commons.wikimedia.org/wiki/File:Butterfly_bottom_PSF_transparent.gif
 my &shadow = &background.assuming(
     :src</img/Butterfly_bottom_PSF_transparent.gif>,
     :rotate(-9),
