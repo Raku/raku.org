@@ -11,7 +11,7 @@ sub learn-page(&basepage, &shadow) is export {
                 h1 'Learn';
             ];
             dashboard [
-                box :order(1), [
+                panel :order(1), [
                     header h3 'Getting Started';
                     main markdown q:to/END/;
                     #### Raku Guide
@@ -34,7 +34,7 @@ sub learn-page(&basepage, &shadow) is export {
                     Raku is well represented on [Rosetta Code](https://rosettacode.org/wiki/Category:Raku), where you can see the Raku Programming Language (and many other languages) applied to numerous programming tasks.
                     END
                 ];
-                box :order(2), [
+                panel :order(2), [
                     header h3 'Books';
                     main markdown q:to/END/;
                     See [a helpful chart of Raku Books](https://perl6book.com/) or pick from the list below:
