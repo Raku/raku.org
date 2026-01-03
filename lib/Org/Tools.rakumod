@@ -11,7 +11,7 @@ sub tools-page(&basepage, &shadow) is export {
                 h1 'Tools';
             ];
             dashboard [
-                box :order(1), [
+                panel :order(1), [
                     header h3 'IDEs';
                     main markdown q:to/END/;
                     IDEs and editor plugins for working with Raku.
@@ -42,7 +42,7 @@ sub tools-page(&basepage, &shadow) is export {
                      - [Raku syntax highlighting](https://github.com/hankache/raku.nanorc)
                     END
                 ];
-                box :order(2), [
+                panel :order(2), [
                     header h3 'Interact & Download';
                     main markdown q:to/END/;
                     #### Sandboxes

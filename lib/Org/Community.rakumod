@@ -11,7 +11,7 @@ sub community-page(&basepage, &shadow) is export {
                 h1 'Community';
             ];
             dashboard [
-                box :order(1), [
+                panel :order(1), [
                     header h3 'Get in touch!';
                     main markdown q:to/END/;
                     _for help and friendly advice_
@@ -35,7 +35,7 @@ sub community-page(&basepage, &shadow) is export {
                     Many questions and answers are marked with the [Raku tag](https://stackoverflow.com/questions/tagged/raku).
                     END
                 ];
-                box :order(2), [
+                panel :order(2), [
                     header h3 'Social & Blogs';
                     main markdown q:to/END/;
                     #### Social
@@ -54,7 +54,7 @@ sub community-page(&basepage, &shadow) is export {
                      - [Raku Advent Calendar](https://rakuadventcalendar.wordpress.com/) - [help for contributors](https://github.com/Raku/advent/blob/master/CONTRIBUTING.md)
                     END
                 ];
-                box :order(3), [
+                panel :order(3), [
                     header h3 'Artistic License';
                     main markdown q:to/END/;
                     The Raku core development teams release the specification, compilers, and documentation they develop under the [Artistic 2.0 license](https://spdx.org/licenses/Artistic-2.0.html).
@@ -64,7 +64,7 @@ sub community-page(&basepage, &shadow) is export {
                     The broader development community is of course not required to use this license, but there is a [large uptake](https://raku.land/stats) among the community.
                     END
                 ];
-                box :order(4), [
+                panel :order(4), [
                     header h3 'Raku Steering Council (RSC)';
                     main markdown q:to/END/;
                     The [Steering Council](https://github.com/Raku-Steering-Council/Papers) is a 7-person committee with many responsibilities, including maintaining the quality and stability of the Raku language, its compilers, and its ecosystem. Also to make contributing and learning Raku as accessible, inclusive, and sustainable as possible.
