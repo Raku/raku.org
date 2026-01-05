@@ -80,7 +80,7 @@ sub SITE is export {
     site
         :@tools, :@pages, :$html404, :@redirects,
         :register[Air::Plugin::Hilite.new, Tabs.new, Home::Buttabs.new,
-                  Background.new, Dashboard.new, Panel.new],
+                  Background.new, Dashboard.new, Panel.new, LightDark.new],
         :theme-color<pink>, :bold-color<springgreen>,
 }
 
