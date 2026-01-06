@@ -30,6 +30,7 @@ my &basepage = &page.assuming(
     ],
 );
 
+# https://commons.wikimedia.org/wiki/File:Butterfly_bottom_PSF_transparent.gif
 my &shadow = &background.assuming(
     :src</img/Butterfly_bottom_PSF_transparent.gif>,
     :rotate(-9),
@@ -47,9 +48,9 @@ my Page @pages = [$home, $community, $learn, $install, $tools, $html404];
 my Nav $nav =
     nav
         logo => (
-            span a :href<https://raku-advent.blog>, :target<_self>, :style("display: flex; align-items: center; gap: 0.5rem; text-decoration: none;"),
+            span a :href<https://raku.org>, :target<_self>, :style("display: flex; align-items: center; gap: 0.5rem; text-decoration: none;"),
             [
-                img :src</img/camelia-xmas.png>, :width<60px>,
+                img :src</img/camelia-logo.png>, :width<60px>,
                 :title('Hi, my name is Camelia. I\'m the spokesbug for the Raku Programming Language. Raku has been developed by a team of dedicated and enthusiastic open source volunteers, and continues to be developed. You can help too. The only requirement is that you know how to be nice to all kinds of people (and butterflies).');
                 p :style("margin:0"),"Raku®";
             ]
@@ -79,7 +80,7 @@ sub SITE is export {
     site
         :@tools, :@pages, :$html404, :@redirects,
         :register[Air::Plugin::Hilite.new, Tabs.new, Home::Buttabs.new,
-                  Background.new, Dashboard.new, Box.new],
+                  Background.new, Dashboard.new, Panel.new, LightDark.new],
         :theme-color<pink>, :bold-color<springgreen>,
 }
 
