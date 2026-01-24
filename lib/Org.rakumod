@@ -11,7 +11,7 @@ use Org::Learn;
 use Org::Tools;
 use Org::HTML404;
 
-my @tools = [Analytics.new: :provider(Provider::Umami), :key<bd5ca56b-3bad-47c7-b0a1-73ba5c3b5713>,];
+my @tools = [Analytics.new: :provider(Umami), :key<bd5ca56b-3bad-47c7-b0a1-73ba5c3b5713>,];
 
 my &basepage = &page.assuming(
     title       => 'Raku®',
