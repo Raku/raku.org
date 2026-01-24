@@ -52,6 +52,10 @@ sub tools-page(&basepage, &shadow) is export {
                      - [Online Raku REPL (glot.io)](https://glot.io/new/raku)
                      - [Online Raku REPL (tio.run)](https://tio.run/#perl6)
                      - [Online Rakudoc editor](https://pod6.in/)
+                     - [Jupyter Binder](https://mybinder.org/v2/gh/rcmlz/raku-binder-env/main?urlpath=git-pull%3Frepo%3Dhttps%253A%252F%252Fgithub.com%252Fantononcube%252FRaku-Jupyter-Chatbook%26urlpath%3Dlab%252Ftree%252FRaku-Jupyter-Chatbook%252Feg%252F%26branch%3Dmaster), see github [repo](https://github.com/rcmlz/raku-binder-env) for details
+
+                    #### Cheatsheet
+
                      - [Cheatsheet](https://raw.githubusercontent.com/Raku/mu/master/docs/Perl6/Cheatsheet/cheatsheet.txt)
 
                     #### Latest Releases
