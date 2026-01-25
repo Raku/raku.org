@@ -277,7 +277,7 @@ sub Docker {
         h1 'Docker';
 
         markdown q:to/END/;
-Other download and installation [options](/nav/1/info) are available.
+Other download and installation [options](/nav/1/tools) are available.
 
 Rakudo Star is a Raku distribution complete with the zef package manager tool.
 
