@@ -67,7 +67,7 @@ sub community-page(&basepage, &shadow) is export {
                 panel :order(4), [
                     header h3 'Raku Steering Council (RSC)';
                     main markdown q:to/END/;
-                    The [Steering Council](https://github.com/Raku-Steering-Council/Papers) is a 7-person committee with many responsibilities, including maintaining the quality and stability of the Raku language, its compilers, and its ecosystem. Also to make contributing and learning Raku as accessible, inclusive, and sustainable as possible.
+                    The [Steering Council](https://github.com/Raku-Steering-Council/Papers) is a 6-person committee with many responsibilities, including maintaining the quality and stability of the Raku language, its compilers, and its ecosystem. Also to make contributing and learning Raku as accessible, inclusive, and sustainable as possible.
 
                     The [Problem Solving](https://github.com/Raku/problem-solving) repository contains issues that impact Raku which require consensus to resolve. The RSC is responsible for guiding any deadlocked issues to completion.
                     END
