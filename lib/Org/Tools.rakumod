@@ -45,6 +45,7 @@ sub tools-page(&basepage, &shadow) is export {
                 panel :order(2), [
                     header h3 'Interact & Download';
                     main markdown q:to/END/;
+
                     #### Sandboxes
 
                      - [Raku track on exercism.io](https://exercism.io/tracks/raku)
@@ -52,7 +53,12 @@ sub tools-page(&basepage, &shadow) is export {
                      - [Online Raku REPL (glot.io)](https://glot.io/new/raku)
                      - [Online Raku REPL (tio.run)](https://tio.run/#perl6)
                      - [Online Rakudoc editor](https://pod6.in/)
-                     - [Jupyter Binder](https://mybinder.org/v2/gh/rcmlz/raku-binder-env/main?urlpath=git-pull%3Frepo%3Dhttps%253A%252F%252Fgithub.com%252Fantononcube%252FRaku-Jupyter-Chatbook%26urlpath%3Dlab%252Ftree%252FRaku-Jupyter-Chatbook%252Feg%252F%26branch%3Dmaster), see github [repo](https://github.com/rcmlz/raku-binder-env) for details
+
+                    #### Notebooks
+
+                     - [Jupyter Chatbook](https://raku.land/zef:antononcube/Jupyter::Chatbook)
+                     - [Jupyter Kernel](https://raku.land/zef:bduggan/Jupyter::Kernel)
+                     - [Jupyter Binder](https://github.com/rcmlz/raku-binder-env)
 
                     #### Cheatsheet
 
