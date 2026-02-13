@@ -14,7 +14,7 @@ WORKDIR /app
 RUN zef install --/test --deps-only --verbose .
 
 COPY . /app
-RUN raku -c -Ilib service.raku
+RUN raku -c -Ilib air-start.raku
 ENV CRO_WEBSITE_HOST=0.0.0.0
 ENV CRO_WEBSITE_PORT=4000
-CMD ["raku", "-Ilib", "service.raku"]
+CMD ["raku", "-Ilib", "air-start.raku"]

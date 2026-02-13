@@ -76,13 +76,14 @@ my Redirect @redirects = [
     download  => '/nav/1/install',
 ];
 
-sub SITE is export {
+our $site =
     site
-        :@tools, :@pages, :$html404, :@redirects,
+        :theme-color<pink>, :bold-color<springgreen>,
         :register[Air::Plugin::Hilite.new, Tabs.new, Home::Buttabs.new,
                   Background.new, Dashboard.new, Panel.new, LightDark.new],
-        :theme-color<pink>, :bold-color<springgreen>,
-}
+        :@tools, :$html404, :@redirects,
+        :@pages,
+;
 
 =begin pod
 
@@ -92,7 +93,7 @@ librasteve <librasteve@furnival.net>
 
 =head1 COPYRIGHT AND LICENSE
 
-Copyright 2025 librasteve
+Copyright 2026 Stephen Roe
 
 This library is free software; you can redistribute it and/or modify it under the Artistic License 2.0.
 
