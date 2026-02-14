@@ -61,8 +61,8 @@ sub home-page(&basepage, &shadow) is export {
         main [
             shadow;
             div :align<center>, [
-                h1 safe 'Raku is an expressive, multi&#8209;paradigm, Open Source language that works the way you think!';
-                spacer :height<16em>;
+                h1 safe 'Raku is an expressive, multi&#8209;paradigm, Open Source language that works the way you think.';
+                spacer;
                 install;
                 spacer;
             ];
