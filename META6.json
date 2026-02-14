@@ -7,8 +7,8 @@
     ],
     "auth": "zef:librasteve",
     "depends": [
-        "Air",
-        "Air::Plugin::Hilite"
+        "Air:ver<0.1.6>:auth<zef:librasteve>",
+        "Air::Plugin::Hilite:ver<0.0.7>:auth<zef:librasteve>"
     ],
     "build-depends": [],
     "provides": {
@@ -17,7 +17,8 @@
         "Org::Community": "lib/Org/Community.rakumod",
         "Org::Install": "lib/Org/Install.rakumod",
         "Org::Learn": "lib/Org/Learn.rakumod",
-        "Org::Tools": "lib/Org/Tools.rakumod"
+        "Org::Tools": "lib/Org/Tools.rakumod",
+        "Org::HTML404": "lib/Org/HTML404.rakumod"
     },
     "license": "Artistic-2.0",
     "source-url": ""

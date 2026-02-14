@@ -1,45 +1,39 @@
 [![Build and Test](https://github.com/Raku/raku.org/actions/workflows/ci.yml/badge.svg)](https://github.com/Raku/raku.org/actions/workflows/ci.yml)
+[![License: Artistic-2.0](https://img.shields.io/badge/License-Artistic%202.0-0298c3.svg)](https://opensource.org/licenses/Artistic-2.0)
 
-# raku.org dev
-a prototype upgrade to the raku.org website
+# raku.org
+This is the source code for <https://raku.org>.
 
-the process:
+It is a complete rewrite bringing many of the best parts of the old site. The old site can still be viewed [here](https://web.archive.org/web/20250821232603/https://raku.org/).
 
-1. Gather Requirments
+It is rendered every 15 minutes, so commits to the repository's main branch should also result in an update of <https://raku.org>. If not, please report an issue for the infra team on [#raku](https://raku.org/community/irc), our IRC channel.
 
-all interested folk invited to comment and input on [Requirements.md](https://github.com/librasteve/raku-org-25-proto/blob/main/Requirements.md)
- - open an Issue for discussion of a point
- - when agreed, make a PR for review and merge
+### Guidelines
+Here are some guidelines that you should respect when changing this site:
 
-the aim was to get all feedback within 5 days - ie by 4th June - so that it can be incorporated into the prototype build
-[now closed for new requirements]
+* Only link to up-to-date information. Feel free to delete outdated information — it is often more confusing than helpful.
 
-2. Build Initial Prototype
+* Be nice.
 
-done - yay!
-spike02 now available at
-https://proto25.harcstack.org
+* Don't hesitate to link to pages you wrote yourself, if they are helpful to a broader Raku audience.
 
-(you can also follow instructions below to install and hack locally)
+* If you have a Raku blog, get it included in the https://planet.raku.org feed instead. You can request this on [#raku](https://raku.org/community/irc), our IRC channel.
 
-3. Summit Folks Review
+* If you intend to change the layout, consider what happens when:
 
-initially summit participants and Damian are invited to review
-see ./Review.md for what to do
-[now complete]
+    - user's viewport is small (e.g. mobile device)
+    - user resizes window
 
-4. Move Proto to Dev
+* We support Chrome, Safari and Edge (HTML5).
 
-the code has been moved from https://github.com/librasteve/raku-org-25-proto to here
-Dockerfile and GHA has been written and checked
+* Please test your changes locally before committing.
 
-5. Final Check
+* We use latest Raku.
 
-6. Go Live
+### hArc Stack
+We use the raku [hArc stack](https://harcstack.org) to make the site. hArc stack combines HTMX, Air, Red and Cro. Red is not used in this case so there is no database to worry about. The raku Air module is the glue for the stack and the documentation is [here](https://librasteve.github.io/Air/), if you would like to read some introductory blogs on hArc, then go [here](https://rakujourney.wordpress.com/all-posts/) and find 'HARC' on page. Please ping me - librasteve - on Discord or IRC if you would like any help.
 
-7. Continuous Improvement
-
-...
+Yeah, Raku on Raku. ;-)
 
 ---
 
@@ -61,8 +55,7 @@ Install raku - eg. from rakubrew, then:
 Install Cro & Air
 
 ```
-zef install --/test cro
-zef install Air
+zef install --/test cro Air
 ```
 
 Red is not used in this build.
@@ -71,7 +64,6 @@ Clone and install this repo
 
 ```
 git clone https://github.com/Raku/raku.org.git
-git checkout proto-25
 cd raku.org
 zef install . --deps-only   #e.g. Air::Plugin::Hilite
 ```
@@ -107,3 +99,24 @@ sudo docker-compose down
 ```
 
 ~librasteve
+
+# git fsck
+
+See https://github.com/Raku/raku.org/issues/50
+
+Please note that there is a git fsck issue with this repository. If you have
+enabled fsckObjects, you will see this error when cloning:
+
+```
+error: object 552c801ce329aab35ec7a165998e114da4edbd8e: zeroPaddedFilemode: contains zero-padded file modes
+```
+
+This warning stems from a change in git where that used to be treated as a
+different representation than non zero padded, and so you might have a
+slightly larger repository (it couldn't tell they were the same). This doesn't
+seem like a true corruption of the repository, even though fsck has been
+updated to complain about it.
+
+For now, you can disable fsckObjects when interacting with this repository
+or use something like '--depth 1' for your clone.
+

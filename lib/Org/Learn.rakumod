@@ -11,7 +11,7 @@ sub learn-page(&basepage, &shadow) is export {
                 h1 'Learn';
             ];
             dashboard [
-                box :order(1), [
+                panel :order(1), [
                     header h3 'Getting Started';
                     main markdown q:to/END/;
                     #### Raku Guide
@@ -34,17 +34,17 @@ sub learn-page(&basepage, &shadow) is export {
                     Raku is well represented on [Rosetta Code](https://rosettacode.org/wiki/Category:Raku), where you can see the Raku Programming Language (and many other languages) applied to numerous programming tasks.
                     END
                 ];
-                box :order(2), [
+                panel :order(2), [
                     header h3 'Books';
                     main markdown q:to/END/;
                     See [a helpful chart of Raku Books](https://perl6book.com/) or pick from the list below:
 
-                     - [Raku Fundamentals](https://www.apress.com/gp/book/9781484261088), by Moritz Lenz *(published, print and ebook)*
-                     - [Perl6 at a Glance](https://deeptext.media/perl6-at-a-glance/), by Andrew Shitov *(published, print)*
-                     - [Think Raku: How to Think Like a Computer Scientist](http://greenteapress.com/wp/think-perl-6/), by Laurent Rosenfeld *(published, print)*
-                     - [Parsing with Perl6 Regexes and Grammars](https://smile.amazon.com/dp/1484232275/), by Moritz Lenz *(published, print and ebook)*
-                     - [Metagenomics](https://kyclark.gitbooks.io/metagenomics/content/), by Ken Youens-Clark *(published, ebook)*
-                     - [Learning to program with Perl6: First Steps](https://www.amazon.com/gp/product/B07221XCVL), by JJ Merelo *(published, ebook)*
+                     - [Raku Fundamentals](https://www.apress.com/gp/book/9781484261088) by _Moritz Lenz_ (published, print and ebook)
+                     - [Perl6 at a Glance](https://deeptext.media/perl6-at-a-glance/) by _Andrew Shitov_ (published, print)
+                     - [Think Raku: How to Think Like a Computer Scientist](http://greenteapress.com/wp/think-perl-6/) by _Laurent Rosenfeld_ (published, print)
+                     - [Parsing with Perl6 Regexes and Grammars](https://smile.amazon.com/dp/1484232275/) by _Moritz Lenz_ (published, print and ebook)
+                     - [Metagenomics](https://kyclark.gitbooks.io/metagenomics/content/) by _Ken Youens-Clark_ (published, ebook)
+                     - [Learning to program with Perl6: First Steps](https://www.amazon.com/gp/product/B07221XCVL) by _JJ Merelo_ (published, ebook)
                     END
                 ];
             ];

@@ -9,8 +9,9 @@ use Org::Community;
 use Org::Install;
 use Org::Learn;
 use Org::Tools;
+use Org::HTML404;
 
-my @tools = [Analytics.new: :provider(Umami), :key<FIXME>,];  # fixme
+my @tools = [Analytics.new: :provider(Umami), :key<bd5ca56b-3bad-47c7-b0a1-73ba5c3b5713>,];
 
 my &basepage = &page.assuming(
     title       => 'Raku®',
@@ -27,22 +28,27 @@ my &basepage = &page.assuming(
         |;
         p safe 'The Raku® Programming Language';
     ],
-    );
+);
 
-my &shadow = &background.assuming
-    :url<https://upload.wikimedia.org/wikipedia/commons/f/fd/Butterfly_bottom_PSF_transparent.gif>;
-
+# https://commons.wikimedia.org/wiki/File:Butterfly_bottom_PSF_transparent.gif
+my &shadow = &background.assuming(
+    :src</img/Butterfly_bottom_PSF_transparent.gif>,
+    :rotate(-9),
+);
 
 my Page $home      = home-page      &basepage, &shadow;
 my Page $community = community-page &basepage, &shadow;
 my Page $install   = install-page   &basepage, &shadow;
 my Page $learn     = learn-page     &basepage, &shadow;
 my Page $tools     = tools-page     &basepage, &shadow;
+my Page $html404   = html404-page   &basepage, &shadow;
+
+my Page @pages = [$home, $community, $learn, $install, $tools, $html404];
 
 my Nav $nav =
     nav
         logo => (
-            span a :href</>, :target<_self>, :style("display: flex; align-items: center; gap: 0.5rem; text-decoration: none;"),
+            span a :href<https://raku.org>, :target<_self>, :style("display: flex; align-items: center; gap: 0.5rem; text-decoration: none;"),
             [
                 img :src</img/camelia-logo.png>, :width<60px>,
                 :title('Hi, my name is Camelia. I\'m the spokesbug for the Raku Programming Language. Raku has been developed by a team of dedicated and enthusiastic open source volunteers, and continues to be developed. You can help too. The only requirement is that you know how to be nice to all kinds of people (and butterflies).');
@@ -56,25 +62,27 @@ my Nav $nav =
             tools     => $tools,
             docs      => (external :href<https://docs.raku.org>),
             modules   => (external :href<https://raku.land>),
-            git       => (external :href<https://github.com/rakudo/rakudo>),
+            source    => (external :href<https://github.com/rakudo/rakudo>),
             install   => $install,
         ];
 
-
-my Page @pages = [$home, $community, $learn, $install, $tools];
 { .nav = $nav } for @pages;
+
+my Redirect @redirects = [
+    community => '/nav/1/community',
+    learn     => '/nav/1/learn',
+    tools     => '/nav/1/tools',
+    install   => '/nav/1/install',
+    download  => '/nav/1/install',
+];
 
 sub SITE is export {
     site
-        :@tools,
-        :register[Air::Plugin::Hilite.new, Tabs.new, Home::Buttabs.new, Background.new,
-              Dashboard.new, Box.new],
-        :theme-color<pink>,
-        :bold-color<springgreen>,
-        :@pages,
+        :@tools, :@pages, :$html404, :@redirects,
+        :register[Air::Plugin::Hilite.new, Tabs.new, Home::Buttabs.new,
+                  Background.new, Dashboard.new, Panel.new, LightDark.new],
+        :theme-color<pink>, :bold-color<springgreen>,
 }
-
-
 
 =begin pod
 
