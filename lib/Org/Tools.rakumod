@@ -12,9 +12,18 @@ sub tools-page(&basepage, &shadow) is export {
             ];
             dashboard [
                 panel :order(1), [
-                    header h3 'IDEs';
+                    header h3 'Environments';
                     main markdown q:to/END/;
-                    IDEs and editor plugins for working with Raku.
+
+                    ### Language Servers
+
+                    Editor-agnostic tools for syntax highlighting, autocompletion, etc. Consider using a Language Server over a syntax-highlighting extension for a richer development experience.
+
+                     - [Raku Navigator](https://github.com/bscan/RakuNavigator) Raku language support for VS Code, Emacs, neovim and others.
+
+                    ### Editor Plugins
+
+                    Editor-specific tools, mostly syntax highlighters.
 
                     #### JetBrains IntelliJ
 
@@ -22,11 +31,7 @@ sub tools-page(&basepage, &shadow) is export {
 
                     #### Visual Studio Code
 
-                     - [Raku Navigator](https://github.com/bscan/RakuNavigator) language support.
-
-                    #### Geany
-
-                     - [Geany](https://www.geany.org) is a popular flyweight Open Source IDE - now supports Raku.
+                     - [Raku Navigator](https://github.com/bscan/RakuNavigator) LSP language server.
 
                     #### Vim
 
@@ -40,6 +45,11 @@ sub tools-page(&basepage, &shadow) is export {
                     #### Nano
 
                      - [Raku syntax highlighting](https://github.com/hankache/raku.nanorc)
+
+                    #### Geany
+
+                     - [Geany](https://www.geany.org) is a popular flyweight Open Source IDE - now supports Raku.
+
                     END
                 ];
                 panel :order(2), [
