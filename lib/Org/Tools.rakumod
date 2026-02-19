@@ -12,21 +12,26 @@ sub tools-page(&basepage, &shadow) is export {
             ];
             dashboard [
                 panel :order(1), [
-                    header h3 'IDEs';
+                    header h3 'Environments';
                     main markdown q:to/END/;
-                    IDEs and editor plugins for working with Raku.
+
+                    ### Language Servers
+
+                    Editor-agnostic tools for syntax highlighting, autocompletion, etc. Consider using a Language Server over a syntax-highlighting extension for a richer development experience.
+
+                     - [Raku Navigator](https://github.com/bscan/RakuNavigator) Raku language support for VS Code, Emacs, neovim and others.
+
+                    ### Editor Plugins
+
+                    Editor-specific tools, mostly syntax highlighters.
 
                     #### JetBrains IntelliJ
 
-                     - [Raku IntelliJ Plugin](https://github.com/ab5tract/raku-intellij-plugin) for use with IntelliJ [IDEs](https://www.jetbrains.com/idea/download) (scroll down for the Community Edition).
+                     - [Raku IntelliJ Plugin](https://github.com/ab5tract/raku-intellij-plugin) for use with IntelliJ [IDEs](https://www.jetbrains.com/idea/download).
 
                     #### Visual Studio Code
 
-                     - [Raku Navigator](https://github.com/bscan/RakuNavigator) language support.
-
-                    #### Geany
-
-                     - [Geany](https://www.geany.org) is a popular flyweight Open Source IDE - now supports Raku.
+                     - [Raku Navigator](https://github.com/bscan/RakuNavigator) LSP language server.
 
                     #### Vim
 
@@ -35,11 +40,16 @@ sub tools-page(&basepage, &shadow) is export {
                     #### Emacs
 
                      - [raku-mode](https://github.com/Raku/raku-mode), an Emacs major mode for Raku which provides syntax highlighting (and more)
-                     - [Spacemacs](https://github.com/syl20bnr/spacemacs): Emacs wrapper with vim key-bindings and extra stuff
+                     - [Spacemacs](https://github.com/syl20bnr/spacemacs), an Emacs wrapper with vim key-bindings and extra stuff
 
                     #### Nano
 
                      - [Raku syntax highlighting](https://github.com/hankache/raku.nanorc)
+
+                    #### Geany
+
+                     - [Geany](https://www.geany.org) is a popular flyweight Open Source IDE - now supports Raku.
+
                     END
                 ];
                 panel :order(2), [
