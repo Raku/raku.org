@@ -27,7 +27,7 @@ sub tools-page(&basepage, &shadow) is export {
 
                     #### JetBrains IntelliJ
 
-                     - [Raku IntelliJ Plugin](https://github.com/ab5tract/raku-intellij-plugin) for use with IntelliJ [IDEs](https://www.jetbrains.com/idea/download) (scroll down for the Community Edition).
+                     - [Raku IntelliJ Plugin](https://github.com/ab5tract/raku-intellij-plugin) for use with IntelliJ [IDEs](https://www.jetbrains.com/idea/download).
 
                     #### Visual Studio Code
 
@@ -40,7 +40,7 @@ sub tools-page(&basepage, &shadow) is export {
                     #### Emacs
 
                      - [raku-mode](https://github.com/Raku/raku-mode), an Emacs major mode for Raku which provides syntax highlighting (and more)
-                     - [Spacemacs](https://github.com/syl20bnr/spacemacs): Emacs wrapper with vim key-bindings and extra stuff
+                     - [Spacemacs](https://github.com/syl20bnr/spacemacs), an Emacs wrapper with vim key-bindings and extra stuff
 
                     #### Nano
 
