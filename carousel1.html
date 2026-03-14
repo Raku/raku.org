@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        body{
+          margin:0;
+          padding:40px;
+          font-family:Arial, sans-serif;
+          background:#f4f4f4;
+        }
+
+        /* Carousel container */
+        .logo-carousel{
+          overflow:hidden;
+          position:relative;
+          width:100%;
+          background:white;
+          border:1px solid #ddd;
+        }
+
+        /* Track that moves */
+        .logo-track{
+          display:flex;
+          align-items:center;
+          gap:60px;
+          width:max-content;
+          animation:scroll 25s linear infinite;
+          padding:20px 0;
+        }
+
+        /* Logos */
+        .logo-track img{
+          height:50px;
+          width:auto;
+          object-fit:contain;
+          filter:grayscale(100%);
+          opacity:0.8;
+          transition:all 0.3s;
+        }
+
+        .logo-track img:hover{
+          filter:none;
+          opacity:1;
+        }
+
+        /* Animation */
+        @keyframes scroll{
+          from{
+            transform:translateX(0);
+          }
+          to{
+            transform:translateX(-50%);
+          }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="logo-carousel">
+    <div class="logo-track" id="logoTrack">
+
+        <img src="logo1.png">
+        <img src="logo2.png">
+        <img src="logo3.png">
+        <img src="logo4.png">
+        <img src="logo5.png">
+        <img src="logo6.png">
+
+    </div>
+</div>
+
+<script>
+    const track = document.getElementById("logoTrack");
+    track.innerHTML += track.innerHTML;
+</script>
+
+</body>
+</html>
