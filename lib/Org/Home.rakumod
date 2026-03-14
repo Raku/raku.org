@@ -8,7 +8,12 @@ sub code-note($s) {
     p( :style('font-size:small; text-align:right'), em("...$s") )
 }
 sub vignette(*@a, *%h) {
-    grid :grid-template-columns<2.2fr 3.2fr>, :gap(1.5), :flex-mobile<column-reverse>, |%h, @a
+    grid
+        :grid-template-columns<2.2fr 3.2fr>,
+        :gap(1.5),
+        :mobile-flex<column-reverse>,
+        :mobile-gap(0.1),
+        |%h, @a
 }
 sub install {
     div [
