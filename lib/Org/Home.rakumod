@@ -61,6 +61,17 @@ class Buttabs does Tabs {
 }
 sub buttabs(*@a, *%h) { Buttabs.new( |@a, |%h ) }
 
+my %logos = (
+'atikon-logo.png'           => 'https://www.atikon.com',
+'cns-logo.png'              => '',
+'edument-logo.png'          => 'https://www.edument.se',
+'haltec-logo.png'           => 'https://www.haltec.net',
+'oetiker_partner-logo.png'  => 'https://www.oetiker.ch/en_US',
+'qbrc-logo.jpg'             => 'https://qbrc.swmed.edu',
+'virtual_blue-logo.png'     => 'https://virtual.blue',
+);
+
+
 sub home-page(&basepage, &shadow) is export {
     basepage #:REFRESH(10),
         main [
@@ -694,6 +705,12 @@ sub home-page(&basepage, &shadow) is export {
                             ];
                     ];
 
+            ];
+
+            div [
+                p 'Sponsored by';
+                logos :%logos;
+                hr;
             ];
 
             div :align<center>, :style<min-width:400px;>, [
