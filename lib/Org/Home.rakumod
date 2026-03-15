@@ -710,7 +710,9 @@ sub home-page(&basepage, &shadow) is export {
             div [
                 p 'Sponsored by';
                 logos :%logos;
-                hr;
+                p :style('font-size:small; text-align:right'),
+                    em ['if you would like to support Raku, please send us a message ';
+                        a( :href('mailto:sponsoring@raku.org?subject="New Sponsor"'), 'sponsoring@raku.org' ) ];
             ];
 
             div :align<center>, :style<min-width:400px;>, [
