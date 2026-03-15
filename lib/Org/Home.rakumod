@@ -8,7 +8,12 @@ sub code-note($s) {
     p( :style('font-size:small; text-align:right'), em("...$s") )
 }
 sub vignette(*@a, *%h) {
-    grid :grid-template-columns<2.2fr 3.2fr>, :gap(1.5), |%h, @a
+    grid
+        :grid-template-columns<2.2fr 3.2fr>,
+        :gap(1.5),
+        :mobile-flex<column-reverse>,
+        :mobile-gap(0.1),
+        |%h, @a
 }
 sub install {
     div [
@@ -55,6 +60,17 @@ class Buttabs does Tabs {
     }
 }
 sub buttabs(*@a, *%h) { Buttabs.new( |@a, |%h ) }
+
+my %logos = (
+'atikon-logo.png'           => 'https://www.atikon.com',
+'cns-logo.png'              => '',
+'edument-logo.png'          => 'https://www.edument.se',
+'haltec-logo.png'           => 'https://www.haltec.net',
+'oetiker_partner-logo.png'  => 'https://www.oetiker.ch/en_US',
+'qbrc-logo.jpg'             => 'https://qbrc.swmed.edu',
+'virtual_blue-logo.png'     => 'https://virtual.blue',
+);
+
 
 sub home-page(&basepage, &shadow) is export {
     basepage #:REFRESH(10),
@@ -689,6 +705,14 @@ sub home-page(&basepage, &shadow) is export {
                             ];
                     ];
 
+            ];
+
+            div [
+                p 'Sponsored by';
+                logos :%logos;
+                p :style('font-size:small; text-align:right'),
+                    em ['if you would like to support Raku, please send us a message ';
+                        a( :href('mailto:sponsoring@raku.org?subject="New Sponsor"'), 'sponsoring@raku.org' ) ];
             ];
 
             div :align<center>, :style<min-width:400px;>, [
