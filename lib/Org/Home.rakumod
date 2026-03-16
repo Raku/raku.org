@@ -62,6 +62,7 @@ class Buttabs does Tabs {
 sub buttabs(*@a, *%h) { Buttabs.new( |@a, |%h ) }
 
 my @logos = (
+    'logo-dotcom-monitor.png'   => 'https://www.dotcom-monitor.com',
     'cns-logo.png'              => '',
     'edument-logo.png'          => 'https://www.edument.se',
     'haltec-logo.png'           => 'https://www.haltec.net',
