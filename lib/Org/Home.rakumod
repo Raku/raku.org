@@ -61,16 +61,14 @@ class Buttabs does Tabs {
 }
 sub buttabs(*@a, *%h) { Buttabs.new( |@a, |%h ) }
 
-my %logos = (
-'atikon-logo.png'           => 'https://www.atikon.com',
-'cns-logo.png'              => '',
-'edument-logo.png'          => 'https://www.edument.se',
-'haltec-logo.png'           => 'https://www.haltec.net',
-'oetiker_partner-logo.png'  => 'https://www.oetiker.ch/en_US',
-'qbrc-logo.jpg'             => 'https://qbrc.swmed.edu',
-'virtual_blue-logo.png'     => 'https://virtual.blue',
+my @logos = (
+    'cns-logo.png'              => '',
+    'edument-logo.png'          => 'https://www.edument.se',
+    'haltec-logo.png'           => 'https://www.haltec.net',
+    'oetiker_partner-logo.png'  => 'https://www.oetiker.ch/en_US',
+    'qbrc-logo.jpg'             => 'https://qbrc.swmed.edu',
+    'virtual_blue-logo.png'     => 'https://virtual.blue',
 );
-
 
 sub home-page(&basepage, &shadow) is export {
     basepage #:REFRESH(10),
@@ -708,8 +706,8 @@ sub home-page(&basepage, &shadow) is export {
             ];
 
             div [
-                p 'Sponsored by';
-                logos :%logos;
+                p 'Supported by';
+                logos :@logos;
                 p :style('font-size:small; text-align:right'),
                     em ['if you would like to support Raku, please send us a message ';
                         a( :href('mailto:sponsoring@raku.org?subject="New Sponsor"'), 'sponsoring@raku.org' ) ];
