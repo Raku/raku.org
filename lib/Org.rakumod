@@ -70,6 +70,7 @@ my Nav $nav =
 
 my Redirect @redirects = [
     community => '/nav/1/community',
+    fun       => '/nav/1/community',
     learn     => '/nav/1/learn',
     tools     => '/nav/1/tools',
     install   => '/nav/1/install',
