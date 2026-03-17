@@ -54,7 +54,7 @@ sub community-page(&basepage, &shadow) is export {
                      - [Raku Advent Calendar](https://rakuadventcalendar.wordpress.com/) - [help for contributors](https://github.com/Raku/advent/blob/master/CONTRIBUTING.md)
                     END
                 ];
-                panel :order(4), [
+                panel :order(3), [
                     header h3 '-Ofun';
                     main markdown q:to/END/;
                     Raku® is optimized for fun!
@@ -71,7 +71,7 @@ sub community-page(&basepage, &shadow) is export {
                      - [The Principle of Charity](https://effectiviology.com/principle-of-charity/): Assume the Best Interpretation of People’s Arguments
                     END
                 ];
-                panel :order(5), [
+                panel :order(4), [
                     header h3 'Artistic License';
                     main markdown q:to/END/;
                     The Raku core development teams release the specification, compilers, and documentation they develop under the [Artistic 2.0 license](https://spdx.org/licenses/Artistic-2.0.html).
@@ -81,7 +81,7 @@ sub community-page(&basepage, &shadow) is export {
                     The broader development community is of course not required to use this license, but there is a [large uptake](https://raku.land/stats) among the community.
                     END
                 ];
-                panel :order(6), [
+                panel :order(5), [
                     header h3 'Raku Steering Council (RSC)';
                     main markdown q:to/END/;
                     The [Steering Council](https://github.com/Raku-Steering-Council/Papers) is a 7-person committee with many responsibilities, including maintaining the quality and stability of the Raku language, its compilers, and its ecosystem. Also to make contributing and learning Raku as accessible, inclusive, and sustainable as possible.
