@@ -66,7 +66,6 @@ sub community-page(&basepage, &shadow) is export {
                      - [Perl 6 is my MMORPG](http://strangelyconsistent.org/blog/perl-6-is-my-mmorpg)
                      - [Optimized for fun (IRC conversations)](https://perlgeek.de/blog-en/perl-6/optimized-for-fun.html)
                      - [Lessons learned from open source communities](https://medium.com/@audrey.tang/lessons-i-ve-learned-32f5d8107e34)
-                     - [My hobby: Troll hugging](http://pugs.blogs.com/audrey/2009/08/my-hobby-troll-hugging.html)
                      - [On Troll Hugging, Hole Digging, and Improving Open Source Communities](https://blogs.perl.org/users/zoffix_znet/2017/08/on-troll-hugging-hole-digging-and-improving-open-source-communities.html)
                      - [The Principle of Charity](https://effectiviology.com/principle-of-charity/): Assume the Best Interpretation of People’s Arguments
                     END
