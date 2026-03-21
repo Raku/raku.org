@@ -62,7 +62,7 @@ class Buttabs does Tabs {
 sub buttabs(*@a, *%h) { Buttabs.new( |@a, |%h ) }
 
 my @supported-by = (
-    'logo-dotcom-monitor.svg'   => 'https://www.dotcom-monitor.com/',
+    'logo-dotcom-monitor.png'   => 'https://www.dotcom-monitor.com/',
     'LoadView-logo-alt.svg'     => 'https://www.loadview-testing.com/',
     'web-hosting-buddy-logo.png' => 'https://webhostingbuddy.com/',
     'findmyelectric-logo.png'   => 'https://www.findmyelectric.com/',
