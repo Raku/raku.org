@@ -61,8 +61,15 @@ class Buttabs does Tabs {
 }
 sub buttabs(*@a, *%h) { Buttabs.new( |@a, |%h ) }
 
-my @logos = (
-    'logo-dotcom-monitor.png'   => 'https://www.dotcom-monitor.com',
+my @supported-by = (
+    'logo-dotcom-monitor.svg'   => 'https://www.dotcom-monitor.com/',
+    'LoadView-logo-alt.svg'     => 'https://www.loadview-testing.com/',
+    'web-hosting-buddy-logo.png' => 'https://webhostingbuddy.com/',
+    'findmyelectric-logo.png'   => 'https://www.findmyelectric.com/',
+    'synthauto-logo.svg'        => 'https://www.synthauto.com/',
+);
+
+my @trusted-by = (
     'cns-logo.png'              => '',
     'edument-logo.png'          => 'https://www.edument.se',
     'haltec-logo.png'           => 'https://www.haltec.net',
@@ -707,11 +714,18 @@ sub home-page(&basepage, &shadow) is export {
             ];
 
             div [
-                p 'Supported by';
-                logos :@logos;
+                p 'Supported by:';
+                logos :logos(@supported-by);
                 p :style('font-size:small; text-align:right'),
-                    em ['if you would like to support Raku, please send us a message ';
+                    em ['if you would like to support Raku, please send a message to ';
                         a( :href('mailto:sponsoring@raku.org?subject="New Sponsor"'), 'sponsoring@raku.org' ) ];
+            ];
+
+            div [
+                p 'Trusted by:';
+                logos :logos(@trusted-by);
+                p :style('font-size:small; text-align:right'),
+                    em ['organisations that use Raku in a production setting' ];
             ];
 
             div :align<center>, :style<min-width:400px;>, [
