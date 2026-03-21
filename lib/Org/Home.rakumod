@@ -717,7 +717,7 @@ sub home-page(&basepage, &shadow) is export {
                 p 'Supported by:';
                 logos :logos(@supported-by);
                 p :style('font-size:small; text-align:right'),
-                    em ['if you would like to support Raku, please send us a message ';
+                    em ['if you would like to support Raku, please send a message to ';
                         a( :href('mailto:sponsoring@raku.org?subject="New Sponsor"'), 'sponsoring@raku.org' ) ];
             ];
 
