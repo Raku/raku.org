@@ -59,6 +59,8 @@ my Nav $nav =
         :widgets[lightdark],
         [
             community => $community,
+            fun       => $community,
+            ofun      => $community,
             learn     => $learn,
             tools     => $tools,
             docs      => (external :href<https://docs.raku.org>),
