@@ -59,8 +59,6 @@ my Nav $nav =
         :widgets[lightdark],
         [
             community => $community,
-            fun       => $community,
-            ofun      => $community,
             learn     => $learn,
             tools     => $tools,
             docs      => (external :href<https://docs.raku.org>),
@@ -73,6 +71,8 @@ my Nav $nav =
 
 my Redirect @redirects = [
     community => '/nav/1/community',
+    fun       => '/nav/1/community',
+    ofun      => '/nav/1/community',
     learn     => '/nav/1/learn',
     tools     => '/nav/1/tools',
     install   => '/nav/1/install',
