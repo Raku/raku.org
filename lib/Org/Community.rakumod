@@ -22,7 +22,7 @@ sub community-page(&basepage, &shadow) is export {
 
                     #### Internet Relay Chat (IRC)
 
-                    Much discussion happens on [#raku, our IRC channel](https://kiwiirc.com/nextclient/irc.libera.chat/#raku). This is the fastest way to get help.
+                    Much discussion happens on [#raku, our IRC channel](https://web.libera.chat/#raku). This is the fastest way to get help.
 
                     The IRC chats are logged [here](https://irclogs.raku.org/). A [family](https://github.com/Raku/whateverable/wiki) of friendly bots (the "Whateverables") are there to help.
 
