@@ -83,6 +83,18 @@ sub community-page(&basepage, &shadow) is export {
                     The [Problem Solving](https://github.com/Raku/problem-solving) repository contains issues that impact Raku which require consensus to resolve. The RSC is responsible for guiding any deadlocked issues to completion.
                     END
                 ];
+                panel :order(6), [
+                    header h3 'Raku Collect, Conserve and Remaster Project (CCR)';
+                    main markdown q:to/END/;
+                    Raku has a more than 20 year long history, much of it as "Perl 6". In this timeframe, many people have been involved in the project and have written blog posts about it. Sadly, some of these have already been lost in the mists of time.
+
+                    On the other hand, the syntax and semantics of the Raku Programming Language has seen several shifts and changes, so at leat some of the blog posts are now providing examples that will not run in the latest version of Raku.
+
+                    Finally, from a search engine optimization perspective, the Raku Community could benefit from an immediate source of up-to-date blog posts of the Raku Programming Language, as opposed to out-of-date Perl 6 blog posts.
+
+                    The [Raku CCR project](https://github.com/Raku/CCR) intends to remedy this situation in three stages.
+                    END
+                ];
             ];
         ];
 }
