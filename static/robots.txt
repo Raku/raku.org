@@ -1,0 +1,8 @@
+User-agent: *
+Disallow: /
+Allow: /
+Allow: /about
+Allow: /about/team
+Allow: /blog
+Allow: /blog/first-post
+Allow: /blog/second-post

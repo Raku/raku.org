@@ -4,7 +4,7 @@ use Air::Functional :BASE;
 use Air::Base;
 
 sub tools-page(&basepage, &shadow) is export {
-    basepage #:REFRESH(10),
+    basepage :stub<tools>, #:REFRESH(10),
         main [
             shadow;
             div :align<center>, :style('position: relative; padding: 20px;'), [

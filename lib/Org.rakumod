@@ -58,25 +58,21 @@ my Nav $nav =
         ),
         :widgets[lightdark],
         [
-            community => $community,
-            learn     => $learn,
-            tools     => $tools,
+            :$community,
+            :$learn,
+            :$tools,
             docs      => (external :href<https://docs.raku.org>),
             modules   => (external :href<https://raku.land>),
             source    => (external :href<https://github.com/rakudo/rakudo>),
-            install   => $install,
+            :$install,
         ];
 
 { .nav = $nav } for @pages;
 
 my Redirect @redirects = [
-    community => '/nav/1/community',
-    fun       => '/nav/1/community',
-    ofun      => '/nav/1/community',
-    learn     => '/nav/1/learn',
-    tools     => '/nav/1/tools',
-    install   => '/nav/1/install',
-    download  => '/nav/1/install',
+    fun       => '/community',
+    ofun      => '/community',
+    download  => '/install',
 ];
 
 our $site =

@@ -4,7 +4,7 @@ use Air::Functional :BASE;
 use Air::Base;
 
 sub learn-page(&basepage, &shadow) is export {
-    basepage #:REFRESH(10),
+    basepage :stub<learn>, #:REFRESH(10),
         main [
             shadow;
             div :align<center>, :style('position: relative; padding: 20px;'), [
