@@ -25,8 +25,8 @@ my &basepage = &page.assuming(
             Written in <a href="https://raku.org" target="_blank">raku</a>.
             &nbsp;&amp;&nbsp;
             Styled by <a href="https://picocss.com" target="_blank">picocss</a>.
-            starty
         |;
+        p safe 'Please report any issues with this site at <a href="https://github.com/Raku/raku.org" target="_blank">Raku/raku.org</a>.';
         p safe 'The Raku® Programming Language';
     ],
 );

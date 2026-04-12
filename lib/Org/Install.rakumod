@@ -25,7 +25,7 @@ div [
 h1 'Linux';
 
 markdown q:to/END/;
-Other download and installation [options](/nav/1/tools) are available.
+Other download and installation [options](/tools) are available.
 
 Rakubrew is a Raku installation tool. It allows you to have multiple versions of different Raku implementations installed in parallel and switch between them. It's a [perlbrew](https://perlbrew.pl/) and [plenv](https://github.com/tokuhirom/plenv) look alike and supports both flavours of commands.
 
@@ -72,11 +72,10 @@ md-tail;
 
 sub macOS {
 div [
-
 h1 'macOS';
 
 markdown q:to/END/;
-Other download and installation [options](/nav/1/tools) are available.
+Other download and installation [options](/tools) are available.
 
 ## Installation (Homebrew)
 
@@ -149,7 +148,7 @@ div [
 h1 'Windows';
 
 markdown q:to/END/;
-Other download and installation [options](/nav/1/tools) are available.
+Other download and installation [options](/tools) are available.
 
 Rakubrew is a Raku installation tool. It allows you to have multiple versions of different Raku implementations installed in parallel and switch between them. It's a [perlbrew](https://perlbrew.pl/) and [plenv](https://github.com/tokuhirom/plenv) look alike and supports both flavours of commands.
 
@@ -277,7 +276,7 @@ sub Docker {
         h1 'Docker';
 
         markdown q:to/END/;
-Other download and installation [options](/nav/1/tools) are available.
+Other download and installation [options](/tools) are available.
 
 Rakudo Star is a Raku distribution complete with the zef package manager tool.
 

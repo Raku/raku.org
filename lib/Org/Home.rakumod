@@ -17,7 +17,7 @@ sub vignette(*@a, *%h) {
 }
 sub install {
     div [
-        a :href</nav/1/install>, :target<_self>, button 'Install';
+        a :href</install>, :target<_self>, button 'Install';
         div :style('min-height:0.4em;');
         p 'Linux, macOS, Windows, Docker';
     ];

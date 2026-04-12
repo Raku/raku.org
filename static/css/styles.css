@@ -227,18 +227,18 @@ details summary[role=button]:not(.outline)::after {
 :root:not([data-theme=dark]) {
   --pico-background-color: #fff;
   --pico-color: #373c44;
-  --pico-text-selection-color: rgba(71, 164, 23, 0.25);
+  --pico-text-selection-color: rgba(246, 84, 126, 0.25);
   --pico-muted-color: #646b79;
   --pico-muted-border-color: #e7eaf0;
-  --pico-primary: #33790f;
-  --pico-primary-background: #398712;
+  --pico-primary: #c72259;
+  --pico-primary-background: #d92662;
   --pico-primary-border: var(--pico-primary-background);
-  --pico-primary-underline: rgba(51, 121, 15, 0.5);
-  --pico-primary-hover: #265e09;
-  --pico-primary-hover-background: #33790f;
+  --pico-primary-underline: rgba(199, 34, 89, 0.5);
+  --pico-primary-hover: #9d1945;
+  --pico-primary-hover-background: #c72259;
   --pico-primary-hover-border: var(--pico-primary-hover-background);
   --pico-primary-hover-underline: var(--pico-primary-hover);
-  --pico-primary-focus: rgba(71, 164, 23, 0.5);
+  --pico-primary-focus: rgba(246, 84, 126, 0.5);
   --pico-primary-inverse: #fff;
   --pico-secondary: #5d6b89;
   --pico-secondary-background: #525f7a;
@@ -347,18 +347,18 @@ details summary[role=button]:not(.outline)::after {
   :root:not([data-theme]) {
     --pico-background-color: #13171f;
     --pico-color: #c2c7d0;
-    --pico-text-selection-color: rgba(78, 179, 27, 0.1875);
+    --pico-text-selection-color: rgba(247, 112, 142, 0.1875);
     --pico-muted-color: #7b8495;
     --pico-muted-border-color: #202632;
-    --pico-primary: #4eb31b;
-    --pico-primary-background: #398712;
+    --pico-primary: #f7708e;
+    --pico-primary-background: #d92662;
     --pico-primary-border: var(--pico-primary-background);
-    --pico-primary-underline: rgba(78, 179, 27, 0.5);
-    --pico-primary-hover: #5dd121;
-    --pico-primary-hover-background: #409614;
+    --pico-primary-underline: rgba(247, 112, 142, 0.5);
+    --pico-primary-hover: #f99eae;
+    --pico-primary-hover-background: #f42c6f;
     --pico-primary-hover-border: var(--pico-primary-hover-background);
     --pico-primary-hover-underline: var(--pico-primary-hover);
-    --pico-primary-focus: rgba(78, 179, 27, 0.375);
+    --pico-primary-focus: rgba(247, 112, 142, 0.375);
     --pico-primary-inverse: #fff;
     --pico-secondary: #969eaf;
     --pico-secondary-background: #525f7a;
@@ -470,18 +470,18 @@ details summary[role=button]:not(.outline)::after {
 [data-theme=dark] {
   --pico-background-color: #13171f;
   --pico-color: #c2c7d0;
-  --pico-text-selection-color: rgba(78, 179, 27, 0.1875);
+  --pico-text-selection-color: rgba(247, 112, 142, 0.1875);
   --pico-muted-color: #7b8495;
   --pico-muted-border-color: #202632;
-  --pico-primary: #4eb31b;
-  --pico-primary-background: #398712;
+  --pico-primary: #f7708e;
+  --pico-primary-background: #d92662;
   --pico-primary-border: var(--pico-primary-background);
-  --pico-primary-underline: rgba(78, 179, 27, 0.5);
-  --pico-primary-hover: #5dd121;
-  --pico-primary-hover-background: #409614;
+  --pico-primary-underline: rgba(247, 112, 142, 0.5);
+  --pico-primary-hover: #f99eae;
+  --pico-primary-hover-background: #f42c6f;
   --pico-primary-hover-border: var(--pico-primary-hover-background);
   --pico-primary-hover-underline: var(--pico-primary-hover);
-  --pico-primary-focus: rgba(78, 179, 27, 0.375);
+  --pico-primary-focus: rgba(247, 112, 142, 0.375);
   --pico-primary-inverse: #fff;
   --pico-secondary: #969eaf;
   --pico-secondary-background: #525f7a;
@@ -2801,7 +2801,7 @@ article > footer {
 }
 
 b {
-  color: red;
+  color: springgreen;
 }
 
 .logo, .logo:hover {
@@ -2814,6 +2814,154 @@ b {
 body > footer > p {
   font-size: 66%;
   font-style: italic;
+}
+
+/* Raku code highlighting */
+:root {
+  --base-color-scalar: #2458a2; /* Darker than #3273dc */
+  --base-color-array: #B01030; /* Darkened crimson */
+  --base-color-hash: #00a693; /* Darker cyan-green */
+  --base-color-code: #209cee; /* Bulma info */
+  --base-color-keyword: #008c7e; /* Darkened primary cyan */
+  --base-color-operator: #1ca24f; /* Darker green for contrast */
+  --base-color-type: #d12c4c; /* Deeper pinkish red */
+  --base-color-routine: #489fdc; /* Richer blue, not too pale */
+  --base-color-string: #369ec6; /* Stronger blue-cyan */
+  --base-color-string-delimiter: #1d90d2; /* More contrast than #7dd3fc */
+  --base-color-escape: #2b2b2b; /* Darkened for visibility */
+  --base-color-text: #2a2a2a; /* Darker base text */
+  --base-color-comment: #4aa36c; /* Less pastel, more visible green */
+  --base-color-regex-special: #00996f; /* Balanced mid-green */
+  --base-color-regex-literal: #a52a2a; /* brown */
+  --base-color-regex-delimiter: #aa00aa; /* Darkened fuchsia */
+  --base-color-doc-text: #2b9e71; /* Deeper mint green */
+  --base-color-doc-markup: #d02b4c; /* Matches adjusted danger */
+}
+
+.raku-code {
+  z-index: 1;
+  text-align: left;
+  position: relative;
+  max-width: 100%;
+  overflow-x: auto;
+  /* required to match highlights-js css with raku highlighter css */
+}
+.raku-code button.copy-code {
+  float: right;
+  cursor: pointer;
+  opacity: 0;
+  padding: 0 0.25rem 0.25rem 0.25rem;
+  margin-left: 0.25rem;
+  margin-bottom: -15px;
+  position: relative;
+}
+.raku-code:hover button.copy-code {
+  opacity: 1;
+}
+.raku-code label {
+  float: right;
+  font-size: xx-small;
+  font-style: italic;
+  height: auto;
+  padding-right: 0;
+  margin-top: 1rem;
+}
+.raku-code pre.browser-hl {
+  padding: 7px;
+}
+.raku-code .code-name {
+  padding-top: 0.75rem;
+  padding-left: 1.25rem;
+  font-weight: 500;
+}
+.raku-code pre {
+  display: inline-block;
+  overflow: auto;
+  width: 100%;
+  margin-bottom: 0px;
+}
+.raku-code .rakudoc-in-code {
+  padding: 1.25rem 1.5rem;
+}
+.raku-code .section {
+  /* https://github.com/Raku/doc-website/issues/144 */
+  padding: 0rem;
+}
+.raku-code .nohighlights {
+  background: none;
+  color: inherit;
+}
+.raku-code .rainbow-name_scalar {
+  color: var(--base-color-scalar);
+  font-weight: 500;
+}
+.raku-code .rainbow-name_array {
+  color: var(--base-color-array);
+  font-weight: 500;
+}
+.raku-code .rainbow-name_hash {
+  color: var(--base-color-hash);
+  font-weight: 500;
+}
+.raku-code .rainbow-name_code {
+  color: var(--base-color-code);
+  font-weight: 500;
+}
+.raku-code .rainbow-keyword {
+  color: var(--base-color-keyword);
+  font-weight: 500;
+}
+.raku-code .rainbow-operator {
+  color: var(--base-color-operator);
+  font-weight: 500;
+}
+.raku-code .rainbow-type {
+  color: var(--base-color-type);
+  font-weight: 500;
+}
+.raku-code .rainbow-routine {
+  color: var(--base-color-routine);
+  font-weight: 500;
+}
+.raku-code .rainbow-string {
+  color: var(--base-color-string);
+  font-weight: 500;
+}
+.raku-code .rainbow-string_delimiter {
+  color: var(--base-color-string-delimiter);
+  font-weight: 500;
+}
+.raku-code .rainbow-escape {
+  color: var(--base-color-escape);
+  font-weight: 500;
+}
+.raku-code .rainbow-text {
+  color: var(--base-color-text);
+  font-weight: 500;
+}
+.raku-code .rainbow-comment {
+  color: var(--base-color-comment);
+  font-weight: 500;
+}
+.raku-code .rainbow-regex_special {
+  color: var(--base-color-regex-special);
+  font-weight: 500;
+}
+.raku-code .rainbow-regex_literal {
+  color: var(--base-color-regex-literal);
+  font-weight: 500;
+}
+.raku-code .rainbow-regex_delimiter {
+  color: var(--base-color-regex-delimiter);
+  font-weight: 500;
+}
+.raku-code .rainbow-rakudoc_text {
+  color: var(--base-color-doc-text);
+  font-weight: 500;
+}
+.raku-code .rainbow-rakudoc_markup {
+  color: var(--base-color-doc-markup);
+  font-weight: 500;
 }
 
 /*# sourceMappingURL=styles.css.map */
