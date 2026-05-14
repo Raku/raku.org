@@ -3,10 +3,10 @@ unit class Tools;
 use Air::Functional :BASE;
 use Air::Base;
 
-sub tools-page(&basepage, &shadow) is export {
+sub tools-page(&basepage, $shadow) is export {
     basepage :stub<tools>, #:REFRESH(10),
         main [
-            shadow;
+            $shadow;
             div :align<center>, :style('position: relative; padding: 20px;'), [
                 h1 'Tools';
             ];

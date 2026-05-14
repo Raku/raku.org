@@ -32,17 +32,14 @@ my &basepage = &page.assuming(
 );
 
 # https://commons.wikimedia.org/wiki/File:Butterfly_bottom_PSF_transparent.gif
-my &shadow = &background.assuming(
-    :src</img/Butterfly_bottom_PSF_transparent.gif>,
-    :rotate(-9),
-);
+my $shadow = background( :src</img/Butterfly_bottom_PSF_transparent.gif>, :rotate(-9), :height<360px> );
 
-my Page $home      = home-page      &basepage, &shadow;
-my Page $community = community-page &basepage, &shadow;
-my Page $install   = install-page   &basepage, &shadow;
-my Page $learn     = learn-page     &basepage, &shadow;
-my Page $tools     = tools-page     &basepage, &shadow;
-my Page $html404   = html404-page   &basepage, &shadow;
+my Page $home      = home-page      &basepage, $shadow;
+my Page $community = community-page &basepage, $shadow;
+my Page $install   = install-page   &basepage, $shadow;
+my Page $learn     = learn-page     &basepage, $shadow;
+my Page $tools     = tools-page     &basepage, $shadow;
+my Page $html404   = html404-page   &basepage, $shadow;
 
 my Page @pages = [$home, $community, $learn, $install, $tools, $html404];
 

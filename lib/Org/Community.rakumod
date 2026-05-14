@@ -3,10 +3,10 @@ unit class Community;
 use Air::Functional :BASE;
 use Air::Base;
 
-sub community-page(&basepage, &shadow) is export {
+sub community-page(&basepage, $shadow) is export {
     basepage :stub<community>, #:REFRESH(10),
         main [
-            shadow;
+            $shadow;
             div :align<center>, :style('position: relative; padding: 20px;'), [
                 h1 'Community';
             ];
