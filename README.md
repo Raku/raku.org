@@ -17,7 +17,7 @@ Here are some guidelines that you should respect when changing this site:
 
 * Don't hesitate to link to pages you wrote yourself, if they are helpful to a broader Raku audience.
 
-* If you have a Raku blog, get it included in the https://planet.raku.org feed instead. You can request this on [#raku](https://raku.org/community/irc), our IRC channel.
+* If you have a Raku blog, get it included in the https://planet.raku.org feed. You can request this on [#raku](https://raku.org/community/irc), our IRC channel.
 
 * If you intend to change the layout, consider what happens when:
 
