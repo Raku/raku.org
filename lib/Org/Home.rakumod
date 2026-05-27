@@ -78,10 +78,10 @@ my @trusted-by = (
     'virtual_blue-logo.png'     => 'https://virtual.blue',
 );
 
-sub home-page(&basepage, &shadow) is export {
+sub home-page(&basepage, $shadow) is export {
     basepage #:REFRESH(10),
         main [
-            shadow;
+            $shadow;
             div :align<center>, [
                 h1 safe 'Raku is an expressive, multi&#8209;paradigm, Open Source language that works the way you think!';
                 spacer;
@@ -603,7 +603,7 @@ sub home-page(&basepage, &shadow) is export {
                     vignette [
                         article [
                             h3 'CPAN (Comprehensive Perl Archive Network)';
-                            p( 'Use '; code 'Inline::Perl5'; ' to call Perl library functions and to insert Perl directly in your Raku code.');
+                            p( 'Use '; code 'Inline::Perl5'; ' or simply '; code ':from<Perl5>'; ' to call Perl library functions and to insert Perl directly in your Raku code.');
                             p( 'Here we write & compress '; em 'some data'; ' to a new bzip2 archive.' );
                             code-note 'access over 220,000 Perl modules';
                         ];

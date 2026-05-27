@@ -3,10 +3,10 @@ unit class Learn;
 use Air::Functional :BASE;
 use Air::Base;
 
-sub learn-page(&basepage, &shadow) is export {
+sub learn-page(&basepage, $shadow) is export {
     basepage :stub<learn>, #:REFRESH(10),
         main [
-            shadow;
+            $shadow;
             div :align<center>, :style('position: relative; padding: 20px;'), [
                 h1 'Learn';
             ];

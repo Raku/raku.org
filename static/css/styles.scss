@@ -50,6 +50,15 @@ body > footer > p {
 
 
 
+/* Non Raku code highlighting */
+pre, code, kbd {
+    background: none;
+}
+.hljs {
+    background: none !important;
+    padding: 0 !important;
+}
+
 /* Raku code highlighting */
 
 //hardwire hilite colours (for now)
@@ -103,7 +112,7 @@ body > footer > p {
         margin-top: 1rem;
     }
     /* required to match highlights-js css with raku highlighter css */
-    pre.browser-hl { padding: 7px; }
+    /* pre.browser-hl { padding: 7px; } */
 
     .code-name {
         padding-top: 0.75rem;
