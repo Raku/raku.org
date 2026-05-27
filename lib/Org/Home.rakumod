@@ -78,10 +78,10 @@ my @trusted-by = (
     'virtual_blue-logo.png'     => 'https://virtual.blue',
 );
 
-sub home-page(&basepage, &shadow) is export {
+sub home-page(&basepage, $shadow) is export {
     basepage #:REFRESH(10),
         main [
-            shadow;
+            $shadow;
             div :align<center>, [
                 h1 safe 'Raku is an expressive, multi&#8209;paradigm, Open Source language that works the way you think!';
                 spacer;

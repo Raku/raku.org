@@ -3,10 +3,10 @@ unit class Install;
 use Air::Functional :BASE;
 use Air::Base;
 
-sub install-page(&basepage, &shadow) is export {
+sub install-page(&basepage, $shadow) is export {
     basepage :stub<install>, #:REFRESH(10),
         main [
-            shadow;
+            $shadow;
             div :align<center>, :style('position: relative; padding: 20px;'), [
                 h1 'Install Raku';
                 tabs :align-nav<center>, [
