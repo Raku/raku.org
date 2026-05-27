@@ -1,32 +1,32 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
+    <loc>localhost:3000/</loc>
+    <lastmod>2026-05-27</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+   <url>
     <loc>localhost:3000/install</loc>
-    <lastmod>2026-04-12</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.5</priority>
-  </url>
-   <url>
-    <loc>localhost:3000/learn</loc>
-    <lastmod>2026-04-12</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.5</priority>
-  </url>
-   <url>
-    <loc>localhost:3000/community</loc>
-    <lastmod>2026-04-12</lastmod>
+    <lastmod>2026-05-27</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
   </url>
    <url>
     <loc>localhost:3000/tools</loc>
-    <lastmod>2026-04-12</lastmod>
+    <lastmod>2026-05-27</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
   </url>
    <url>
-    <loc>localhost:3000/</loc>
-    <lastmod>2026-04-12</lastmod>
+    <loc>localhost:3000/community</loc>
+    <lastmod>2026-05-27</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+   <url>
+    <loc>localhost:3000/learn</loc>
+    <lastmod>2026-05-27</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
   </url>
