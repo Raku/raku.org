@@ -56,7 +56,6 @@ pre, code, kbd {
 }
 .hljs {
     background: none !important;
-    padding: 0 !important;
 }
 
 /* Raku code highlighting */
@@ -112,7 +111,7 @@ pre, code, kbd {
         margin-top: 1rem;
     }
     /* required to match highlights-js css with raku highlighter css */
-    /* pre.browser-hl { padding: 7px; } */
+    pre.browser-hl { padding: 7px; }
 
     .code-name {
         padding-top: 0.75rem;

@@ -13,7 +13,7 @@ cmd_container () {
 
   # The "full tag" is a calendar-sortable version
   full_tag="quay.io/chroot.club/raku-org-website:${tag_version}"
-  docker build --build-arg quay_expiration="24w" -t $full_tag .
+  docker build -t $full_tag .
 
   # Also tag this build as "latest"
   latest_tag="quay.io/chroot.club/raku-org-website:latest"

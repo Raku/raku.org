@@ -41,6 +41,8 @@ Yeah, Raku on Raku. ;-)
 
 Checkout the [quay.io](https://quay.io/repository/chroot.club/proto-25?tab=tags&tag=latest) repo 
 
+Note: each time you commit to main, the CI script builds a new Docker image and pushes it to [quay.io/chroot.club/raku-org-website](https://quay.io/repository/chroot.club/raku-org-website) - you may wish to prune older versions from time to time.
+
 ```
 docker run -it -p 4000:4000 quay.io/chroot.club/proto-25  [:tag]
 Open a browser and go to http://localhost:4000
