@@ -80,7 +80,7 @@ sub tools-page(&basepage, $shadow) is export {
 
                     #### Download Options
 
-                    Visit the [install](/nav/1/install) page for the most convenient installation option for Linux, macOS, Windows and Docker.
+                    Visit the [install](/install) page for the most convenient installation option for Linux, macOS, Windows and Docker.
 
                     Other download, build and installation options are available at [Rakudo Downloads](https://rakudo.org/downloads).
                     END
