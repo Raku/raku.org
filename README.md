@@ -6,6 +6,8 @@ This is the source code for <https://raku.org>.
 
 It is a complete rewrite bringing many of the best parts of the old site. The old site can still be viewed [here](https://web.archive.org/web/20250821232603/https://raku.org/).
 
+The Docker image is rebuilt on commit to `main` or `dev` and uploaded to quay.io. Then the raku.org (or dev.raku.org) will poll, download and run the new version.
+
 It is rendered every 15 minutes, so commits to the repository's main branch should also result in an update of <https://raku.org>. If not, please report an issue for the infra team on [#raku](https://raku.org/community/irc), our IRC channel.
 
 ### Guidelines
