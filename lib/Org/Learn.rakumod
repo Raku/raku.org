@@ -24,7 +24,7 @@ sub learn-page(&basepage, $shadow) is export {
 
                     #### Online Learning
 
-                     - [Raku Essentials](https://course.raku.org/essentials/)
+                     - [Raku Course](https://course.raku.org/)
                      - [Learn Raku in Y minutes](https://learnxinyminutes.com/docs/raku/)
                      - [Learn Pod in Y minutes](https://learnxinyminutes.com/docs/perl6-pod/)
                      - [Raku on Exercism](https://exercism.org/tracks/raku)
