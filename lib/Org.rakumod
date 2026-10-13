@@ -10,6 +10,7 @@ use Org::Install;
 use Org::Learn;
 use Org::Tools;
 use Org::HTML404;
+use Org::Theme;
 
 my @tools = [Analytics.new: :provider(Umami), :key<bd5ca56b-3bad-47c7-b0a1-73ba5c3b5713>,];
 
@@ -74,9 +75,10 @@ my Redirect @redirects = [
 
 our $site =
     site
-        :theme-color<pink>, :bold-color<springgreen>,
+        :theme-color<pink>, :bold-color<inherit>,
         :register[Air::Plugin::Hilite.new, Tabs.new, Home::Buttabs.new,
-                  Background.new, Dashboard.new, Panel.new, LightDark.new],
+                  Background.new, Dashboard.new, Panel.new, LightDark.new,
+                  Theme.new],
         :@tools, :$html404, :@redirects,
         :@pages,
 ;

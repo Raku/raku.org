@@ -18,7 +18,8 @@
         "Org::Install": "lib/Org/Install.rakumod",
         "Org::Learn": "lib/Org/Learn.rakumod",
         "Org::Tools": "lib/Org/Tools.rakumod",
-        "Org::HTML404": "lib/Org/HTML404.rakumod"
+        "Org::HTML404": "lib/Org/HTML404.rakumod",
+        "Org::Theme": "lib/Org/Theme.rakumod"
     },
     "license": "Artistic-2.0",
     "source-url": ""

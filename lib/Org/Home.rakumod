@@ -16,7 +16,7 @@ sub vignette(*@a, *%h) {
         |%h, @a
 }
 sub install {
-    div [
+    div :class<cta>, [
         a :href</install>, :target<_self>, button 'Install';
         div :style('min-height:0.4em;');
         p 'Linux, macOS, Windows, Docker';
@@ -82,7 +82,7 @@ sub home-page(&basepage, $shadow) is export {
     basepage #:REFRESH(10),
         main [
             $shadow;
-            div :align<center>, [
+            div :align<center>, :class<hero>, [
                 h1 safe 'Raku is an expressive, multi&#8209;paradigm, Open Source language that works the way you think!';
                 spacer;
                 install;
@@ -713,7 +713,7 @@ sub home-page(&basepage, $shadow) is export {
 
             ];
 
-            div [
+            div :class<logos>, [
                 p 'Supported by:';
                 logos :logos(@supported-by);
                 p :style('font-size:small; text-align:right'),
@@ -721,14 +721,14 @@ sub home-page(&basepage, $shadow) is export {
                         a( :href('mailto:sponsoring@raku.org?subject="New Sponsor"'), 'sponsoring@raku.org' ) ];
             ];
 
-            div [
+            div :class<logos>, [
                 p 'Trusted by:';
                 logos :logos(@trusted-by);
                 p :style('font-size:small; text-align:right'),
                     em ['organisations that use Raku in a production setting' ];
             ];
 
-            div :align<center>, :style<min-width:400px;>, [
+            div :align<center>, [
                 spacer;
                 install;
                 spacer;
