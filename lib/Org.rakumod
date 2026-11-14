@@ -9,6 +9,7 @@ use Org::Community;
 use Org::Install;
 use Org::Learn;
 use Org::Tools;
+use Org::Source;
 use Org::HTML404;
 
 my @tools = [Analytics.new: :provider(Umami), :key<bd5ca56b-3bad-47c7-b0a1-73ba5c3b5713>,];
@@ -39,9 +40,10 @@ my Page $community = community-page &basepage, $shadow;
 my Page $install   = install-page   &basepage, $shadow;
 my Page $learn     = learn-page     &basepage, $shadow;
 my Page $tools     = tools-page     &basepage, $shadow;
+my Page $source    = source-page    &basepage, $shadow;
 my Page $html404   = html404-page   &basepage, $shadow;
 
-my Page @pages = [$home, $community, $learn, $install, $tools, $html404];
+my Page @pages = [$home, $community, $learn, $install, $tools, $source, $html404];
 
 my Nav $nav =
     nav
@@ -60,7 +62,7 @@ my Nav $nav =
             :$tools,
             docs      => (external :href<https://docs.raku.org>),
             modules   => (external :href<https://raku.land>),
-            source    => (external :href<https://github.com/rakudo/rakudo>),
+            :$source,
             :$install,
         ];
 
