@@ -77,8 +77,14 @@ Run and view it
 ```
 export CRO_WEBSITE_HOST=0.0.0.0
 export CRO_WEBSITE_PORT=4000
-raku -I. service.raku
+raku -Ilib air-start.raku
 Open a browser and go to http://localhost:4000
+```
+
+Note: on Rakudo builds where RakuAST is the default frontend, the header logo and mobile menu are missing. Run with `RAKUDO_RAKUAST=0` as a workaround:
+
+```
+RAKUDO_RAKUAST=0 raku -Ilib air-start.raku
 ```
 
 # Server Installation
