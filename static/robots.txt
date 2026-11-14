@@ -4,4 +4,5 @@ Allow: /
 Allow: /community
 Allow: /install
 Allow: /learn
+Allow: /source
 Allow: /tools
