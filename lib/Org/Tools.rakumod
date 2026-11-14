@@ -62,7 +62,8 @@ sub tools-page(&basepage, $shadow) is export {
                      - [Online Raku compiler (most up to date)](https://repl.it/languages/raku)
                      - [Online Raku REPL (glot.io)](https://glot.io/new/raku)
                      - [Online Raku REPL (tio.run)](https://tio.run/#perl6)
-                     - [Online Rakudoc editor](https://pod6.in/)
+                     - [Online Rakudoc editor using Podlite](https://pod6.in/)
+                     - [Online RakuDoc v2 editor using Rakuast-RakuDoc-Render](https://raku.finanalyst.org/rakudoc_editor/)
 
                     #### Notebooks
 
