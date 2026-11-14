@@ -28,7 +28,7 @@ sub community-page(&basepage, $shadow) is export {
 
                     #### Weekly
 
-                    The [Rakudo Weeky News](https://rakudoweekly.blog/blog-feed/) is a great way to keep up to date on the latest core developments and module releases.
+                    The [Raku Weeky News](https://rakuweekly.blog/blog-feed/) is a great way to keep up to date on the latest core developments and module releases.
 
                     #### Stack Overflow
 
