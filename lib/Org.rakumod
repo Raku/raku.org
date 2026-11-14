@@ -75,7 +75,7 @@ my Redirect @redirects = [
 our $site =
     site
         :theme-color<pink>, :bold-color<springgreen>,
-        :register[Air::Plugin::Hilite.new, Tabs.new, Home::Buttabs.new,
+        :register[Air::Plugin::Hilite.new, Tabs.new, Home::Buttabs.new, Install::EngineTabs.new,
                   Background.new, Dashboard.new, Panel.new, LightDark.new],
         :@tools, :$html404, :@redirects,
         :@pages,
